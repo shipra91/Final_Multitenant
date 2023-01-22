@@ -15,19 +15,11 @@ class FineSettingService {
         return $fineOptionsRepository->all();
     }
 
-<<<<<<< HEAD
-    public function getSetting(){
-        $data = array();
-        $fineOptionsRepository = new FineOptionsRepository();
-        $fineSettingRepository = new FineSettingRepository();
-        $data = $fineSettingRepository->all();
-=======
     public function getSetting($allSessions){
         $data = array();
         $fineOptionsRepository = new FineOptionsRepository();
         $fineSettingRepository = new FineSettingRepository();
         $data = $fineSettingRepository->all($allSessions);
->>>>>>> main
      
         if(count($data)>0) {
             $fineOptionDetails = $fineOptionsRepository->fetch($data[0]->label_fine_options);
@@ -41,20 +33,12 @@ class FineSettingService {
         return $fineSettingRepository->fetchData($label);
     }
 
-<<<<<<< HEAD
-    public function getSettingDetails($labelFineOption){
-        $fineSettingDetails = array();
-        $settingTypes = array();
-        $fineSettingRepository = new FineSettingRepository();
-        $fineSetting = $fineSettingRepository->fetchData($labelFineOption);
-=======
     public function getSettingDetails($labelFineOption, $allSessions){
         $fineSettingDetails = array();
         $settingTypes = array();
         $fineSettingRepository = new FineSettingRepository();
 
         $fineSetting = $fineSettingRepository->fetchData($labelFineOption, $allSessions);
->>>>>>> main
 
         if($labelFineOption == 'FIXED' || $labelFineOption == 'PERDAY')
         {
@@ -64,11 +48,7 @@ class FineSettingService {
             $settingTypes[1] = 'PERDAY';
         }
 
-<<<<<<< HEAD
-        $fine_setting_details = $fineSettingRepository->getData();
-=======
         $fine_setting_details = $fineSettingRepository->getData($allSessions);
->>>>>>> main
         $fineSettingDetails = array(
             'fine_setting'=>$fineSetting,
             'label_fine_option'=>$labelFineOption,
@@ -80,14 +60,8 @@ class FineSettingService {
 
     public function add($fineSettingData) {
         
-<<<<<<< HEAD
-        $allSessions = session()->all();
-        $institutionId = $allSessions['institutionId'];
-        $academicYear = $allSessions['academicYear'];
-=======
         $institutionId = $fineSettingData->id_institute;
         $academicYear = $fineSettingData->id_academic;
->>>>>>> main
         $count = 0;
         $fineSettingRepository = new FineSettingRepository();
         foreach($fineSettingData->number_of_days as $key => $numberOfDays) {
@@ -151,11 +125,7 @@ class FineSettingService {
         return $output;
     }
     
-<<<<<<< HEAD
-    public function getFineAmount($dueDate, $totalInstallmentFinePaid) {
-=======
     public function getFineAmount($dueDate, $totalInstallmentFinePaid, $allSessions) {
->>>>>>> main
         $fineSettingRepository = new FineSettingRepository();
         $fineDetails = array();
         $todaysDate = date('Y-m-d');
@@ -164,11 +134,7 @@ class FineSettingService {
         $diff = $todaysDate - $dueDate;
         $numberOfDays = round($diff / 86400);
         $fineAmount = 0;
-<<<<<<< HEAD
-        $fineSettingDetails = $fineSettingRepository->getData();
-=======
         $fineSettingDetails = $fineSettingRepository->getData($allSessions);
->>>>>>> main
         foreach($fineSettingDetails as $key => $data) {
             if($numberOfDays>0) {
                 if($numberOfDays <= $data->number_of_days) {

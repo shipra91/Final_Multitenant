@@ -9,11 +9,7 @@
 
     class FeeAssignDetailService {
         
-<<<<<<< HEAD
-        public function fetchFeeConcession($idFeeCategory, $idStudent){
-=======
         public function fetchFeeConcession($idFeeCategory, $idStudent, $allSessions){
->>>>>>> main
 
             $feeHeadingRepository = new FeeHeadingRepository();
             $feeAssignDetailRepository = new FeeAssignDetailRepository();
@@ -21,52 +17,32 @@
             $feeCollectionDetailRepository = new FeeCollectionDetailRepository();
             $headingArray=array();   
          
-<<<<<<< HEAD
-            $allFeeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory);
-            // dd($allFeeHeadings);
-            foreach($allFeeHeadings as $key => $feeHeadings){
-                
-                $concession = $feeAssignDetailRepository->fetchConcession($feeHeadings->id, $idStudent);
-=======
             $allFeeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory, $allSessions);
             // dd($allFeeHeadings);
             foreach($allFeeHeadings as $key => $feeHeadings){
                 
                 $concession = $feeAssignDetailRepository->fetchConcession($feeHeadings->id, $idStudent, $allSessions);
->>>>>>> main
                 if($concession->amount){
                     $concessionAmount = $concession->amount;
                 }else{
                     $concessionAmount = 0;
                 }
 
-<<<<<<< HEAD
-                $assigned =  $feeAssignDetailRepository->fetchAssignedAmount($feeHeadings->id, $idStudent);
-=======
                 $assigned =  $feeAssignDetailRepository->fetchAssignedAmount($feeHeadings->id, $idStudent, $allSessions);
->>>>>>> main
                 if($assigned->amount){
                     $assignedAmount = $assigned->amount;
                 }else{
                     $assignedAmount = 0;
                 }
 
-<<<<<<< HEAD
-                $addition =  $feeAssignDetailRepository->fetchAddition($feeHeadings->id, $idStudent);
-=======
                 $addition =  $feeAssignDetailRepository->fetchAddition($feeHeadings->id, $idStudent, $allSessions);
->>>>>>> main
                 if($addition->amount){
                     $additionAmount = $addition->amount;
                 }else{
                     $additionAmount = 0;
                 }
               
-<<<<<<< HEAD
-                $paid =  $feeCollectionDetailRepository->fetchPaidAmount($feeHeadings->id, $idStudent);
-=======
                 $paid =  $feeCollectionDetailRepository->fetchPaidAmount($feeHeadings->id, $idStudent, $allSessions);
->>>>>>> main
              
                 if($paid->paid_amount){
                     $paidAmount = $paid->paid_amount;
@@ -86,30 +62,18 @@
             return $headingArray;
         }
         
-<<<<<<< HEAD
-        public function fetchFeeAddition($idFeeCategory, $idStudent){
-=======
         public function fetchFeeAddition($idFeeCategory, $idStudent, $allSessions){
->>>>>>> main
 
             $feeHeadingRepository = new FeeHeadingRepository();
             $feeAssignDetailRepository = new FeeAssignDetailRepository();
             $feeMappingRepository = new FeeMappingRepository();
             $headingArray=array();
 
-<<<<<<< HEAD
-            $allFeeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory);
-            
-            foreach($allFeeHeadings as $key => $feeHeadings){
-
-                $additional = $feeAssignDetailRepository->fetchAddition($feeHeadings->id, $idStudent);
-=======
             $allFeeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory, $allSessions);
             
             foreach($allFeeHeadings as $key => $feeHeadings){
 
                 $additional = $feeAssignDetailRepository->fetchAddition($feeHeadings->id, $idStudent, $allSessions);
->>>>>>> main
                 if($additional->amount){
                     $additionalAmount = $additional->amount;
                 }else{
@@ -152,48 +116,28 @@
             return $additionAmount;
         }
 
-<<<<<<< HEAD
-        public function fetchTotalBalanceAmount($idStudent, $idAcademicYear){
-=======
         public function fetchTotalBalanceAmount($idStudent, $idAcademicYear, $allSessions){
->>>>>>> main
             $feeAssignDetailRepository =  new FeeAssignDetailRepository();
             $feeCollectionDetailRepository =  new FeeCollectionDetailRepository();
             $concessionAmount = 0;
             $additionalAmount = 0;
             $assignedAmount = 0;
             $paidAmount = 0;
-<<<<<<< HEAD
-            $concession = $feeAssignDetailRepository->getAcademicTotalConcessionAmount($idStudent, $idAcademicYear);
-            if($concession){
-                $concessionAmount = $concession->amount;
-            }
-            $addition = $feeAssignDetailRepository->getAcademicTotalAdditionalAmount($idStudent, $idAcademicYear);
-=======
             $concession = $feeAssignDetailRepository->getAcademicTotalConcessionAmount($idStudent, $idAcademicYear, $allSessions);
             if($concession){
                 $concessionAmount = $concession->amount;
             }
             $addition = $feeAssignDetailRepository->getAcademicTotalAdditionalAmount($idStudent, $idAcademicYear, $allSessions);
->>>>>>> main
             if($addition){
                 $additionalAmount = $addition->amount;
             }
 
-<<<<<<< HEAD
-            $assigned = $feeAssignDetailRepository->getAcademicTotalAssignedAmount($idStudent, $idAcademicYear); 
-=======
             $assigned = $feeAssignDetailRepository->getAcademicTotalAssignedAmount($idStudent, $idAcademicYear, $allSessions); 
->>>>>>> main
             if($assigned){
                 $assignedAmount = $assigned->amount;
             }
 
-<<<<<<< HEAD
-            $paid = $feeCollectionDetailRepository->totalPaidAmount($idStudent, $idAcademicYear);
-=======
             $paid = $feeCollectionDetailRepository->totalPaidAmount($idStudent, $idAcademicYear, $allSessions);
->>>>>>> main
             if($paid){
                 $paidAmount = $paid->paid_amount;
             }

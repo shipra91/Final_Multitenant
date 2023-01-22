@@ -8,15 +8,6 @@
 
     class MessageGroupNameService {
 
-<<<<<<< HEAD
-        public function all() {
-            $messageGroupNameData = array();
-            $messageGroupNameRepository = new MessageGroupNameRepository();
-            $messageGroupMembersService = new MessageGroupMembersService();
-            $messageGroupNames= $messageGroupNameRepository->all();
-            foreach($messageGroupNames as $index => $data) {
-                $groupMemberDetails = $messageGroupMembersService->all($data->id);
-=======
         public function all($allSessions) {
 
             $messageGroupNameData = array();
@@ -26,7 +17,6 @@
             $messageGroupNames= $messageGroupNameRepository->all($allSessions);
             foreach($messageGroupNames as $index => $data) {
                 $groupMemberDetails = $messageGroupMembersService->all($data->id, $allSessions);
->>>>>>> main
                 $messageGroupNameData[$index] = $data;
                 $messageGroupNameData[$index]['count'] = count($groupMemberDetails);
             }
@@ -40,14 +30,8 @@
         
         public function add($data) {
             
-<<<<<<< HEAD
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicId = $allSessions['academicYear'];
-=======
             $institutionId = $data->id_institute;
             $academicId = $data->id_academic;
->>>>>>> main
 
             $messageGroupNameRepository = new MessageGroupNameRepository();
             $groupName = $data->group_name;
@@ -88,16 +72,10 @@
         public function update($data, $id) {
 
             $messageGroupNameRepository = new MessageGroupNameRepository();
-<<<<<<< HEAD
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicId = $allSessions['academicYear'];
-=======
             
             $institutionId = $data->id_institute;
             $academicId = $data->id_academic;
 
->>>>>>> main
             $groupDetails = $messageGroupNameRepository->fetch($id);
 
             $check = MessageGroupName::where('id_institute', $institutionId)->where('id_academic', $academicId)->where('group_name', $data->group_name)->where('id', '!=', $id)->first();
@@ -148,17 +126,10 @@
         }
 
 
-<<<<<<< HEAD
-        public function getDeletedRecords(){
-
-            $messageGroupNameRepository = new MessageGroupNameRepository();
-            $messageGroupNameData = $messageGroupNameRepository->allDeleted();
-=======
         public function getDeletedRecords($allSessions){
 
             $messageGroupNameRepository = new MessageGroupNameRepository();
             $messageGroupNameData = $messageGroupNameRepository->allDeleted($allSessions);
->>>>>>> main
             return $messageGroupNameData;
         }
 

@@ -12,21 +12,13 @@
     class GradeService {
 
         // Get all grade
-<<<<<<< HEAD
-        public function getAll(){
-=======
         public function getAll($allSessions){
->>>>>>> main
 
             $gradeRepository = new GradeRepository();
             $gradeDetailRepository = new GradeDetailRepository();
             $examSubjectConfigurationService = new ExamSubjectConfigurationService();
 
-<<<<<<< HEAD
-            $gradeData = $gradeRepository->all();
-=======
             $gradeData = $gradeRepository->all($allSessions);
->>>>>>> main
             $gradeDetails = array();
 
             foreach($gradeData as $key => $grade){
@@ -77,14 +69,8 @@
             $gradeRepository = new GradeRepository();
             $gradeDetailRepository = new GradeDetailRepository();
 
-<<<<<<< HEAD
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
-=======
             $institutionId = $gradeData->id_institute;
             $academicYear = $gradeData->id_academic;
->>>>>>> main
 
             $check = Grade::where('id_institute', $institutionId)
                             ->where('id_academic_year', $academicYear)
@@ -289,20 +275,12 @@
         }
 
         // Deleted grade records
-<<<<<<< HEAD
-        public function getDeletedRecords(){
-=======
         public function getDeletedRecords($allSessions){
->>>>>>> main
 
             $gradeRepository = new GradeRepository();
             $gradeDetailRepository = new GradeDetailRepository();
 
-<<<<<<< HEAD
-            $gradeData = $gradeRepository->allDeleted();
-=======
             $gradeData = $gradeRepository->allDeleted($allSessions);
->>>>>>> main
             $gradeDetails = array();
 
             foreach($gradeData as $key => $grade){

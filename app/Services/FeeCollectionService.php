@@ -20,11 +20,7 @@
 
     class FeeCollectionService{
 
-<<<<<<< HEAD
-        public function studentFeeDetail($request){
-=======
         public function studentFeeDetail($request, $allSessions){
->>>>>>> main
             
             $studentMappingRepository = new StudentMappingRepository();
             $academicYearMappingRepository = new AcademicYearMappingRepository();
@@ -44,13 +40,8 @@
 
             $idStudent = $request['student'];
             $standardName = '';
-<<<<<<< HEAD
-            $studentDetails = $studentMappingRepository->getStuentsAcademicYear($idStudent);
-            $student = $studentMappingRepository->fetchStudent($idStudent);
-=======
             $studentDetails = $studentMappingRepository->getStuentsAcademicYear($idStudent, $allSessions);
             $student = $studentMappingRepository->fetchStudent($idStudent, $allSessions);
->>>>>>> main
             if($student){
                 $standardName = $institutionStandardService->fetchStandardByUsingId($student->id_standard);
             }
@@ -72,33 +63,21 @@
                     $studentFeeDetail[$index]['academic_year'] = $detail->name;
                     $studentFeeDetail[$index]['academic_year_id'] = $detail->id_academic_year;
 
-<<<<<<< HEAD
-                    $getTotalAssigned = $feeAssignDetailRepository->getAcademicTotalAssignedAmount($idStudent, $detail->id_academic_year);
-=======
                     $getTotalAssigned = $feeAssignDetailRepository->getAcademicTotalAssignedAmount($idStudent, $detail->id_academic_year, $allSessions);
->>>>>>> main
                     if($getTotalAssigned->amount != ""){
                         $studentFeeDetail[$index]['assignedAmount'] = $getTotalAssigned->amount;
                     }else{
                         $studentFeeDetail[$index]['assignedAmount'] = 0;
                     }
 
-<<<<<<< HEAD
-                    $getTotalAdditional = $feeAssignDetailRepository->getAcademicTotalAdditionalAmount($idStudent, $detail->id_academic_year);
-=======
                     $getTotalAdditional = $feeAssignDetailRepository->getAcademicTotalAdditionalAmount($idStudent, $detail->id_academic_year, $allSessions);
->>>>>>> main
                     if($getTotalAdditional->amount != ""){
                         $studentFeeDetail[$index]['additionalAmount'] = $getTotalAdditional->amount;
                     }else{
                         $studentFeeDetail[$index]['additionalAmount'] = 0;
                     }
 
-<<<<<<< HEAD
-                    $getTotalConcession = $feeAssignDetailRepository->getAcademicTotalConcessionAmount($idStudent, $detail->id_academic_year);
-=======
                     $getTotalConcession = $feeAssignDetailRepository->getAcademicTotalConcessionAmount($idStudent, $detail->id_academic_year, $allSessions);
->>>>>>> main
                   
                     if($getTotalConcession->amount != ''){
                         $studentFeeDetail[$index]['concessionAmount'] = $getTotalConcession->amount;
@@ -108,11 +87,7 @@
 
                     
                     //TOTAL PAID
-<<<<<<< HEAD
-                    $getTotalFeePaid = $feeCollectionRepository->totalPaid($idStudent, $detail->id_academic_year);
-=======
                     $getTotalFeePaid = $feeCollectionRepository->totalPaid($idStudent, $detail->id_academic_year, $allSessions);
->>>>>>> main
 
                     if($getTotalFeePaid->amount != ''){
                         $studentFeeDetail[$index]['totalPaidAmount'] = $getTotalFeePaid->amount;
@@ -121,38 +96,23 @@
                     }
 
                     //PAYMENT HISTORY
-<<<<<<< HEAD
-                    $paymentHistory = $feeCollectionDetailRepository->getPaymentDetails($idStudent, $detail->id_academic_year);
-=======
                     $paymentHistory = $feeCollectionDetailRepository->getPaymentDetails($idStudent, $detail->id_academic_year, $allSessions);
->>>>>>> main
                     // dd($paymentHistory);
 
                     
                     $createChallanHideCount = 0;
                     $collectFeeHideCount = 0;
                     //PENDING HISTORY
-<<<<<<< HEAD
-                    $feeCategories = $feeAssignRepository->fetchStudentFeeCategory($idStudent, $detail->id_academic_year);
-                    foreach($feeCategories as $key => $feeCategory){
-
-                        $feeCategoryChallanSetting = $feeChallanSettingRepository->fetch($feeCategory->id, $detail->id_academic_year);
-=======
                     $feeCategories = $feeAssignRepository->fetchStudentFeeCategory($idStudent, $detail->id_academic_year, $allSessions);
                     foreach($feeCategories as $key => $feeCategory){
 
                         $feeCategoryChallanSetting = $feeChallanSettingRepository->fetch($feeCategory->id, $detail->id_academic_year, $allSessions);
->>>>>>> main
 
                         if(!$feeCategoryChallanSetting) {
                             $createChallanHideCount++;
                         }
 
-<<<<<<< HEAD
-                        $feeCategoryReceiptSetting = $feeReceiptSettingRepository->fetch($feeCategory->id, $detail->id_academic_year);
-=======
                         $feeCategoryReceiptSetting = $feeReceiptSettingRepository->fetch($feeCategory->id, $detail->id_academic_year, $allSessions);
->>>>>>> main
 
                         if(!$feeCategoryReceiptSetting) {
                             $collectFeeHideCount++;
@@ -162,11 +122,7 @@
                         $pendingPaymentHistory[$key]['feeCategory'] = $feeCategory->name;
                         $feeCategoryDetails = array();
 
-<<<<<<< HEAD
-                        $getAssignedFee = $feeAssignDetailRepository->all($idStudent, $feeCategory->id, $detail->id_academic_year);
-=======
                         $getAssignedFee = $feeAssignDetailRepository->all($idStudent, $feeCategory->id, $detail->id_academic_year, $allSessions);
->>>>>>> main
 
                       
                         foreach($getAssignedFee as $in => $assignedFee){ 
@@ -176,11 +132,7 @@
                             $outstandingIntallmentAmount = 0;
                             
                             //GET ADDITIONAL AMOUNT
-<<<<<<< HEAD
-                            $getAdditionalAmount = $feeAssignDetailRepository->fetchAddition($assignedFee->id_fee_heading, $idStudent);
-=======
                             $getAdditionalAmount = $feeAssignDetailRepository->fetchAddition($assignedFee->id_fee_heading, $idStudent, $allSessions);
->>>>>>> main
                             
                             if($getAdditionalAmount->amount != ''){
                                 $additionAmount = $getAdditionalAmount->amount;
@@ -189,11 +141,7 @@
                             }
 
                             //GET CONCESSION AMOUNT
-<<<<<<< HEAD
-                            $getConcessionAmount = $feeAssignDetailRepository->fetchApprovedConcession($assignedFee->id_fee_heading, $idStudent);
-=======
                             $getConcessionAmount = $feeAssignDetailRepository->fetchApprovedConcession($assignedFee->id_fee_heading, $idStudent, $allSessions);
->>>>>>> main
 
                             if($getConcessionAmount->amount != ''){
                                 $concessionAmount = $getConcessionAmount->amount;
@@ -204,11 +152,7 @@
                             $intallmentAmount = $assignedFee->amount + $additionAmount;
 
                             //CHECK IF INSTALLMENT IS ALREADY PAID
-<<<<<<< HEAD
-                            $checkCollectionAgainstHeading = $feeCollectionDetailRepository->getHeadingWiseInstallmentPaymentDetails($idStudent, $assignedFee->id_fee_heading, $assignedFee->installment_no, $detail->id_academic_year);
-=======
                             $checkCollectionAgainstHeading = $feeCollectionDetailRepository->getHeadingWiseInstallmentPaymentDetails($idStudent, $assignedFee->id_fee_heading, $assignedFee->installment_no, $detail->id_academic_year, $allSessions);
->>>>>>> main
                             
                             if($checkCollectionAgainstHeading) {
                                 foreach($checkCollectionAgainstHeading as $paidInstallmentAmount){
@@ -216,11 +160,7 @@
                                 }                                
                             }
                             $totalInstallmentFinePaid = 0;
-<<<<<<< HEAD
-                            $fineAmount = $fineSettingService->getFineAmount($assignedFee->due_date,$totalInstallmentFinePaid);
-=======
                             $fineAmount = $fineSettingService->getFineAmount($assignedFee->due_date,$totalInstallmentFinePaid, $allSessions);
->>>>>>> main
 
                             $outstandingIntallmentAmount = $intallmentAmount - $concessionAmount - $totalInstallmentPaidAmount;
                             
@@ -262,16 +202,9 @@
 
         // STORE FEE COLLECTION
 
-<<<<<<< HEAD
-        public function add($request){
-        
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-=======
         public function add($request, $allSessions){
         
             $institutionId = $request->id_institute;
->>>>>>> main
             $academicId = $request->academicId;
             
             $currencyDenominationService = new CurrencyDenominationService();
@@ -290,11 +223,7 @@
                 $feeReceiptId = array();
                 $feeAssignedCategory = $request->feeAssignedCategory;
 
-<<<<<<< HEAD
-                $allReceiptSettings = $feeReceiptSettingRepository->academicAllReceiptSetting($academicId);
-=======
                 $allReceiptSettings = $feeReceiptSettingRepository->academicAllReceiptSetting($academicId, $allSessions);
->>>>>>> main
                 // dd($allReceiptSettings);
                 foreach($allReceiptSettings as $index => $receiptSetting){
 
@@ -317,11 +246,7 @@
                                     $cgst = 0 ;
 
                                     //CALCULATION OF SGST
-<<<<<<< HEAD
-                                    $feeMappingData = $feeMappingRepository->getAcademicHeadingMapping($idFeeHeading, $academicId);
-=======
                                     $feeMappingData = $feeMappingRepository->getAcademicHeadingMapping($idFeeHeading, $academicId, $allSessions);
->>>>>>> main
 
                                     if($feeMappingData->sgst != 0){
                                         $sgstBaseAmount = $request->paying_amount[$idFeeCategory][$headIndex]/(1 + $feeMappingData->sgst/100);
@@ -351,11 +276,7 @@
                     if($totalCategoryPayable > 0){
 
                         //CHECKING FEE RECEIPT NUMBER
-<<<<<<< HEAD
-                        $getMaxReceiptNo = $feeCollectionRepository->getMaxReceiptNo($receiptSetting['id_receipt_setting'], $academicId);
-=======
                         $getMaxReceiptNo = $feeCollectionRepository->getMaxReceiptNo($receiptSetting['id_receipt_setting'], $academicId, $allSessions);
->>>>>>> main
                         if($getMaxReceiptNo == ""){
                             $receiptNo = $receiptSetting['receipt_no_sequence'];
                         }else{
@@ -453,11 +374,7 @@
 
                                         if($request->paying_amount[$idFeeCategory][$headIndex] != ''){
                                             //CALCULATION OF SGST
-<<<<<<< HEAD
-                                            $feeMappingData = $feeMappingRepository->getAcademicHeadingMapping($idFeeHeading, $academicId);
-=======
                                             $feeMappingData = $feeMappingRepository->getAcademicHeadingMapping($idFeeHeading, $academicId, $allSessions);
->>>>>>> main
                                             if($feeMappingData->sgst != 0){
 
                                                 $headingSGSTBaseAmount = $request->paying_amount[$idFeeCategory][$headIndex]/(1 + $feeMappingData->sgst/100);
@@ -538,11 +455,7 @@
 
         }
 
-<<<<<<< HEAD
-        public function getStudentFeeDetails($request) {
-=======
         public function getStudentFeeDetails($request, $allSessions) {
->>>>>>> main
             
             $feeCollectionDetailRepository = new FeeCollectionDetailRepository();
             $studentMappingRepository = new StudentMappingRepository();
@@ -552,17 +465,10 @@
             $paidHistoryArray['collectionDetails'] = array();
             $idStudent = $request['student'];
             
-<<<<<<< HEAD
-            $studentDetails = $studentMappingRepository->fetchStudent($idStudent);
-            if($studentDetails){
-                $standard = $institutionStandardService->fetchStandardByUsingId($studentDetails->id_standard); 
-                $paymentHistory = $feeCollectionDetailRepository->getFeePaymentDetails($idStudent);
-=======
             $studentDetails = $studentMappingRepository->fetchStudent($idStudent, $allSessions);
             if($studentDetails){
                 $standard = $institutionStandardService->fetchStandardByUsingId($studentDetails->id_standard); 
                 $paymentHistory = $feeCollectionDetailRepository->getFeePaymentDetails($idStudent, $allSessions);
->>>>>>> main
                 
                 $paidHistoryArray['studentDetails']['name'] = $studentDetails->name;
                 $paidHistoryArray['studentDetails']['class'] = $standard;

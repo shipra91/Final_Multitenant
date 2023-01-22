@@ -14,10 +14,7 @@
     use App\Repositories\StudentMappingRepository;
     use App\Repositories\FeeMappingRepository;
     use App\Services\FeeAssignDetailService;
-<<<<<<< HEAD
     use App\Services\FeeAssignService;
-=======
->>>>>>> main
     use App\Repositories\FeeSettingRepository;
     use App\Repositories\FeeInstallmentRepository;
     use Carbon\Carbon;
@@ -25,11 +22,7 @@
 
     class FeeBulkAssignService{       
 
-<<<<<<< HEAD
-        public function getAllData($standardId){
-=======
         public function getAllData($standardId, $allSessions){
->>>>>>> main
             $feeMasterRepository = new FeeMasterRepository();
             $feeCategoryRepository = new FeeCategoryRepository();
             $feeTypeRepository = new FeeTypeRepository();
@@ -37,11 +30,7 @@
             $allCategory = array();
             $allCategoryData = array();
             
-<<<<<<< HEAD
-            $feeCategories = $feeMasterRepository->standardFeeCategory($standardId);
-=======
             $feeCategories = $feeMasterRepository->standardFeeCategory($standardId, $allSessions);
->>>>>>> main
             
             foreach($feeCategories as $feeCategory => $value){
                 
@@ -56,14 +45,8 @@
             return $allCategoryData;
         }
 
-<<<<<<< HEAD
-        public function getStudentData($request){
-            
-            $allSessions = session()->all();
-=======
         public function getStudentData($request, $allSessions){
             
->>>>>>> main
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -120,20 +103,11 @@
             return $classStudents;
         }
 
-<<<<<<< HEAD
-        public function add($request){
-
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicId = $allSessions['academicYear'];
-            $organizationId = $allSessions['organizationId'];
-=======
         public function add($request, $allSessions){
 
             $institutionId = $request->id_institute;
             $academicId = $request->id_academic;
             $organizationId = $request->organization;
->>>>>>> main
 
             $idFeeCategory = $request->idFeeCategory;
             $idStandard = $request->idStudentStandard;
@@ -147,18 +121,10 @@
             $studentMappingRepository = new StudentMappingRepository();
             $feeSettingRepository = new FeeSettingRepository();
             $feeInstallmentRepository = new FeeInstallmentRepository();
-<<<<<<< HEAD
-            $feeAssignService =  new FeeAssignService();
-
-            $concessionApprovalRequired = '';
-            $concessionApproved = 'PENDING';
-            $feeSettingDetails = $feeSettingRepository->all();
-=======
 
             $concessionApprovalRequired = '';
             $concessionApproved = 'PENDING';
             $feeSettingDetails = $feeSettingRepository->all($allSessions);
->>>>>>> main
             if($feeSettingDetails) {
                 $concessionApprovalRequired = $feeSettingDetails->concession_approval_required;
             }
@@ -168,15 +134,9 @@
             }
            
             foreach($request->idStudent as $index => $student){
-<<<<<<< HEAD
-               
-                $check = $feeAssignRepository->checkFeeAssignAvaibility($idStandard, $student, $idFeeCategory, $request->feeType[$index]);
-                
-=======
 
                 $check = $feeAssignRepository->checkFeeAssignAvaibility($idStandard, $student, $idFeeCategory, $request->feeType[$index], $allSessions);
 
->>>>>>> main
                 //if fee type is custom
                 if($request->feeType[$index] == 'CUSTOM'){
 
@@ -284,60 +244,6 @@
                     
                 }else{
 
-<<<<<<< HEAD
-                    $feeAssign_id = $feeAssignService->assignFeeForStudent($idStandard, $request->feeType[$index], $student);  
-                    if($feeAssign_id){
-
-                        //ASSIGN CONCESSION
-                        $action_type = 'CONCESSION';
-                        // $deleteConcession = $feeAssignDetailRepository->delete($feeAssign_id, $action_type);                        
-
-                        foreach($request->concession_heading_id[$student] as $key => $concession_heading){ 
-                            if($request->concession_amount[$student][$key] != ''){
-
-                                $concessionFeeData = array(
-                                    'id_fee_assign' => $feeAssign_id,
-                                    'id_fee_heading' => $concession_heading,
-                                    'action_type' => 'CONCESSION',
-                                    'installment_no' => 0,
-                                    'amount' => $request->concession_amount[$student][$key],
-                                    'remark' => $request->concession_remark[$student][$key],
-                                    'concession_approved' => $concessionApproved,
-                                    'created_by' => Session::get('userId'),
-                                    'created_at' => Carbon::now()
-                                );
-
-                                $storeFeeAssign = $feeAssignDetailRepository->store($concessionFeeData);
-                            }
-                        }
-
-                        //ASSIGN ADDITION
-                        $action_type = 'ADDITION';
-                        // $deleteConcession = $feeAssignDetailRepository->delete($feeAssign_id, $action_type);                        
-
-                        foreach($request->addition_heading_id[$student] as $key => $addition_heading){                                  
-                            if($request->addition_amount[$student][$key] != ''){
-
-                                $additionFeeData = array(
-                                    'id_fee_assign' => $feeAssign_id,
-                                    'id_fee_heading' => $addition_heading,
-                                    'action_type' => 'ADDITION',
-                                    'installment_no' => 0,
-                                    'amount' => $request->addition_amount[$student][$key],
-                                    'remark' => $request->addition_remark[$student][$key],
-                                    'created_by' => Session::get('userId'),
-                                    'created_at' => Carbon::now()
-                                );
-
-                                $storeFeeAssign = $feeAssignDetailRepository->store($additionFeeData);
-                            }
-                        }
-                    }
-                }
-
-                //UPDATE FEE TYPE OF STUDENT IN STUDENT MAPPING TABLE
-                $studentMappingData = $studentMappingRepository->fetch($student);
-=======
                     $getFeeMasterData = $feeMasterRepository->getInstallmentType($idFeeCategory, $idStandard, $request->feeType[$index], $allSessions);
 
                     if($getFeeMasterData){
@@ -562,7 +468,6 @@
 
                 //UPDATE FEE TYPE OF STUDENT IN STUDENT MAPPING TABLE
                 $studentMappingData = $studentMappingRepository->fetch($student, $allSessions);
->>>>>>> main
                 
                 $studentMappingData->id_fee_type = $request->feeType[$index];
                 $studentMappingData->modified_by = Session::get('userId');
@@ -583,24 +488,15 @@
         }
 
         //GET STUDENT CONCESSION ASSIGNED
-<<<<<<< HEAD
-        public function studentConcessionAssignedDetails($idStudent){
-=======
         public function studentConcessionAssignedDetails($idStudent, $allSessions){
->>>>>>> main
             $feeAssignRepository = new FeeAssignRepository();
             $feeCategoryRepository = new FeeCategoryRepository();
             $feeMappingRepository = new FeeMappingRepository();
             $studentMappingRepository = new StudentMappingRepository();
 
             $studentConcessionDetails = array();
-<<<<<<< HEAD
-            $concessionDetails = $feeAssignRepository->studentConcessionAssignedDetails($idStudent);
-            $studentDetails = $studentMappingRepository->fetchStudent($idStudent);
-=======
             $concessionDetails = $feeAssignRepository->studentConcessionAssignedDetails($idStudent, $allSessions);
             $studentDetails = $studentMappingRepository->fetchStudent($idStudent, $allSessions);
->>>>>>> main
             foreach($concessionDetails as $index => $details) {
                 
                 $studentConcessionDetails[$index]['uid'] = $studentDetails->egenius_uid;
