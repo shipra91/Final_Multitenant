@@ -32,11 +32,7 @@ class SendEmail extends Mailable
     public function envelope()
     {
         return new Envelope(
-<<<<<<< HEAD
             subject: 'Activation Email',
-=======
-            subject: 'Send Email',
->>>>>>> main
         );
     }
 
