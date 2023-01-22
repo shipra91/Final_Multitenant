@@ -29,11 +29,7 @@
     class HomeworkSubmissionService {
 
         // Get all homework submission
-<<<<<<< HEAD
-        public function getAll(){
-=======
         public function getAll($allSessions){
->>>>>>> main
 
             $homeworkSubmissionRepository = new HomeworkSubmissionRepository();
             $homeworkDetailRepository = new HomeworkDetailRepository();
@@ -49,17 +45,9 @@
             $staffService = new StaffService();
 
             $homeworkDetails = array();
-<<<<<<< HEAD
-
-            $allSessions = session()->all();
-            $idStudent = $allSessions['userId'];
-
-            $studentDetails = $studentMappingRepository->fetchStudent($idStudent);
-=======
             $idStudent = $allSessions['userId'];
 
             $studentDetails = $studentMappingRepository->fetchStudent($idStudent, $allSessions);
->>>>>>> main
 
             if($studentDetails){
 
@@ -73,11 +61,7 @@
                     $subject[] = $studentDetails->id_third_language;
                 }
 
-<<<<<<< HEAD
-                $electiveSubjects = $studentElectivesRepository->fetchStudentSubjects($idStudent);
-=======
                 $electiveSubjects = $studentElectivesRepository->fetchStudentSubjects($idStudent, $allSessions);
->>>>>>> main
 
                 foreach ($electiveSubjects as $elective){
 
@@ -86,16 +70,9 @@
                     }
                 }
 
-<<<<<<< HEAD
-                $homeworks = $homeworkRepository->fetchHomeworkByStandard($idStandard);
-
-                foreach ($homeworks as $details){
-
-=======
                 $homeworks = $homeworkRepository->fetchHomeworkByStandard($idStandard, $allSessions);
 
                 foreach ($homeworks as $details){
->>>>>>> main
                     $resubmission = '';
                     $submission = '';
                     $resubmissionDate = '';
@@ -103,13 +80,8 @@
                     $resubmissionRequired = '';
                     $resubmissionDateTime = 0;
                     $standardName = $institutionStandardService->fetchStandardByUsingId($idStandard);
-<<<<<<< HEAD
-                    $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject);
-                    $staffDetails = $staffService->find($details->id_staff);
-=======
                     $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject, $allSessions);
                     $staffDetails = $staffService->find($details->id_staff, $allSessions);
->>>>>>> main
                     $fromDate = Carbon::createFromFormat('Y-m-d', $details->start_date)->format('d/m/Y');
                     $toDate = Carbon::createFromFormat('Y-m-d', $details->end_date)->format('d/m/Y');
 
@@ -176,10 +148,6 @@
                     $homeworkSubmissionDetails = $homeworkSubmissionRepository->fetchActiveDetails($data);
 
                     if($homeworkSubmissionDetails){
-<<<<<<< HEAD
-
-=======
->>>>>>> main
                         if($homeworkSubmissionDetails->obtained_marks != ''){
                             $resubmission = 'hide';
                             $submission = 'hide';
@@ -187,11 +155,7 @@
                     }
 
                     $homeworkImageDetails = $homeworkDetailRepository->fetch($details->id);
-<<<<<<< HEAD
-                    $subjectType = $institutionSubjectService->getSubjectLabel($details->id_subject);
-=======
                     $subjectType = $institutionSubjectService->getSubjectLabel($details->id_subject, $allSessions);
->>>>>>> main
 
                     if($subjectType->label == 'common'){
 
@@ -207,10 +171,7 @@
                             'resubmission'=>$resubmission,
                             'submission'=>$submission,
                             'submitted'=>$submitted,
-<<<<<<< HEAD
                             'submission_type'=>$details->submission_type,
-=======
->>>>>>> main
                             'homeworkImageDetails'=>$homeworkImageDetails,
                             'id_student'=>$idStudent
                         );
@@ -231,10 +192,7 @@
                                 'resubmission'=>$resubmission,
                                 'submission'=>$submission,
                                 'submitted'=>$submitted,
-<<<<<<< HEAD
                                 'submission_type'=>$details->submission_type,
-=======
->>>>>>> main
                                 'homeworkImageDetails'=>$homeworkImageDetails,
                                 'id_student'=>$idStudent
                             );
@@ -246,23 +204,14 @@
             return $homeworkDetails;
         }
 
-<<<<<<< HEAD
         // Insert homework submisson
-=======
-        // Add homework submisson details
->>>>>>> main
         public function add($homeworkSubmissionData){
 
             $homeworkSubmissionRepository = new HomeworkSubmissionRepository();
             $homeworkSubmissionDetailRepository = new HomeworkSubmissionDetailRepository();
             $uploadService = new UploadService();
 
-<<<<<<< HEAD
-            $allSessions = session()->all();
-            $idStudent = $allSessions['userId'];
-=======
             $idStudent = $homeworkSubmissionData->userId;
->>>>>>> main
 
             $idHomework = $homeworkSubmissionData->id_homework;
             $homeworkSubmittedDate  = date('Y-m-d');
@@ -327,11 +276,7 @@
             return $output;
         }
 
-<<<<<<< HEAD
-        public function getStudentHomework($idHomework){
-=======
         public function getStudentHomework($idHomework, $allSessions){
->>>>>>> main
 
             $homeworkSubmissionRepository = new HomeworkSubmissionRepository();
             $homeworkRepository = new HomeworkRepository();
@@ -350,19 +295,6 @@
             $homeworkData['subjectId'] = $homeworkDetails->id_subject;
             $readReceipt = $homeworkDetails->read_receipt;
 
-<<<<<<< HEAD
-            $subjectType = $institutionSubjectService->getSubjectLabel($homeworkData['subjectId']);
-
-            if($subjectType->label == 'common'){
-                $studentDetails = $studentMappingRepository->fetchStudentUsingStandard($homeworkDetails->id_standard);
-            }else{
-                $studentDetails = $studentMappingRepository->fetchStudentUsingSubject($homeworkData);
-            }
-
-            $subjectName = $institutionSubjectService->getSubjectName($homeworkDetails->id_subject);
-
-            foreach($studentDetails as $student){
-=======
             $subjectType = $institutionSubjectService->getSubjectLabel($homeworkData['subjectId'], $allSessions);
 
             if($subjectType->label == 'common'){
@@ -377,7 +309,6 @@
             $subjectName =  $institutionSubjectService->getSubjectName($homeworkDetails->id_subject, $allSessions);
 
             foreach ($studentDetails as $student){
->>>>>>> main
 
                 $data['id_student'] = $student->id_student;
                 $data['id_homework'] = $idHomework;
@@ -423,7 +354,6 @@
                     $viewCount ='Not Applicable';
                 }
 
-<<<<<<< HEAD
                 $studentName = $studentMappingRepository->getFullName($student->name, $student->middle_name, $student->last_name);
 
                 $studentHomeworkDetails[] = array(
@@ -431,12 +361,6 @@
                     'id_homework'=>$idHomework,
                     //'student_name'=>$student->name,
                     'student_name'=>$studentName,
-=======
-                $studentHomeworkDetails[] = array(
-                    'id'=>$student->id_student,
-                    'id_homework'=>$idHomework,
-                    'student_name'=>$student->name,
->>>>>>> main
                     'submitted_date'=>$submittedDate,
                     'submitted_time'=>$submittedTime,
                     'status'=>$status,
@@ -470,11 +394,7 @@
             readfile($fileName);
         }
 
-<<<<<<< HEAD
-        public function fetchHomeworkValuationDetails($details){
-=======
         public function fetchHomeworkValuationDetails($details, $allSessions){
->>>>>>> main
 
             $homeworkSubmissionRepository = new HomeworkSubmissionRepository();
             $institutionSubjectService = new InstitutionSubjectService();
@@ -502,13 +422,8 @@
                 $homeworkComments = $homeworkSubmissionDetails->comments;
             }
 
-<<<<<<< HEAD
-            $subjectName =  $institutionSubjectService->getSubjectName($homework->id_subject);
-            $staffDetails = $staffService->find($homework->id_staff);
-=======
             $subjectName =  $institutionSubjectService->getSubjectName($homework->id_subject, $allSessions);
             $staffDetails = $staffService->find($homework->id_staff, $allSessions);
->>>>>>> main
             $gradeValue = explode(',' , $homework->grade);
 
             $permissionDetails = $homeworkSubmissionPermissionRepository->fetchActiveDetails($data);
@@ -545,11 +460,7 @@
             return $homeworkDetails;
         }
 
-<<<<<<< HEAD
-        public function fetchHomeworkVerifiedDetails($details){
-=======
         public function fetchHomeworkVerifiedDetails($details, $allSessions){
->>>>>>> main
 
             $homeworkSubmissionRepository = new HomeworkSubmissionRepository();
             $institutionSubjectService = new InstitutionSubjectService();
@@ -564,13 +475,8 @@
 
             $homework = $homeworkRepository->fetch($data['id_homework']);
             $homeworkSubmissionDetails = $homeworkSubmissionRepository->fetch($data);
-<<<<<<< HEAD
-            $subjectName =  $institutionSubjectService->getSubjectName($homework->id_subject);
-            $staffDetails = $staffService->find($homework->id_staff);
-=======
             $subjectName =  $institutionSubjectService->getSubjectName($homework->id_subject, $allSessions);
             $staffDetails = $staffService->find($homework->id_staff, $allSessions);
->>>>>>> main
             $gradeValue = explode(',' , $homework->grade);
 
             foreach($homeworkSubmissionDetails as $homeworks){
@@ -674,7 +580,4 @@
             return $output;
         }
     }
-<<<<<<< HEAD
-=======
 ?>
->>>>>>> main

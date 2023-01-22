@@ -16,11 +16,7 @@
     class GalleryService {
 
         // Get gallery data
-<<<<<<< HEAD
-        public function getGalleryData(){
-=======
         public function getGalleryData($allSessions){
->>>>>>> main
 
             $staffCategoryRepository = new StaffCategoryRepository();
             $staffSubCategoryRepository = new StaffSubCategoryRepository();
@@ -28,11 +24,7 @@
 
             $staffCategory = $staffCategoryRepository->all();
             $staffSubCategory = $staffSubCategoryRepository->all();
-<<<<<<< HEAD
-            $institutionStandards = $institutionStandardService->fetchStandard();
-=======
             $institutionStandards = $institutionStandardService->fetchStandard($allSessions);
->>>>>>> main
 
             $output = array(
                 'staffCategory' => $staffCategory,
@@ -44,16 +36,6 @@
         }
 
         // View gallery
-<<<<<<< HEAD
-        public function getAll(){
-
-            $galleryRepository = new GalleryRepository();
-            $galleryAudienceRepository = new GalleryAudienceRepository();
-            $galleryAttachmentRepository = new GalleryAttachmentRepository();
-
-            $galleryDetail = array();
-            $galleryData = $galleryRepository->all();
-=======
         public function getAll($allSessions){
 
             $galleryRepository = new GalleryRepository();
@@ -62,7 +44,6 @@
             $galleryDetail = array();
 
             $galleryData = $galleryRepository->all($allSessions);
->>>>>>> main
 
             foreach($galleryData as $key => $gallery){
 
@@ -70,7 +51,6 @@
                 $galleryData = '';
 
                 $audience = $galleryAudienceRepository->galleryAudienceType($gallery->id);
-<<<<<<< HEAD
                 $galleryAttachment = $galleryAttachmentRepository->fetch($gallery->id);
 
                 if(count($galleryAttachment) > 0){
@@ -80,42 +60,24 @@
                 }
 
                 if($audience){
-                    foreach($audience as $audienceType){
-                        $galleryData .= $audienceType['audience_type'].', ';
-                    }
-=======
-
-                if($audience){
 
                     foreach($audience as $audienceType){
                         $galleryData .= $audienceType['audience_type'].', ';
                     }
 
->>>>>>> main
                     $galleryData = substr($galleryData, 0, -2);
                 }
 
                 if($gallery->cover_image == ''){
-<<<<<<< HEAD
                     $coverImage = "https://cdn.egenius.in/img/placeholder.jpg";
                 }else {
-=======
-
-                    $coverImage = "https://cdn.egenius.in/img/placeholder.jpg";
-
-                }else {
-
->>>>>>> main
                     $coverImage = $gallery->cover_image;
                 }
 
                 $galleryDetail[$key]['audienceType'] = $galleryData;
                 $galleryDetail[$key]['coverImage'] = $coverImage;
-<<<<<<< HEAD
                 $galleryDetail[$key]['galleryAttachment'] = $galleryAttachment;
                 $galleryDetail[$key]['status'] = $status;
-=======
->>>>>>> main
             }
 
             return $galleryDetail;
@@ -191,14 +153,8 @@
             $staffSubCategoryRepository = new StaffSubCategoryRepository();
             $uploadService = new UploadService();
 
-<<<<<<< HEAD
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
-=======
             $institutionId = $galleryData->id_institute;
             $academicYear = $galleryData->id_academic;
->>>>>>> main
 
             $galleryName = $galleryData->galleryName;
             $date = Carbon::createFromFormat('d/m/Y', $galleryData->galleryDate)->format('Y-m-d');
@@ -487,20 +443,12 @@
         }
 
         // Deleted gallery records
-<<<<<<< HEAD
-        public function getDeletedRecords(){
-=======
         public function getDeletedRecords($allSessions){
->>>>>>> main
 
             $galleryRepository = new GalleryRepository();
             $galleryAudienceRepository = new GalleryAudienceRepository();
 
-<<<<<<< HEAD
-            $galleryData = $galleryRepository->allDeleted();
-=======
             $galleryData = $galleryRepository->allDeleted($allSessions);
->>>>>>> main
             $galleryDetail = array();
 
             foreach($galleryData as $key => $gallery){

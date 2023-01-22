@@ -22,23 +22,6 @@
     class HomeworkService {
 
         // Get all subjects
-<<<<<<< HEAD
-        public function allSubject($idStandard){
-
-            $standardSubjectRepository = new StandardSubjectRepository();
-            $standardSubjectStaffMappingRepository = new StandardSubjectStaffMappingRepository();
-
-            $allSessions = session()->all();
-            $idStaff = $allSessions['userId'];
-
-            $role = $allSessions['role'];
-            $role = 'staff';
-
-            if($role == 'admin' || $role == 'superadmin'){
-                $allSubjects = $standardSubjectRepository->fetchStandardSubjects($idStandard);
-            }else{
-                $allSubjects = $standardSubjectStaffMappingRepository->fetchStandardStaffSubjects($idStandard, $idStaff);
-=======
         public function allSubject($idStandard, $allSessions){
 
             $standardSubjectRepository = new StandardSubjectRepository();
@@ -51,7 +34,6 @@
                 $allSubjects = $standardSubjectRepository->fetchStandardSubjects($idStandard, $allSessions);
             }else{
                 $allSubjects = $standardSubjectStaffMappingRepository->fetchStandardStaffSubjects($idStandard, $idStaff, $allSessions);
->>>>>>> main
             }
 
             return $allSubjects;
@@ -67,11 +49,7 @@
         }
 
         // Get all homework
-<<<<<<< HEAD
-        public function getAll(){
-=======
         public function getAll($allSessions){
->>>>>>> main
 
             $homeworkRepository = new HomeworkRepository();
             $homeworkDetailRepository = new HomeworkDetailRepository();
@@ -81,17 +59,6 @@
 
             $homeworkDetails = array();
 
-<<<<<<< HEAD
-            $allSessions = session()->all();
-            $idStaff = $allSessions['userId'];
-
-            $role = $allSessions['role'];
-
-            if($role == 'admin' || $role == 'superadmin'){
-                $homeworkDetail = $homeworkRepository->all();
-            }else{
-                $homeworkDetail = $homeworkRepository->fetchHomeworkUsingStaff($idStaff);
-=======
             $idStaff = $allSessions['userId'];
             $role = $allSessions['role'];
 
@@ -99,19 +66,13 @@
                 $homeworkDetail = $homeworkRepository->all($allSessions);
             }else{
                 $homeworkDetail = $homeworkRepository->fetchHomeworkUsingStaff($idStaff, $allSessions);
->>>>>>> main
             }
 
             foreach($homeworkDetail as  $details){
 
                 $standardName = $institutionStandardService->fetchStandardByUsingId($details->id_standard);
-<<<<<<< HEAD
-                $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject);
-                $staffDetails = $staffService->find($details->id_staff);
-=======
                 $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject, $allSessions);
                 $staffDetails = $staffService->find($details->id_staff, $allSessions);
->>>>>>> main
                 $fromDate = Carbon::createFromFormat('Y-m-d', $details->start_date)->format('d/m/Y');
                 $toDate = Carbon::createFromFormat('Y-m-d', $details->end_date)->format('d/m/Y');
                 $homeworkImageDetail = $homeworkDetailRepository->fetch($details->id);
@@ -147,7 +108,6 @@
         }
 
         // Get particular homework
-<<<<<<< HEAD
         // public function find($id){
 
         //     $homeworkRepository = new HomeworkRepository();
@@ -191,19 +151,7 @@
         }
 
         // Get homework details
-        public function fetchDetails($data){
-=======
-        public function find($id){
-
-            $homeworkRepository = new HomeworkRepository();
-
-            $homework = $homeworkRepository->fetch($id);
-            return $homework;
-        }
-
-        // Get homework details
         public function fetchDetails($data, $allSessions){
->>>>>>> main
 
             $homeworkDetailRepository = new HomeworkDetailRepository();
             $institutionStandardService = new InstitutionStandardService();
@@ -244,13 +192,8 @@
 
             $homework = $homeworkRepository->fetch($id);
             $standardName = $institutionStandardService->fetchStandardByUsingId($homework->id_standard);
-<<<<<<< HEAD
-            $subjectName =  $institutionSubjectService->getSubjectName($homework->id_subject);
-            $staffDetails = $staffService->find($homework->id_staff);
-=======
             $subjectName =  $institutionSubjectService->getSubjectName($homework->id_subject, $allSessions);
             $staffDetails = $staffService->find($homework->id_staff, $allSessions);
->>>>>>> main
             $fromDate = Carbon::createFromFormat('Y-m-d', $homework->start_date)->format('d/m/Y');
             $toDate = Carbon::createFromFormat('Y-m-d', $homework->end_date)->format('d/m/Y');
 
@@ -292,16 +235,9 @@
             $homeworkRepository = new HomeworkRepository();
             $homeworkDetailRepository = new HomeworkDetailRepository();
             $uploadService = new UploadService();
-<<<<<<< HEAD
-
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
-=======
             
             $institutionId = $homeworkData->id_institute;
             $academicYear = $homeworkData->id_academic;
->>>>>>> main
 
             $homeworkClass = $homeworkData->homework_class;
             $homeworkSubject = $homeworkData->homework_subject;
@@ -412,14 +348,8 @@
             $homeworkRepository = new HomeworkRepository();
             $homeworkDetailRepository = new HomeworkDetailRepository();
 
-<<<<<<< HEAD
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
-=======
             $institutionId = $homeworkData->id_institute;
             $academicYear = $homeworkData->id_academic;
->>>>>>> main
 
             $homeworkClass = $homeworkData->homework_class;
             $homeworkSubject = $homeworkData->homework_subject;
@@ -451,9 +381,6 @@
             $homeworkStartDate = Carbon::createFromFormat('d/m/Y', $homeworkData->homework_start_date)->format('Y-m-d');
             $homeworkEndDate = Carbon::createFromFormat('d/m/Y', $homeworkData->homework_end_date)->format('Y-m-d');
 
-<<<<<<< HEAD
-            $check = Homework::where('id_institute', $institutionId)->where('id_academic', $academicYear)->where('id_standard', $homeworkClass)->where('id_subject', $homeworkSubject)->where('id_staff', $homeworkStaff)->where('name', $homeworkName)->where('id', '!=', $id)->first();
-=======
             $check = Homework::where('id_institute', $institutionId)
                             ->where('id_academic', $academicYear)
                             ->where('id_standard', $homeworkClass)
@@ -462,7 +389,6 @@
                             ->where('name', $homeworkName)
                             ->where('id', '!=', $id)
                             ->first();
->>>>>>> main
 
             if(!$check){
 
@@ -554,11 +480,7 @@
             return $output;
         }
 
-<<<<<<< HEAD
-        public function getDetails($data){
-=======
         public function getDetails($data, $allSessions){
->>>>>>> main
 
             $institutionStandardService = new InstitutionStandardService();
             $standardSubjectService = new StandardSubjectService();
@@ -569,15 +491,9 @@
             $subjectId = $data->id_subject;
             $staffs = array();
 
-<<<<<<< HEAD
-            $homeworkDetails['standard'] = $institutionStandardService->fetchStandard();
-            $homeworkDetails['subject'] = $standardSubjectService->fetchStandardSubjects($standardId);
-            $staffSubjectDetails = $standardSubjectStaffMappingRepository->getStaffs($subjectId, $standardId);
-=======
             $homeworkDetails['standard'] = $institutionStandardService->fetchStandard($allSessions);
             $homeworkDetails['subject'] = $standardSubjectService->fetchStandardSubjects($standardId, $allSessions);
             $staffSubjectDetails = $standardSubjectStaffMappingRepository->getStaffs($subjectId, $standardId, $allSessions);
->>>>>>> main
 
             if($staffSubjectDetails){
                 foreach($staffSubjectDetails as $index => $details){
@@ -591,22 +507,12 @@
         }
 
         // Download homework attachment zip
-<<<<<<< HEAD
-        public function downloadHomeworkFiles($id, $type) {
-=======
         public function downloadHomeworkFiles($id, $type, $allSessions) {
->>>>>>> main
 
             $homeworkDetailRepository = new HomeworkDetailRepository();
             $homeworkViewedDetailsService = new HomeworkViewedDetailsService();
 
-<<<<<<< HEAD
-            $allSessions = session()->all();
             $idStudent = $allSessions['userId'];
-
-=======
-            $idStudent = $allSessions['userId'];
->>>>>>> main
             $data['id_student'] = $idStudent;
             $data['id_homework'] = $id;
 
@@ -632,20 +538,12 @@
         }
 
         // Deleted homework records
-<<<<<<< HEAD
-        public function getDeletedRecords(){
-=======
         public function getDeletedRecords($allSessions){
->>>>>>> main
 
             $homeworkRepository = new HomeworkRepository();
 
             $homeworkDetail = array();
-<<<<<<< HEAD
-            $homeworkData = $homeworkRepository->allDeleted();
-=======
             $homeworkData = $homeworkRepository->allDeleted($allSessions);
->>>>>>> main
 
             foreach($homeworkData as $key => $data){
 
@@ -681,7 +579,4 @@
             return $output;
         }
     }
-<<<<<<< HEAD
-=======
 ?>
->>>>>>> main

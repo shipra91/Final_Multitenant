@@ -43,16 +43,9 @@
         public function add($institutionBankDetailsData){
 
             $institutionBankDetailsRepository = new InstitutionBankDetailsRepository();
-<<<<<<< HEAD
-
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
-=======
             
             $institutionId = $institutionBankDetailsData->id_academic;
             $academicYear = $institutionBankDetailsData->id_institute;
->>>>>>> main
 
             $insertedCount = 0;
 
@@ -169,17 +162,10 @@
         }
 
          // Deleted grade records
-<<<<<<< HEAD
-         public function getDeletedRecords(){
-
-            $institutionBankDetailsRepository = new InstitutionBankDetailsRepository();
-            $data = $institutionBankDetailsRepository->allDeleted();
-=======
          public function getDeletedRecords($allSessions){
 
             $institutionBankDetailsRepository = new InstitutionBankDetailsRepository();
             $data = $institutionBankDetailsRepository->allDeleted($allSessions);
->>>>>>> main
             return $data;
         }
 

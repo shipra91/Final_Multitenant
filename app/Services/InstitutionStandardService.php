@@ -1,14 +1,9 @@
 <?php
     namespace App\Services;
-<<<<<<< HEAD
 
     use App\Models\InstitutionStandard;
     use App\Repositories\InstitutionStandardRepository;
     use App\Repositories\CourseRepository;
-=======
-    use App\Models\InstitutionStandard;
-    use App\Repositories\InstitutionStandardRepository;
->>>>>>> main
     use App\Interfaces\InstitutionStandardRepositoryInterface;
     use App\Services\InstituteService;
     use App\Services\StandardService;
@@ -29,11 +24,7 @@
 
     class InstitutionStandardService {
 
-<<<<<<< HEAD
-        public function all(){
-=======
         public function all($allSessions){
->>>>>>> main
 
             $boardService = new BoardService();
             $yearSemService = new YearSemService();
@@ -43,24 +34,14 @@
             $institutionBoardService = new InstitutionBoardService();
             $standardService = new StandardService();
             $institutionStandardRepository = new InstitutionStandardRepository();
-<<<<<<< HEAD
-
-            $institutionStandardDetails = array();
-            $institutionStandard = $institutionStandardRepository->all();
-=======
             $institutionStandardDetails = array();
             $institutionStandard = $institutionStandardRepository->all($allSessions);
->>>>>>> main
 
             foreach($institutionStandard as $data){
 
                 $standardName = $divisionName = $streamName = $combinationName = $boardName = $yearName = $semName = '';
 
                 $standard = $standardService->find($data->id_standard);
-<<<<<<< HEAD
-
-=======
->>>>>>> main
                 if($standard){
                     $standardName = $standard->name;
                 }
@@ -117,14 +98,9 @@
             return $institutionStandardDetails;
         }
 
-<<<<<<< HEAD
-        public function fetchStandard(){
-
-=======
         public function fetchStandard($allSessions){
 
             // DB::enableQueryLog();
->>>>>>> main
             $boardService = new BoardService();
             $yearSemService = new YearSemService();
             $combinationService = new CombinationService();
@@ -132,21 +108,11 @@
             $divisionService = new DivisionService();
             $standardService = new StandardService();
             $institutionStandardRepository = new InstitutionStandardRepository();
-<<<<<<< HEAD
-
-            $institutionStandardDetails = array();
-            $standardDetails = array();
-            $standardArray = array();
-
-            $institutionStandard = $institutionStandardRepository->all();
-
-=======
             $institutionStandardDetails = array();
             $institutionStandard = $institutionStandardRepository->all($allSessions);
             $standardDetails = array();
             $standardArray = array();
 
->>>>>>> main
             foreach($institutionStandard as $key => $data){
 
                 $standard = $standardService->find($data->id_standard);
@@ -197,17 +163,12 @@
             return $standardArray;
         }
 
-<<<<<<< HEAD
-        public function fetchStaffStandard(){
-
-=======
         public function fetchStaffStandard($allSessions){
 
             $role = $allSessions['role'];
             $idStaff = $allSessions['userId'];
           
             // DB::enableQueryLog();
->>>>>>> main
             $boardService = new BoardService();
             $yearSemService = new YearSemService();
             $combinationService = new CombinationService();
@@ -216,28 +177,15 @@
             $divisionService = new DivisionService();
             $standardService = new StandardService();
             $institutionStandardRepository = new InstitutionStandardRepository();
-<<<<<<< HEAD
 
             $institutionStandardDetails = array();
             $standardDetails = array();
-
-            $allSessions = session()->all();
-            $role = $allSessions['role'];
-            $idStaff = $allSessions['userId'];
-
-=======
-            $institutionStandardDetails = array();
-         
->>>>>>> main
+            
             if($role == 'admin' || $role == 'superadmin'){
                 $standardData = $institutionStandardRepository->all();
             }else{
                 $standardData = $standardSubjectStaffMappingService->fetchStandardUsingStaff($idStaff);
             }
-<<<<<<< HEAD
-=======
-            $standardDetails = array();
->>>>>>> main
 
             foreach($standardData as $key => $data){
 
@@ -303,7 +251,6 @@
             $standardService = new StandardService();
             $institutionStandardRepository = new InstitutionStandardRepository();
 
-<<<<<<< HEAD
             $class = '';
             $data = $institutionStandardRepository->fetch($id);
 
@@ -353,52 +300,6 @@
                 $class = $standardName.' '.$divisionName.' '.$streamName.' '.$combinationName.' '.$semName.' '.$boardName;
             }
 
-=======
-            $data = $institutionStandardRepository->fetch($id);
-            $standard = $standardService->find($data->id_standard);
-            $division = $divisionService->find($data->id_division);
-            $stream = $streamService->find($data->id_stream);
-            $combination = $combinationService->find($data->id_combination);
-            $board = $boardService->find($data->id_board);
-
-            $standardName = $divisionName = $streamName = $combinationName = $boardName = $yearName = $semName = '';
-
-            if($standard){
-                $standardName = $standard->name;
-            }
-
-            if($division){
-                $divisionName = $division->name;
-            }
-
-            if($stream){
-                $streamName = $stream->name;
-            }
-
-            if($combination){
-                $combinationName = $combination->name;
-            }
-
-            if($board){
-                $boardName = $board->name;
-            }
-
-            if($data->standard_type == 'year'){
-
-                $year = $yearSemService->find($data->id_year);
-                if($year){
-                    $yearName = $year->name;
-                }
-
-                $sem = $yearSemService->findSem($data->id_sem);
-                if($sem){
-                    $semName = $sem->name;
-                }
-            }
-
-            $class = $standardName.' '.$divisionName.' '.$streamName.' '.$combinationName.' '.$semName.' '.$boardName;
-
->>>>>>> main
             return $class;
         }
 
@@ -518,16 +419,10 @@
 
         public function add($institutionStandardData){
 
-<<<<<<< HEAD
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
-=======
             $institutionStandardRepository = new InstitutionStandardRepository();
 
             $institutionId = $institutionStandardData->id_institute;
             $academicYear = $institutionStandardData->id_academic;
->>>>>>> main
 
             if($institutionStandardData->standard_type != 'general'){
 
@@ -548,7 +443,6 @@
                 $standardSem = '';
             }
 
-<<<<<<< HEAD
             foreach($institutionStandardData->division as $division){
 
                 $institutionStandardRepository = new InstitutionStandardRepository();
@@ -567,13 +461,6 @@
                                             ->first();
                 if(!$check){
 
-=======
-            foreach($institutionStandardData->division as $division)
-            {
-                $check = InstitutionStandard::where('id_institute', $institutionId)->where('id_academic_year', $academicYear)->where('id_standard', $institutionStandardData->standard)->where('id_division', $division)->where('id_year', $institutionStandardData->year)->where('id_sem', $institutionStandardData->sem)->where('id_stream', $institutionStandardData->stream)->where('id_combination', $institutionStandardData->combination)->where('id_board', $institutionStandardData->board)->where('id_course', $institutionStandardData->course)->where('standard_type', $institutionStandardData->standard_type)->first();
-                if(!$check)
-                {
->>>>>>> main
                     $data = array(
                         'id_academic_year' => $academicYear,
                         'id_institute' => $institutionId,
@@ -590,7 +477,6 @@
                     );
 
                     $response = $institutionStandardRepository->store($data);
-<<<<<<< HEAD
 
                     if($response){
                         $signal = 'success';
@@ -600,18 +486,6 @@
                         $msg = 'Error inserting data!';
                     }
 
-=======
-                    if($response)
-                    {
-                        $signal = 'success';
-                        $msg = 'Data inserted successfully!';
-                    }
-                    else
-                    {
-                        $signal = 'failure';
-                        $msg = 'Error inserting data!';
-                    }
->>>>>>> main
                 }else{
                     $signal = 'exist';
                     $msg = 'This data already exists!';
@@ -626,17 +500,6 @@
             return $output;
         }
 
-<<<<<<< HEAD
-        public function fetchStandardName(){
-
-            $standardService = new StandardService();
-            $streamService = new StreamService();
-            $institutionStandardRepository = new InstitutionStandardRepository();
-
-            $standardStreamDetails['data'] = array();
-
-            $institutionStandardDetails = $institutionStandardRepository->fetchStandard();
-=======
         public function fetchStandardName($allSessions){
 
             $standardService = new StandardService();
@@ -644,7 +507,6 @@
             $standardStreamDetails['data'] = array();
             $institutionStandardRepository = new InstitutionStandardRepository();
             $institutionStandardDetails = $institutionStandardRepository->fetchStandard($allSessions);
->>>>>>> main
 
             foreach($institutionStandardDetails as $key => $data){
 
@@ -652,10 +514,6 @@
                 $streamData = $institutionStandardRepository->fetchStreams($data->id_standard);
 
                 foreach($streamData as $index => $details){
-<<<<<<< HEAD
-=======
-
->>>>>>> main
                     $standardData['id'] = $data->id_standard.'/'.$details->id_stream;
                     $streamDetails = $streamService->find($details->id_stream);
                     $standardData['standard'] = $standardDetails->name;
@@ -672,28 +530,17 @@
             $divisionService = new DivisionService();
             $combinationService = new CombinationService();
             $institutionStandardRepository = new InstitutionStandardRepository();
-<<<<<<< HEAD
 
             $combinationName = $divisionName = '';
             $institutionStandardDetails = $institutionStandardRepository->fetch($idStandard);
 
             $combinationDetails = $combinationService->find($institutionStandardDetails->id_combination);
 
-=======
-            $institutionStandardDetails = $institutionStandardRepository->fetch($idStandard);
-            $combinationName = $divisionName = '';
-
-            $combinationDetails = $combinationService->find($institutionStandardDetails->id_combination);
->>>>>>> main
             if($combinationDetails){
                 $combinationName = $combinationDetails->name;
             }
 
             $divisionDetails = $divisionService->find($institutionStandardDetails->id_division);
-<<<<<<< HEAD
-
-=======
->>>>>>> main
             if($divisionDetails){
                 $divisionName = $divisionDetails->name;
             }
@@ -703,14 +550,6 @@
             return $standardStreamDetails;
         }
 
-<<<<<<< HEAD
-        public function fetchStandardDetails($request){
-            $institutionStandardRepository = new InstitutionStandardRepository();
-            return $institutionStandardRepository->fetchStandardDetails($request);
-        }
-
-        public function fetchStandardGroupByCombination(){
-=======
         public function fetchStandardDetails($request, $allSessions){
 
             $institutionStandardRepository = new InstitutionStandardRepository();
@@ -719,18 +558,14 @@
         }
 
         public function fetchStandardGroupByCombination($allSessions){
->>>>>>> main
 
             $institutionStandardRepository = new InstitutionStandardRepository();
 
             // return $institutionStandardRepository->fetchStandardGroupByCombination();
-<<<<<<< HEAD
-=======
 
             $role = $allSessions['role'];
             $idStaff = $allSessions['userId'];
 
->>>>>>> main
             $boardService = new BoardService();
             $yearSemService = new YearSemService();
             $combinationService = new CombinationService();
@@ -739,27 +574,12 @@
             $divisionService = new DivisionService();
             $standardService = new StandardService();
             $institutionStandardRepository = new InstitutionStandardRepository();
-<<<<<<< HEAD
-
-            $institutionStandardDetails = array();
-
-            $allSessions = session()->all();
-            $role = $allSessions['role'];
-            // $role = 'staff';
-            $idStaff = $allSessions['userId'];
-
-            if($role == 'admin' || $role == 'superadmin'){
-                $standardData = $institutionStandardRepository->fetchStandardGroupByCombination();
-            }else{
-                $standardData = $standardSubjectStaffMappingService->fetchStandardUsingStaff($idStaff);
-=======
             $institutionStandardDetails = array();
 
             if($role == 'admin' || $role == 'superadmin'){
                 $standardData = $institutionStandardRepository->fetchStandardGroupByCombination($allSessions);
             }else{
                 $standardData = $standardSubjectStaffMappingService->fetchStandardUsingStaff($idStaff, $allSessions);
->>>>>>> main
             }
 
             $standardDetails = array();
@@ -875,7 +695,6 @@
             $divisionService = new DivisionService();
             $combinationService = new CombinationService();
             $institutionStandardRepository = new InstitutionStandardRepository();
-<<<<<<< HEAD
 
             $institutionStandardDivisions = $institutionStandardRepository->getDivisions($idStandard, $idYear, $idSem, $idStream, $idCombination);
             return $institutionStandardDivisions;
@@ -953,11 +772,4 @@
             return $standardArray;
         }
     }
-=======
-            $institutionStandardDivisions = $institutionStandardRepository->getDivisions($idStandard, $idYear, $idSem, $idStream, $idCombination);
-
-            return $institutionStandardDivisions;
-        }
-    }
 ?>
->>>>>>> main

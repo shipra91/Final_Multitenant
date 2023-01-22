@@ -20,22 +20,14 @@
 
     class FeeMasterService{       
 
-<<<<<<< HEAD
-        public function getFeeMasterData(){
-=======
         public function getFeeMasterData($allSessions){
->>>>>>> main
             
             $feeMasterRepository = new FeeMasterRepository(); 
             $feeCategoryRepository = new FeeCategoryRepository();
             $institutionFeeTypeMappingRepository = new InstitutionFeeTypeMappingRepository();
             $institutionStandardService = new InstitutionStandardService();
             $output = array();
-<<<<<<< HEAD
-            $feeMasterDetails = $feeMasterRepository->getAll();
-=======
             $feeMasterDetails = $feeMasterRepository->getAll($allSessions);
->>>>>>> main
             foreach($feeMasterDetails as $details) {
                 $feeCategory = $feeCategoryRepository->fetch($details->id_fee_category);
                 $feeType = $institutionFeeTypeMappingRepository->fetch($details->id_fee_type);
@@ -52,25 +44,15 @@
             return $output;
         }
 
-<<<<<<< HEAD
-        public function getAllData(){
-=======
         public function getAllData($allSessions){
->>>>>>> main
             
             $feeMappingRepository = new FeeMappingRepository();
             $institutionFeeTypeMappingRepository = new InstitutionFeeTypeMappingRepository();
             $institutionStandardService = new InstitutionStandardService();
             
-<<<<<<< HEAD
-            $feeCategory = $feeMappingRepository->getFeeCategory();
-            $feeType = $institutionFeeTypeMappingRepository->getInstitutionFeetype();
-            $standard = $institutionStandardService->fetchStandard();
-=======
             $feeCategory = $feeMappingRepository->getFeeCategory($allSessions);
             $feeType = $institutionFeeTypeMappingRepository->getInstitutionFeetype($allSessions);
             $standard = $institutionStandardService->fetchStandard($allSessions);
->>>>>>> main
 
             $output = array(
                 'feeCategory' => $feeCategory,
@@ -81,11 +63,7 @@
         }
 
         // Get Fee Heading Based On Fee Category
-<<<<<<< HEAD
-        public function allFeeData($request){
-=======
         public function allFeeData($request, $allSessions){
->>>>>>> main
             $allData = array();
 
             $feeMappingRepository = new FeeMappingRepository();
@@ -105,11 +83,7 @@
             $feeMasterStatus = "not-added";
             $feeCollectionStatus = "not-collected";
 
-<<<<<<< HEAD
-            $feeMasterCheck = $feeMasterRepository->getFeeMasterDetails($allStandards, $fee_type, $idFeeCategory);
-=======
             $feeMasterCheck = $feeMasterRepository->getFeeMasterDetails($allStandards, $fee_type, $idFeeCategory, $allSessions);
->>>>>>> main
 
             
             if($feeMasterCheck && ($feeMasterCheck->installment_type != $installment_type)){
@@ -117,11 +91,7 @@
                 $feeMasterStatus = "added";
             }
 
-<<<<<<< HEAD
-            $feeCollectionForMaster = $feeCollectionRepository->getCollectionForFeeMaster($allStandards, $fee_type, $idFeeCategory);
-=======
             $feeCollectionForMaster = $feeCollectionRepository->getCollectionForFeeMaster($allStandards, $fee_type, $idFeeCategory, $allSessions);
->>>>>>> main
             if($feeCollectionForMaster){
                 $feeCollectionStatus = 'collected';
                 $allData['feeCollectionStatus'] = $feeCollectionStatus;
@@ -132,11 +102,7 @@
 
                 foreach($allStandards as $standard){ 
 
-<<<<<<< HEAD
-                    $feeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory);
-=======
                     $feeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory, $allSessions);
->>>>>>> main
                     // $feeHeadings = $feeHeadingRepository->fetchCategoryWiseHeading($idFeeCategory);
 
                     foreach($feeHeadings as $index => $feeHeading){         
@@ -144,11 +110,7 @@
                         $allData['headingWise'][$index]['heading_id'] = $feeHeading->id;
                         $allData['headingWise'][$index]['heading_name'] = $feeHeading->display_name;
 
-<<<<<<< HEAD
-                        $getFeeMasterData = $feeMasterRepository->all($idFeeCategory, $standard, $fee_type, $installment_type);
-=======
                         $getFeeMasterData = $feeMasterRepository->all($idFeeCategory, $standard, $fee_type, $installment_type, $allSessions);
->>>>>>> main
                         
                         if($getFeeMasterData){
 
@@ -204,11 +166,7 @@
 
                 foreach($allStandards as $standard){ 
 
-<<<<<<< HEAD
-                    $getFeeMasterData = $feeMasterRepository->all($idFeeCategory, $standard, $fee_type, $installment_type);
-=======
                     $getFeeMasterData = $feeMasterRepository->all($idFeeCategory, $standard, $fee_type, $installment_type, $allSessions);
->>>>>>> main
                     
                     if($getFeeMasterData){
 
@@ -219,11 +177,7 @@
                         if($feeCategorySettingData){
 
                             //$feeHeadings = $feeHeadingRepository->fetchCategoryWiseHeading($idFeeCategory);
-<<<<<<< HEAD
-                            $feeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory);
-=======
                             $feeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory, $allSessions);
->>>>>>> main
 
                             foreach($feeHeadings as $index => $feeHeading){   
 
@@ -291,11 +245,7 @@
 
                         // $feeHeadings = $feeHeadingRepository->fetchCategoryWiseHeading($idFeeCategory);
 
-<<<<<<< HEAD
-                        $feeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory);
-=======
                         $feeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory, $allSessions);
->>>>>>> main
 
 
                         foreach($feeHeadings as $index => $feeHeading){   
@@ -325,11 +275,7 @@
         }
 
         // Insert & Update Fee Master
-<<<<<<< HEAD
-        public function add($feeMasterData){
-=======
         public function add($feeMasterData, $allSessions){
->>>>>>> main
 
             $count=0;
             $feeMasterRepository = new FeeMasterRepository();
@@ -345,11 +291,7 @@
 
             foreach($standards as $standard){
 
-<<<<<<< HEAD
-                $getFeeMasterData = $feeMasterRepository->all($feeMasterData->feeCtegory, $standard, $feeMasterData->selectedFeeType, $feeMasterData->feeInstallment);
-=======
                 $getFeeMasterData = $feeMasterRepository->all($feeMasterData->feeCtegory, $standard, $feeMasterData->selectedFeeType, $feeMasterData->feeInstallment, $allSessions);
->>>>>>> main
 
                 if(!$getFeeMasterData){
 
@@ -560,22 +502,13 @@
                     }
                 }
 
-<<<<<<< HEAD
-                $studentDetails = $studentMappingRepository->fetchStudentByStandardFeetype($standard, $feeMasterData->selectedFeeType);
-              
-=======
                 $studentDetails = $studentMappingRepository->fetchStudentByStandardFeetype($standard, $feeMasterData->selectedFeeType, $allSessions);
->>>>>>> main
                 if(count($studentDetails) > 0){
                     foreach($studentDetails as $student){
                         $assignFee = $feeAssignService->assignFeeForStudent($standard, $feeMasterData->selectedFeeType, $student->id_student);
                     }
                 }
             }
-<<<<<<< HEAD
-=======
-
->>>>>>> main
             if($count){
 
                 $signal = 'success';
@@ -595,11 +528,7 @@
             return $output;
         }
 
-<<<<<<< HEAD
-        public function allCustomFeeData($request){
-=======
         public function allCustomFeeData($request, $allSessions){
->>>>>>> main
 
             $allData = array();
             
@@ -615,22 +544,14 @@
             $fee_type = $request->feeType;
             $installment_type = $request->instalmentTypeId;
 
-<<<<<<< HEAD
-            $feeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory);
-=======
             $feeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($idFeeCategory, $allSessions);
->>>>>>> main
 
             foreach($feeHeadings as $index => $feeHeading){         
                 
                 $allData[$index]['heading_id'] = $feeHeading->id;
                 $allData[$index]['heading_name'] = $feeHeading->display_name;
 
-<<<<<<< HEAD
-                $getFeeMasterData = $feeMasterRepository->all($idFeeCategory, $standard, $fee_type, $installment_type);
-=======
                 $getFeeMasterData = $feeMasterRepository->all($idFeeCategory, $standard, $fee_type, $installment_type, $allSessions);
->>>>>>> main
                 
                 if($getFeeMasterData){
 

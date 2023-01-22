@@ -12,11 +12,7 @@
 
     class MenuPermissionService {
 
-<<<<<<< HEAD
-        public function getAll(){
-=======
         public function getAll($allSessions){
->>>>>>> main
 
             $moduleRepository = new ModuleRepository();
             $institutionModuleRepository = new InstitutionModuleRepository();
@@ -25,20 +21,12 @@
             $data = array();
             $arrayPermission = array();
 
-<<<<<<< HEAD
-            $permittedRoles = $menuPermissionRepository->permissionedRoles();
-=======
             $permittedRoles = $menuPermissionRepository->permissionedRoles($allSessions);
->>>>>>> main
 
             foreach($permittedRoles as $index => $role){
 
                 $modules = "";
-<<<<<<< HEAD
-                $permissions = $menuPermissionRepository->roleModules($role['id_role']);
-=======
                 $permissions = $menuPermissionRepository->roleModules($role['id_role'], $allSessions);
->>>>>>> main
                 $roleData = $roleRepository->fetch($role['id_role']);
 
                 foreach($permissions as $permission){
@@ -68,11 +56,7 @@
             return $arrayPermission;
         }
 
-<<<<<<< HEAD
-        public function getAllServicePermission(){
-=======
         public function getAllServicePermission($allSessions){
->>>>>>> main
 
             $moduleRepository = new ModuleRepository();
             $roleRepository = new RoleRepository();
@@ -82,11 +66,7 @@
             $arrayPermission = array();
             $roleId = $roleRepository->getRoleID($userType);
 
-<<<<<<< HEAD
-            $permissions = $menuPermissionRepository->getAllServicePermission($roleId->id);
-=======
             $permissions = $menuPermissionRepository->getAllServicePermission($roleId->id, $allSessions);
->>>>>>> main
 
             if($permissions){
 
@@ -108,11 +88,7 @@
             return $arrayPermission;
         }
 
-<<<<<<< HEAD
-        public function getDeletedRecords(){
-=======
         public function getDeletedRecords($allSessions){
->>>>>>> main
 
             $moduleRepository = new ModuleRepository();
             $roleRepository = new RoleRepository();
@@ -121,11 +97,7 @@
 
             $data = array();
             $arrayPermission = array();
-<<<<<<< HEAD
-            $permissions = $menuPermissionRepository->allDeleted();
-=======
             $permissions = $menuPermissionRepository->allDeleted($allSessions);
->>>>>>> main
             // dd($permissions);
             foreach($permissions as $permission){
 
@@ -158,15 +130,6 @@
 
         public function add($menuPermissionData){
 
-<<<<<<< HEAD
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicId = $allSessions['academicYear'];
-
-            $allActions = ['view', 'viewOwn', 'create', 'edit', 'delete', 'export', 'import'];
-
-            $menuPermissionRepository = new MenuPermissionRepository();
-=======
             $menuPermissionRepository = new MenuPermissionRepository();
 
             $institutionId = $menuPermissionData->id_institute;
@@ -174,7 +137,6 @@
 
             $allActions = ['view', 'viewOwn', 'create', 'edit', 'delete', 'export', 'import'];
 
->>>>>>> main
             $count = 0;
 
             foreach($menuPermissionData->module as $index => $moduleId){
@@ -303,17 +265,10 @@
             return $output;
         }
 
-<<<<<<< HEAD
-        public function getRolesModulesData(){
-
-            DB::enableQueryLog();
-            $allSessions = session()->all();
-=======
         public function getRolesModulesData($allSessions){
 
             DB::enableQueryLog();
             
->>>>>>> main
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             $modules = array();
@@ -323,11 +278,7 @@
             $moduleRepository = new ModuleRepository();
 
             $allParentModules = $institutionModuleRepository->all($institutionId);
-<<<<<<< HEAD
-            $roles = $roleRepository->institutionRoleMenuPermission();
-=======
             $roles = $roleRepository->institutionRoleMenuPermission($allSessions);
->>>>>>> main
             // dd($roles);
 
             foreach($allParentModules as $index => $module){
@@ -345,11 +296,7 @@
                 $modules[$index]["access_for"] = $module->access_for;
                 $modules[$index]['sub_modules'] = array();
 
-<<<<<<< HEAD
-                $allChilds = $institutionModuleRepository->allSubModules($module->id);
-=======
                 $allChilds = $institutionModuleRepository->allSubModules($module->id, $allSessions);
->>>>>>> main
 
                 if(count($allChilds) > 0){
 
@@ -378,14 +325,8 @@
             return $output;
         }
 
-<<<<<<< HEAD
-        public function getServiceRoleModulesData(){
-
-            $allSessions = session()->all();
-=======
         public function getServiceRoleModulesData($allSessions){
 
->>>>>>> main
             $institutionId = $allSessions['institutionId'];
 
             $institutionModuleRepository = new InstitutionModuleRepository();
@@ -412,11 +353,7 @@
                 $modules[$index]["access_for"] = $module->access_for;
                 $modules[$index]['sub_modules'] = array();
 
-<<<<<<< HEAD
-                $allChilds = $institutionModuleRepository->allSubModules($module->id);
-=======
                 $allChilds = $institutionModuleRepository->allSubModules($module->id, $allSessions);
->>>>>>> main
 
                 if($allChilds){
 
@@ -434,11 +371,7 @@
                         $modules[$index]['sub_modules'][$key]["is_email_mapped"] = $child->is_email_mapped;
                         $modules[$index]['sub_modules'][$key]["access_for"] = $child->access_for;
                         // dd($permission);
-<<<<<<< HEAD
-                        $permission = $menuPermissionRepository->roleModulesPermission($idRole, $child->id_institution_module);
-=======
                         $permission = $menuPermissionRepository->roleModulesPermission($idRole, $child->id_institution_module, $allSessions);
->>>>>>> main
 
                         if($permission){
 
@@ -468,11 +401,7 @@
 
                 }else{
 
-<<<<<<< HEAD
-                    $permission = $menuPermissionRepository->roleModulesPermission($idRole, $module->id_institution_module);
-=======
                     $permission = $menuPermissionRepository->roleModulesPermission($idRole, $module->id_institution_module, $allSessions);
->>>>>>> main
 
                     if($permission){
 
@@ -525,17 +454,10 @@
             return $output;
         }
 
-<<<<<<< HEAD
-        public function restoreAll(){
-
-            $menuPermissionRepository = new MenuPermissionRepository();
-            $module = $menuPermissionRepository->restoreAll();
-=======
         public function restoreAll($allSessions){
 
             $menuPermissionRepository = new MenuPermissionRepository();
             $module = $menuPermissionRepository->restoreAll($allSessions);
->>>>>>> main
 
             if($module){
                 $signal = 'success';
@@ -550,11 +472,7 @@
             return $output;
         }
 
-<<<<<<< HEAD
-        public function roleMenuPermission($idRole, $institutionId){
-=======
         public function roleMenuPermission($idRole, $institutionId, $allSessions){
->>>>>>> main
 
             $menuPermissionRepository = new MenuPermissionRepository();
             $institutionModuleRepository = new InstitutionModuleRepository();
@@ -582,11 +500,7 @@
                 $modules[$index]["access_for"] = $module->access_for;
                 $modules[$index]['sub_modules'] = array();
 
-<<<<<<< HEAD
-                $allChilds = $institutionModuleRepository->allSubModules($module->id);
-=======
                 $allChilds = $institutionModuleRepository->allSubModules($module->id, $allSessions);
->>>>>>> main
                 // dd($allChilds);
 
                 if(count($allChilds) > 0){
@@ -605,11 +519,7 @@
                         $modules[$index]['sub_modules'][$key]["is_email_mapped"] = $child->is_email_mapped;
                         $modules[$index]['sub_modules'][$key]["access_for"] = $child->access_for;
 
-<<<<<<< HEAD
-                        $permission = $menuPermissionRepository->roleModulesPermission($idRole, $child->id_institution_module);
-=======
                         $permission = $menuPermissionRepository->roleModulesPermission($idRole, $child->id_institution_module, $allSessions);
->>>>>>> main
 
                         if($permission){
 
@@ -637,11 +547,7 @@
 
                 }else{
 
-<<<<<<< HEAD
-                    $permission = $menuPermissionRepository->roleModulesPermission($idRole, $module->id_institution_module);
-=======
                     $permission = $menuPermissionRepository->roleModulesPermission($idRole, $module->id_institution_module, $allSessions);
->>>>>>> main
                     // dd($permission);
 
                     if($permission){

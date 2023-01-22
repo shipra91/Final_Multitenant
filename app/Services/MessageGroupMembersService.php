@@ -8,19 +8,11 @@
 
     class MessageGroupMembersService {
 
-<<<<<<< HEAD
-        public function all($groupId) {
-            $messageGroupMemberDetails = array();
-            $messageGroupMembersRepository = new MessageGroupMembersRepository();
-            $messageGroupNameRepository = new MessageGroupNameRepository();
-            $messageGroupMemberDetails = $messageGroupMembersRepository->all($groupId);
-=======
         public function all($groupId, $allSessions) {
             $messageGroupMemberDetails = array();
             $messageGroupMembersRepository = new MessageGroupMembersRepository();
             $messageGroupNameRepository = new MessageGroupNameRepository();
             $messageGroupMemberDetails = $messageGroupMembersRepository->all($groupId, $allSessions);
->>>>>>> main
 
             if(count($messageGroupMemberDetails)>0){
                 $messageGroupNameDetails = $messageGroupNameRepository->fetch($groupId);
@@ -37,14 +29,8 @@
         
         public function add($data) {
             
-<<<<<<< HEAD
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicId = $allSessions['academicYear'];
-=======
             $institutionId = $data->id_institute;
             $academicId = $data->id_academic;
->>>>>>> main
 
             $messageGroupMembersRepository = new MessageGroupMembersRepository();
             $groupNameId = $data->group_name;
