@@ -26,10 +26,13 @@ class SeminarConductedByController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
                         $btn = '';
-
                         if(Helper::checkAccess('seminar-conductors', 'view')){
-                            $btn .='<a href="javascript:void();" data-id="'.$row->id_seminar.'"  rel="tooltip" title="View" class="text-info seminarDetail"><i class="material-icons">visibility</i></a>
+                            // $btn .='<a href="javascript:void();" data-id="'.$row->id_seminar.'" rel="tooltip" title="View" class="text-info seminarDetail"><i class="material-icons">visibility</i></a>
+
+                            $btn .='<a href="/seminar-detail/'.$row->id_seminar.'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>
+
                             <a href="/seminar-download/'.$row->id_seminar.'/student" rel="tooltip" title="Download Files" class="text-success" target="_blank"><i class="material-icons">file_download</i></a>
+
                             <a href="javascript:void();" data-id="'.$row->id_seminar.'" student-id="'.$row->conducted_by.'"  rel="tooltip" title="View Mark And Comment" class="text-warning valuationDetails"><i class="material-icons">check_circle</i></a>';
                         }
                         return $btn;

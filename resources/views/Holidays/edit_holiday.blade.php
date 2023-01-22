@@ -31,14 +31,14 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Start Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Start Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker startDate" name="start_date" value="{{ $selectedData['holidayData']->startDate }}" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">End Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">End Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker endDate" name="end_date" value="{{ $selectedData['holidayData']->endDate }}" required autocomplete="off"/>
                                             </div>
                                         </div>
@@ -46,8 +46,8 @@
 
                                     <div class="row">
                                         <div class="col-lg-12">
+                                            <label class="control-label">Holiday Details</label>
                                             <div class="form-group">
-                                                <label class="control-label form-group">Holiday Details</label>
                                                 <textarea class="ckeditor" name="holiday_details" rows="5">{{ $selectedData['holidayData']->description }}</textarea>
                                             </div>
                                         </div>
@@ -67,7 +67,7 @@
                                         <div id="staffDiv" @if(!in_array("STAFF", $selectedData['recepientTypes'])) style="display:none;" @endif>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Category</label>
+                                                    <label class="control-label mt-0">Staff Category</label>
                                                     <select class="selectpicker" name="staffCategory[]" id="staffCategory" data-style="select-with-transition" data-live-search="true" title="Select" data-selected-text-format="count > 1" multiple data-actions-box="true">
                                                         @foreach($holidayData['staffCategory'] as $staffCategory)
                                                             <option value="{{$staffCategory->id}}" @if(in_array($staffCategory->id, $selectedData['selectedStaffCategory'])) {{"selected"}} @endif>{{ucwords($staffCategory->name)}}</option>
@@ -78,7 +78,7 @@
 
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Subcategory</label>
+                                                    <label class="control-label mt-0">Staff Subcategory</label>
                                                     <select class="selectpicker" name="staffSubcategory[]" id="staffSubcategory" data-style="select-with-transition" data-live-search="true" title="Select SubCategory" data-selected-text-format="count > 1" multiple data-actions-box="true">
                                                         @foreach($holidayData['staffSubcategory'] as $staffSubcategory)
                                                             <option value="{{$staffSubcategory->id}}" @if(in_array($staffSubcategory->id, $selectedData['selectedStaffSubCategory'])) {{"selected"}} @endif>{{ucwords($staffSubcategory->name)}}</option>
@@ -97,7 +97,7 @@
                                         <div id="studentDiv" @if(!in_array("STUDENT", $selectedData['recepientTypes'])) style="display:none;" @endif>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Standard</label>
+                                                    <label class="control-label mt-0">Standard</label>
                                                     <select class="selectpicker" name="standard[]" id="standard" data-style="select-with-transition" data-live-search="true" data-size="5" title="Select" multiple data-actions-box="true" data-selected-text-format="count > 1">
                                                         @foreach($holidayData['institutionStandards'] as $standard)
                                                             <option value="{{$standard['institutionStandard_id']}}" @if(in_array($standard['institutionStandard_id'], $selectedData['selectedStandards'])) {{"selected"}} @endif>{{$standard['class']}}</option>
@@ -142,6 +142,38 @@
                                     </div>
                                 </div>
                             </div>
+
+                            @if(count($selectedData['holidayAttachments']) > 0)
+                                <div class="card">
+                                    <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
+                                        <i class="material-icons">attachment</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4 class="card-title">Attachment</h4>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    @foreach($selectedData['holidayAttachments'] as $key =>$attachment)
+                                                        @if($attachment['extension'] =="pdf")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @elseif($attachment['extension'] =="doc" || $attachment['extension'] =="docx")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @else
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="{{ $attachment['file_url'] }}" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -166,13 +198,13 @@
         $("#attachment").change(function(){
 
             // check if fileArr length is greater than 0
-            if (fileArr.length > 0) fileArr = [];
+            if(fileArr.length > 0) fileArr = [];
 
             $('#image_preview').html("");
             var total_file = document.getElementById("attachment").files;
-            if (!total_file.length) return;
+            if(!total_file.length) return;
 
-            for (var i = 0; i < total_file.length; i++){
+            for(var i = 0; i < total_file.length; i++){
 
                 var extension = total_file[i].name.substr((total_file[i].name.lastIndexOf('.') + 1));
                 var fileType = '';
@@ -180,37 +212,23 @@
 
                 fileArr.push(total_file[i]);
 
-                if (extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
+                if(extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) +
-                        '" class="multiple_image img-responsive" title="' + total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) + '" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
                 }else if (extension == "pdf"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://listimg.pinclipart.com/picdir/s/336-3361375_pdf-svg-png-icon-free-download-adobe-acrobat.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
                 }else if (extension == "docs" || extension == "doc" || extension == "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://www.pngitem.com/pimgs/m/181-1816575_google-docs-png-five-feet-apart-google-docs.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
                 }
 
                 $('#image_preview').append(fileType);
@@ -218,12 +236,13 @@
         });
 
         $('body').on('click', '#action-icon', function(evt){
+
             var divName = this.value;
             var fileName = $(this).attr('role');
-            $(`#${divName}`).remove();
 
-            for (var i = 0; i < fileArr.length; i++){
-                if (fileArr[i].name === fileName){
+            $(`#${divName}`).remove();
+            for(var i = 0; i < fileArr.length; i++){
+                if(fileArr[i].name === fileName){
                     fileArr.splice(i, 1);
                 }
             }

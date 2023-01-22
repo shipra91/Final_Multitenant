@@ -1,4 +1,4 @@
-@php 
+@php
 
 @endphp
 
@@ -14,11 +14,12 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-left" style="margin-top:18px;font-weight:900;font-size:28px;">
-				    <p style="margin-top:10px;">{{ $domainDetail->name }}</p> 				
-                </ul> 
+				    <p style="margin-top:10px;">{{ $domainDetail->name }}</p>
+                </ul>
             </div>
         </div>
     </nav>
+
     <div class="wrapper wrapper-full-page">
         <div class="full-page login-page" filter-color="black" data-image="//cdn.egenius.in/img/image3.jpg" style="width:auto;height:100%;">
             <div class="content">
@@ -31,7 +32,6 @@
                                     <div class="card-header text-center" data-background-color="mediumaquamarine">
                                         <h4 class="card-title">Login</h4>
                                     </div>
-                                  
                                     <div class="card-content">
                                         <div class="input-group">
                                             <span class="input-group-addon">
@@ -43,7 +43,8 @@
                                                 <input type="hidden" name="id_organization" value={{ $domainDetail->id }} />
                                                 <input type="hidden" name="id_institution" value={{ $domainDetail->institution_id }} />
                                             </div>
-                                        </div>                              
+                                        </div>
+
                                         <div class="input-group">
                                             <span class="input-group-addon">
                                                 <i class="material-icons">lock_outline</i>
@@ -63,26 +64,24 @@
                     </div>
                 </div>
             </div>
-            
         </div>
-    </div>  
+    </div>
 @endsection
 
 @section('script-content')
 <script>
-$(document).ready(function(){    
+    $(document).ready(function(){
 
-    demo.checkFullPageBackgroundImage();
-    setTimeout(function() {
-        $('.card').removeClass('card-hidden');
-    }, 600)
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
 
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
+        demo.checkFullPageBackgroundImage();
+        setTimeout(function() {
+            $('.card').removeClass('card-hidden');
+        }, 600)
     });
-    
-});
 </script>
-@endsection   
+@endsection

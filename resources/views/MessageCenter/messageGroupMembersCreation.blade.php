@@ -79,37 +79,41 @@
 
                                     <div class="tab-pane" id="account">
                                         <h4 class="text-center fw-400">Import the Excel Files</h4>
-                                        <form method="POST" enctype="multipart/form-data" id="excelFileForm">
-                                            <div class="row">
-                                                <div class="col-lg-6 col-lg-offset-3">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Group Name</label>
-                                                        <select name="group_name" class="selectpicker" data-style="select-with-transition" data-size="5" data-live-search ="true" title="Select" data-parsley-errors-container=".groupNameError">
-                                                            @foreach($messageGroupName as $data)
-                                                                <option value="{{$data->id}}" >{{$data->group_name}}</option>
-                                                            @endforeach
-                                                        </select>
-                                                        <div class="groupNameError"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
+                                        <form method="POST" action="/group-member-import" enctype="multipart/form-data">
+                                            @csrf
                                             <div class="row mt-10">
                                                 <div class="col-lg-8 col-lg-offset-2">
-                                                    <div class="pull-left">
-                                                        <a class="btn btn-fill btn-info pull-left btn-sm m-r-5" href="//utility.egenius.in/GroupBulk/sample_groups.csv" download> <i class="material-icons">file_download</i> Download Sample File</a>
+                                                    @if(session('status'))
+                                                        <div class="row">
+                                                            <div class="col-lg-6">
+                                                                <div class="alert alert-success" role="alert">
+                                                                    {{ session('status') }}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label mt-0">Download Sample File</label><br>
+                                                            <a href="{{ url('/export-group-sample') }}" class="btn btn-info btn-sm">Download</a>
+                                                        </div>
                                                     </div>
-                                                    <div class="pull-right">
-                                                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
-                                                            <div class="fileinput-preview fileinput-exists thumbnail"></div>
-                                                            <div>
-                                                                <span class="btn btn-info btn-file btn-sm">
-                                                                    <span class="fileinput-new">Select Files</span>
-                                                                    <span class="fileinput-exists">Change</span>
-                                                                    <input type="file" name="file" />
-                                                                </span>
-                                                                <a href="#pablo" class="btn btn-danger btn-square fileinput-exists btn-sm"
-                                                                data-dismiss="fileinput"><i class="material-icons">highlight_off</i></a>
+
+                                                    <div class="col-lg-6 text-right">
+                                                        <div class="form-group">
+                                                            <label class="control-label mt-0">Import File</label><br>
+                                                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                                                <div class="fileinput-preview fileinput-exists thumbnail mt-10"></div>
+                                                                <div>
+                                                                    <span class="btn btn-info btn-file btn-sm">
+                                                                        <span class="fileinput-new">Select Files</span>
+                                                                        <span class="fileinput-exists">Change</span>
+                                                                        <input type="file" name="file" />
+                                                                    </span>
+                                                                    <a href="#pablo" class="btn btn-danger btn-square fileinput-exists btn-sm"
+                                                                    data-dismiss="fileinput"><i class="material-icons">highlight_off</i></a>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                    </div>
@@ -119,7 +123,7 @@
                                             <div class="row mt-10">
                                                 <div class="col-lg-8 col-lg-offset-2">
                                                     <div class="pull-right">
-                                                        <button type="submit" class="btn btn-info btn-fill btn-wd mr-5" value="Upload" id="excel_submit">Submit</button>
+                                                        <button type="submit" class="btn btn-info btn-fill btn-wd mr-5">Submit</button>
                                                         <button type="button" class="btn btn-danger btn-fill btn-wd" data-dismiss="modal" onclick="window.location.href='./viewgroup.php'">Close </button>
                                                     </div>
                                                 </div>
@@ -250,67 +254,6 @@
                 $('#student_name').val(names[2]);
     			$('#phone_number').val(names[4]);
             }
-        });
-
-        // Save import excel files
-        $('body').delegate('#excelFileForm', 'submit', function(e){
-            e.preventDefault();
-
-            var btn = $('#excel_submit');
-
-            $.ajax({
-                url:"/message-excel-group-members",
-                type:"POST",
-                dataType:"json",
-                data: new FormData(this),
-                contentType: false,
-                processData:false,
-                beforeSend:function(){
-                    btn.html('Submitting...');
-                    btn.attr('disabled',true);
-                },
-                success:function(result){
-                    btn.html('Submit');
-                    btn.attr('disabled',false);
-
-                    if(result['status'] == "200"){
-
-                        if(result.data['signal'] == "success"){
-                            swal({
-                                title: result.data['message'],
-                                buttonsStyling: false,
-                                confirmButtonClass: "btn btn-success"
-                            }).then(function() {
-                                window.location.replace('/message-group-name');
-                            }).catch(swal.noop)
-
-                        }else if(result.data['signal'] == "exist"){
-
-                            swal({
-                                title: result.data['message'],
-                                buttonsStyling: false,
-                                confirmButtonClass: "btn btn-warning"
-                            });
-
-                        }else{
-
-                            swal({
-                                title: result.data['message'],
-                                buttonsStyling: false,
-                                confirmButtonClass: "btn btn-danger"
-                            });
-                        }
-
-                    }else{
-
-                        swal({
-                            title: 'Server error',
-                            buttonsStyling: false,
-                            confirmButtonClass: "btn btn-danger"
-                        })
-                    }
-                }
-            });
         });
     });
 </script>

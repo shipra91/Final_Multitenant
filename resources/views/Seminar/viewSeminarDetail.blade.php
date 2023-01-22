@@ -16,7 +16,7 @@
                 <div class="col-lg-8">
                     <div class="card">
                         <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
-                            <i class="material-icons">assignment</i>
+                            <i class="material-icons">school</i>
                         </div>
                         <div class="card-content">
                             <h4 class="card-title">Seminar Details</h4>

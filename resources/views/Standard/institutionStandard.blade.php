@@ -29,7 +29,7 @@
                                     <div class="row">
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Board<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Board<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="board" id="board" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" data-parsley-errors-container=".boardError" required>
                                                     @foreach($standardDetails['boards'] as $index => $data)
                                                         <option value="{{$data['id']}}">{{$data['name']}}</option>
@@ -41,7 +41,7 @@
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Course<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Course<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="course" id="course" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" data-parsley-errors-container=".courseError" required>
 
                                                 </select>
@@ -51,7 +51,7 @@
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Stream<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Stream<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="stream" id="stream" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" data-parsley-errors-container=".streamError" required>
 
                                                 </select>
@@ -61,7 +61,7 @@
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Combination<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Combination<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="combination" id="combination" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" data-parsley-errors-container=".combinationError" required>
 
                                                 </select>
@@ -71,7 +71,7 @@
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Standard<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Standard<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="standard" id="standard" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" data-parsley-errors-container=".standardError" required>
                                                     @foreach($standardDetails['standard'] as $index => $data)
                                                         <option value="{{$data->id}}">{{$data->name}}</option>
@@ -83,7 +83,7 @@
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Standard Type<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Standard Type<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="standard_type" id="standard_type" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" data-parsley-errors-container=".standardTypeError" required>
                                                     <option value="general">GENERAL</option>
                                                     <option value="year">YEAR</option>
@@ -94,7 +94,7 @@
 
                                         <div class="col-lg-3" id="standard_year_col">
                                             <div class="form-group">
-                                                <label class="control-label">Year</label>
+                                                <label class="control-label mt-0">Year</label>
                                                 <select class="selectpicker" name="year" id="year" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select">
                                                     @foreach($standardDetails['years'] as $index => $data)
                                                         <option value="{{$index}}">{{$data}}</option>
@@ -105,7 +105,7 @@
 
                                         <div class="col-lg-3" id="standard_sem_col">
                                             <div class="form-group">
-                                                <label class="control-label">Sem</label>
+                                                <label class="control-label mt-0">Sem</label>
                                                 <select class="selectpicker" name="sem" id="sem" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select">
 
                                                 </select>
@@ -116,7 +116,7 @@
                                     <div class="row">
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Division<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Division<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="division[]" id="division" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" data-actions-box="true" data-parsley-errors-container=".divisionError" multiple required>
                                                     @foreach($standardDetails['division'] as $index => $data)
                                                         <option value="{{$data->id}}">{{$data->name}}</option>
@@ -145,7 +145,6 @@
         </div>
     </div>
 </div>
-</div>
 @endsection
 
 @section('script-content')
@@ -162,19 +161,17 @@
         $('#board').on('change', function(){
 
             var boardUniversity = $(this).val();
-            console.log(boardUniversity);
+            //console.log(boardUniversity);
 
             $.ajax({
                 url: "/course-details",
                 type: "POST",
                 dataType: "json",
-                data: {
-                    boardUniversity: boardUniversity
-                },
+                data: {boardUniversity: boardUniversity},
                 success: function(data){
                     var select = $('#course');
                     select.empty();
-                    for (var i = 0; i < data.length; i++){
+                    for(var i = 0; i < data.length; i++){
                         select.append('<option value="' + data[i]['id'] + '">' + data[i]['label'] + '</option>');
                     }
                     select.selectpicker('refresh');
@@ -192,14 +189,11 @@
                 url: "/stream-details",
                 type: "POST",
                 dataType: "json",
-                data: {
-                    course: course,
-                    boardUniversity: boardUniversity
-                },
+                data: {course: course, boardUniversity: boardUniversity},
                 success: function(data){
                     var select = $('#stream');
                     select.empty();
-                    for (var i = 0; i < data.length; i++){
+                    for(var i = 0; i < data.length; i++){
                         select.append('<option value="' + data[i]['id'] + '">' + data[i]['label'] + '</option>');
                     }
                     select.selectpicker('refresh');
@@ -218,16 +212,12 @@
                 url: "/combination-details",
                 type: "POST",
                 dataType: "json",
-                data: {
-                    stream: stream,
-                    boardUniversity: boardUniversity,
-                    course: course
-                },
+                data: {stream: stream, boardUniversity: boardUniversity, course: course},
                 success: function(data){
                     // console.log(data);
                     var select = $('#combination');
                     select.empty();
-                    for (var i = 0; i < data.length; i++){
+                    for(var i = 0; i < data.length; i++){
                         select.append('<option value="' + data[i]['id'] + '">' + data[i]['label'] + '</option>');
                     }
                     select.selectpicker('refresh');
@@ -243,9 +233,7 @@
             $.ajax({
                 url: "/year-sem",
                 type: "POST",
-                data: {
-                    id: yearId
-                },
+                data: {id: yearId},
                 success: function(data){
                     // alert(data);
                     console.log(data);
@@ -261,12 +249,9 @@
             var standardType = $(this).val();
 
             if(standardType == 'general'){
-
                 $('#standard_year_col').hide();
                 $('#standard_sem_col').hide();
-
             }else{
-
                 $('#standard_year_col').show();
                 $('#standard_sem_col').show();
             }
@@ -300,7 +285,7 @@
                         btn.html('Submit');
                         btn.attr('disabled', false);
 
-                        if (result['status'] == "200"){
+                        if(result['status'] == "200"){
 
                             if(result.data['signal'] == "success"){
 

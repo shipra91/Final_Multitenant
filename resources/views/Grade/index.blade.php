@@ -12,7 +12,7 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="alert alert-danger" role="alert">
-                    <strong>Note:</strong> The Grade can not be edited or deleted if the religion is already mapped</p>
+                    <strong>Note:</strong> The Grade can not be edited or deleted if the grade is already mapped</p>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 col-sm-offset-0 text-right">

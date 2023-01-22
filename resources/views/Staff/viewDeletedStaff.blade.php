@@ -77,7 +77,7 @@
                 {data: 'primary_contact_no', name: 'primary_contact_no', "width": "10%"},
                 {data: 'designation', name: 'designation', "width": "15%", className:"capitalize"},
                 {data: 'show', name: 'working', "width": "14%"},
-                {data: 'action', name: 'action', orderable: false, searchable: false, "width": "21%"},
+                {data: 'action', name: 'action', orderable: false, searchable: false, "width": "21%", className:"text-center"},
             ]
         });
 

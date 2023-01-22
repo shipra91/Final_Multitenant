@@ -28,16 +28,21 @@ class HomeworkSubmissionController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
 
-                        if($row['resubmission'] == 'show'){
-                            $label = 'Re-Upload Files';
-                        }else{
-                            $label = 'Upload Files';
-                        }
+                        $label = '';
 
-                        if($row['submission'] == 'show' || $row['resubmission'] == 'show'){
-                            $submission = '<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="'.$label.'" class="text-success homeworkSubmissionDetail"><i class="material-icons">file_upload</i></a>';
-                        }else{
-                            $submission = '';
+                        if($row['submission_type'] == 'ONLINE'){
+
+                            if($row['resubmission'] == 'show'){
+                                $label = 'Re-Upload Files';
+                            }else{
+                                $label = 'Upload Files';
+                            }
+
+                            if($row['submission'] == 'show' || $row['resubmission'] == 'show'){
+                                $submission = '<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="'.$label.'" class="text-success homeworkSubmissionDetail"><i class="material-icons">file_upload</i></a>';
+                            }else{
+                                $submission = '';
+                            }
                         }
 
                         if($row['submitted'] == 'YES'){

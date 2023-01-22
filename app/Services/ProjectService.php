@@ -2,16 +2,9 @@
     namespace App\Services;
 
     use App\Models\Project;
-    use App\Services\ProjectService;
-    use App\Services\InstitutionSubjectService;
-    use App\Services\StaffService;
-    use App\Services\UploadService;
-    use App\Services\SubjectService;
-    use App\Services\StandardSubjectService;
-    use App\Services\ProjectAssignedStudentService;
     use App\Repositories\ProjectRepository;
-    use App\Repositories\StaffSubjectMappingRepository;
     use App\Repositories\ProjectDetailRepository;
+    use App\Repositories\StaffSubjectMappingRepository;
     use App\Repositories\StandardSubjectRepository;
     use App\Repositories\StandardSubjectStaffMappingRepository;
     use App\Repositories\StudentMappingRepository;
@@ -21,6 +14,13 @@
     use App\Repositories\SubjectRepository;
     use App\Repositories\SubjectTypeRepository;
     use App\Repositories\ProjectSubmissionPermissionRepository;
+    use App\Services\InstitutionSubjectService;
+    use App\Services\InstitutionStandardService;
+    use App\Services\StaffService;
+    use App\Services\UploadService;
+    use App\Services\SubjectService;
+    use App\Services\StandardSubjectService;
+    use App\Services\ProjectAssignedStudentService;
     use Carbon\Carbon;
     use Session;
     use ZipArchive;
@@ -120,6 +120,40 @@
         }
 
         // Get particular project
+        public function getProjectSelectedData($idProject){
+
+            $projectRepository = new ProjectRepository();
+            $projectDetailRepository = new ProjectDetailRepository();
+            $institutionStandardService = new InstitutionStandardService();
+            $institutionSubjectService = new InstitutionSubjectService();
+            $staffService = new StaffService();
+
+            $projectAttachment = array();
+            $projectData = $projectRepository->fetch($idProject);
+            $projectAttachments = $projectDetailRepository->fetch($idProject);
+
+            $standardName = $institutionStandardService->fetchStandardByUsingId($projectData->id_standard);
+            $subjectName =  $institutionSubjectService->getSubjectName($projectData->id_subject);
+            $staffDetails = $staffService->find($projectData->id_staff);
+
+            foreach($projectAttachments as $key => $attachment){
+                $ext = pathinfo($attachment['file_url'], PATHINFO_EXTENSION);
+                $projectAttachment[$key] = $attachment;
+                $projectAttachment[$key]['extension'] = $ext;
+            }
+
+            $output = array(
+                'projectData' => $projectData,
+                'projectAttachment' => $projectAttachment,
+                'className'=>$standardName,
+                'subjectName'=>$subjectName,
+                'staffName'=>$staffDetails->name,
+            );
+            //dd($output);
+            return $output;
+        }
+
+        // Get project details
         public function find($id){
 
             $projectRepository = new ProjectRepository();
@@ -249,7 +283,13 @@
             $projectStartDate = Carbon::createFromFormat('d/m/Y', $projectData->project_start_date)->format('Y-m-d');
             $projectEndDate = Carbon::createFromFormat('d/m/Y', $projectData->project_end_date)->format('Y-m-d');
 
-            $check = Project::where('id_institute', $institutionId)->where('id_academic', $academicYear)->where('id_standard', $projectClass)->where('id_subject', $projectSubject)->where('id_staff', $projectStaff)->where('name', $projectName)->first();
+            $check = Project::where('id_institute', $institutionId)
+                            ->where('id_academic', $academicYear)
+                            ->where('id_standard', $projectClass)
+                            ->where('id_subject', $projectSubject)
+                            ->where('id_staff', $projectStaff)
+                            ->where('name', $projectName)
+                            ->first();
 
             if(!$check){
 
@@ -378,7 +418,14 @@
             $projectEndDate = Carbon::createFromFormat('d/m/Y', $projectData->project_end_date)->format('Y-m-d');
 
 
-            $check = Project::where('id_institute', $institutionId)->where('id_academic', $academicYear)->where('id_standard', $projectClass)->where('id_subject', $projectSubject)->where('id_staff', $projectStaff)->where('name', $projectName)->where('id', '!=', $id)->first();
+            $check = Project::where('id_institute', $institutionId)
+                            ->where('id_academic', $academicYear)
+                            ->where('id_standard', $projectClass)
+                            ->where('id_subject', $projectSubject)
+                            ->where('id_staff', $projectStaff)
+                            ->where('name', $projectName)
+                            ->where('id', '!=', $id)
+                            ->first();
 
             if(!$check){
 
@@ -411,9 +458,7 @@
                     $lastInsertedId = $id;
 
                     if($projectData->attachmentProject){
-
-                        $projectDetailRepository->delete($lastInsertedId);
-
+                        // $projectDetailRepository->delete($lastInsertedId);
                         foreach($projectData->attachmentProject as $attachment){
 
                             $path = 'Project';
@@ -526,8 +571,13 @@
             }else{
                 $students = $studentMappingRepository->fetchStudentUsingSubject($request, $allSessions);
             }
+            foreach($students as $key => $student){
+                
+                $allStudents[$key] = $student;
+                $allStudents[$key]['name'] = $studentMappingRepository->getFullName($student['name'], $student['middle_name'], $student['last_name']);
+            }
 
-            $projectDetails['student'] = $students;
+            $projectDetails['student'] = $allStudents;            
 
             $projectAssignedStudents = $projectAssignedStudentsRepository->fetch($projectId);
 

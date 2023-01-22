@@ -30,12 +30,12 @@
         }
 
         public function getAllTimetableSettings($periodSettingsId){
-            $data = classTimeTableSettings::where('id_period_setting', $periodSettingsId)->orderBy(STR_TO_DATE('start_time', '%l:%i %p'))->get();
+            $data = classTimeTableSettings::where('id_period_setting', $periodSettingsId)->get();
             return $data;
         }
 
-        public function getClassTimetableSettings($periodSettingsId, $allSessions){
-            
+        public function getClassTimetableSettings($periodSettingsId){
+            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 

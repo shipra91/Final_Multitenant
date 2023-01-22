@@ -99,9 +99,14 @@ class WorkdoneController extends Controller
      * @param  \App\Models\Workdone  $workdone
      * @return \Illuminate\Http\Response
      */
-    public function show(Workdone $workdone)
+    public function show($id)
     {
-        //
+        $workdoneService = new WorkdoneService();
+
+        $workdone = $workdoneService->getWorkdoneSelectedData($id);
+        $workdoneDetails = $workdoneService->getDetails($workdone['workdoneData']);
+        //dd($workdone);
+        return view('Workdone/viewWorkdoneDetail', ["workdone" => $workdone, 'workdoneDetails' => $workdoneDetails])->with("page", "workdone");
     }
 
     /**
@@ -211,6 +216,7 @@ class WorkdoneController extends Controller
         return view('Workdone/viewDeletedRecord')->with("page", "workdone");
     }
 
+    // Restore workdone records
     public function restore($id){
 
         $workdoneService = new WorkdoneService();

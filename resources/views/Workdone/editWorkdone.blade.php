@@ -1,8 +1,5 @@
-<?php
-    use Carbon\Carbon;
-?>
 @php
-
+    use Carbon\Carbon;
 @endphp
 
 @extends('layouts.master')
@@ -35,7 +32,7 @@
                                                 <label class="control-label mt-0">Standard<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="workdone_class" id="workdone_class" data-style="select-with-transition" data-live-search="true" title="Select" data-actions-box="true" data-size="5" required="required" data-parsley-errors-container=".standardError">
                                                     @foreach($workdoneDetails['standard'] as $standard)
-                                                        <option value="{{ $standard['institutionStandard_id'] }}" @if($workdone->id_standard == $standard['institutionStandard_id'] ) {{'selected'}} @endif>{{ $standard['class'] }}</option>
+                                                        <option value="{{ $standard['institutionStandard_id'] }}" @if($workdone['workdoneData']->id_standard == $standard['institutionStandard_id'] ) {{'selected'}} @endif>{{ $standard['class'] }}</option>
                                                     @endforeach
                                                 </select>
                                                 <div class="standardError"></div>
@@ -47,7 +44,7 @@
                                                 <label class="control-label mt-0">Subject<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="workdone_subject" id="workdone_subject" data-style="select-with-transition" data-live-search="true" title="Select" data-actions-box="true" data-size="5" required="required" data-parsley-errors-container=".subjectError">
                                                     @foreach($workdoneDetails['subject'] as $subject)
-                                                        <option value="{{ $subject['id'] }}" @if($workdone->id_subject == $subject['id'] ) {{'selected'}} @endif>{{ $subject['name'] }}</option>
+                                                        <option value="{{ $subject['id'] }}" @if($workdone['workdoneData']->id_subject == $subject['id'] ) {{'selected'}} @endif>{{ $subject['name'] }}</option>
                                                     @endforeach
                                                 </select>
                                                 <div class="subjectError"></div>
@@ -59,7 +56,7 @@
                                                 <label class="control-label mt-0">Teacher<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="workdone_staff" id="workdone_staff" data-style="select-with-transition" data-live-search="true" title="Select" data-actions-box="true" data-size="5" required="required" data-parsley-errors-container=".staffError">
                                                     @foreach($workdoneDetails['staff'] as $staff)
-                                                        <option value="{{ $staff->id }}" @if($workdone->id_staff == $staff->id ) {{'selected'}} @endif>{{ $staff->name }}</option>
+                                                        <option value="{{ $staff->id }}" @if($workdone['workdoneData']->id_staff == $staff->id ) {{'selected'}} @endif>{{ $staff->name }}</option>
                                                     @endforeach
                                                 </select>
                                                 <div class="staffError"></div>
@@ -70,36 +67,36 @@
                                     <div class="row">
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label class="control-label">Date<span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control datepicker" name="workdone_date" value="{{  Carbon::createFromFormat('Y-m-d', $workdone->date)->format('d/m/Y') }}" required />
+                                                <label class="control-label mt-0">Date<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control datepicker" name="workdone_date" value="{{  Carbon::createFromFormat('Y-m-d', $workdone['workdoneData']->date)->format('d/m/Y') }}" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label class="control-label">Start Time<span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control timepicker" name="workdone_start_time" value="{{$workdone->start_time}}" required />
+                                                <label class="control-label mt-0">Start Time<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control timepicker" name="workdone_start_time" value="{{ $workdone['workdoneData']->start_time }}" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label class="control-label">End Time<span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control timepicker" name="workdone_end_time" value="{{$workdone->end_time}}" required />
+                                                <label class="control-label mt-0">End Time<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control timepicker" name="workdone_end_time" value="{{ $workdone['workdoneData']->end_time }}" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label class="control-label">Chapter Name<span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="chapter_name" value="{{$workdone->workdone_topic}}" required />
+                                                <label class="control-label mt-0">Chapter Name<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="chapter_name" value="{{ $workdone['workdoneData']->workdone_topic }}" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-12">
+                                            <label class="control-label">Workdone Details</label>
                                             <div class="form-group">
-                                                <label class="control-label form-group">Workdone Details</label>
-                                                <textarea class="ckeditor" name="workdone_details" rows="5">{{$workdone->description}}</textarea>
+                                                <textarea class="ckeditor" name="workdone_details" rows="5">{{ $workdone['workdoneData']->description }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -138,6 +135,38 @@
                                     </div>
                                 </div>
                             </div>
+
+                            @if(count($workdone['workdoneAttachment']) > 0)
+                                <div class="card">
+                                    <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
+                                        <i class="material-icons">attachment</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4 class="card-title">Attachment</h4>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    @foreach($workdone['workdoneAttachment'] as $key =>$attachment)
+                                                        @if($attachment['extension'] =="pdf")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @elseif($attachment['extension'] =="doc" || $attachment['extension'] =="docx")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @else
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="{{ $attachment['file_url'] }}" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -162,13 +191,13 @@
         $("#attachmentWorkdone").change(function(){
 
             // check if fileArr length is greater than 0
-            if (fileArr.length > 0) fileArr = [];
+            if(fileArr.length > 0) fileArr = [];
 
             $('#image_preview').html("");
             var total_file = document.getElementById("attachmentWorkdone").files;
-            if (!total_file.length) return;
+            if(!total_file.length) return;
 
-            for (var i = 0; i < total_file.length; i++){
+            for(var i = 0; i < total_file.length; i++){
 
                 var extension = total_file[i].name.substr((total_file[i].name.lastIndexOf('.') + 1));
                 var fileType = '';
@@ -176,37 +205,23 @@
 
                 fileArr.push(total_file[i]);
 
-                if (extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
+                if(extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) +
-                        '" class="multiple_image img-responsive" title="' + total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) + '" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
-                }else if (extension == "pdf"){
+                }else if(extension == "pdf"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://listimg.pinclipart.com/picdir/s/336-3361375_pdf-svg-png-icon-free-download-adobe-acrobat.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
-                }else if (extension == "docs" || extension == "doc" || extension == "docx"){
+                }else if(extension == "docs" || extension == "doc" || extension == "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://www.pngitem.com/pimgs/m/181-1816575_google-docs-png-five-feet-apart-google-docs.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
                 }
 
                 $('#image_preview').append(fileType);
@@ -214,12 +229,13 @@
         });
 
         $('body').on('click', '#action-icon', function(evt){
+
             var divName = this.value;
             var fileName = $(this).attr('role');
-            $(`#${divName}`).remove();
 
-            for (var i = 0; i < fileArr.length; i++){
-                if (fileArr[i].name === fileName){
+            $(`#${divName}`).remove();
+            for(var i = 0; i < fileArr.length; i++){
+                if(fileArr[i].name === fileName){
                     fileArr.splice(i, 1);
                 }
             }
@@ -230,9 +246,9 @@
 
         function FileListItem(file){
             file = [].slice.call(Array.isArray(file) ? file : arguments)
-            for (var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
-            if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
-            for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
+            for(var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
+            if(!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+            for(b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
             return b.files
         }
 

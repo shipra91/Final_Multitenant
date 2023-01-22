@@ -16,11 +16,15 @@
                             <div class="card-content">
                                 <h4 class="card-title">Add Student Attendance</h4>
                                 <form method="GET" action="{{ url('/student-attendance-filter') }}" id="getstudentAttendance">
+
+                                    <input type="hidden" id="display_subject" value="{{ $_GET && $_GET['subject'] != ''? 'yes' : '' }}"  >
+                                    <input type="hidden" id="subject_timetable_dependent">
+
                                     <div class="row">
                                         <div class="col-lg-3 col-lg-offset-0">
                                             <div class="form-group">
                                                 <label class="control-label mt-0">Date<span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control datepicker" name="attendance_date" value="{{ $_GET && $_GET['attendance_date']? $_GET['attendance_date'] : date('d/m/Y') }}" required />
+                                                <input type="text" class="form-control datepicker" name="attendance_date" id="attendance_date"  value="{{ $_GET && $_GET['attendance_date']? $_GET['attendance_date'] : date('d/m/Y') }}" required />
                                             </div>
                                         </div>
 
@@ -58,7 +62,7 @@
                                         <div class="col-lg-3 col-lg-offset-0 {{ $_REQUEST && $_REQUEST['attendanceType'] == "periodwise" ?"":'d-none'}} mb-5" id="periodDiv">
                                             <div class="form-group">
                                                 <label class="control-label mt-0">Period</label>
-                                                <select class="selectpicker" name="period" id="period" data-size="3" data-style="select-with-transition" data-live-search="true" title="Select">
+                                                <select class="selectpicker" name="period" id="period" data-size="3" data-style="select-with-transition" data-live-search="true" title="Select" >
                                                     @foreach($allPeriods as $period)
                                                         <option value="{{$period['id']}}" @if($_REQUEST && $_REQUEST['period'] == $period['id']) {{ "selected" }} @endif>{{$period['name']}}</option>
                                                     @endforeach
@@ -129,9 +133,9 @@
                                                             <td>{{$index + 1}}</td>
                                                             <td>{{$attendance->roll_number}}</td>
                                                             <td>{{$attendance->egenius_uid }}</td>
-                                                            <td>{{$attendance->name}}</td>
+                                                            <td>{{$attendance->studentName}}</td>
                                                             <td>
-                                                                <div class="form-group label-floating">
+                                                                <div class="label-floating">
                                                                     <div class="radio col-lg-4" style="margin-top:10px;">
                                                                         <label>
                                                                             <input type="radio" name="status[{{$attendance->id}}]" value="PRESENT" @if($attendance->attendanceStatus === "PRESENT") {{'checked'}} @endif onclick="changeColorp('@php echo $attendance['id']; @endphp')">
@@ -140,7 +144,7 @@
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <div class="form-group label-floating">
+                                                                <div class="label-floating">
                                                                     <div class="radio col-lg-4" style="margin-top:10px;">
                                                                         <label>
                                                                             <input type="radio" name="status[{{$attendance->id}}]" value="ABSENT" @if($attendance->attendanceStatus === "ABSENT") {{'checked'}} @endif onclick="changeColora('@php echo $attendance['id']; @endphp')">
@@ -205,14 +209,16 @@
 
         var attendanceType = getUrlVars()["attendanceType"];
         var standard = getUrlVars()["standard"]; //alert(standard);
-        var subject = getUrlVars()["subject"];
+        var subject = getUrlVars()["subject"]; //alert(subject);
+        var period = getUrlVars()["period"];
 
         if(attendanceType != ''){
             getStandardOnAttendanceType(attendanceType);
         }
 
         if(standard != ''){
-            getStandardSubject(standard);
+            getAttendanceSettingOnStandard(standard, attendanceType)
+            getStandardSubject(standard, period);
         }
 
         // Get standard based on attendance type
@@ -223,7 +229,6 @@
                 type:"post",
                 data : {attendanceType : attendanceType},
                 success:function(result){
-                    console.log(result);
                     var html = '';
                     $.each(result.standardData, function(index, item){
                         html += '<option value="'+item.id_standard+'"'; if(standard == item.id_standard) html +='selected'; html+='>'+item.standard+'</option>';
@@ -236,29 +241,70 @@
         }
 
         // Get subject on standard selection
-        function getStandardSubject(standardId){
+        function getStandardSubject(standardId, periodId){
+            
+            var subjectTimetableDependent = $('#subject_timetable_dependent').val();
+            console.log('dependent'+subjectTimetableDependent);
+            var attendanceDate = $('#attendance_date').val();
+            
+            if(subjectTimetableDependent == 'yes'){
+              
+                $.ajax({
+                    url:"/class-timetable-period-subjects",
+                    type:"POST",
+                    data: {standardId : standardId, periodId : periodId, attendanceDate : attendanceDate},
+                    success: function(data){
+                        console.log(data);
+                        var options = '';
+                        $.map(data, function(item, index){
 
+                            options += '<option value="'+item.id_institution_subject+'"'; options+='>'+item.subject_name+'</option>';
+                        });
+
+                        $("#subject").html(options);
+                        $("#subject").selectpicker('refresh');
+                    }
+                });
+
+            }else{
+               
+                $.ajax({
+                    url:"/assignment-subjects",
+                    type:"POST",
+                    data: {standardId : standardId},
+                    success: function(data){
+                        var options = '';
+                        $.map(data, function(item, index){
+
+                            var subject_type = '';
+
+                            if(item.subject_type === "PRACTICAL"){
+                                subject_type = ' - '+item.subject_type;
+                            }else{
+                                subject_type = '';
+                            }
+
+                            options += '<option value="'+item.id_institution_subject+'"'; if(subject == item.id_institution_subject) options +='selected'; options+='>'+item.display_name+''+ subject_type+'</option>';
+                        });
+
+                        $("#subject").html(options);
+                        $("#subject").selectpicker('refresh');
+                    }
+                });
+            }
+        }
+
+        //Get attendace type setting details based on standard
+
+        function getAttendanceSettingOnStandard(standardId, attendanceType){
             $.ajax({
-                url:"/assignment-subjects",
+                url:"/standard-attendance-setting",
                 type:"POST",
-                data: {standardId : standardId},
+                data: {standardId : standardId, attendanceType:attendanceType},
                 success: function(data){
-                    var options = '';
-                    $.map(data, function(item, index){
-
-                        var subject_type = '';
-
-                        if(item.subject_type === "PRACTICAL"){
-                            subject_type = ' - '+item.subject_type;
-                        }else{
-                            subject_type = '';
-                        }
-
-                        options += '<option value="'+item.id_institution_subject+'"'; if(subject == item.id_institution_subject) options +='selected'; options+='>'+item.display_name+''+ subject_type+'</option>';
-                    });
-
-                    $("#subject").html(options);
-                    $("#subject").selectpicker('refresh');
+                    console.log(data);
+                    $('#display_subject').val(data.display_subject);
+                    $('#subject_timetable_dependent').val(data.is_subject_classtimetable_dependent);
                 }
             });
         }
@@ -273,33 +319,46 @@
 
                 $("#sessionDiv").addClass('d-none');
                 $("#periodDiv").addClass('d-none');
-                $("#subjectDiv").addClass('d-none');
 
             }else if(attendanceType == 'sessionwise'){
 
                 $("#sessionDiv").removeClass('d-none');
                 $("#periodDiv").addClass('d-none');
-                $("#subjectDiv").addClass('d-none');
 
             }else if(attendanceType == 'periodwise'){
 
                 $("#sessionDiv").addClass('d-none');
                 $("#periodDiv").removeClass('d-none');
-                $("#subjectDiv").removeClass('d-none');
             }
 
             $("#subject").html('');
             $("#subject").selectpicker('refresh');
+            $("#period").selectpicker('refresh');
 
             // Get standard based on attendance type
             getStandardOnAttendanceType(attendanceType);
         });
 
-        // Get subject on standard selection
+        // Get subject and attendance setting on standard selection 
         $('#standard').on('change', function(){
             var standardId = $(this).val();
-            getStandardSubject(standardId);
+            var attendanceType = $('#attendanceType').val();
+            getAttendanceSettingOnStandard(standardId, attendanceType);
+            $("#period").selectpicker('refresh');
 
+        });
+
+        $('#period').on('change', function(){
+            var periodId = $(this).val();
+            var standardId = $('#standard').val();
+            var displaySubject = $('#display_subject').val();
+            console.log(displaySubject);
+            if(displaySubject == 'yes'){
+                $('#subjectDiv').removeClass('d-none');
+                getStandardSubject(standardId, periodId);
+            }else{
+                $('#subjectDiv').addClass('d-none');
+            }
         });
 
         $("#getstudentAttendance").parsley({

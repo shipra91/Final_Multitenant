@@ -214,10 +214,10 @@
                 dataType: "json",
                 data: {studentId: studentId, standardId: standardId, examId: examId},
                 success: function(response){
-                    console.log(response);
+                    // console.log(response);
                     var html = studentUId = studentName = '';
 
-                    if(response.length > 0){
+                    if(response.student_uid != ''){
                         var studentUId = response.student_uid;
                         var studentName = response.student_name;
                     }

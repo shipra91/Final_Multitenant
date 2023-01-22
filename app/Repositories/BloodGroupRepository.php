@@ -28,5 +28,9 @@
         public function delete($id){
             return BloodGroup::find($id)->delete();
         }
+
+        public function getBloodGroupId($bloodGroup){
+            return BloodGroup::where('name', $bloodGroup)->first();
+        }
     }
 ?>

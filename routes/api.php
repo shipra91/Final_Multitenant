@@ -81,7 +81,7 @@ Route::controller(StudentTimetableController::class)->group(function (){
 });
 
 Route::controller(DocumentManagementController::class)->group(function (){
-    Route::post('get-timetable', 'getTimetable');
+    Route::post('get-document', 'getDocument');
 });
 
 

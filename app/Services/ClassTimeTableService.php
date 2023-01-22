@@ -12,6 +12,7 @@
     use App\Services\InstitutionStandardService;
     use App\Services\StandardSubjectService;
     use App\Services\StaffService;
+    use App\Services\InstitutionSubjectService;
     use Carbon\Carbon;
     use Session;
 
@@ -248,6 +249,28 @@
             $timeTableDetailData = $classTimeTableRepository->fetchTimeTableDetail($idStandard, $day, $idPeriod, $allSessions);
 
             return $timeTableDetailData;
+        }
+        
+        public function fetchPeriodSubjects($standardId, $periodId, $attendanceDate, $allSessions){
+            $classTimeTableRepository = new ClassTimeTableRepository();
+            $institutionSubjectService = new InstitutionSubjectService();
+
+            $subjectData = array();
+            $attendanceDate = Carbon::createFromFormat('d/m/Y', $attendanceDate)->format('Y-m-d');
+
+            $timestamp = strtotime($attendanceDate);
+            $day = date('l', $timestamp);
+
+            $timeTableDetailData = $classTimeTableRepository->fetchStandardPeriodData($standardId, $day, $periodId, $allSessions);
+            foreach($timeTableDetailData as $key => $data){
+                $idInstitutionSubject = $data->id_subject;
+                $subjectName = $institutionSubjectService->getSubjectName($idInstitutionSubject);
+                $subjectData[$key] = array(
+                    'id_institution_subject'=>$idInstitutionSubject,
+                    'subject_name'=>$subjectName
+                );
+            }
+            return $subjectData;
         }
     }
 ?>

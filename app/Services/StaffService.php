@@ -50,6 +50,8 @@
             foreach($staff as $key => $staffData){
 
                 $arrayData[$key] = $staffData;
+                $arrayData[$key]['name'] = $staffRepository->getFullName($staffData['name'], $staffData['middle_name'], $staffData['last_name']);
+
                 $bloodGroup = $gender = $designation = $department = $role = $staffCategory = $staffSubCategory = $nationality = $religion = $category = '';
 
                 if($staffData->id_blood_group){
@@ -164,14 +166,18 @@
                 $role = '';
 
                 if($staffData->id_gender){
+
                     $genderData = $genderRepository->fetch($staffData->id_gender);
+
                     if($genderData){
                         $gender = $genderData->name;
                     }
                 }
 
                 if($staffData->id_role){
+
                     $roleData = $roleRepository->fetch($staffData->id_role);
+
                     if($roleData){
                         $role = $roleData->display_name;
                     }
@@ -223,6 +229,7 @@
 
             if($staff){
 
+                $fullname = $staffRepository->getFullName($staff['name'], $staff['middle_name'], $staff['last_name']);
                 $bloodGroup = $bloodGroupRepository->fetch($staff->id_blood_group);
                 $gender = $genderRepository->fetch($staff->id_gender);
                 $department = $departmentRepository->fetch($staff->id_department);
@@ -331,6 +338,7 @@
                 $staffData['familyDetails'] = $staffFamilyData;
                 $staffData['selectedBoard'] = $selectedBoard;
                 $staffData['selectedSubject'] = $selectedSubject;
+                $staffData['fullname'] = $fullname;
             }
             //dd($staffData);
             return $staffData;
@@ -349,6 +357,7 @@
             $departmentRepository = new DepartmentRepository();
             $genderRepository = new GenderRepository();
             $bloodGroupRepository = new BloodGroupRepository();
+            
             $bloodGroup = $bloodGroupRepository->all();
             $gender = $genderRepository->all();
             $department = $departmentRepository->all();
@@ -458,70 +467,10 @@
                 // Get max staff id
                 $staffUid = $staffRepository->getMaxStaffId();
 
+                $staffImage = $attachmentAadhaar = $attachmentPancard = '';
+
                 $dob = Carbon::createFromFormat('d/m/Y', $staffData->staffDob)->format('Y-m-d');
                 $joiningDate = Carbon::createFromFormat('d/m/Y', $staffData->joiningDate)->format('Y-m-d');
-
-                $employeeId = $bloodGroup = $designation = $department = $staffSubcategory = $staffEmail = $employmentDuration = $nationality = $religion = $castCategory = $aadhaarNumber = $panNumber = $uanNumber = $emergencyContact = $headTeacher = $staffImage = $attachmentAadhaar = $attachmentPancard = '';
-
-                if($staffData->employeeId){
-                    $employeeId = $staffData->employeeId;
-                }
-
-                if($staffData->bloodGroup){
-                    $bloodGroup = $staffData->bloodGroup;
-                }
-
-                if($staffData->designation){
-                    $designation = $staffData->designation;
-                }
-
-                if($staffData->department){
-                    $department = $staffData->department;
-                }
-
-                if($staffData->staffSubcategory){
-                    $staffSubcategory = $staffData->staffSubcategory;
-                }
-
-                if($staffData->staffEmail){
-                    $staffEmail = $staffData->staffEmail;
-                }
-
-                if($staffData->employmentDuration){
-                    $employmentDuration = $staffData->employmentDuration;
-                }
-
-                if($staffData->nationality){
-                    $nationality = $staffData->nationality;
-                }
-
-                if($staffData->religion){
-                    $religion = $staffData->religion;
-                }
-
-                if($staffData->cast){
-                    $castCategory = $staffData->cast;
-                }
-
-                if($staffData->aadhaarNumber){
-                    $aadhaarNumber = $staffData->aadhaarNumber;
-                }
-
-                if($staffData->panNumber){
-                    $panNumber = $staffData->panNumber;
-                }
-
-                if($staffData->uanNumber){
-                    $uanNumber = $staffData->uanNumber;
-                }
-
-                if($staffData->emergencyContact){
-                    $emergencyContact = $staffData->emergencyContact;
-                }
-
-                if($staffData->head_teacher){
-                    $headTeacher = $staffData->head_teacher;
-                }
 
                 // S3 file upload function call
                 if($staffData->hasfile('staffImage')){
@@ -544,26 +493,28 @@
                     'id_academic_year' => $staffData->id_academic,
                     'id_institute' => $staffData->id_institute,
                     'name' => $staffData->staffName,
+                    'middle_name' => $staffData->staffMiddleName,
+                    'last_name' => $staffData->staffLastName,
                     'date_of_birth' => $dob,
-                    'employee_id' => $employeeId,
+                    'employee_id' => $staffData->employeeId,
                     'staff_uid' => $staffUid,
                     'id_gender' => $staffData->gender,
-                    'id_blood_group' => $bloodGroup,
-                    'id_designation' => $designation,
-                    'id_department' => $department,
+                    'id_blood_group' => $staffData->bloodGroup,
+                    'id_designation' => $staffData->designation,
+                    'id_department' => $staffData->department,
                     'id_role' => $staffData->staffRoll,
                     'id_staff_category' => $staffData->staffCategory,
-                    'id_staff_subcategory' => $staffSubcategory,
+                    'id_staff_subcategory' => $staffData->staffSubcategory,
                     'primary_contact_no' => $staffData->staffPhone,
-                    'email_id' => $staffEmail,
+                    'email_id' => $staffData->staffEmail,
                     'joining_date' => $joiningDate,
-                    'duration_employment' => $employmentDuration,
-                    'id_nationality' => $nationality,
-                    'id_religion' => $religion,
-                    'id_caste_category' => $castCategory,
-                    'aadhaar_no' => $aadhaarNumber,
-                    'pancard_no' => $panNumber,
-                    'pf_uan_no' => $uanNumber,
+                    'duration_employment' => $staffData->employmentDuration,
+                    'id_nationality' => $staffData->nationality,
+                    'id_religion' => $staffData->religion,
+                    'id_caste_category' => $staffData->cast,
+                    'aadhaar_no' => $staffData->aadhaarNumber,
+                    'pancard_no' => $staffData->panNumber,
+                    'pf_uan_no' => $staffData->uanNumber,
                     'address' => $staffData->address,
                     'city' => $staffData->city,
                     'state' => $staffData->state,
@@ -572,12 +523,12 @@
                     'pincode' => $staffData->pincode,
                     'post_office' => $staffData->post_office,
                     'country' => $staffData->country,
-                    'secondary_contact_no' => $emergencyContact,
+                    'secondary_contact_no' => $staffData->emergencyContact,
                     'staff_image' => $staffImage,
                     'sms_for' => $staffData->smsFor,
                     'attachment_aadhaar' => $attachmentAadhaar,
                     'attachment_pancard' => $attachmentPancard,
-                    'head_teacher' => $headTeacher,
+                    'head_teacher' => $staffData->head_teacher,
                     'working_hours' => $staffData->working_hour,
                     'created_by' => Session::get('userId')
                 );
@@ -729,100 +680,8 @@
 
             if(!$check){
 
-                $data = $staffRepository->fetch($id);
-
                 $dob = Carbon::createFromFormat('d/m/Y', $staffData->staffDob)->format('Y-m-d');
                 $joiningDate = Carbon::createFromFormat('d/m/Y', $staffData->joiningDate)->format('Y-m-d');
-
-                if($staffData->employeeId){
-                    $employeeId = $staffData->employeeId;
-                }else{
-                    $employeeId = '';
-                }
-
-                if($staffData->bloodGroup){
-                    $bloodGroup = $staffData->bloodGroup;
-                }else{
-                    $bloodGroup = '';
-                }
-
-                if($staffData->designation){
-                    $designation = $staffData->designation;
-                }else{
-                    $designation = '';
-                }
-
-                if($staffData->department){
-                    $department = $staffData->department;
-                }else{
-                    $department = '';
-                }
-
-                if($staffData->staffSubcategory){
-                    $staffSubcategory = $staffData->staffSubcategory;
-                }else{
-                    $staffSubcategory = '';
-                }
-
-                if($staffData->staffEmail){
-                    $staffEmail = $staffData->staffEmail;
-                }else{
-                    $staffEmail = '';
-                }
-
-                if($staffData->employmentDuration){
-                    $employmentDuration = $staffData->employmentDuration;
-                }else{
-                    $employmentDuration = '';
-                }
-
-                if($staffData->nationality){
-                    $nationality = $staffData->nationality;
-                }else{
-                    $nationality = '';
-                }
-
-                if($staffData->religion){
-                    $religion = $staffData->religion;
-                }else{
-                    $religion = '';
-                }
-
-                if($staffData->cast){
-                    $castCategory = $staffData->cast;
-                }else{
-                    $castCategory = '';
-                }
-
-                if($staffData->aadhaarNumber){
-                    $aadhaarNumber = $staffData->aadhaarNumber;
-                }else{
-                    $aadhaarNumber = '';
-                }
-
-                if($staffData->panNumber){
-                    $panNumber = $staffData->panNumber;
-                }else{
-                    $panNumber = '';
-                }
-
-                if($staffData->uanNumber){
-                    $uanNumber = $staffData->uanNumber;
-                }else{
-                    $uanNumber = '';
-                }
-
-                if($staffData->emergencyContact){
-                    $emergencyContact = $staffData->emergencyContact;
-                }else{
-                    $emergencyContact = '';
-                }
-
-                if($staffData->head_teacher){
-                    $headTeacher = $staffData->head_teacher;
-                }else{
-                    $headTeacher = '';
-                }
 
                 // S3 file upload
                 if($staffData->hasfile('staffImage')){
@@ -846,26 +705,30 @@
                     $attachmentPancard = $staffData->oldattachmentPancard;
                 }
 
+                $data = $staffRepository->fetch($id);
+
                 $data->name = $staffData->staffName;
+                $data->middle_name = $staffData->staffMiddleName;
+                $data->last_name = $staffData->staffLastName;
                 $data->date_of_birth = $dob;
-                $data->employee_id = $employeeId;
+                $data->employee_id = $staffData->employeeId;
                 $data->id_gender = $staffData->gender;
-                $data->id_blood_group = $bloodGroup;
-                $data->id_designation = $designation;
-                $data->id_department = $department;
+                $data->id_blood_group = $staffData->bloodGroup;
+                $data->id_designation = $staffData->designation;
+                $data->id_department = $staffData->department;
                 $data->id_role = $staffData->staffRoll;
                 $data->id_staff_category = $staffData->staffCategory;
-                $data->id_staff_subcategory = $staffSubcategory;
+                $data->id_staff_subcategory = $staffData->staffSubcategory;
                 $data->primary_contact_no = $staffData->staffPhone;
-                $data->email_id = $staffEmail;
+                $data->email_id = $staffData->staffEmail;
                 $data->joining_date = $joiningDate;
-                $data->duration_employment = $employmentDuration;
-                $data->id_nationality = $nationality;
-                $data->id_religion = $religion;
-                $data->id_caste_category = $castCategory;
-                $data->aadhaar_no = $aadhaarNumber;
-                $data->pancard_no = $panNumber;
-                $data->pf_uan_no = $uanNumber;
+                $data->duration_employment = $staffData->employmentDuration;
+                $data->id_nationality = $staffData->nationality;
+                $data->id_religion = $staffData->religion;
+                $data->id_caste_category = $staffData->cast;
+                $data->aadhaar_no = $staffData->aadhaarNumber;
+                $data->pancard_no = $staffData->panNumber;
+                $data->pf_uan_no = $staffData->uanNumber;
                 $data->address = $staffData->address;
                 $data->city = $staffData->city;
                 $data->state = $staffData->state;
@@ -874,11 +737,11 @@
                 $data->pincode = $staffData->pincode;
                 $data->post_office = $staffData->post_office;
                 $data->country = $staffData->country;
-                $data->secondary_contact_no = $emergencyContact;
+                $data->secondary_contact_no = $staffData->emergencyContact;
                 $data->staff_image = $staffImage;
                 $data->attachment_aadhaar = $attachmentAadhaar;
                 $data->attachment_pancard = $attachmentPancard;
-                $data->head_teacher = $headTeacher;
+                $data->head_teacher = $staffData->head_teacher;
                 $data->working_hours = $staffData->working_hour;
                 $data->modified_by = Session::get('userId');
 

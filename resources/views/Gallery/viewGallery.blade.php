@@ -12,13 +12,13 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-8 mb-20">
                         <div class="card">
                             <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
                                 <i class="material-icons">photo</i>
                             </div>
                             <div class="card-content">
-                                <h4 class="card-title">View Gallery Details</h4>
+                                <h4 class="card-title">Gallery Details</h4>
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
@@ -38,42 +38,8 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="form-group">
-                                            <label class="control-label form-group">Gallery Details</label>
+                                            <label class="control-label form-group mt-0">Gallery Details</label>
                                             <textarea class="ckeditor" name="eventDetails" rows="5">{{$selectedData['galleryData']->description}}</textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label class="control-label form-group">Gallery Image</label>
-                                            {{-- @foreach($selectedData['galleryAttachment'] as $attachment)
-                                                @if($attachment)
-                                                <div class="get_image_preview mt-10">
-                                                    <li class="list-inline-item">
-                                                        <a href="{{ $attachment['file_url'] }}" data-toggle="lightbox" data-gallery="example-gallery">
-                                                            <img src="{{ $attachment['file_url'] }}" class="img-fluid">
-                                                        </a>
-                                                    </li>
-                                                </div>
-                                                @else
-                                                    <img src="https://cdn.egenius.in/img/placeholder.jpg" class="rounded">
-                                                @endif
-                                            @endforeach --}}
-                                            <div class="get_image_preview mt-3">
-                                                @foreach($selectedData['galleryAttachment'] as $attachment)
-                                                    @if($attachment)
-                                                        <li>
-                                                            <a href="{{ $attachment['file_url'] }}" data-toggle="lightbox" data-gallery="example-gallery">
-                                                                <img src="{{ $attachment['file_url'] }}" class="rounded">
-                                                            </a>
-                                                        </li>
-                                                        @else
-                                                    <img src="https://cdn.egenius.in/img/placeholder.jpg" class="rounded">
-                                                    @endif
-                                                @endforeach
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -81,7 +47,9 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="pull-right">
-                                            <a href="/gallery/{{$selectedData['galleryData']->id}}" type="button" class="btn btn-success btn-wd mr-5">Edit</a>
+                                            @if(Helper::checkAccess('gallery', 'edit'))
+                                                <a href="/gallery/{{$selectedData['galleryData']->id}}" type="button" class="btn btn-success btn-wd mr-5">Edit</a>
+                                            @endif
                                             <a href="{{ url('gallery') }}" class="btn btn-finish btn-fill btn-wd btn btn-danger">Close</a>
                                         </div>
                                     </div>
@@ -97,26 +65,53 @@
                                 <i class="material-icons">attachment</i>
                             </div>
                             <div class="card-content">
-                                <h4 class="card-title">Gallery Attachment</h4>
-                                <div class="text-center">
-                                    @if(count($selectedData['galleryAttachment']) > 0)
-                                        <a href="/gallery-download/{{$selectedData['galleryData']->id}}" class="btn btn-info btn-sm"><i class="material-icons">file_download</i> Download</a>
-                                    @else
-                                        <span class="badge badge-warning">No attachment found</span>
-                                    @endif
+                                <h4 class="card-title">Cover Image</h4>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="card-logo1">
+                                            @if($selectedData['galleryData']->cover_image != '')
+                                                <img class="img rounded" src="{{url($selectedData['galleryData']->cover_image)}}" />
+                                            @else
+                                               <img class="img" rounded src="//cdn.egenius.in/img/placeholder.jpg" alt="Image" />
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="card card-profile" style="margin-top: 50px;">
-                            <div class="card-logo">
-                                @if($selectedData['galleryData']->cover_image != '')
-                                    <img class="img rounded" src="{{url($selectedData['galleryData']->cover_image)}}" />
-                                @else
-                                   <img class="img" rounded src="//cdn.egenius.in/img/placeholder.jpg" alt="Image" />
-                                @endif
+                        <div class="card">
+                            <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
+                                <i class="material-icons">attachment</i>
                             </div>
-                            <h4 style="font-weight: 400; color: #5a5a5a; text-transform: capitalize;">Cover Image</h4>
+                            <div class="card-content">
+                                <h4 class="card-title">Gallery Image</h4>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            @if(count($selectedData['galleryAttachment']) > 0)
+                                            <div class="get_image_preview mt-3 text-center">
+                                                @foreach($selectedData['galleryAttachment'] as $attachment)
+                                                    @if($attachment)
+                                                        <li>
+                                                            <a href="{{ $attachment['file_url'] }}" data-toggle="lightbox" data-gallery="example-gallery">
+                                                                <img src="{{ $attachment['file_url'] }}" class="rounded">
+                                                            </a>
+                                                        </li>
+                                                        @else
+                                                    <img src="https://cdn.egenius.in/img/placeholder.jpg" class="rounded">
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                            @else
+                                                <div class="text-center">
+                                                    <span class="badge badge-warning">No attachment found</span>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

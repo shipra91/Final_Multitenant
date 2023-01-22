@@ -24,5 +24,9 @@
         public function delete($id){
             return Category::find($id)->delete();
         }
+
+        public function getCasteCategoryId($name){
+            return Category::where('name', $name)->first();
+        }
     }
 ?>

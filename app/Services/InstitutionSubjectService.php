@@ -11,7 +11,11 @@
 
     class InstitutionSubjectService 
     {
+<<<<<<< HEAD
+        public function getSubjectWithType()
+=======
         public function getSubjectWithType($allSessions)
+>>>>>>> main
         { 
             $subjectTypeRepository = new SubjectTypeRepository();
             $institutionSubjectRepository = new InstitutionSubjectRepository();
@@ -21,11 +25,19 @@
             foreach($subjectTypes as $type)
             {
                 $subjectDetails = array();
+<<<<<<< HEAD
+                $allSubjectDetails =  $institutionSubjectRepository->fetch($type->id);
+                foreach($allSubjectDetails as $key => $details)
+                {
+                    $subjectDetails[$key] = $details;
+                    $subjectCount =  $institutionSubjectRepository->findCount($details->id_subject);
+=======
                 $allSubjectDetails =  $institutionSubjectRepository->fetch($type->id, $allSessions);
                 foreach($allSubjectDetails as $key => $details)
                 {
                     $subjectDetails[$key] = $details;
                     $subjectCount =  $institutionSubjectRepository->findCount($details->id_subject, $allSessions);
+>>>>>>> main
                     if(sizeof($subjectCount) == 2)
                     {
                         $subjectDetails[$key]['label_with_type'] = $details['display_name'].'-'.$details['subject_type'];
@@ -42,7 +54,11 @@
 
         }
 
+<<<<<<< HEAD
+        public function getAll()
+=======
         public function getAll($allSessions)
+>>>>>>> main
         { 
             $institutionSubjectRepository = new InstitutionSubjectRepository();
             $subjectService = new SubjectService();
@@ -51,7 +67,11 @@
 
             $subjectDetails = array();
 
+<<<<<<< HEAD
+            $allSubject = $institutionSubjectRepository->all();
+=======
             $allSubject = $institutionSubjectRepository->all($allSessions);
+>>>>>>> main
             foreach($allSubject as $subject)
             {
                 $subjectData = $subjectService->find($subject->id_subject);
@@ -64,7 +84,11 @@
                     $subjectName = $subjectData->name;
                 }
                 
+<<<<<<< HEAD
+                $subjectCount =  $institutionSubjectRepository->findCount($subject->id_subject);
+=======
                 $subjectCount =  $institutionSubjectRepository->findCount($subject->id_subject, $allSessions);
+>>>>>>> main
                 if(sizeof($subjectCount) > 1){
                     $display_name = $subject['display_name'].'-'.$subject['subject_type'];
                 }else{
@@ -83,7 +107,11 @@
             return $subjectDetails;
         }
 
+<<<<<<< HEAD
+        public function getSubjectName($idSubject)
+=======
         public function getSubjectName($idSubject, $allSessions)
+>>>>>>> main
         { 
             $institutionSubjectRepository = new InstitutionSubjectRepository();
 
@@ -93,7 +121,11 @@
             
             if($insttutionSubjectData){
             
+<<<<<<< HEAD
+                $subjectCount =  $institutionSubjectRepository->findCount($insttutionSubjectData->id_subject);
+=======
                 $subjectCount =  $institutionSubjectRepository->findCount($insttutionSubjectData->id_subject, $allSessions);
+>>>>>>> main
                 
                 if(sizeof($subjectCount) == 2)
                 {
@@ -112,8 +144,13 @@
         {
             $institutionSubjectRepository = new InstitutionSubjectRepository();
             $allSessions = session()->all();
+<<<<<<< HEAD
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+=======
             $institutionId = $institutionSubjectData->id_institute;
             $academicYear = $institutionSubjectData->id_academic;
+>>>>>>> main
             $count = $existCount = 0;
 
             foreach($institutionSubjectData->subject as $key => $subject){
@@ -167,7 +204,11 @@
             return $output;
         }
 
+<<<<<<< HEAD
+        public function getPeriodWiseSubjectData($attendanceType){
+=======
         public function getPeriodWiseSubjectData($attendanceType, $allSessions){
+>>>>>>> main
 
             $subjectTypeRepository = new SubjectTypeRepository();
             $institutionSubjectRepository = new InstitutionSubjectRepository();
@@ -175,7 +216,11 @@
             $subjectRepository = new SubjectRepository();
             $attendanceSubjects = array();
 
+<<<<<<< HEAD
+            $attendanceSubjects = $institutionSubjectRepository->fetchInstitutionAttendanceSubject($attendanceType);
+=======
             $attendanceSubjects = $institutionSubjectRepository->fetchInstitutionAttendanceSubject($attendanceType, $allSessions);
+>>>>>>> main
             // dd($attendanceSubjects);
             foreach($attendanceSubjects as $key => $subjectData){
                 $attendanceSubjects[$key] = $subjectData;
@@ -196,12 +241,20 @@
             return $attendanceSubjects;
         }
 
+<<<<<<< HEAD
+        public function getSubjectLabel($institutionSubjectId)
+=======
         public function getSubjectLabel($institutionSubjectId, $allSessions)
+>>>>>>> main
         { 
             $institutionSubjectRepository = new InstitutionSubjectRepository();
             $subjectService = new SubjectService();
             $institutionSubjectData = $institutionSubjectRepository->find($institutionSubjectId);
+<<<<<<< HEAD
+            return $subjectService->fetchSubjectTypeDetails($institutionSubjectData->id_subject);
+=======
             return $subjectService->fetchSubjectTypeDetails($institutionSubjectData->id_subject, $allSessions);
+>>>>>>> main
         }
 
         public function delete($id){
@@ -209,7 +262,11 @@
             $institutionSubjectRepository = new InstitutionSubjectRepository();
             $standardSubjectRepository = new StandardSubjectRepository();
 
+<<<<<<< HEAD
+            $checkExistence = $standardSubjectRepository->fetchExamSubjectStandards($id);
+=======
             $checkExistence = $standardSubjectRepository->fetchSubjectStandards($id);
+>>>>>>> main
             if(count($checkExistence) > 0){
 
                 $signal = 'success';
@@ -266,5 +323,56 @@
             return $output;
 
         }
+<<<<<<< HEAD
+
+        public function getInstitutionSubjectWithType(){
+            $subjectService = new SubjectService();
+            $allSubjects = $subjectService->getSubjects();
+            $institutionSubjects = $this->getAll();
+
+            $commonSubjects   =  array();
+            $electiveSubjects =  array();
+            $languageSubjects =  array();
+            $institutionSubjectsDetails = array();
+            $institutionSubjectsId = array();
+
+            foreach($institutionSubjects as $subjects) {
+                $institutionSubjectsId[] = $subjects['id_subject'];
+            }          
+
+            foreach($allSubjects['common'] as $commonKey => $common){
+
+                if(in_array($common->id, $institutionSubjectsId)){
+                    $commonSubjects[$commonKey]['subject_master_id'] = $common->id;
+                    $commonSubjects[$commonKey]['subject_name'] = $common->name;
+                }
+            }
+
+            foreach($allSubjects['elective'] as $electiveKey => $elective){
+
+                if(in_array($elective->id, $institutionSubjectsId)){
+                    $electiveSubjects[$electiveKey]['subject_master_id'] = $elective->id;
+                    $electiveSubjects[$electiveKey]['subject_name'] = $elective->name;
+                }
+            }
+
+            foreach($allSubjects['language'] as  $languageKey =>  $language){
+
+                if(in_array($language->id, $institutionSubjectsId)){
+                    $languageSubjects[$languageKey]['subject_master_id'] = $language->id;
+                    $languageSubjects[$languageKey]['subject_name'] = $language->name;
+                }
+            }
+
+            $institutionSubjectsDetails = array(
+                'language_subjects'=>$languageSubjects,
+                'elective_subjects'=>$electiveSubjects,
+                'common_subjects'=>$commonSubjects
+            );
+
+            return $institutionSubjectsDetails;
+        }
+=======
+>>>>>>> main
     }
 ?>

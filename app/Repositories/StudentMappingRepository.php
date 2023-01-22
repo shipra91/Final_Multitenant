@@ -6,7 +6,7 @@
     use DB;
     use Session;
 
-    class StudentMappingRepository implements StudentMappingRepositoryInterface{
+    class StudentMappingRepository implements StudentMappingRepositoryInterface {
 
         public function all(){
             return StudentMapping::all();
@@ -19,7 +19,8 @@
         public function getLatestUpdate($idStudent){
             DB::enableQueryLog();
             $lastRecord = StudentMapping::where('id_student', $idStudent)
-                                        ->orderBy('updated_at', 'desc')->first();
+                                        ->orderBy('updated_at', 'desc')
+                                        ->first();
             // dd(DB::getQueryLog());
             // dd($lastRecord);
             return $lastRecord;
@@ -55,8 +56,8 @@
             // dd($standard);
 
             $studentDetails = StudentMapping::join('tbl_student', 'tbl_student.id', '=', 'tbl_student_mapping.id_student')
-                                ->where('tbl_student_mapping.id_institute', $institutionId)
-                                ->where('tbl_student_mapping.id_academic_year', $academicYear);
+                                        ->where('tbl_student_mapping.id_institute', $institutionId)
+                                        ->where('tbl_student_mapping.id_academic_year', $academicYear);
             // dd($request);
 
             if($standard){
@@ -194,13 +195,18 @@
                             ->join('tbl_standard_subject', 'tbl_standard_subject.id_standard', '=', 'tbl_student_mapping.id_standard')
                             ->where('tbl_student_mapping.id_academic_year', $academicYear)
                             ->where('tbl_student_mapping.id_institute', $institutionId)
-                            ->where('tbl_student_mapping.id_standard', $standardId);
-                            
+                            ->where('tbl_student_mapping.id_standard', $standardId)
+                            ->orderBy('egenius_uid', 'asc');
+
 
             $subjectTypeData = $institutionSubjectRepository->find($subjectId);
+
             if($subjectTypeData->label == 'common'){
+
                 $studentDetails = $studentDetails->where('tbl_standard_subject.id_institution_subject', $subjectId);
+
             }else{
+
                 $studentDetails = $studentDetails->where(function($q) use($subjectId){
                                         $q->where('tbl_student_mapping.id_first_language', $subjectId)
                                         ->orWhere('tbl_student_mapping.id_second_language', $subjectId)
@@ -208,9 +214,10 @@
                                         ->orWhere('tbl_student_electives.id_elective', $subjectId);
                                     });
             }
+
             $studentDetails = $studentDetails->select('tbl_student.*', 'tbl_student_mapping.*')
-                            ->groupBy('tbl_student_mapping.id_student');
-                
+                                            ->groupBy('tbl_student_mapping.id_student');
+
             $studentDetails = $studentDetails->get();
             //dd(\DB::getQueryLog());
             return $studentDetails;
@@ -243,7 +250,8 @@
                                             ->where('tbl_student_mapping.id_standard', $standardId)
                                             ->where('tbl_student_mapping.id_institute', $institutionId)
                                             ->where('tbl_student_mapping.id_academic_year', $academicYear)
-                                            ->select('tbl_student.*', 'tbl_student_mapping.*')->get();
+                                            ->select('tbl_student.*', 'tbl_student_mapping.*') 
+                                            ->orderBy('egenius_uid', 'asc')->get();
             // dd(\DB::getQueryLog());
             return $studentDetails;
         }
@@ -332,7 +340,8 @@
             return $studentDetails;
         }
 
-        public function studentName($firstName, $secondName='', $thirdName=''){
+        public function getFullName($firstName, $secondName='', $thirdName=''){
+
             $output = $firstName;
 
             if($secondName != ''){
@@ -349,7 +358,6 @@
             return studentMapping::where('id_fee_type', $idFeeType)->first();
         }
 
-
         public function fetchStudentByStandardFeetype($standardId, $idFeeType, $allSessions){
 
             DB::enableQueryLog();
@@ -358,7 +366,7 @@
             $academicYear = $allSessions['academicYear'];
 
             $studentDetails = StudentMapping::join('tbl_student', 'tbl_student.id', '=', 'tbl_student_mapping.id_student')
-                                            ->where('tbl_student_mapping.id_standard', $standardId)   
+                                            ->where('tbl_student_mapping.id_standard', $standardId)
                                             ->where('tbl_student_mapping.id_fee_type', $idFeeType)
                                             ->where('tbl_student_mapping.id_institute', $institutionId)
                                             ->where('tbl_student_mapping.id_academic_year', $academicYear)

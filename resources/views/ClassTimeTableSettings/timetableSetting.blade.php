@@ -84,9 +84,12 @@
                                     <i class="material-icons">assessment</i>
                                 </div>
                                 <form method="POST" id="timeTableSettingsForm" enctype="multipart/form-data">
+<<<<<<< HEAD
+=======
                                     <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
                                     <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
                                     <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+>>>>>>> main
                                     <input type="hidden" name="standardId" value="{{ $timeTableSettings['id_standard'] }}">
                                     <input type="hidden" name="days" value="{{ $timeTableSettings['days'] }}">
                                     <input type="hidden" name="noOfTeachingPeriods" value="{{ $timeTableSettings['no_of_teaching_periods'] }}">

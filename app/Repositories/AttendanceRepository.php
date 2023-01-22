@@ -203,4 +203,16 @@
                                     ->first();
             return $attendanceData;
         }
+
+        public function checkAttendanceForStandard($idStandard, $allSessions){
+            
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return Attendance::where('id_institute', $institutionId)
+                            ->where('id_academic_year', $academicYear)
+                            ->where('id_standard', $idStandard)
+                            ->first();
+        }
     }
+
+    ?>

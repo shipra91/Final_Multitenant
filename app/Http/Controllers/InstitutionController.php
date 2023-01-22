@@ -145,18 +145,18 @@ class InstitutionController extends Controller
         $streamDetails = array();
         $combinationDetails = array();
 
-        $selectedInstitution = $instituteService->find($id);
+        $selectedInstitution = $this->instituteService->find($id);
         // dd($selectedInstitution['university']->id);
-        $institutionTypes = $institutionTypeService->getAll();
-        $organizations = $organizationService->all();
-        $courseMaster = $courseMasterService->getAll();
-        $academicYears = $academicYearService->getAll();
-        $modules = $moduleService->getAllParents();
-        $universities = $universityService->getAll();
-        $institutionModule = $institutionModuleService->getAllIds($id);
+        $institutionTypes = $this->institutionTypeService->getAll();
+        $organizations = $this->organizationService->all();
+        $courseMaster = $this->courseMasterService->getAll();
+        $academicYears = $this->academicYearService->getAll();
+        $modules = $this->moduleService->getAllParents();
+        $universities = $this->universityService->getAll();
+        $institutionModule = $this->institutionModuleService->getAllIds($id);
         
-        $institutionCourseDetails = $institutionCourseMasterService->getInstitutionCourseDetails($id);
-        $institutionCourseData = $instituteService->getInstitutionCourseData($id);
+        $institutionCourseDetails = $this->institutionCourseMasterService->getInstitutionCourseDetails($id);
+        $institutionCourseData = $this->instituteService->getInstitutionCourseData($id);
         //   dd($institutionCourseData['combinationDetails']);
         return view('Institutions/editInstitution', ["selectedInstitution" => $selectedInstitution, "institutionTypes" => $institutionTypes, "organizations" => $organizations, "academicYears" => $academicYears, "modules" => $modules, "universities" => $universities, "institutionModule" => $institutionModule, "institutionCourseDetails" => $institutionCourseDetails, "courseMaster" => $courseMaster , "institutionCourseData" => $institutionCourseData ])->with("page", "institution");
     }

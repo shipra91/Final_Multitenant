@@ -26,7 +26,7 @@
                                 <div class="card-content">
                                     <h4 class="card-title">Add Homework</h4>
                                     <div class="row">
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label class="control-label mt-0">Standard<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="homework_class" id="homework_class" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".homeworkError">
@@ -38,7 +38,7 @@
                                             <div class="homeworkError"></div>
                                         </div>
 
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label class="control-label mt-0">Subject<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="homework_subject" id="homework_subject" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".subjectError">
@@ -48,7 +48,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-3">
+                                        <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label class="control-label mt-0">Teacher<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="homework_staff" id="homework_staff" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".teacherError">
@@ -57,11 +57,20 @@
                                                 <div class="teacherError"></div>
                                             </div>
                                         </div>
+                                    </div>
 
-                                        <div class="col-lg-3">
+                                    <div class="row">
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="control-label mt-0">Chapter Name</label>
                                                 <input type="text" class="form-control" name="homework_chapter_name" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="control-label mt-0">Homework Name<span class="text-danger">*</span></label>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" name="homework_name" required />
                                             </div>
                                         </div>
                                     </div>
@@ -69,28 +78,28 @@
                                     <div class="row">
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Start Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Start Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker startDate" name="homework_start_date" data-parsley-trigger="change" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">End Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">End Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker endDate" name="homework_end_date" data-parsley-trigger="change" required autocomplete="off" />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Start Time<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Start Time<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control timepicker" name="homework_start_time" data-parsley-trigger="change" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">End Time<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">End Time<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control timepicker" name="homework_end_time" data-parsley-trigger="change" required />
                                             </div>
                                         </div>
@@ -98,20 +107,9 @@
 
                                     <div class="row">
                                         <div class="col-md-12">
+                                            <label class="control-label">Homework Details</label>
                                             <div class="form-group">
-                                                <label class="control-label">Homework Name<span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="homework_name" required />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="form-group">
-                                                <label class="control-label">Homework Details</label>
-                                                <div class="form-group">
-                                                    <textarea class="ckeditor" name="homework_details" rows="5"></textarea>
-                                                </div>
+                                                <textarea class="ckeditor" name="homework_details" rows="5"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -119,7 +117,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Submission Type<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Submission Type<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="submission_type" id="submission_type" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".typeError">
                                                     <option value="ONLINE">ONLINE</option>
                                                     <option value="OFFLINE">OFFLINE</option>
@@ -130,7 +128,7 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Grade/Marks Adding Option Required?<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Grade/Marks Adding Option Required?<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="grading_required" id="grading_required" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".gradeError">
                                                     <option value="YES">YES</option>
                                                     <option value="NO">NO</option>
@@ -143,7 +141,7 @@
                                     <div class="row">
                                         <div class="col-lg-6" id="grading_options">
                                             <div class="form-group">
-                                                <label class="control-label">Grading Options?<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Grading Options?<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="grading_option" id="grading_option" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" data-parsley-errors-container=".gradeOptionError">
                                                     <option value="GRADE">GRADE</option>
                                                     <option value="MARKS">MARKS</option>
@@ -154,14 +152,14 @@
 
                                         <div class="col-lg-6" id="grade">
                                             <div class="form-group">
-                                                <label class="control-label">Grade</label>
+                                                <label class="control-label mt-0">Grade</label>
                                                 <input type="text" class="form-control" name="homework_grade" placeholder="Mention grade here (eg:A+,A,B...)" />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6" id="marks">
                                             <div class="form-group">
-                                                <label class="control-label">Marks</label>
+                                                <label class="control-label mt-0">Marks</label>
                                                 <input type="text" class="form-control" name="homework_mark" placeholder="Mention max mark here" />
                                             </div>
                                         </div>
@@ -170,7 +168,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Read receipt from recipients required?<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Read receipt from recipients required?<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="read_receipt" id="read_receipt" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".receiptError">
                                                     <option value="YES">YES</option>
                                                     <option value="NO">NO</option>
@@ -181,7 +179,7 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">SMS alert to recipients required? (cost may apply)<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">SMS alert to recipients required?(cost may apply)<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="sms_alert" id="sms_alert" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".smsError">
                                                     <option value="YES">YES</option>
                                                     <option value="NO">NO</option>
@@ -250,8 +248,8 @@
 
             $('#image_preview').html("");
             var total_file = document.getElementById("attachmentHomework").files;
-            if (!total_file.length) return;
-            for (var i = 0; i < total_file.length; i++) {
+            if(!total_file.length) return;
+            for(var i = 0; i < total_file.length; i++){
 
                 var extension = total_file[i].name.substr((total_file[i].name.lastIndexOf('.') + 1));
                 var fileType = '';
@@ -259,50 +257,37 @@
 
                 fileArr.push(total_file[i]);
 
-                if (extension != "pdf" && extension != "docs" && extension != "doc" && extension !=
-                    "docx") {
+                if(extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) +
-                        '" class="multiple_image img-responsive" title="' + total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) + '" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
-                } else if (extension == "pdf") {
+                }else if (extension == "pdf"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://listimg.pinclipart.com/picdir/s/336-3361375_pdf-svg-png-icon-free-download-adobe-acrobat.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
-                } else if (extension == "docs" || extension == "doc" || extension == "docx") {
+                }else if (extension == "docs" || extension == "doc" || extension == "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://www.pngitem.com/pimgs/m/181-1816575_google-docs-png-five-feet-apart-google-docs.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
                 }
                 $('#image_preview').append(fileType);
             }
         });
 
         $('body').on('click', '#action-icon', function(evt){
+
             var divName = this.value;
             var fileName = $(this).attr('role');
+
             $(`#${divName}`).remove();
 
-            for (var i = 0; i < fileArr.length; i++) {
-                if (fileArr[i].name === fileName) {
+            for(var i = 0; i < fileArr.length; i++){
+                if(fileArr[i].name === fileName){
                     fileArr.splice(i, 1);
                 }
             }
@@ -312,9 +297,9 @@
 
         function FileListItem(file){
             file = [].slice.call(Array.isArray(file) ? file : arguments)
-            for (var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
-            if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
-            for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
+            for(var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
+            if(!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+            for(b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
             return b.files
         }
 

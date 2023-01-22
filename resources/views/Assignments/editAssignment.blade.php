@@ -65,14 +65,14 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Chapter Name</label>
+                                                <label class="control-label mt-0">Chapter Name</label>
                                                 <input type="text" class="form-control" name="assignment_chapter_name" value="{{$assignment['assignmentData']->chapter_name}}" />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Assignment Title<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Assignment Title<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="assignment_name" value="{{$assignment['assignmentData']->name}}" required />
                                             </div>
                                         </div>
@@ -81,28 +81,28 @@
                                     <div class="row">
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Start Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Start Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker startDate" name="assignment_start_date" value="{{ Carbon::createFromFormat('Y-m-d', $assignment['assignmentData']->start_date)->format('d/m/Y') }}" />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">End Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">End Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker endDate" name="assignment_end_date" value="{{  Carbon::createFromFormat('Y-m-d', $assignment['assignmentData']->end_date)->format('d/m/Y') }}" required autocomplete="off"/>
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Start Time<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Start Time<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control timepicker" name="assignment_start_time" value="{{$assignment['assignmentData']->start_time}}" />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">End Time<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">End Time<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control timepicker" name="assignment_end_time" value="{{$assignment['assignmentData']->end_time}}" required />
                                             </div>
                                         </div>
@@ -110,11 +110,9 @@
 
                                     <div class="row">
                                         <div class="col-md-12">
+                                            <label class="control-label">Assignment Details</label>
                                             <div class="form-group">
-                                                <label class="control-label">Assignment Details</label>
-                                                <div class="form-group">
-                                                    <textarea class="ckeditor" name="assignment_details" rows="5">{{$assignment['assignmentData']->description}}</textarea>
-                                                </div>
+                                                <textarea class="ckeditor" name="assignment_details" rows="5">{{$assignment['assignmentData']->description}}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -122,7 +120,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Submission Type<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Submission Type<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="submission_type" id="submission_type" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".typeError">
                                                     <option value="ONLINE" @if($assignment['assignmentData']->submission_type == 'ONLINE'){{'selected'}} @endif>ONLINE</option>
                                                     <option value="OFFLINE" @if($assignment['assignmentData']->submission_type == 'OFFLINE'){{'selected'}} @endif>OFFLINE</option>
@@ -133,7 +131,7 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Grade/Marks Adding Option Required?<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Grade/Marks Adding Option Required?<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="grading_required" id="grading_required" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".gradeError">
                                                     <option value="YES" @if($assignment['assignmentData']->grading_required == 'YES'){{'selected'}} @endif>YES</option>
                                                     <option value="NO" @if($assignment['assignmentData']->grading_required == 'NO'){{'selected'}} @endif>NO</option>
@@ -147,7 +145,7 @@
                                         <input type="hidden" id="grading_required_value" value="{{ $assignment['assignmentData']->grading_required }}">
                                         <div class="col-lg-6" id="grading_options">
                                             <div class="form-group">
-                                                <label class="control-label">Grading Options?</label>
+                                                <label class="control-label mt-0">Grading Options?</label>
                                                 <select class="selectpicker" name="grading_option" id="grading_option" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" data-parsley-errors-container=".gradeOptionError">
                                                     <option value="GRADE" @if($assignment['assignmentData']->grading_option == 'GRADE'){{'selected'}} @endif>GRADE</option>
                                                     <option value="MARKS" @if($assignment['assignmentData']->grading_option == 'MARKS'){{'selected'}} @endif>MARKS</option>
@@ -159,14 +157,14 @@
                                         <input type="hidden" id="grading_option_value" value="{{ $assignment['assignmentData']->grading_option }}">
                                         <div class="col-lg-6" id="grade">
                                             <div class="form-group">
-                                                <label class="control-label">Grade</label>
+                                                <label class="control-label mt-0">Grade</label>
                                                 <input type="text" class="form-control" name="assignment_grade" placeholder="Mention grade here (eg:A+,A,B...)" />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6" id="marks">
                                             <div class="form-group">
-                                                <label class="control-label">Marks</label>
+                                                <label class="control-label mt-0">Marks</label>
                                                 <input type="text" class="form-control" name="assignment_mark" placeholder="Mention max mark here" value="{{$assignment['assignmentData']->marks}}" />
                                             </div>
                                         </div>
@@ -175,7 +173,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Read receipt from recipients required?<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Read receipt from recipients required?<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="read_receipt" id="read_receipt" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".receiptError">
                                                     <option value="YES" @if($assignment['assignmentData']->read_receipt == 'YES'){{'selected'}} @endif>YES</option>
                                                     <option value="NO" @if($assignment['assignmentData']->read_receipt == 'NO'){{'selected'}} @endif>NO</option>
@@ -186,7 +184,7 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">SMS alert to recipients required?(cost may apply)<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">SMS alert to recipients required?(cost may apply)<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="sms_alert" id="sms_alert" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".smsError">
                                                     <option value="YES" @if($assignment['assignmentData']->sms_alert == 'YES'){{'selected'}} @endif>YES</option>
                                                     <option value="NO" @if($assignment['assignmentData']->sms_alert == 'NO'){{'selected'}} @endif>NO</option>
@@ -231,29 +229,30 @@
 
                             @if(count($assignment['assignmentAttachment']) > 0)
                                 <div class="card">
+                                    <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
+                                        <i class="material-icons">attachment</i>
+                                    </div>
                                     <div class="card-content">
                                         <h4 class="card-title">Attachment</h4>
                                         <div class="row">
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <ul>
-                                                        @foreach($assignment['assignmentAttachment'] as $key =>$attachment)
+                                                    @foreach($assignment['assignmentAttachment'] as $key=>$attachment)
 
-                                                            @if($attachment['extension'] =="pdf")
-                                                                <div class="img_div" id="img_div">
-                                                                    <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="">
-                                                                </div>
-                                                            @elseif($attachment['extension'] =="doc" || $attachment['extension'] =="docx")
-                                                                <div class="img_div" id="img_div">
-                                                                    <img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="">
-                                                                </div>
-                                                            @else
-                                                                <div class="img_div" id="img_div">
-                                                                    <img src="{{ $attachment['file_url'] }}" class="multiple_image img-responsive" title="">
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
-                                                    </ul>
+                                                        @if($attachment['extension'] =="pdf")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @elseif($attachment['extension'] =="doc" || $attachment['extension'] =="docx")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @else
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="{{ $attachment['file_url'] }}" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         </div>

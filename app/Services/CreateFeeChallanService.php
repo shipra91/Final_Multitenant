@@ -344,21 +344,21 @@
                                             $idFeeHeading = $paidHeading->id_fee_mapping_heading;
                                             $installmentNo = $paidHeading->installment_no;
 
-                                            //COLLECTION DETAIL INSERTION
-                                            $collectDetail = array(
-                                                'id_fee_collection' => $storeFeeCollection->id,
-                                                'id_fee_category' => $idFeeCategory,
-                                                'id_fee_mapping_heading' => $idFeeHeading,
-                                                'installment_no' => $installmentNo,
-                                                'fee_amount' => $headingAmount,
-                                                'sgst_received' => $sgstReceived,
-                                                'cgst_received' => $cgstReceived,
-                                                'gst_received' => $gstReceived,
-                                                'created_by' => Session::get('userId'),
-                                            );
-                                            // dd($collectDetail);
-                                            $storeFeeCollectionDetail = $feeCollectionDetailRepository->store($collectDetail);
-
+                                        //COLLECTION DETAIL INSERTION
+                                    $collectDetail = array(
+                                        'id_fee_collection' => $storeFeeCollection->id,
+                                        'id_fee_category' => $idFeeCategory,
+                                        'id_fee_mapping_heading' => $idFeeHeading,
+                                        'installment_no' => $installmentNo,
+                                        'fee_amount' => $headingAmount,
+                                        'sgst_received' => $sgstReceived,
+                                        'cgst_received' => $cgstReceived,
+                                        'gst_received' => $gstReceived,
+                                        'created_by' => Session::get('userId'),
+                                    );
+                                   
+                                    $storeFeeCollectionDetail = $feeCollectionDetailRepository->store($collectDetail);
+                                    
                                         }
                                     }
                                 }
@@ -366,6 +366,7 @@
                         }
                     }
                 }
+              
                 $feeReceiptId = implode(',' ,$feeReceiptId);
                 if($collectionCount>0){
                     $signal = 'success';

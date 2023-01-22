@@ -28,5 +28,9 @@
         public function delete($id){
             return Nationality::find($id)->delete();
         }
+
+        public function fetchNationalityId($nationality){
+            return Nationality::where("name", $nationality)->first();
+        }
     }
 ?>

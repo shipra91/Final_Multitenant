@@ -15,7 +15,11 @@
 
         public function fetch($id){
             return Standard::find($id);
-        }        
+        }    
+
+        public function getStandardId($standard){
+            return Standard::where('name',$standard)->first();
+        }    
 
         public function update($data){
             return $data->save();

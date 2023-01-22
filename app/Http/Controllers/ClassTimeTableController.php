@@ -7,6 +7,7 @@ use App\Services\ClassTimeTableService;
 use App\Services\StaffService;
 use App\Services\RoomMasterService;
 use Illuminate\Http\Request;
+use Session;
 
 class ClassTimeTableController extends Controller
 {
@@ -114,14 +115,35 @@ class ClassTimeTableController extends Controller
         $roomMasterService = new RoomMasterService();
         $classTimeTableService = new ClassTimeTableService();
         $timeTableSettingData = array();
-        $allSessions = session()->all();
-
         $standardId = $request->get('standard');
 
         $roomData = $roomMasterService->all();
         $standard = $classTimeTableService->getStandards($allSessions);
         $timeTableSettingData = $classTimeTableService->getTimeTableDayWise($standardId, $allSessions);
+        // dd($timeTableSettingData);
+        foreach($timeTableSettingData['dayPeriodSettingData'] as $index => $periodSettingData){
+
+            foreach($periodSettingData['classTimeTableSettingData'] as $key => $timetableSetting){
+            
+                if($timetableSetting['selected_subject']){
+                   
+                    foreach($timetableSetting['selected_subject'] as $sub => $subject){
+                        // dd($timetableSetting['all_staff']);
+                        foreach($timetableSetting['all_staff'] as $staffkey => $staff){
+                          
+
+                        }
+                    }
+                }
+            }
+        }
+        // dd('abd');
         
+        // $selectedData = $classTimeTableService->getTimeTableDayWise($standardId);
+
+        // $selectedData = $classTimeTableService->getTimeTableSelectedData($request);
+        // dd($selectedData);
+
         return view('ClassTimeTable/index', ['standard'=>$standard, 'timeTableSettingData'=>$timeTableSettingData, 'roomData' => $roomData])->with("page", "class_timetable");
     }
 
@@ -134,10 +156,23 @@ class ClassTimeTableController extends Controller
         $standard = $request->standardId;
         $subjectArray = array(
             'subject' => $request->subjectId
-        );        
+        );
+        
 
         $staffData = $staffService->getStaffByStandardAndSubject($standard, $subjectArray, $allSessions);
       
         return $staffData;
     }
+
+    public function getPeriodSubjects(Request $request){
+        $allSessions = session()->all();
+        $classTimeTableService = new ClassTimeTableService();
+        $standardId = $request->standardId;
+        $periodId = $request->periodId;
+        $attendanceDate = $request->attendanceDate;
+
+        return $classTimeTableService->fetchPeriodSubjects($standardId, $periodId, $attendanceDate, $allSessions);
+    }
+
 }
+?>

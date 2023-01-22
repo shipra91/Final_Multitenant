@@ -45,7 +45,7 @@ class PreadmissionController extends Controller
 
                         if($row['admitted'] == 'YES'){
 
-                            $admitStatus = '<button type="button" rel="tooltip"  class="btn btn-success btn-xs" >ADMITTED</button>';
+                            $admitStatus = '<button type="button" rel="tooltip" class="btn btn-success btn-xs" >ADMITTED</button>';
 
                         }else{
 

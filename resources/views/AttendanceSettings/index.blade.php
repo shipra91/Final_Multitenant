@@ -17,9 +17,16 @@
                             <a href="{{ url('attendance-settings/create') }}" type="button" class="btn btn-primary mr-5"><i class="material-icons">add</i> Add Attendance Settings</a>
                         @endif
                         @if(Helper::checkAccess('attendance-settings', 'view'))
-                            <a href="{{ url('attendance-settings-deleted-records') }}" type="button" class="btn btn-info"><i class="material-icons">delete_forever</i> Deleted Records</a>
+                            <!-- <a href="{{ url('attendance-settings-deleted-records') }}" type="button" class="btn btn-info"><i class="material-icons">delete_forever</i> Deleted Records</a> -->
                         @endif
                     </div>
+                    <!-- <div class="col-sm-12 col-sm-offset-0">
+                        <div class="card">
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Note:</strong> If already used then you can't delete the setting.
+                            </div>
+                        </div>
+                    </div> -->
 
                     @if(Helper::checkAccess('attendance-settings', 'view'))
                         <div class="col-sm-12 col-sm-offset-0">

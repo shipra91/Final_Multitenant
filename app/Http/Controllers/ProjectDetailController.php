@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProjectDetail;
 use Illuminate\Http\Request;
+use App\Services\ProjectAttachmentService;
 
 class ProjectDetailController extends Controller
 {
@@ -78,8 +79,25 @@ class ProjectDetailController extends Controller
      * @param  \App\Models\ProjectDetail  $projectDetail
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProjectDetail $projectDetail)
+    public function removeProjectAttachments(Request $request)
     {
-        //
+        $projectAttachmentService = new ProjectAttachmentService();
+
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $projectAttachmentService->delete($request->projectId);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
+    
     }
 }

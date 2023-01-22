@@ -28,5 +28,9 @@
         public function delete($id){
             return Department::find($id)->delete();
         }
+
+        public function fetchDepartmentId($designation){
+            return Department::where("name", $designation)->first();
+        }
     }
 ?>

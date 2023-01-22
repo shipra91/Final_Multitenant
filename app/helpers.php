@@ -178,6 +178,8 @@
         $query = DB::table('tbl_institution')
                 ->join('tbl_organization', 'tbl_institution.id_organization', '=', 'tbl_organization.id')
                 ->where('tbl_institution.website_url', $_SERVER['HTTP_HOST'])
+                ->whereNull('tbl_organization.deleted_at')
+                ->whereNull('tbl_institution.deleted_at')
                 ->select('tbl_organization.*', 'tbl_institution.id as institution_id', 'tbl_institution.name as institution_name', 'tbl_institution.institution_logo')
                 ->first();
         if($query){
@@ -185,6 +187,20 @@
         }else{
             return "error";
         }
+    }
+    
+    public static function domainCheckWithUrl($url){
+
+        $query = DB::table('tbl_institution')
+                ->join('tbl_organization', 'tbl_institution.id_organization', '=', 'tbl_organization.id')
+                ->where('tbl_institution.website_url', $url)
+                ->orWhere('tbl_organization.website_url', $url)
+                ->whereNull('tbl_organization.deleted_at')
+                ->whereNull('tbl_institution.deleted_at')
+                ->select('tbl_organization.*', 'tbl_institution.id as institution_id', 'tbl_institution.name as institution_name', 'tbl_institution.institution_logo')
+                ->first();
+
+        return $query;
     }
 
     //FETCH ALL THE ACADEMIC YEARS FOR INSTITUTION

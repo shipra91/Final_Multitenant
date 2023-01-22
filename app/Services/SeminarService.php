@@ -1,12 +1,7 @@
 <?php
     namespace App\Services;
+
     use App\Models\Seminar;
-    use App\Services\SeminarService;
-    use App\Services\StudentService;
-    use App\Services\InstitutionStandardService;
-    use App\Services\InstitutionSubjectService;
-    use App\Services\StandardSubjectService;
-    use App\Services\EventService;
     use App\Repositories\SeminarRepository;
     use App\Repositories\StaffRepository;
     use App\Repositories\StaffCategoryRepository;
@@ -18,6 +13,12 @@
     use App\Repositories\SeminarConductedByRepository;
     use App\Repositories\StudentMappingRepository;
     use App\Repositories\SeminarMentorsRepository;
+    use App\Services\SeminarService;
+    use App\Services\StudentService;
+    use App\Services\InstitutionStandardService;
+    use App\Services\InstitutionSubjectService;
+    use App\Services\StandardSubjectService;
+    use App\Services\EventService;
     use Carbon\Carbon;
     use Storage;
     use Session;
@@ -292,12 +293,16 @@
             $seminarConductedByRepository = new SeminarConductedByRepository();
             $studentMappingRepository = new StudentMappingRepository();
             $staffRepository = new StaffRepository();
+            $staffCategoryRepository = new StaffCategoryRepository();
+            $staffSubCategoryRepository = new StaffSubCategoryRepository();
             $seminarRepository = new SeminarRepository();
+            $seminarAttachmentRepository = new SeminarAttachmentRepository();
             $studentService = new StudentService();
             $eventService = new EventService();
             $seminarMentorsRepository = new SeminarMentorsRepository();
             $institutionStandardService = new InstitutionStandardService();
             $standardSubjectService = new StandardSubjectService();
+            $institutionSubjectService = new InstitutionSubjectService();
 
             $selectedStaffCategoryData = array();
             $selectedStaffSubCategoryData = array();
@@ -314,6 +319,20 @@
             $mentorsData = array();
             $standardIds = array();
 
+            $seminarMentorsDetails = array();
+            $categoryDetails = array();
+            $subCategoryDetails = array();
+            $standardDetails = array();
+            $subjectDetails = array();
+
+            $seminarAttachment = $seminarAttachmentRepository->fetch($idSeminar);
+
+            foreach($seminarAttachment as $key => $attachment){
+                $ext = pathinfo($attachment['file_url'], PATHINFO_EXTENSION);
+                $seminarAttachment[$key] = $attachment;
+                $seminarAttachment[$key]['extension'] = $ext;
+            }
+
             $seminarData = $seminarRepository->fetch($idSeminar);
 
             $seminarData['start_date'] = Carbon::createFromFormat('Y-m-d', $seminarData->start_date)->format('d/m/Y');
@@ -329,11 +348,18 @@
                     $selectedStaffCategoryData = $seminarInvitiesRepository->allSeminarCategory($idSeminar, $recipientType->recipient_type);
                     foreach($selectedStaffCategoryData as $staffCategory){
                         array_push($selectedStaffCategory, $staffCategory['id_staff_category']);
+
+                        $category = $staffCategoryRepository->fetch($staffCategory['id_staff_category']);
+                        array_push($categoryDetails, $category->name);
+
                     }
 
                     $selectedStaffSubCategoryData = $seminarInvitiesRepository->allSeminarSubCategory($idSeminar, $recipientType->recipient_type);
                     foreach($selectedStaffSubCategoryData as $staffSubCategory){
                         array_push($selectedStaffSubCategory, $staffSubCategory['id_staff_subcategory']);
+
+                        $subCategory = $staffSubCategoryRepository->fetch($staffSubCategory['id_staff_subcategory']);
+                        array_push($subCategoryDetails, $subCategory->name);
                     }
 
                     $selectedStaffs = $seminarRecipientRepository->seminarRecipients($idSeminar, $recipientType->recipient_type);
@@ -348,11 +374,21 @@
                     $selectedStandards = $seminarInvitiesRepository->allSeminarStandards($idSeminar, $recipientType->recipient_type);
                     foreach($selectedStandards as $studentStandard){
                         array_push($selectedStudentStandard, $studentStandard['id_standard']);
+
+                        $standard = $institutionStandardService->fetchStandardByUsingId($studentStandard['id_standard']);
+                        if(!in_array($standard, $standardDetails)){
+                            array_push($standardDetails, $standard);
+                        }
                     }
 
                     $selectedStandardSubjectData = $seminarInvitiesRepository->allSeminarSubjects($idSeminar, $recipientType->recipient_type);
                     foreach($selectedStandardSubjectData as $standardSubject){
                         array_push($selectedStandardSubject, $standardSubject['id_subject']);
+
+                        $subject = $institutionSubjectService->getSubjectName($standardSubject['id_subject']);
+                        if(!in_array($subject, $subjectDetails)){
+                            array_push($subjectDetails, $subject);
+                        }
                     }
 
                     $requestData = array(
@@ -363,7 +399,7 @@
                     $allStudents = $studentService->getAllStudent($requestData);
 
                     $selectedStudents = $seminarRecipientRepository->seminarRecipients($idSeminar, $recipientType->recipient_type);
-                    foreach($selectedStudents as $studentId) {
+                    foreach($selectedStudents as $studentId){
                         array_push($selectedStudentData, $studentId['id_recipient']);
                     }
                 }
@@ -398,10 +434,13 @@
 
             foreach($seminarMentors as $mentors){
                 $mentorsData[] = $mentors->id_staff;
+                //$mentorsDetail[] = $mentors;
+
+                $staffDetails = $staffRepository->fetch($mentors->id_staff);
+                array_push($seminarMentorsDetails, $staffDetails->name);
             }
 
             $standardSubjects = $standardSubjectService->getStandardsSubject($selectedStudentStandard);
-
             $details = $eventService->getEventData();
 
             $output = array(
@@ -421,7 +460,13 @@
                 'teachingStaffs' => $details['teachingStaffs'],
                 'studentStaffData' => $studentStaffData,
                 'mentorsData' => $mentorsData,
-                'standardSubjects' => $standardSubjects
+                'mentors' => $seminarMentorsDetails,
+                'standardSubjects' => $standardSubjects,
+                'seminarAttachment' => $seminarAttachment,
+                'categoryDetails' => $categoryDetails,
+                'subCategoryDetails' => $subCategoryDetails,
+                'standardDetails' => $standardDetails,
+                'subjectDetails' => $subjectDetails,
             );
 
             return $output;
@@ -660,12 +705,9 @@
                 }
 
                 if($seminarData->seminarAttachment != ""){
-
-                    $deleteAttachment = $seminarAttachmentRepository->delete($id);
-
+                    //$deleteAttachment = $seminarAttachmentRepository->delete($id);
                     if($seminarData->hasfile('seminarAttachment')){
 
-                        //$path = 'Seminar';
                         foreach($seminarData->seminarAttachment as $attachment){
 
                             $path = 'Seminar';

@@ -44,9 +44,9 @@
 
                                 <div class="row">
                                     <div class="col-lg-12">
+                                        <label class="control-label">Circular Details</label>
                                         <div class="form-group">
-                                            <label class="control-label mt-0 form-group">Circular Details</label>
-                                            <textarea class="ckeditor" name="circular_details" rows="5" disabled>{{$selectedData['circularData']->description}}</textarea>
+                                            <textarea class="ckeditor" name="circular_details" rows="5" disabled>{{ $selectedData['circularData']->description }}</textarea>
                                         </div>
                                     </div>
                                 </div>

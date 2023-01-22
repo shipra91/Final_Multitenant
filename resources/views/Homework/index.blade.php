@@ -5,9 +5,6 @@
 @extends('layouts.master')
 
 @section('content')
-<style>
-    .cke_top { display: none !important }
-</style>
 <div class="wrapper">
     @include('sliderbar')
     <div class="main-panel">
@@ -64,7 +61,7 @@
 </div>
 
 <!-- View homework detail modal -->
-<div class="modal fade" id="homework_modal">
+{{-- <div class="modal fade" id="homework_modal">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="card1">
@@ -154,7 +151,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @endsection
 
 @section('script-content')
@@ -237,47 +234,47 @@
         });
 
         // View homework details
-        $("body").delegate(".homeworkDetail", "click", function(event){
-            event.preventDefault();
+        // $("body").delegate(".homeworkDetail", "click", function(event){
+        //     event.preventDefault();
 
-            var homeworkId = $(this).attr('data-id');
+        //     var homeworkId = $(this).attr('data-id');
 
-            $.ajax({
-                url: "{{ url('/homework-detail') }}",
-                type: "post",
-                dataType: "json",
-                data: {homeworkId: homeworkId,login_type: ''},
-                success: function(response){
-                    // console.log(response);
-                    var html = '';
-                    var gradingOption = '';
-                    var gradeValue = '';
-                    var marksValue = '';
-                    var resubmissionDateValue = '';
-                    var resubmissionTimeValue = '';
+        //     $.ajax({
+        //         url: "{{ url('/homework-detail') }}",
+        //         type: "post",
+        //         dataType: "json",
+        //         data: {homeworkId: homeworkId,login_type: ''},
+        //         success: function(response){
+        //             // console.log(response);
+        //             var html = '';
+        //             var gradingOption = '';
+        //             var gradeValue = '';
+        //             var marksValue = '';
+        //             var resubmissionDateValue = '';
+        //             var resubmissionTimeValue = '';
 
-                    $("#homework_modal").find("#homework_name").text("Homework Name: " + response.homework_name);
-                    $("#homework_modal").find("#staff_name").text("Staff Name: " + response.staff_name);
-                    $("#homework_modal").find("#subject_name").text("Subject Name: " + response.subject_name);
-                    //$("#homework_modal").find("#description").html(response.description);
-                    $("#homework_modal").find(CKEDITOR.instances.description.setData(response.description));
-                    $("#homework_modal").find(CKEDITOR.instances.description.setReadOnly(true));
-                    $("#homework_modal").find("#submit_date").text("Submit Before: " + response.to_date + " - " + response.end_time);
-                    $("#homework_modal").find("#chapter_name").val(response.chapter_name);
-                    $("#homework_modal").find("#submission_type").val(response.submission_type);
-                    $("#homework_modal").find("#grading_required").val(response.grading_required);
-                    $("#homework_modal").find("#read_receipt").val(response.read_receipt);
-                    $("#homework_modal").find("#sms_alert").val(response.sms_alert);
-                    $("#homework_modal").find("#start_time").val(response.start_time);
-                    $("#homework_modal").find("#end_time").val(response.end_time);
-                    $("#homework_modal").find("#grading_option").html(gradingOption);
-                    $("#homework_modal").find("#grade").html(gradeValue);
-                    $("#homework_modal").find("#marks").html(marksValue);
-                    $("#homework_modal").find('tbody').html(html);
-                    $("#homework_modal").modal('show');
-                }
-            });
-        })
+        //             $("#homework_modal").find("#homework_name").text("Homework Name: " + response.homework_name);
+        //             $("#homework_modal").find("#staff_name").text("Staff Name: " + response.staff_name);
+        //             $("#homework_modal").find("#subject_name").text("Subject Name: " + response.subject_name);
+        //             //$("#homework_modal").find("#description").html(response.description);
+        //             $("#homework_modal").find(CKEDITOR.instances.description.setData(response.description));
+        //             $("#homework_modal").find(CKEDITOR.instances.description.setReadOnly(true));
+        //             $("#homework_modal").find("#submit_date").text("Submit Before: " + response.to_date + " - " + response.end_time);
+        //             $("#homework_modal").find("#chapter_name").val(response.chapter_name);
+        //             $("#homework_modal").find("#submission_type").val(response.submission_type);
+        //             $("#homework_modal").find("#grading_required").val(response.grading_required);
+        //             $("#homework_modal").find("#read_receipt").val(response.read_receipt);
+        //             $("#homework_modal").find("#sms_alert").val(response.sms_alert);
+        //             $("#homework_modal").find("#start_time").val(response.start_time);
+        //             $("#homework_modal").find("#end_time").val(response.end_time);
+        //             $("#homework_modal").find("#grading_option").html(gradingOption);
+        //             $("#homework_modal").find("#grade").html(gradeValue);
+        //             $("#homework_modal").find("#marks").html(marksValue);
+        //             $("#homework_modal").find('tbody').html(html);
+        //             $("#homework_modal").modal('show');
+        //         }
+        //     });
+        // })
     });
 </script>
 @endsection

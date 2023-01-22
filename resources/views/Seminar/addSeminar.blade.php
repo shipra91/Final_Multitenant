@@ -38,15 +38,15 @@
                                         </div>
                                     </div>
 
-                                    <div class="row mt-20">
+                                    <div class="row">
                                         <div class="col-lg-12 col-lg-offset-0">
-                                            <table class="table table-striped table-no-bordered table-hover mt-30">
+                                            <table class="table table-striped table-no-bordered table-hover mt-20 mb-30">
                                                 <thead style="font-size:12px;">
                                                     <tr>
                                                         <th width="10%"><b>UID</b></th>
-                                                        <th width="20%"><b>Name</b></th>
+                                                        <th width="30%"><b>Name</b></th>
                                                         <th width="30%"><b>Standard</b></th>
-                                                        <th width="30%"><b>Type</b></th>
+                                                        <th width="20%"><b>Type</b></th>
                                                         <th width="10%"><b>Remove</b></th>
                                                     </tr>
                                                 </thead>
@@ -58,68 +58,82 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="form-group col-lg-3">
-                                            <label class="control-label">Start Date<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control datepicker startDate" name="seminar_start_date" data-parsley-trigger="change" required />
-                                        </div>
-
-                                        <div class="form-group col-lg-3">
-                                            <label class="control-label">End Date<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control datepicker endDate"  name="seminar_end_date" data-parsley-trigger="change" required autocomplete="off"/>
-                                        </div>
-
-                                        <div class="form-group col-lg-3">
-                                            <label class="control-label">Start Time<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control timepicker" name="seminar_start_time" data-parsley-trigger="change" required />
-                                        </div>
-
-                                        <div class="form-group col-lg-3">
-                                            <label class="control-label">End Time<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control timepicker" name="seminar_end_time" data-parsley-trigger="change" required />
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-4 mt-10">
-                                            <label class="control-label">Mentored By<span class="text-danger">*</span></label>
-                                            <select class="selectpicker" name="mentors[]" id="mentors" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-actions-box="true" data-selected-text-format="count > 1" multiple data-parsley-errors-container=".mentoredError">
-                                                @foreach($details['teachingStaffs'] as $staffs)
-                                                    <option value="{{$staffs->id}}">{{$staffs->name}}</option>
-                                                @endforeach
-                                            </select>
-                                            <div class="mentoredError"></div>
-                                        </div>
-
-                                        <div class="form-group col-lg-8">
-                                            <label class="control-label">Seminar Topic<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="seminar_topic" required />
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Seminar Details</label>
-                                                <div class="form-group">
-                                                    <textarea class="ckeditor" name="description" rows="5"></textarea>
-                                                </div>
+                                                <label class="control-label mt-0">Start Date<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control datepicker startDate" name="seminar_start_date" data-parsley-trigger="change" required />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">End Date<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control datepicker endDate"  name="seminar_end_date" data-parsley-trigger="change" required autocomplete="off"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Start Time<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control timepicker" name="seminar_start_time" data-parsley-trigger="change" required />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">End Time<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control timepicker" name="seminar_end_time" data-parsley-trigger="change" required />
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="form-group col-lg-6">
-                                            <label class="control-label">Maximum Marks</label>
-                                            <input type="text" class="form-control" name="max_mark" placeholder="Mention max mark here" />
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Mentored By<span class="text-danger">*</span></label>
+                                                <select class="selectpicker" name="mentors[]" id="mentors" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-actions-box="true" data-selected-text-format="count > 1" multiple data-parsley-errors-container=".mentoredError">
+                                                    @foreach($details['teachingStaffs'] as $staffs)
+                                                        <option value="{{$staffs->id}}">{{$staffs->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="mentoredError"></div>
+                                            </div>
                                         </div>
 
-                                        <div class="form-group col-lg-6 mt-10">
-                                            <label class="control-label">SMS alert to recipients required? (cost may apply)<span class="text-danger">*</span></label>
-                                            <select class="selectpicker" name="sms_alert" id="sms_alert" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".smsError">
-                                                <option value="YES"> YES</option>
-                                                <option value="NO"> NO</option>
-                                            </select>
-                                            <div class="smsError"></div>
+                                        <div class="col-lg-8">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Seminar Topic<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="seminar_topic" required />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="control-label">Seminar Details</label>
+                                            <div class="form-group">
+                                                <textarea class="ckeditor" name="description" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Maximum Marks</label>
+                                                <input type="text" class="form-control" name="max_mark" placeholder="Mention max mark here" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">SMS alert to recipients required? (cost may apply)<span class="text-danger">*</span></label>
+                                                <select class="selectpicker" name="sms_alert" id="sms_alert" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".smsError">
+                                                    <option value="YES"> YES</option>
+                                                    <option value="NO"> NO</option>
+                                                </select>
+                                                <div class="smsError"></div>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -137,7 +151,7 @@
                                         <div id="staffDiv" style="display:none">
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Category</label>
+                                                    <label class="control-label mt-0">Staff Category</label>
                                                     <select class="selectpicker" name="staffCategory[]" id="staffCategory" data-style="select-with-transition" data-live-search="true" title="Select" data-selected-text-format="count > 1" multiple data-actions-box="true" data-parsley-errors-container=".catError">
                                                         @foreach($details['staffCategory'] as $staffCategory)
                                                             <option value="{{$staffCategory->id}}">{{ucwords($staffCategory->name)}}</option>
@@ -149,8 +163,8 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Subcategory</label>
-                                                    <select class="selectpicker" name="staffSubcategory[]" id="staffSubcategory" data-style="select-with-transition" data-live-search="true" title="Select SubCategory" data-selected-text-format="count > 1" multiple data-actions-box="true" data-parsley-errors-container=".subcatError">
+                                                    <label class="control-label mt-0">Staff Subcategory</label>
+                                                    <select class="selectpicker" name="staffSubcategory[]" id="staffSubcategory" data-style="select-with-transition" data-live-search="true" title="Select" data-selected-text-format="count > 1" multiple data-actions-box="true" data-parsley-errors-container=".subcatError">
 
                                                     </select>
                                                     <div class="subcatError"></div>
@@ -159,8 +173,8 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff</label>
-                                                    <select class="selectpicker" name="staff[]" id="staff" data-style="select-with-transition" data-live-search="true" title="Select Staffs" multiple data-actions-box="true" data-selected-text-format="count > 1" data-parsley-errors-container=".staffError">
+                                                    <label class="control-label mt-0">Staff</label>
+                                                    <select class="selectpicker" name="staff[]" id="staff" data-style="select-with-transition" data-live-search="true" title="Select" multiple data-actions-box="true" data-selected-text-format="count > 1" data-parsley-errors-container=".staffError">
 
                                                     </select>
                                                     <div class="staffError"></div>
@@ -177,7 +191,7 @@
                                         <div id="studentDiv" style="display:none">
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Standard</label>
+                                                    <label class="control-label mt-0">Standard</label>
                                                     <select class="selectpicker" name="standard[]" id="standard" data-style="select-with-transition" data-live-search="true" data-size="5" title="Select" multiple data-actions-box="true" data-selected-text-format="count > 1" data-parsley-errors-container=".standardError">
                                                         @foreach($details['institutionStandards'] as $standard)
                                                             <option value="{{ $standard['institutionStandard_id'] }}">{{ $standard['class'] }}</option>
@@ -189,7 +203,7 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Subject</label>
+                                                    <label class="control-label mt-0">Subject</label>
                                                     <select class="selectpicker" name="subject[]" id="subject" data-style="select-with-transition" data-live-search="true" title="Select" data-size="5" multiple data-actions-box="true" data-selected-text-format="count > 1" data-parsley-errors-container=".subjectError">
 
                                                     </select>
@@ -199,7 +213,7 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Student</label>
+                                                    <label class="control-label mt-0">Student</label>
                                                     <select class="selectpicker" name="student[]" id="student" data-style="select-with-transition" data-live-search="true" title="Select" multiple data-actions-box="true" data-selected-text-format="count > 1" data-parsley-errors-container=".studentError">
 
                                                     </select>
@@ -282,37 +296,23 @@
 
                 fileArr.push(total_file[i]);
 
-                if (extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
+                if(extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) +
-                        '" class="multiple_image img-responsive" title="' + total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) + '" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="fa fa-trash"></i></button></div></div>';
 
                 }else if (extension == "pdf"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://listimg.pinclipart.com/picdir/s/336-3361375_pdf-svg-png-icon-free-download-adobe-acrobat.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="fa fa-trash"></i></button></div></div>';
 
                 }else if (extension == "docs" || extension == "doc" || extension == "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://www.pngitem.com/pimgs/m/181-1816575_google-docs-png-five-feet-apart-google-docs.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="fa fa-trash"></i></button></div></div>';
                 }
 
                 $('#image_preview').append(fileType);
@@ -320,12 +320,14 @@
         });
 
         $('body').on('click', '#action-icon', function(evt){
+
             var divName = this.value;
             var fileName = $(this).attr('role');
+
             $(`#${divName}`).remove();
 
-            for (var i = 0; i < fileArr.length; i++){
-                if (fileArr[i].name === fileName){
+            for(var i = 0; i < fileArr.length; i++){
+                if(fileArr[i].name === fileName){
                     fileArr.splice(i, 1);
                 }
             }
@@ -342,7 +344,7 @@
             return b.files
         }
 
-        // Get students
+        // Get student details
         $('#autocomplete').autocomplete({
 
             source: function(request, response){
@@ -351,9 +353,7 @@
                     type: "POST",
                     url: '{{ url("staff-student-search") }}',
                     dataType: "json",
-                    data: {
-                        term: request.term
-                    },
+                    data: {term: request.term},
                     success: function(data){
                         response(data);
                         response($.map(data, function(item){
@@ -371,17 +371,17 @@
             },
             autoFocus: true,
             minLength: 2,
-            select: function(event, ui) {
+            select: function(event, ui){
                 var names = ui.item.data.split("@");
                 // console.log(names);
                 var insert = true;
                 var length = $('#selectedStudent tr').length;
 
-                if (length > 0){
+                if(length > 0){
 
                     $('#selectedStudent tr').each(function(){
 
-                        if ($(this).attr("id") == names[1]){
+                        if($(this).attr("id") == names[1]){
 
                             swal({
                                 title: "Student Already Added!",
@@ -394,7 +394,7 @@
                     });
                 }
 
-                if (insert == true){
+                if(insert == true){
 
                     $("#selectedStudent").append('<tr id=' + names[1] +
                         '><input type="hidden" name="conducted_by[]" value="' + names[1] +
@@ -421,7 +421,7 @@
 
             $("#selectedStudent tr#" + studentId).remove();
             var length = $('#selectedStudent tr').length;
-            if (length == 0){
+            if(length == 0){
                 $("#modalAbsent").modal('hide');
             }
         });
@@ -444,9 +444,7 @@
                 url: "{{url('/get-all-subcategory')}}",
                 type: "post",
                 dataType: "json",
-                data: {
-                    catId: catId
-                },
+                data: {catId: catId},
                 success: function(result){
                     $("#staffSubcategory").html(result['data']);
                     $("#staffSubcategory").selectpicker('refresh');
@@ -465,10 +463,7 @@
                 url: "{{url('/get-all-staff')}}",
                 type: "post",
                 dataType: "json",
-                data: {
-                    catId: catId,
-                    subCatId: subCatId
-                },
+                data: {catId: catId, subCatId: subCatId},
                 success: function(result){
                     var arrayData = '';
                     $.each(result, function(index, staff){
@@ -488,9 +483,7 @@
             $.ajax({
                 url: "/event-subjects",
                 type: "POST",
-                data: {
-                    standardId: standardId
-                },
+                data: {standardId: standardId},
                 success: function(data){
 
                     var options = '';
@@ -499,9 +492,9 @@
 
                         var subject_type = '';
 
-                        if (item.subject_type === "PRACTICAL"){
+                        if(item.subject_type === "PRACTICAL"){
                             subject_type = ' - ' + item.subject_type;
-                        } else{
+                        }else{
                             subject_type = '';
                         }
 
@@ -523,10 +516,7 @@
             $.ajax({
                 url: "/get-all-student",
                 type: "POST",
-                data: {
-                    subjectId: subjectId,
-                    standardId: standardId
-                },
+                data: {subjectId: subjectId, standardId: standardId},
                 success: function(data){
                     var studentOptions = '';
                     $.map(data, function(item, index){
@@ -548,7 +538,7 @@
 
             var btn = $('#submit');
 
-            if ($('#seminarForm').parsley().isValid()){
+            if($('#seminarForm').parsley().isValid()){
 
                 $.ajax({
                     url: "/seminar",
@@ -565,9 +555,9 @@
                         btn.html('Submit');
                         btn.attr('disabled', false);
 
-                        if (result['status'] == "200"){
+                        if(result['status'] == "200"){
 
-                            if (result.data['signal'] == "success"){
+                            if(result.data['signal'] == "success"){
 
                                 swal({
                                     title: result.data['message'],

@@ -9,16 +9,32 @@ use Carbon\Carbon;
 
 class FeeSettingService {
 
+<<<<<<< HEAD
+    public function fetchData(){
+        $feeSettingDetails['concession_approval_required'] = '';
+        $feeSettingRepository = new FeeSettingRepository();
+        $feeSettingData = $feeSettingRepository->all();
+=======
     public function fetchData($allSessions){
         $feeSettingDetails['concession_approval_required'] = '';
         $feeSettingRepository = new FeeSettingRepository();
         $feeSettingData = $feeSettingRepository->all($allSessions);
+>>>>>>> main
         if($feeSettingData){
             $feeSettingDetails['concession_approval_required'] = $feeSettingData->concession_approval_required;
         }
         return $feeSettingDetails;
     }
 
+<<<<<<< HEAD
+    public function add($feeSettingData) {
+        $feeSettingRepository = new FeeSettingRepository();
+        $allSessions = session()->all();
+        $institutionId = $allSessions['institutionId'];
+        $academicYear = $allSessions['academicYear'];
+         
+        $check = $feeSettingRepository->all();
+=======
     public function add($feeSettingData, $allSessions) {
         $feeSettingRepository = new FeeSettingRepository();
         
@@ -26,6 +42,7 @@ class FeeSettingService {
         $academicYear = $feeSettingData->id_academic;
          
         $check = $feeSettingRepository->all($allSessions);
+>>>>>>> main
         if(!$check){
 
             $data = array(

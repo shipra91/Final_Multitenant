@@ -24,5 +24,10 @@
         public function delete($id){
             return Combination::find($id)->delete();
         }
+
+        public function getCombinationId($combination){
+            return Combination::where('name',$combination)->first();
+        }    
+
     }
 ?>

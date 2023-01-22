@@ -197,15 +197,9 @@ class AssignmentController extends Controller
         $assignmentService = new AssignmentService();
         $standardId = $request->standardId;
         $allSessions = session()->all();
-        // return $standardSubjectService->getStandardsSubject($standardId);
+        
         return $assignmentService->allSubject($standardId, $allSessions);
     }
-
-    // public function getAssignmentDetails(Request $request)
-    // {
-    //     $assignmentService = new AssignmentService();
-    //     return $assignmentService->fetchDetails($request);
-    // }
 
     public function downloadAssignmentFiles($id, $type)
     {
@@ -240,6 +234,7 @@ class AssignmentController extends Controller
         return view('Assignments/viewDeletedRecord')->with("page", "assignment");
     }
 
+    // Restore assignment records
     public function restore($id)
     {
         $assignmentService = new AssignmentService();
@@ -261,24 +256,24 @@ class AssignmentController extends Controller
         return response()->json($result, $result['status']);
     }
 
-    public function restoreAll()
-    {
-        $assignmentService = new AssignmentService();
+    // public function restoreAll()
+    // {
+    //     $assignmentService = new AssignmentService();
 
-        $result = ["status" => 200];
+    //     $result = ["status" => 200];
 
-        try{
+    //     try{
 
-            $result['data'] = $assignmentService->restoreAll();
+    //         $result['data'] = $assignmentService->restoreAll();
 
-        }catch(Exception $e){
+    //     }catch(Exception $e){
 
-            $result = [
-                "status" => 500,
-                "error" => $e->getMessage()
-            ];
-        }
+    //         $result = [
+    //             "status" => 500,
+    //             "error" => $e->getMessage()
+    //         ];
+    //     }
 
-        return response()->json($result, $result['status']);
-    }
+    //     return response()->json($result, $result['status']);
+    // }
 }

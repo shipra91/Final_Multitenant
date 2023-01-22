@@ -1,13 +1,13 @@
 <?php
     namespace App\Services;
+
     use App\Models\Workdone;
-    use App\Services\WorkdoneService;
-    use App\Services\InstitutionStandardService;
-    use App\Services\StandardSubjectService;
     use App\Repositories\WorkdoneAttachmentRepository;
     use App\Repositories\StandardSubjectStaffMappingRepository;
     use App\Repositories\StaffRepository;
     use App\Repositories\WorkdoneRepository;
+    use App\Services\InstitutionStandardService;
+    use App\Services\StandardSubjectService;
     use Carbon\Carbon;
     use Session;
     use ZipArchive;
@@ -69,6 +69,40 @@
             //dd($workdoneAttachments);
             return $workdoneAttachments;
         }
+
+        // Get particular workdone
+        public function getWorkdoneSelectedData($idWorkdone){
+
+            $workdoneRepository = new WorkdoneRepository();
+            $workdoneAttachmentRepository = new WorkdoneAttachmentRepository();
+            $institutionStandardService = new InstitutionStandardService();
+            $institutionSubjectService = new InstitutionSubjectService();
+            $staffService = new StaffService();
+
+            $workdoneAttachment = array();
+            $workdoneData = $workdoneRepository->fetch($idWorkdone);
+            $workdoneAttachments = $workdoneAttachmentRepository->fetch($idWorkdone);
+
+            $standardName = $institutionStandardService->fetchStandardByUsingId($workdoneData->id_standard);
+            $subjectName =  $institutionSubjectService->getSubjectName($workdoneData->id_subject);
+            $staffDetails = $staffService->find($workdoneData->id_staff);
+
+            foreach($workdoneAttachments as $key => $attachment){
+                $ext = pathinfo($attachment['file_url'], PATHINFO_EXTENSION);
+                $workdoneAttachment[$key] = $attachment;
+                $workdoneAttachment[$key]['extension'] = $ext;
+            }
+
+            $output = array(
+                'workdoneData' => $workdoneData,
+                'workdoneAttachment' => $workdoneAttachment,
+                'className'=>$standardName,
+                'subjectName'=>$subjectName,
+                'staffName'=>$staffDetails->name,
+            );
+            //dd($output);
+            return $output;
+        }        
 
         // Insert workdone
         public function add($workdoneData){
@@ -241,9 +275,7 @@
                     $lastInsertedId = $id;
 
                     if($workdoneData->attachmentWorkdone){
-
-                        $workdoneAttachmentRepository->delete($lastInsertedId);
-
+                        //$workdoneAttachmentRepository->delete($lastInsertedId);
                         foreach($workdoneData->attachmentWorkdone as $attachment){
 
                             $path = 'Workdone';

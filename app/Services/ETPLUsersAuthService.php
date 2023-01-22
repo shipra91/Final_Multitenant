@@ -7,6 +7,7 @@
     use Mail;
     use DB;
     use App\Mail\SendEmail;
+    use App\Mail\SendActivationEmail;
 
     class ETPLUsersAuthService {
 
@@ -15,23 +16,22 @@
         }
         
         public function add($data){
-            
+
             $etplUsersAuthRepository = new ETPLUsersAuthRepository();
 
             $emailExplode = explode("@", $data['email']);
-            if($emailExplode[1] == "erelego.com") {   
-                
+            if($emailExplode[1] == "erelego.com") {  
+
                 $checkEmailExistence = ETPLUsers::where('email', $data['email'])
                                                 ->first();
-                if(!$checkEmailExistence){
 
+                if(!$checkEmailExistence){
                     $check = ETPLUsers::where('emp_id', $data['emp_id'])
                             ->orWhere('email', $data['email'])
                             ->orWhere('contact', $data['mobile'])
                             ->first();
 
                     if(!$check){
-                        
                         $data = array(
                             'emp_id' => $data['emp_id'],
                             'email' => $data['email'],
@@ -40,32 +40,27 @@
                             'password' => Hash::make($data['password']),
                             'created_by' => Session::get('userId')
                         );
-                        $storeData = $etplUsersAuthRepository->store($data); 
-                        
+                        $storeData = $etplUsersAuthRepository->store($data);
                         if($storeData) {
-
                             $signal = 'success';
                             $msg = 'Please check your mail to activate the account!';
-
                             //send mail
                             $mailData = [
                                 'title' => 'Account Activation Email From Multitenant Team',
                                 'body' => 'http://multitenant.egenius.in/etpl/activate'
                             ];
-
                             Mail::to($data['email'])->send(new SendEmail($mailData));
 
                         }else{
 
                             $signal = 'failure';
                             $msg = 'Error registering your data!';
-
-                        } 
-
+                        }
                     }else{
                         $signal = 'exist';
                         $msg = 'This account is already registered with us!';
-                    } 
+                    }
+
                 }else{
                     $signal = 'exist';
                     $msg = 'This email is already registered with us!';
@@ -78,8 +73,8 @@
                 'signal'=>$signal,
                 'message'=>$msg
             );
-            return $output;
 
+            return $output;
         }
 
         public function activate($request){
@@ -111,7 +106,7 @@
                             'body' => 'Account activation is successful!'
                         ];
 
-                        Mail::to($request->email)->send(new SendEmail($mailData));
+                        Mail::to($request->email)->send(new SendActivationEmail($mailData));
 
                     }else{
 

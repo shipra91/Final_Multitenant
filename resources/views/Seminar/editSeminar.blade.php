@@ -13,17 +13,17 @@
             <div class="container-fluid">
                 <div class="row">
                     <form method="POST" id="seminarForm">
-                        <input type="hidden" name="seminar_id" id="seminar_id" value="{{$seminarDetails['seminarData']->id}}">
+                        <input type="hidden" name="seminar_id" id="seminar_id" value="{{ $seminarDetails['seminarData']->id }}">
                         <div class="col-lg-8">
                             <div class="card">
                                 <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
-                                    <i class="material-icons">pie_chart</i>
+                                    <i class="material-icons">school</i>
                                 </div>
                                 <div class="card-content">
                                     <h4 class="card-title">Edit Seminar</h4>
-                                    <div class="row mt-45">
+                                    <div class="row mt-30">
                                         <div class="col-lg-10 col-lg-offset-1">
-                                            <h4 class="card-title text-center">Seminar Conducted By</h4>
+                                            <h4 class="card-title text-center font-15">Seminar Conducted By</h4>
                                             <div class="input-group">
                                                 <span class="input-group-addon">
                                                     <i class="material-icons">search</i>
@@ -35,29 +35,29 @@
                                         </div>
                                     </div>
 
-                                    <div class="row mt-20">
+                                    <div class="row">
                                         <div class="col-lg-12 col-lg-offset-0">
-                                            <table class="table table-striped table-no-bordered table-hover mt-30">
+                                            <table class="table table-striped table-no-bordered table-hover mt-20 mb-30">
                                                 <thead style="font-size:12px;">
                                                     <tr>
                                                         <th width="10%"><b>UID</b></th>
-                                                        <th width="20%"><b>Name</b></th>
+                                                        <th width="30%"><b>Name</b></th>
                                                         <th width="30%"><b>Standard</b></th>
-                                                        <th width="30%"><b>Type</b></th>
+                                                        <th width="20%"><b>Type</b></th>
                                                         <th width="10%"><b>Remove</b></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="selectedStudent">
                                                     @foreach($seminarDetails['studentStaffData'] as $data)
-                                                        <tr id='{{$data->id}}'>
-                                                            <input type="hidden" name="conducted_by[]" value="{{$data->id}}" />
-                                                            <input type="hidden" name="conducted_by_type[]" value="{{$data->type}}" />
-                                                            <td>{{$data->uid}}</td>
-                                                            <td>{{$data->name}}</td>
-                                                            <td>{{$data->standard}}</td>
-                                                            <td>{{$data->contact_number}}</td>
+                                                        <tr id='{{ $data->id }}'>
+                                                            <input type="hidden" name="conducted_by[]" value="{{ $data->id }}" />
+                                                            <input type="hidden" name="conducted_by_type[]" value="{{ $data->type }}" />
+                                                            <td>{{ $data->uid }}</td>
+                                                            <td>{{ ucwords($data->name) }}</td>
+                                                            <td>{{ $data->standard }}</td>
+                                                            <td>{{ $data->type }}</td>
                                                             <td>
-                                                                <button type="button" rel="tooltip" class="btn btn-danger btn-xs deleteStudent" data-id='{{$data->id}}' title="" data-original-title="Delete">
+                                                                <button type="button" rel="tooltip" class="btn btn-danger btn-xs deleteStudent" data-id='{{ $data->id }}' title="" data-original-title="Delete">
                                                                     <i class="material-icons">close</i>
                                                                     <div class="ripple-container"></div>
                                                                 </button>
@@ -70,70 +70,84 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="form-group col-lg-3">
-                                            <label class="control-label">Start Date<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control datepicker startDate" name="seminar_start_date" value="{{$seminarDetails['seminarData']->start_date}}" required />
-                                        </div>
-
-                                        <div class="form-group col-lg-3">
-                                            <label class="control-label">End Date<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control datepicker endDate" name="seminar_end_date" value="{{$seminarDetails['seminarData']->end_date}}" required autocomplete="off"/>
-                                        </div>
-
-                                        <div class="form-group col-lg-3">
-                                            <label class="control-label">Start Time<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control timepicker" name="seminar_start_time" value="{{$seminarDetails['seminarData']->start_time}}" required />
-                                        </div>
-
-                                        <div class="form-group col-lg-3">
-                                            <label class="control-label">End Time<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control timepicker" name="seminar_end_time" value="{{$seminarDetails['seminarData']->end_time}}" required />
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-4 mt-10">
-                                            <label class="control-label">Mentored By<span class="text-danger">*</span></label>
-                                            <select class="selectpicker" name="mentors[]" id="mentors" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-actions-box="true" data-selected-text-format="count > 1" multiple>
-                                                @foreach($seminarDetails['teachingStaffs'] as $staffs)
-                                                    <option value="{{$staffs->id}}" @if(in_array($staffs->id,$seminarDetails['mentorsData'])) {{"selected"}} @endif>{{$staffs->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group col-lg-8">
-                                            <label class="control-label">Seminar Topic<span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="seminar_topic" value="{{$seminarDetails['seminarData']->seminar_topic}}" required />
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Seminar Details</label>
-                                                <div class="form-group">
-                                                    <textarea class="ckeditor" name="description" rows="5">{{$seminarDetails['seminarData']->description}}</textarea>
-                                                </div>
+                                                <label class="control-label mt-0">Start Date<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control datepicker startDate" name="seminar_start_date" value="{{ $seminarDetails['seminarData']->start_date }}" required />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">End Date<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control datepicker endDate" name="seminar_end_date" value="{{ $seminarDetails['seminarData']->end_date }}" required autocomplete="off"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Start Time<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control timepicker" name="seminar_start_time" value="{{ $seminarDetails['seminarData']->start_time }}" required />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">End Time<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control timepicker" name="seminar_end_time" value="{{$seminarDetails['seminarData']->end_time}}" required />
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="form-group col-lg-6">
-                                            <label class="control-label">Maximum Marks</label>
-                                            <input type="text" class="form-control" name="max_mark" placeholder="Mention max mark here" value="{{$seminarDetails['seminarData']->max_marks}}" />
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Mentored By<span class="text-danger">*</span></label>
+                                                <select class="selectpicker" name="mentors[]" id="mentors" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-actions-box="true" data-selected-text-format="count > 1" multiple>
+                                                    @foreach($seminarDetails['teachingStaffs'] as $staffs)
+                                                        <option value="{{ $staffs->id }}" @if(in_array($staffs->id,$seminarDetails['mentorsData'])) {{"selected"}} @endif>{{ $staffs->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
 
-                                        <div class="form-group col-lg-6 mt-10">
-                                            <label class="control-label">SMS alert to recipients required? (cost may apply)<span class="text-danger">*</span></label>
-                                            <select class="selectpicker" name="sms_alert" id="sms_alert" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required">
-                                                <option value="YES" @if($seminarDetails['seminarData']->sms_alert == 'YES') {{"selected"}} @endif> YES</option>
-                                                <option value="NO" @if($seminarDetails['seminarData']->sms_alert == 'NO') {{"selected"}} @endif> NO</option>
-                                            </select>
+                                        <div class="col-lg-8">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Seminar Topic<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="seminar_topic" value="{{$seminarDetails['seminarData']->seminar_topic}}" required />
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="row mt-30">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="control-label">Seminar Details</label>
+                                            <div class="form-group">
+                                                <textarea class="ckeditor" name="description" rows="5">{{ $seminarDetails['seminarData']->description }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Maximum Marks</label>
+                                                <input type="text" class="form-control" name="max_mark" placeholder="Mention max mark here" value="{{ $seminarDetails['seminarData']->max_marks }}" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">SMS alert to recipients required? (cost may apply)<span class="text-danger">*</span></label>
+                                                <select class="selectpicker" name="sms_alert" id="sms_alert" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required">
+                                                    <option value="YES" @if($seminarDetails['seminarData']->sms_alert == 'YES') {{"selected"}} @endif> YES</option>
+                                                    <option value="NO" @if($seminarDetails['seminarData']->sms_alert == 'NO') {{"selected"}} @endif> NO</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-20">
                                         <div class="col-lg-12">
                                             <h4 class="card-title">Invities</h4>
                                         </div>
@@ -147,10 +161,10 @@
                                         <div id="staffDiv" @if(!in_array("STAFF", $seminarDetails['recipientTypes'])) {{ 'style="display:none"'; }} @endif>
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Category</label>
-                                                    <select class="selectpicker" name="staffCategory[]" id="staffCategory" data-style="select-with-transition" data-live-search="true" title="Select" data-selected-text-format="count > 1" multiple data-actions-box="true">
+                                                    <label class="control-label mt-0">Staff Category</label>
+                                                    <select class="selectpicker" name="staffCategory[]" id="staffCategory" data-style="select-with-transition" data-live-search="true" title="Select" data-selected-text-format="count > 1" data-size="5" multiple data-actions-box="true">
                                                         @foreach($seminarDetails['staffCategory'] as $staffCategory)
-                                                            <option value="{{$staffCategory->id}}" @if(in_array($staffCategory->id,$seminarDetails['selectedStaffCategory'])) {{"selected"}} @endif >{{ucwords($staffCategory->name)}}</option>
+                                                            <option value="{{ $staffCategory->id }}" @if(in_array($staffCategory->id,$seminarDetails['selectedStaffCategory'])) {{"selected"}} @endif >{{ ucwords($staffCategory->name) }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -158,10 +172,10 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Subcategory</label>
-                                                    <select class="selectpicker" name="staffSubcategory[]" id="staffSubcategory" data-style="select-with-transition" data-live-search="true" title="Select SubCategory" data-selected-text-format="count > 1" multiple data-actions-box="true">
+                                                    <label class="control-label mt-0">Staff Subcategory</label>
+                                                    <select class="selectpicker" name="staffSubcategory[]" id="staffSubcategory" data-style="select-with-transition" data-live-search="true" title="Select SubCategory" data-selected-text-format="count > 1" data-size="5" multiple data-actions-box="true">
                                                         @foreach($seminarDetails['staffSubcategory'] as $staffSubcategory)
-                                                            <option value="{{$staffSubcategory->id}}" @if(in_array($staffSubcategory->id,$seminarDetails['selectedStaffSubCategory'])) {{"selected"}} @endif>{{ucwords($staffSubcategory->name)}}</option>
+                                                            <option value="{{ $staffSubcategory->id }}" @if(in_array($staffSubcategory->id,$seminarDetails['selectedStaffSubCategory'])) {{"selected"}} @endif>{{ ucwords($staffSubcategory->name) }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -169,10 +183,10 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff</label>
-                                                    <select class="selectpicker" name="staff[]" id="staff" data-style="select-with-transition" data-live-search="true" title="Select Staffs" multiple data-actions-box="true" data-selected-text-format="count > 1">
+                                                    <label class="control-label mt-0">Staff</label>
+                                                    <select class="selectpicker" name="staff[]" id="staff" data-style="select-with-transition" data-live-search="true" title="Select Staffs" data-size="5" multiple data-actions-box="true" data-selected-text-format="count > 1">
                                                         @foreach($seminarDetails['allStaffs'] as $staff)
-                                                            <option value="{{$staff['id']}}" @if(in_array($staff['id'],$seminarDetails['selectedStaffs'])) {{"selected"}} @endif>{{ucwords($staff['name'])}}</option>
+                                                            <option value="{{ $staff['id'] }}" @if(in_array($staff['id'],$seminarDetails['selectedStaffs'])) {{"selected"}} @endif>{{ ucwords($staff['name']) }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -188,7 +202,7 @@
                                         <div id="studentDiv" @if(!in_array("STUDENT",$seminarDetails['recipientTypes'])) {{ 'style="display:none"'; }} @endif>
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Standard</label>
+                                                    <label class="control-label mt-0">Standard</label>
                                                     <select class="selectpicker" name="standard[]" id="standard" data-style="select-with-transition" data-live-search="true" data-size="5" title="Select" multiple data-actions-box="true" data-selected-text-format="count > 1">
                                                         @foreach($seminarDetails['institutionStandards'] as $standard)
                                                             <option value="{{ $standard['institutionStandard_id'] }}" @if(in_array($standard['institutionStandard_id'],$seminarDetails['selectedStandards'])) {{"selected"}} @endif>{{ $standard['class'] }}</option>
@@ -199,10 +213,10 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Subject</label>
+                                                    <label class="control-label mt-0">Subject</label>
                                                     <select class="selectpicker" name="subject[]" id="subject" data-style="select-with-transition" data-live-search="true" title="Select" data-size="5" multiple data-actions-box="true" data-selected-text-format="count > 1">
                                                         @foreach($seminarDetails['standardSubjects'] as $standardSubject)
-                                                            <option value="{{$standardSubject['id']}}" @if(in_array($standardSubject['id'],$seminarDetails['selectedStandardSubject'])) {{"selected"}} @endif>{{$standardSubject['name']}}</option>
+                                                            <option value="{{ $standardSubject['id'] }}" @if(in_array($standardSubject['id'],$seminarDetails['selectedStandardSubject'])) {{"selected"}} @endif>{{ $standardSubject['name'] }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -210,11 +224,11 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Student</label>
-                                                    <select class="selectpicker" name="student[]" id="student" data-style="select-with-transition" data-live-search="true" title="Select" multiple data-actions-box="true" data-selected-text-format="count > 1">
+                                                    <label class="control-label mt-0">Student</label>
+                                                    <select class="selectpicker" name="student[]" id="student" data-style="select-with-transition" data-live-search="true" title="Select" data-size="5" multiple data-actions-box="true" data-selected-text-format="count > 1">
                                                         @if(count($seminarDetails['allStudents']) > 0)
                                                             @foreach($seminarDetails['allStudents'] as $student)
-                                                                <option value="{{$student['id_student']}}" @if(in_array($student['id_student'],$seminarDetails['selectedStudents'])) {{"selected"}} @endif>{{ucwords($student['name'])}}</option>
+                                                                <option value="{{ $student['id_student'] }}" @if(in_array($student['id_student'],$seminarDetails['selectedStudents'])) {{"selected"}} @endif>{{ ucwords($student['name']) }}</option>
                                                             @endforeach
                                                         @endif
                                                     </select>
@@ -224,9 +238,8 @@
                                     </div>
 
                                     <div class="pull-right">
-                                        <button type="submit" class="btn btn-finish btn-fill btn-info btn-wd mr-5"
-                                            id="submit" name="submit">Update</button>
-                                        <a href="{{ url('seminar') }}" class="btn btn-finish btn-fill btn-wd btn btn-danger">Close</a>
+                                        <button type="submit" class="btn btn-info btn-wd mr-5" id="submit" name="submit">Update</button>
+                                        <a href="{{ url('seminar') }}" class="btn btn-danger btn-wd">Close</a>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -258,6 +271,38 @@
                                     </div>
                                 </div>
                             </div>
+
+                            @if(count($seminarDetails['seminarAttachment']) > 0)
+                                <div class="card">
+                                    <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
+                                        <i class="material-icons">attachment</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4 class="card-title">Attachment</h4>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    @foreach($seminarDetails['seminarAttachment'] as $key =>$attachment)
+                                                        @if($attachment['extension'] =="pdf")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @elseif($attachment['extension'] =="doc" || $attachment['extension'] =="docx")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @else
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="{{ $attachment['file_url'] }}" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -282,13 +327,13 @@
         $("#seminarAttachment").change(function(){
 
             // check if fileArr length is greater than 0
-            if (fileArr.length > 0) fileArr = [];
+            if(fileArr.length > 0) fileArr = [];
 
             $('#image_preview').html("");
             var total_file = document.getElementById("seminarAttachment").files;
-            if (!total_file.length) return;
+            if(!total_file.length) return;
 
-            for (var i = 0; i < total_file.length; i++){
+            for(var i = 0; i < total_file.length; i++){
 
                 var extension = total_file[i].name.substr((total_file[i].name.lastIndexOf('.') + 1));
                 var fileType = '';
@@ -296,37 +341,23 @@
 
                 fileArr.push(total_file[i]);
 
-                if (extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
+                if(extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) +
-                        '" class="multiple_image img-responsive" title="' + total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) + '" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="fa fa-trash"></i></button></div></div>';
 
                 }else if (extension == "pdf"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://listimg.pinclipart.com/picdir/s/336-3361375_pdf-svg-png-icon-free-download-adobe-acrobat.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="fa fa-trash"></i></button></div></div>';
 
                 }else if (extension == "docs" || extension == "doc" || extension == "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://www.pngitem.com/pimgs/m/181-1816575_google-docs-png-five-feet-apart-google-docs.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="fa fa-trash"></i></button></div></div>';
                 }
 
                 $('#image_preview').append(fileType);
@@ -334,11 +365,12 @@
         });
 
         $('body').on('click', '#action-icon', function(evt){
+
             var divName = this.value;
             var fileName = $(this).attr('role');
-            $(`#${divName}`).remove();
 
-            for (var i = 0; i < fileArr.length; i++){
+            $(`#${divName}`).remove();
+            for(var i = 0; i < fileArr.length; i++){
                 if (fileArr[i].name === fileName){
                     fileArr.splice(i, 1);
                 }
@@ -350,9 +382,9 @@
 
         function FileListItem(file){
             file = [].slice.call(Array.isArray(file) ? file : arguments)
-            for (var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
-            if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
-            for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
+            for(var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
+            if(!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+            for(b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
             return b.files
         }
 

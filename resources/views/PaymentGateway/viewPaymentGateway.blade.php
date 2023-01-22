@@ -18,16 +18,12 @@
                                 <i class="material-icons">account_balance_wallet</i>
                             </div>
                             <div class="card-content">
-                                <div class="back back1" style="float:right;">
-                                    <button onclick="window.history.go(-1)" class="btn btn-info"><i class="material-icons">arrow_back</i></button>
-                                </div>
-                                <h4 class="card-title">View Payment Gateway</h4>
-
+                                <h4 class="card-title">Payment Gateway Details</h4>
                                 <div class="row">
                                     <div class="col-lg-12 col-lg-offset-0">
                                         <div class="form-group">
                                             <label class="control-label">Payment Gateway</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($paymentGatewayData->gateway_name)}}" disabled />
+                                            <input type="text" class="form-control" value ="{{ ucwords($paymentGatewayData->gateway_name) }}" disabled />
                                         </div>
                                     </div>
                                 </div>
@@ -36,23 +32,26 @@
                                     <div class="row">
                                         <div class="col-lg-6 col-lg-offset-0">
                                             <div class="form-group">
-                                                <label class="control-label">Label</label>
-                                                <input type="text" class="form-control" value ="{{$data->field_label}}" disabled />
+                                                <label class="control-label mt-0">Label</label>
+                                                <input type="text" class="form-control" value ="{{ $data->field_label }}" disabled />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6 col-lg-offset-0">
                                             <div class="form-group">
-                                                <label class="control-label">Key</label>
-                                                <input type="text" class="form-control" value ="{{$data->field_key}}" disabled />
+                                                <label class="control-label mt-0">Key</label>
+                                                <input type="text" class="form-control" value ="{{ $data->field_key }}" disabled />
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
 
                                 <div class="row">
-                                    <div class="col-lg-12" style="text-align:right;">
-                                        <a href="/etpl/payment-gateway/{{$paymentGatewayData->id}}" type="button" rel="tooltip" title="Edit" class="btn btn-success btn-xs"><i class="material-icons">edit</i></a>
+                                    <div class="col-md-12">
+                                        <div class="pull-right">
+                                            <a href="/etpl/payment-gateway/{{ $paymentGatewayData['id'] }}" type="button" class="btn btn-success btn-wd mr-5">Edit</a>
+                                            <a href="{{ url('payment-gateway') }}" class="btn btn-danger btn-wd">Close</a>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="clearfix"></div>

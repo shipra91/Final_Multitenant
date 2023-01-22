@@ -31,6 +31,10 @@ class HolidayController extends Controller
                         }
                         if(Helper::checkAccess('holiday', 'view')){
                             $btn .='<a href="/holiday-detail/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>';
+
+                            if($row['status'] == 'file_found'){
+                                $btn .= '<a href="/holiday-download/'.$row['id'].'" rel="tooltip" title="Download Files" class="text-success" target="_blank"><i class="material-icons">file_download</i></a>';
+                            }
                         }
                         if(Helper::checkAccess('holiday', 'delete')){
                             $btn .= '<a href="javascript:void();" type="button" data-id="'.$row['id'].'" rel="tooltip" title="Delete" class="text-danger delete"><i class="material-icons">delete</i></a>';
@@ -183,6 +187,12 @@ class HolidayController extends Controller
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
+                        $btn = '';
+                        if(Helper::checkAccess('holiday', 'delete')){
+                            $btn .= '<a href="javascript:void();" type="button" data-id="'.$row['id'].'" rel="tooltip" title="Delete" class="text-danger delete"><i class="material-icons">delete</i></a>';
+                        }else{
+                            $btn .= 'No Access';
+                        }
                         $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
                         return $btn;
                     })
@@ -193,8 +203,8 @@ class HolidayController extends Controller
         return view('Holidays/view_deleted_record')->with("page", "holiday");
     }
 
-    public function restore($id){
-
+    public function restore($id)
+    {
         $holidayService = new HolidayService();
 
         $result = ["status" => 200];
@@ -225,10 +235,9 @@ class HolidayController extends Controller
         return view('Holidays/view_holiday_detail', ['holidayData' => $holidayData, 'selectedData' => $selectedData])->with("page", "holiday");
     }
 
-    public function downloadHolidayFiles($idHoliday){
-
+    public function downloadHolidayFiles($idHoliday)
+    {
         $holidayService = new HolidayService();
-
         return $holidayService->downloadHolidayFiles($idHoliday);
     }
 }

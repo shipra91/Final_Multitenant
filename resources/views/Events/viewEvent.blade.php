@@ -29,28 +29,28 @@
 
                                     <div class="col-lg-3">
                                         <div class="form-group">
-                                            <label class="control-label">Start Date</label>
+                                            <label class="control-label mt-0">Start Date</label>
                                             <input type="text" class="form-control" value="{{$selectedData['eventData']->startDate}}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3">
                                         <div class="form-group">
-                                            <label class="control-label">End Date</label>
+                                            <label class="control-label mt-0">End Date</label>
                                             <input type="text" class="form-control" value="{{$selectedData['eventData']->endDate}}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3">
                                         <div class="form-group">
-                                            <label class="control-label">Start Time</label>
+                                            <label class="control-label mt-0">Start Time</label>
                                             <input type="text" class="form-control" value="{{$selectedData['eventData']->start_time}}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3">
                                         <div class="form-group">
-                                            <label class="control-label">End Time</label>
+                                            <label class="control-label mt-0">End Time</label>
                                             <input type="text" class="form-control" value="{{$selectedData['eventData']->end_time}}" disabled />
                                         </div>
                                     </div>
@@ -58,8 +58,8 @@
 
                                 <div class="row">
                                     <div class="col-lg-12">
+                                        <label class="control-label">Event Details</label>
                                         <div class="form-group">
-                                            <label class="control-label form-group">Event Details</label>
                                             <textarea class="ckeditor" name="eventDetails" rows="5" disabled>{{$selectedData['eventData']->event_detail}}</textarea>
                                         </div>
                                     </div>
@@ -68,21 +68,21 @@
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label class="control-label">Event Type</label>
+                                            <label class="control-label mt-0">Event Type</label>
                                             <input type="text" class="form-control" value="{{$selectedData['eventData']->event_type}}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label class="control-label">Event Attendance Required?</label>
+                                            <label class="control-label mt-0">Event Attendance Required?</label>
                                             <input type="text" class="form-control" value="{{$selectedData['eventData']->attendance_required}}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4">
                                         <div class="form-group">
-                                            <label class="control-label">Read Receipt Required?</label>
+                                            <label class="control-label mt-0">Read Receipt Required?</label>
                                             <input type="text" class="form-control" value="{{$selectedData['eventData']->receipt_required}}" disabled />
                                         </div>
                                     </div>
@@ -91,7 +91,7 @@
                                 <div class="row">
                                     <div class="col-lg-12">
                                         @if($selectedData['recepientTypes'])
-                                            <div class="row mt-30">
+                                            <div class="row mt-20">
                                                 <div class="col-lg-12">
                                                     <h4 class="card-title">Applicable To</h4>
                                                 </div>

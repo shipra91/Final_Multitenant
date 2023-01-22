@@ -24,5 +24,10 @@
         public function delete($id){
             return Board::find($id)->delete();
         }
+
+        public function getBoardId($board){
+            return Board::where('name',$board)->first();
+        }    
+
     }
 ?>

@@ -90,7 +90,6 @@ class StaffScheduleMappingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $staffScheduleMappingService = new StaffScheduleMappingService();
         $result = ["status" => 200];
 
         try{

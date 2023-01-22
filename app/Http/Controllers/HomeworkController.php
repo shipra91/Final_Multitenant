@@ -44,6 +44,9 @@ class HomeworkController extends Controller
                             $btn .= '<a href="/homework/'.$row['id'].'" type="button" rel="tooltip" title="Edit" class="text-success"><i class="material-icons">edit</i></a>';
                         }
                         if(Helper::checkAccess('homework', 'view')){
+                            // $btn .='<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="View" class="text-info homeworkDetail"><i class="material-icons">visibility</i></a>';
+
+                            $btn .= '<a href="/homework-detail/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>';
                             $btn .='<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="View" class="text-info homeworkDetail"><i class="material-icons">visibility</i></a>';
                         }
                         if(Helper::checkAccess('homework', 'view')){
@@ -112,9 +115,14 @@ class HomeworkController extends Controller
      * @param  \App\Models\Homework  $homework
      * @return \Illuminate\Http\Response
      */
-    public function show(Homework $homework)
+    public function show($id)
     {
-        //
+        $homeworkService = new HomeworkService();
+
+        $homework = $homeworkService->getHomeworkSelectedData($id);
+        $homeworkDetails = $homeworkService->getDetails($homework['homeworkData']);
+        //dd($homeworkDetails);
+        return view('Homework/viewHomeworkDetail', ["homework" => $homework, 'homeworkDetails' => $homeworkDetails])->with("page", "homework");
     }
 
     /**
@@ -224,7 +232,12 @@ class HomeworkController extends Controller
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        $btn ='';
+                        if(Helper::checkAccess('homework', 'create')){
+                            $btn .= '<button type="button" data-id="'.$row->id.'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        }else{
+                            $btn .= 'No Access';
+                        }
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -234,8 +247,9 @@ class HomeworkController extends Controller
         return view('Homework/viewDeletedRecord')->with("page", "homework");
     }
 
-    public function restore($id){
-
+    // Restore homework records
+    public function restore($id)
+    {
         $homeworkService = new HomeworkService();
 
         $result = ["status" => 200];

@@ -1,5 +1,6 @@
-<?php 
+<?php
     namespace App\Services;
+
     use App\Models\PreadmissionApplicationSetting;
     use App\Services\ApplicationSettingService;
     use App\Repositories\ApplicationSettingRepository;
@@ -72,42 +73,44 @@
                     $signal = 'failure';
                     $msg = 'Error inserting data!';
 
-                } 
+                }
 
             }else{
                 $signal = 'exist';
                 $msg = 'This data already exists!';
-            } 
-            
+            }
+
             $output = array(
                 'signal'=>$signal,
                 'message'=>$msg
             );
 
             return $output;
-
         }
 
         public function update($applicationSettingData, $id){
 
             $applicationSettingRepository = new ApplicationSettingRepository();
 
-            $check = PreadmissionApplicationSetting::where('id_academic', $applicationSettingData->id_academic)->where('id_institution', $applicationSettingData->id_institute)->where('name', $applicationSettingData->application_name)->where('id', '!=', $id)->first();
+            $check = PreadmissionApplicationSetting::where('id_academic', $applicationSettingData->id_academic)
+                                                    ->where('id_institution', $applicationSettingData->id_institute)
+                                                    ->where('name', $applicationSettingData->application_name)
+                                                    ->where('id', '!=', $id)
+                                                    ->first();
 
             if(!$check){
 
-                $data = array(
-                    'id_academic' => $applicationSettingData->id_academic, 
-                    'id_institution' => $applicationSettingData->id_institute, 
-                    'name' => $applicationSettingData->application_name,  
-                    'prefix' => $applicationSettingData->application_prefix,  
-                    'starting_number' => $applicationSettingData->application_starting_number,  
-                    'standards' => implode(",", $applicationSettingData->standards), 
-                    'created_by' => '',
-                    'modified_by' => Session::get('userId')
-                );
+                $detail = $applicationSettingRepository->fetch($id); 
 
-                $storeData = $applicationSettingRepository->update($data, $id); 
+                $detail->id_academic = $applicationSettingData->id_academic;
+                $detail->id_institution = $applicationSettingData->id_institute;
+                $detail->name = $applicationSettingData->application_name;
+                $detail->prefix = $applicationSettingData->application_prefix;
+                $detail->starting_number = $applicationSettingData->application_starting_number;
+                $detail->standards = implode(",", $applicationSettingData->standards);
+                $detail->modified_by = Session::get('userId');
+                
+                $storeData = $applicationSettingRepository->update($detail); 
               
                 if($storeData) {
 
@@ -119,13 +122,13 @@
                     $signal = 'failure';
                     $msg = 'Error updating data!';
 
-                } 
+                }
 
             }else{
                 $signal = 'exist';
                 $msg = 'This data already exists!';
-            } 
-            
+            }
+
             $output = array(
                 'signal'=>$signal,
                 'message'=>$msg
@@ -135,7 +138,7 @@
         }
 
         public function delete($id){
-            
+            $applicationSettingRepository = new ApplicationSettingRepository();
             $bloodGroup = $applicationSettingRepository->delete($id);
 
             if($bloodGroup){

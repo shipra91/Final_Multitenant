@@ -23,6 +23,10 @@
             return Organization::find($id);
         }
 
+        public function getOrganizationId($name){
+            return Organization::where('name', $name)->first();
+        }
+
         public function update($data){
             return $data->save();
         }

@@ -15,7 +15,7 @@
                     <div class="col-sm-12 col-sm-offset-0">
                         <div class="card">
                             <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
-                                <i class="material-icons">pie_chart</i>
+                                <i class="material-icons">school</i>
                             </div>
                             <div class="card-content">
                                 <h4 class="card-title">Seminar List</h4>
@@ -176,6 +176,25 @@
         <div class="modal-content">
             <div class="card1">
                 <div class="card-header card-header-tabs" data-background-color="mediumaquamarine">
+<<<<<<< HEAD
+                    <p class="card-title1 font-15 mb-0" id="seminar_topic_name"></p>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="control-label mt-0">Comments</label>
+                            <input type="text" class="form-control" id="comments" readonly />
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label mt-0">Obtained Marks</label>
+                            <input type="text" class="form-control" id="obtained_marks" readonly />
+=======
                     <h4 class="card-title1" id="seminar_topic_name"></h4>
                 </div>
             </div>
@@ -195,13 +214,20 @@
                             <div class="form-group">
                                 <input type="text" class="form-control" id="obtained_marks" readonly />
                             </div>
+>>>>>>> main
                         </div>
                     </div>
                 </div>
             </div>
+<<<<<<< HEAD
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger pull-right btn-wd" data-dismiss="modal">Close</button>
+=======
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger pull-right btn-wd" data-dismiss="modal"
                     style="margin-right:8px;">Close </button>
+>>>>>>> main
             </div>
         </div>
     </div>
@@ -328,7 +354,11 @@
             });
         })
 
+<<<<<<< HEAD
+        $("body").delegate(".valuationDetails", "click", function(event){
+=======
         $("body").delegate(".valuationDetails", "click", function(event) {
+>>>>>>> main
             event.preventDefault();
 
             var seminarId = $(this).attr('data-id');
@@ -338,6 +368,16 @@
                 url: "{{ url('/seminar-valuation-details') }}",
                 type: "post",
                 dataType: "json",
+<<<<<<< HEAD
+                data: {seminarId: seminarId, studentId: studentId},
+                success: function(response){
+                    //console.log(response);
+                    var marksCommentDetails = '';
+                    var html = '';
+                    $("#seminar_valuation_modal").find("#seminar_topic_name").text("Seminar Topic: " + response.seminar_topic);
+                    $("#seminar_valuation_modal").find('#comments').val(response.remarks);
+                    $("#seminar_valuation_modal").find('#obtained_marks').val(response.obtained_marks);
+=======
                 data: {
                     seminarId: seminarId,
                     studentId: studentId
@@ -351,12 +391,16 @@
                     $("#seminar_valuation_modal").find('#comments').val(response.remarks);
                     $("#seminar_valuation_modal").find('#obtained_marks').val(response
                         .obtained_marks);
+>>>>>>> main
                     $("#seminar_valuation_modal").find('tbody').html(html);
                     $("#seminar_valuation_modal").modal('show');
                 }
             });
         })
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
     });
 </script>
 @endsection

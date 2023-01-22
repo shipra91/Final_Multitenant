@@ -23,6 +23,15 @@
             return $academicYearMapping = AcademicYearMapping::join('tbl_academic_years', 'tbl_academic_years.id', '=', 'tbl_academic_year_mappings.id_academic_year')->select('tbl_academic_years.name', 'tbl_academic_years.from_date', 'tbl_academic_years.to_date', 'tbl_academic_year_mappings.*')->where('tbl_academic_year_mappings.id', $id)->first();
         }
 
+        public function getAcademicYearMappingId($academicName, $allSessions){
+            $institutionId = $allSessions['institutionId'];
+
+            return AcademicYearMapping::join('tbl_academic_years', 'tbl_academic_years.id', '=', 'tbl_academic_year_mappings.id_academic_year')->select( 'tbl_academic_year_mappings.*')
+            ->where('tbl_academic_years.name', $academicName)
+            ->where('tbl_academic_year_mappings.id_institute', $institutionId)
+            ->first();
+        }
+
         // public function update($data, $id){
         //     return AcademicYearMapping::whereId($id)->update($data);
         // }

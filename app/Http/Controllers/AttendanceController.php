@@ -34,17 +34,18 @@ class AttendanceController extends Controller
             return Datatables::of($attendanceData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-
                         $btn = '';
-                        if(Helper::checkAccess('student-attendance', 'view')){
-                            $btn = '<a href="javascript:void(0)" data-id="'.$row->id.'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>';
-                        }
-
+                        // if(Helper::checkAccess('student-attendance', 'view')){
+                        //     $btn = '<a href="javascript:void(0)" data-id="'.$row->id.'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>';
+                        // }
                         return $btn;
                     })
                     ->addColumn('status', function($res){
+
                         $statusData = '';
+
                         foreach($res['attendanceStatus'] as $status){
+
                             if($status === 'PRESENT'){
                                 $statusData .= '<span class="badge badge-success m-3">'.$status.'</span>';
                             }else if($status === 'ABSENT'){
@@ -115,7 +116,6 @@ class AttendanceController extends Controller
      * @param  \App\Models\Attendance  $attendance
      * @return \Illuminate\Http\Response
      */
-
     public function show(Attendance $attendance)
     {
         //
@@ -127,7 +127,6 @@ class AttendanceController extends Controller
      * @param  \App\Models\Attendance  $attendance
      * @return \Illuminate\Http\Response
      */
-
     public function edit(Attendance $attendance)
     {
         //
@@ -140,7 +139,6 @@ class AttendanceController extends Controller
      * @param  \App\Models\Attendance  $attendance
      * @return \Illuminate\Http\Response
      */
-
     public function update(Request $request, Attendance $attendance)
     {
         //

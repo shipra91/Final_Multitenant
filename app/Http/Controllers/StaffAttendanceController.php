@@ -31,7 +31,6 @@ class StaffAttendanceController extends Controller
             return Datatables::of($attendanceData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-
                         $btn = '';
                         if(Helper::checkAccess('staff-attendance', 'view')){
                             $btn .= '<a href="javascript:void(0)" data-id="'.$row->id.'" rel="tooltip" title="View" class="text-warning"><i class="material-icons">visibility</i></a>';

@@ -114,15 +114,15 @@
                                                 <tbody>
                                                     @foreach($attendanceData as $index => $attendance)
                                                         <tr id="{{$attendance->id}}" style="background-color: #7bbc9c30">
-                                                            <td>{{$index + 1}}</td>
-                                                            <td>{{$attendance->roll_number}}</td>
-                                                            <td>{{$attendance->egenius_uid }}</td>
-                                                            <td>{{ucwords($attendance->name)}}</td>
+                                                            <td>{{ $index + 1 }}</td>
+                                                            <td>{{ $attendance->roll_number }}</td>
+                                                            <td>{{ $attendance->egenius_uid }}</td>
+                                                            <td>{{ ucwords($attendance['studentName']) }}</td>
                                                             <td>
                                                                 <div class="form-group label-floating">
                                                                     <div class="radio col-lg-4" style="margin-top:10px;">
                                                                         <label>
-                                                                            <input type="radio" name="status[{{$attendance->id}}]" value="PRESENT" @if($attendance->attendanceStatus === "PRESENT") {{'checked'}} @endif onclick="changeColorp('@php echo $attendance['id']; @endphp')">
+                                                                            <input type="radio" name="status[{{ $attendance->id }}]" value="PRESENT" @if($attendance->attendanceStatus === "PRESENT") {{'checked'}} @endif onclick="changeColorp('@php echo $attendance['id']; @endphp')">
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -131,7 +131,7 @@
                                                                 <div class="form-group label-floating">
                                                                     <div class="radio col-lg-4" style="margin-top:10px;">
                                                                         <label>
-                                                                            <input type="radio" name="status[{{$attendance->id}}]" value="ABSENT" @if($attendance->attendanceStatus === "ABSENT") {{'checked'}} @endif onclick="changeColora('@php echo $attendance['id']; @endphp')">
+                                                                            <input type="radio" name="status[{{ $attendance->id }}]" value="ABSENT" @if($attendance->attendanceStatus === "ABSENT") {{'checked'}} @endif onclick="changeColora('@php echo $attendance['id']; @endphp')">
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -150,7 +150,7 @@
                                             </table>
                                         </div>
                                         <div class="pull-right mt-10">
-                                            <button type="submit" class="btn btn-finish btn-fill btn-info btn-wd mr-5" id="submit" name="submit">Submit</button>
+                                            <button type="submit" class="btn btn-info btn-wd mr-5" id="submit" name="submit">Submit</button>
                                         </div>
                                         <div class="clearfix"></div>
                                     </div>
@@ -216,7 +216,7 @@
                 type:"POST",
                 data: {subjectId : subjectId},
                 success: function(data){
-                    //console.log(data);
+                    console.log(data);
                     var html = '';
                     $.each(data, function(index, item){
                         html += '<option value="'+item.id_standard+'"'; if(standardId == item.id_standard) html +='selected'; html+='>'+item.standard+'</option>';
@@ -241,7 +241,7 @@
                 type:"POST",
                 data: {standardId : standardId},
                 success: function(data){
-                    //console.log(data);
+                    console.log(data);
                     var html = '';
                     $.each(data, function(index, item){
                         html += '<option value="'+item.id+'"'; if(batchId == item.id) html +='selected'; html+='>'+item.batch_name+'</option>';

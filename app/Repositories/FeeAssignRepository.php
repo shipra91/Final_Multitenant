@@ -134,6 +134,7 @@
             ->where('tbl_fee_assign.id_institution', $institutionId)
             ->where('tbl_fee_assign.id_academic', $academicId)
             ->where('tbl_fee_assign_details.action_type', 'CONCESSION')
+            ->whereNull('tbl_fee_assign_details.deleted_at')
             ->get();
            
         }

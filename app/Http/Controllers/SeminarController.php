@@ -31,8 +31,12 @@ class SeminarController extends Controller
                             $btn ='<a href="/seminar/'.$row->id.'" type="button" rel="tooltip" title="Edit" class="text-success"><i class="material-icons">edit</i></a>';
                         }
                         if(Helper::checkAccess('seminar', 'view')){
-                            $btn .= '<a href="javascript:void();" data-id="'.$row->id.'" rel="tooltip" title="View" class="text-info seminarDetail"><i class="material-icons">visibility</i></a>
+                            // $btn .= '<a href="javascript:void();" data-id="'.$row->id.'" rel="tooltip" title="View" class="text-info seminarDetail"><i class="material-icons">visibility</i></a>
+
+                            $btn .='<a href="/seminar-detail/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>
+
                             <a href="/seminar-download/'.$row->id.'/staff_admin" rel="tooltip" title="Download Files" class="text-success" target="_blank"><i class="material-icons">file_download</i></a>
+
                             <a href="/seminar-conductors/'.$row->id.'" type="button" rel="tooltip" title="Submission Details" class="text-warning"><i class="material-icons">account_box</i></a>';
                         }
                         if(Helper::checkAccess('seminar', 'delete')){
@@ -95,9 +99,13 @@ class SeminarController extends Controller
      * @param  \App\Models\Seminar  $seminar
      * @return \Illuminate\Http\Response
      */
-    public function show(Seminar $seminar)
+    public function show($id)
     {
-        //
+        $seminarService = new SeminarService();
+
+        $seminarDetails = $seminarService->getSeminarDetails($id);
+        //dd($seminarDetails);
+        return view('Seminar/viewSeminarDetail', ['seminarDetails' => $seminarDetails])->with("page", "seminar");
     }
 
     /**
@@ -109,9 +117,9 @@ class SeminarController extends Controller
     public function edit($id)
     {
         $seminarService = new SeminarService();
+
         $seminarDetails = $seminarService->getSeminarDetails($id);
         //dd($seminarDetails);
-
         return view('Seminar/editSeminar', ['seminarDetails' => $seminarDetails])->with("page", "seminar");
     }
 
@@ -187,12 +195,17 @@ class SeminarController extends Controller
         $seminarService = new SeminarService();
         $allSessions = session()->all();
 
-        if ($request->ajax()){
+        if($request->ajax()){
             $deletedData = $seminarService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        $btn ='';
+                        if(Helper::checkAccess('seminar', 'create')){
+                            $btn .= '<button type="button" data-id="'.$row->id.'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        }else{
+                            $btn .= 'No Access';
+                        }
                         return $btn;
                     })
                     ->rawColumns(['action'])

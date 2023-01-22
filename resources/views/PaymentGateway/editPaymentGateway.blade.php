@@ -20,103 +20,88 @@
                             <div class="card-content">
                                 <h4 class="card-title">Edit Payment Gateway</h4>
                                 <form method="POST" id="paymentGatewayForm">
-                                    <input type="hidden" name="paymentGatewayId" id="paymentGatewayId" class="form-control" value="{{$selectedPaymentGateway->id}}">
+                                    <input type="hidden" name="paymentGatewayId" id="paymentGatewayId" value="{{ $selectedPaymentGateway->id }}">
+
                                     <div class="row">
                                         <div class="col-lg-6 col-lg-offset-0">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                    <i class="material-icons icon-middle">view_headline</i>
-                                                </span>
-                                                <div class="form-group">
-                                                    <label class="control-label">Payment Gateway<span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" name="paymentGateway" id="paymentGateway" value="{{$selectedPaymentGateway->gateway_name}}" required />
-                                                </div>
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Payment Gateway<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="paymentGateway" id="paymentGateway" value="{{ $selectedPaymentGateway->gateway_name }}" required />
                                             </div>
-
-                                            <input type="hidden" class="form-control" name="paymentGatewayKey" id="paymentGatewayKey" value="{{$selectedPaymentGateway->gateway_key}}" />
                                         </div>
+                                        <input type="hidden" name="paymentGatewayKey" id="paymentGatewayKey" value="{{ $selectedPaymentGateway->gateway_key }}" />
 
                                         <div class="col-lg-12 col-lg-offset-0">
                                             <div id="repeater">
                                                 @php $countRow = 0;@endphp
+
                                                 @if($selectedPaymentGateway['paymentGatewayFields'])
+
                                                     @foreach($selectedPaymentGateway['paymentGatewayFields'] as $index => $data)
+
                                                         @php $countRow++;@endphp
-                                                        <div class="row" id="section_{{ $countRow }}" data-id="{{ $countRow }}" style="margin-top: -20px;">
+
+                                                        <div class="row" id="section_{{ $countRow }}" data-id="{{ $countRow }}">
                                                             <input type="hidden" name="gatewayFieldsId[]" value = "{{$data->id}}">
                                                             <div class="col-lg-5 col-lg-offset-0">
-                                                                <div class="input-group">
-                                                                    <span class="input-group-addon">
-                                                                        <i class="material-icons icon-middle">view_headline</i>
-                                                                    </span>
-                                                                    <div class="form-group">
-                                                                        <label class="control-label">Label<span class="text-danger">*</span></label>
-                                                                        <input type="text" class="form-control" name="fieldLabel[]" id="fieldLabel_1" value="{{$data->field_label}}" required />
-                                                                    </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label mt-0">Label<span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control" name="fieldLabel[]" id="fieldLabel_1" value="{{ $data->field_label }}" required />
                                                                 </div>
                                                             </div>
 
                                                             <div class="col-lg-5 col-lg-offset-0">
-                                                                <div class="input-group">
-                                                                    <span class="input-group-addon">
-                                                                        <i class="material-icons icon-middle">view_headline</i>
-                                                                    </span>
-                                                                    <div class="form-group">
-                                                                        <label class="control-label">Key<span class="text-danger">*</span></label>
-                                                                        <input type="text" class="form-control" name="fieldKey[]" id="fieldKey_1" value="{{$data->field_key}}" required />
-                                                                    </div>
+                                                                <div class="form-group">
+                                                                    <label class="control-label mt-0">Key<span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control" name="fieldKey[]" id="fieldKey_1" value="{{ $data->field_key }}" required />
                                                                 </div>
                                                             </div>
 
                                                             <div class="col-lg-1 col-lg-offset-0 text-right">
-                                                                <button type="button" id="{{$data->id}}" class="btn btn-danger btn-sm delete_button mt-30" data-id={{ $countRow }}><i class="material-icons">delete</i></button>
+                                                                <div class="form-group">
+                                                                    <button type="button" id="{{$data->id}}" class="btn btn-danger btn-sm delete_button mt-15" data-id={{ $countRow }}><i class="material-icons">delete</i></button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     @endforeach
 
                                                 @else
 
-                                                    <div class="row" id="section_1" data-id="1" style="margin-top: -20px;">
+                                                    <div class="row" id="section_1" data-id="1">
                                                         <input type="hidden" name="gatewayFieldsId[]" value = "">
+
                                                         <div class="col-lg-5 col-lg-offset-0">
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon">
-                                                                    <i class="material-icons icon-middle">view_headline</i>
-                                                                </span>
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Label<span class="text-danger">*</span></label>
-                                                                    <input type="text" class="form-control" name="fieldLabel[]" id="fieldLabel_1" required />
-                                                                </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label mt-0">Label<span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" name="fieldLabel[]" id="fieldLabel_1" required />
                                                             </div>
                                                         </div>
 
                                                         <div class="col-lg-5 col-lg-offset-0">
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon">
-                                                                    <i class="material-icons icon-middle">view_headline</i>
-                                                                </span>
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Key<span class="text-danger">*</span></label>
-                                                                    <input type="text" class="form-control" name="fieldKey[]" id="fieldKey_1" required />
-                                                                </div>
+                                                            <div class="form-group">
+                                                                <label class="control-label mt-0">Key<span class="text-danger">*</span></label>
+                                                                <input type="text" class="form-control" name="fieldKey[]" id="fieldKey_1" required />
                                                             </div>
                                                         </div>
 
                                                         <div class="col-lg-1 col-lg-offset-0 text-right">
-                                                            <button type="button" id="1" class="btn btn-danger btn-sm delete_button" data-id="1"><i class="material-icons">delete</i></button>
+                                                            <div class="form-group">
+                                                                <button type="button" id="1" class="btn btn-danger btn-sm delete_button mt-15" data-id="1"><i class="material-icons">delete</i></button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 @endif
-                                                <input type="hidden" name="totalCount" id="totalCount" class="form-control" value="{{ $selectedPaymentGateway['paymentGatewayFields']?$countRow:1 }}">
+                                                <input type="hidden" name="totalCount" id="totalCount" value="{{ $selectedPaymentGateway['paymentGatewayFields']?$countRow:1 }}">
                                             </div>
+
                                             <div class="col-lg-12 col-lg-offset-0">
                                                 <button id="add_more" type="button" class="btn btn-warning btn-sm"><i class="material-icons">add_circle_outline</i> Add</button>
                                             </div>
                                         </div>
 
                                         <div class="col-lg-12 col-lg-offset-0 text-right">
-                                            <button type="submit" class="btn btn-finish btn-fill btn-info btn-wd mr-5" id="submit" name="submit">Submit</button>
-                                            <a href="{{url('/etpl/payment-gateway')}}" class="btn btn-finish btn-fill btn-wd btn btn-danger">Close</a>
+                                            <button type="submit" class="btn btn-info btn-wd mr-5" id="submit" name="submit">Submit</button>
+                                            <a href="{{ url('/etpl/payment-gateway') }}" class="btn btn-danger btn-wd">Close</a>
                                         </div>
                                     </div>
                                 </form>
@@ -141,7 +126,7 @@
         });
 
         // Autogenerate payment gateway key
-        $("body").delegate("#paymentGateway", "keyup", function(e) {
+        $("body").delegate("#paymentGateway", "keyup", function(e){
             e.preventDefault();
 
             var gatewayKey = $(this).val().trim();
@@ -157,33 +142,25 @@
             count++;
 
             html += '<div class="row" id="section_'+count+'" data-id="'+count+'">';
+
             html += '<input type="hidden" name="gatewayFieldsId[]" value = "">';
-            html += '<div class="col-lg-5 form-group col-lg-offset-0">';
-            html += '<div class="input-group">';
-            html += '<span class="input-group-addon">';
-            html += '<i class="material-icons icon-middle">view_headline</i>';
-            html += '</span>';
+            html += '<div class="col-lg-5 col-lg-offset-0">';
             html += '<div class="form-group">';
-            html += '<label class="control-label">Label<span class="text-danger">*</span></label>';
+            html += '<label class="control-label mt-0">Label<span class="text-danger">*</span></label>';
             html += '<input type="text" class="form-control" name="fieldLabel[]" id="fieldLabel_'+count+'" required />';
             html += '</div>';
             html += '</div>';
-            html += '</div>';
 
-            html += '<div class="col-lg-5 form-group col-lg-offset-0">';
-            html += '<div class="input-group">';
-            html += '<span class="input-group-addon">';
-            html += '<i class="material-icons icon-middle">view_headline</i>';
-            html += '</span>';
+            html += '<div class="col-lg-5 col-lg-offset-0">';
             html += '<div class="form-group">';
-            html += '<label class="control-label">Key<span class="text-danger">*</span></label>';
+            html += '<label class="control-label mt-0">Key<span class="text-danger">*</span></label>';
             html += '<input type="text" class="form-control" name="fieldKey[]" id="fieldKey_'+count+'" required />';
             html += '</div>';
             html += '</div>';
-            html += '</div>';
 
-            html += ' <div class="col-lg-1 form-group col-lg-offset-0 text-right">';
-            html += '<button type="button" id="'+count+'" class="btn btn-danger btn-sm remove_button mt-30"><i class="material-icons">highlight_off</i></button>';
+            html += '<div class="col-lg-1 col-lg-offset-0 text-right">';
+            html += '<div class="form-group">';
+            html += '<button type="button" id="'+count+'" class="btn btn-danger btn-sm remove_button mt-15"><i class="material-icons">highlight_off</i></button>';
             html += '</div>';
             html += '</div>';
             html += '</div>';

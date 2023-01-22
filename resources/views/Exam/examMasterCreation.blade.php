@@ -62,7 +62,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="text-left">
                                             <button id="add_more" type="button" class="btn btn-warning btn-sm"><i class="material-icons">add_circle_outline</i> Add</button>
                                         </div>
 
@@ -85,7 +85,7 @@
                                     <i class="material-icons">school</i>
                                 </div>
                                 <div class="card-content">
-                                    <h4 class="card-title">Exam List</h4>
+                                    <h4 class="card-title">Exam Master List</h4>
                                     <div class="material-datatables">
                                         <table class="table table-striped table-no-bordered table-hover data-table" cellspacing="0" style="width:100%">
                                             <thead style="font-size:12px;">
@@ -138,10 +138,10 @@
             columns: [
                 {data: 'DT_RowIndex', name: 'id', "width": "8%"},
                 {data: 'class_name', name: 'class_name', "width": "25%"},
-                {data: 'exam_name', name: 'exam_name', "width": "25%"},
+                {data: 'exam_name', name: 'exam_name', "width": "22%"},
                 {data: 'from_date', name: 'from_date', "width": "15%"},
                 {data: 'to_date', name: 'from_date', "width": "15%"},
-                {data: 'action', name: 'action', orderable: false, searchable: false, "width": "12%"},
+                {data: 'action', name: 'action', orderable: false, searchable: false, "width": "15%", className:"text-center"},
             ]
         });
 
@@ -156,35 +156,41 @@
             html += '<div class="row" id="section_' + count + '" data-id="' + count + '">';
             html += '<div class="col-lg-3 col-lg-offset-0">';
             html += '<div class="form-group">';
-            html += '<label class="control-label">Standard<span class="text-danger">*</span></label>';
+            html += '<label class="control-label mt-0">Standard<span class="text-danger">*</span></label>';
             html += '<select class="selectpicker" name="standard[' + count + '][]" id="standard_' + count +
-                '" data-size="3" data-style="select-with-transition" data-live-search="true" title="Select Class " data-selected-text-format="count > 1" required="required" multiple data-actions-box="true">';
-            <?php foreach($standardDetails as $standard){?>
+                '" data-size="3" data-style="select-with-transition" data-live-search="true" title="Select" data-selected-text-format="count > 1" required="required" multiple data-actions-box="true">';
+            html += '<?php foreach($standardDetails as $standard){?>';
             html += '<option value="<?php echo $standard['institutionStandard_id'];?>"><?php echo $standard['class'];?> </option>';
-            <?php } ?>
+            html += '<?php } ?>';
             html += ' </select>';
             html += '</div>';
             html += '</div>';
+
             html += '<div class="col-lg-3 col-lg-offset-0">';
             html += '<div class="form-group">';
-            html += '<label class="control-label">Exam Name<span class="text-danger">*</span></label>';
+            html += '<label class="control-label mt-0">Exam Name<span class="text-danger">*</span></label>';
             html += '<input type="text" class="form-control exam_name" name="exam_name[]" id="exam_name_' + count + '" required/>';
             html += '</div>';
             html += '</div>';
+
             html += '<div class="col-lg-3 col-lg-offset-0">';
             html += '<div class="form-group">';
-            html += '<label class="control-label">From Date<span class="text-danger">*</span></label>';
+            html += '<label class="control-label mt-0">From Date<span class="text-danger">*</span></label>';
             html += '<input type="text" class="form-control from_date" name="from_date[]" id="from_date_' + count + '" required/>';
             html += '</div>';
             html += '</div>';
+
             html += '<div class="col-lg-2 col-lg-offset-0">';
             html += '<div class="form-group">';
-            html += '<label class="control-label">To Date<span class="text-danger">*</span></label>';
+            html += '<label class="control-label mt-0">To Date<span class="text-danger">*</span></label>';
             html += '<input type="text" class="form-control to_date" name="to_date[]" id="to_date_' + count + '" required/>';
             html += '</div>';
             html += '</div>';
-            html += ' <div class="col-lg-1 form-group col-lg-offset-0">';
+            html += ' <div class="col-lg-1 col-lg-offset-0">';
+
+            html += '<div class="form-group">';
             html += '<td><button type="button" id="' + count + '" class="btn btn-danger btn-sm remove_button mt-15"><i class="material-icons">highlight_off</i></button></td>';
+            html += '</div>';
             html += '</div>';
             html += '</div>';
 

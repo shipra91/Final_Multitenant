@@ -42,10 +42,11 @@
             foreach($documents as $key => $document){
 
                 $student = $studentRepository->fetch($document->id_student);
+                $studentName = $studentMappingRepository->getFullName($student->name, $student->middle_name, $student->last_name);
 
                 $documentArray = array(
                     'id' => $document->id,
-                    'student'=>$student->name,
+                    'student'=>$studentName,
                     'docketNumber'=>$document->docket_number,
                 );
 
@@ -70,9 +71,9 @@
             $document = $documentRepository->fetch($idDocument);
             $studentDetails = $studentMappingRepository->fetchStudent($document->id_student, $allSessions);
             //dd($studentDetails);
+            $studentName = $studentMappingRepository->getFullName($studentDetails->name, $studentDetails->middle_name, $studentDetails->last_name);
             $standard = $institutionStandardService->fetchStandardByUsingId($studentDetails->id_standard);
             //dd($standard);
-
             $documentDetails = $documentDetailRepository->all($idDocument);
 
             foreach($documentDetails as $key => $doc){
@@ -81,7 +82,7 @@
                 $docDetail[$key]['headerName'] = $headerData->name;
             }
 
-            $documentData['studentName'] = $studentDetails->name;
+            $documentData['studentName'] = $studentName;
             $documentData['studentStandard'] = $standard;
             $documentData['UID'] = $studentDetails->egenius_uid;
             $documentData['idDocument'] = $idDocument;
@@ -104,11 +105,16 @@
             $studentId = $documentData->studentId;
             $docketNumber = $randomid;
 
-            $check = Document::where('id_student', $studentId)->where('id_institute', $institutionId)->where('id_academic', $academicYear)->first();
+            $check = Document::where('id_student', $studentId)
+                            ->where('id_institute', $institutionId)
+                            ->where('id_academic', $academicYear)
+                            ->first();
 
             if(!$check){
 
                 $data = array(
+                    'id_institute' => $institutionId,
+                    'id_academic' => $academicYear,
                     'id_student' => $studentId,
                     'docket_number' => $docketNumber,
                     'created_by' => Session::get('userId'),
@@ -270,9 +276,4 @@
 
             return $output;
         }
-
-        public function studentDocuments($request){
-
-        }
     }
-?>

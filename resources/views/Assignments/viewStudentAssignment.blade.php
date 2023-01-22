@@ -8,11 +8,6 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-12 col-sm-offset-0 text-right">
-                        <a href="{{url('assignment')}}" class="btn btn-finish btn-fill btn-wd btn btn-info"><i class="material-icons">arrow_back</i> Back</a>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-12 col-sm-offset-0">
                         <div class="card">
                             <div class="card-header card-header-icon" data-background-color="mediumaquamarine">

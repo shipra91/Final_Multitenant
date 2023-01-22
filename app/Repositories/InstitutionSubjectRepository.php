@@ -112,5 +112,31 @@
             // dd(DB::getQueryLog());
             return $subjectData;
         }
+
+        public function getInstitutionSubjectId($subjectDetails, $allSessions) {
+
+            $subjectDisplayName = $subjectDetails[0]; 
+            $subjectType = $subjectDetails[1];
+
+            $academicYear  = $allSessions['academicYear'];
+            $institutionId = $allSessions['institutionId'];
+
+            return InstitutionSubject::where('id_institute', $institutionId)
+            ->where('id_academic_year', $academicYear)
+            ->where('display_name', $subjectDisplayName)
+            ->where('subject_type', $subjectType)
+            ->first();
+        }
+
+        public function getInstitutionSubjectDetails($masterSubjectId, $allSessions) {
+
+            $academicYear  = $allSessions['academicYear'];
+            $institutionId = $allSessions['institutionId'];
+
+            return InstitutionSubject::where('id_institute', $institutionId)
+            ->where('id_academic_year', $academicYear)
+            ->where('id_subject', $masterSubjectId)
+            ->first();
+        }
     }
 ?>

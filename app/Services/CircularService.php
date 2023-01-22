@@ -276,8 +276,13 @@
             $studentService = new StudentService();
 
             $output = array();
-
             $circularAttachments = $circularAttachmentRepository->fetch($idCircular);
+
+            foreach($circularAttachments as $key => $attachment){
+                $ext = pathinfo($attachment['file_url'], PATHINFO_EXTENSION);
+                $circularAttachments[$key] = $attachment;
+                $circularAttachments[$key]['extension'] = $ext;
+            }
 
             $selectedStaffCategoryData = array();
             $selectedStaffSubCategoryData = array();
@@ -403,12 +408,9 @@
             if($storeData){
 
                 if($circularData->circularAttachment != ""){
-
-                    $deleteAttachment = $circularAttachmentRepository->delete($id);
-
+                    //$deleteAttachment = $circularAttachmentRepository->delete($id);
                     if($circularData->hasfile('circularAttachment')){
 
-                        //$path = 'Circular';
                         foreach($circularData->circularAttachment as $attachment){
 
                             $path = 'Circular';

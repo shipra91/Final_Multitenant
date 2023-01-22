@@ -16,22 +16,19 @@ class PreadmissionApplicationSettingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
     public function index(Request $request)
     {
         $applicationSettingService = new ApplicationSettingService();
         $allSessions = session()->all();
 
-        if ($request->ajax()) {
-            $allSettingData = $applicationSettingService->getAll($allSessions);
+        if($request->ajax()){
+            $allSettingData = $this->applicationSettingService->getAll($allSessions);
             return Datatables::of($allSettingData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        
                         $btn = '<a href="/application-setting/'.$row['id'].'" type="button" rel="tooltip" title="Edit" class="btn btn-success btn-xs"><i class="material-icons">edit</i></a>
-                              
                         <button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Delete" class="btn btn-danger btn-xs delete"><i class="material-icons">delete</i></button>';
-                                                    
+
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -77,7 +74,6 @@ class PreadmissionApplicationSettingController extends Controller
                 "error" => $e->getMessage()
             ];
         }
-        
         return response()->json($result, $result['status']);
     }
 
@@ -131,7 +127,6 @@ class PreadmissionApplicationSettingController extends Controller
                 "error" => $e->getMessage()
             ];
         }
-        
         return response()->json($result, $result['status']);
     }
 
@@ -172,47 +167,50 @@ class PreadmissionApplicationSettingController extends Controller
             return Datatables::of($allSettings)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        
                         $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-xs restore"><i class="material-icons">delete</i> Restore</button>';
-                        
                         return $btn;
                     })
                     ->rawColumns(['action'])
                     ->make(true);
         }
-          
+
         return view('Preadmission/deleted_records');
     }
 
-    /**
-     * Write code on Method
-     *
-     * @return response()
-     */
     public function restore($id)
     {
-        $applicationSettingService = new ApplicationSettingService();
-
         $result = ["status" => 200];
         try{
-            
-            $result['data'] = $applicationSettingService->restore($id);
+
+            $result['data'] = $this->applicationSettingService->restore($id);
 
         }catch(Exception $e){
+
             $result = [
                 "status" => 500,
                 "error" => $e->getMessage()
             ];
         }
-        
-        return response()->json($result, $result['status']);
-    }  
-  
-    /**
-     * Write code on Method
-     *
-     * @return response()
-    */
 
-    
+        return response()->json($result, $result['status']);
+    }
+
+    public function restoreAll()
+    {
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $this->menuPermissionService->restoreAll();
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
+    }
 }

@@ -38,7 +38,10 @@
             $staffSubCategory = $staffSubCategoryRepository->all();
             $institutionStandards = $institutionStandardService->fetchStandard($allSessions);
             $teachingStaffs = $staffRepository->getTeachingStaff($allSessions);
-
+            foreach($teachingStaffs as $key => $staff){
+                $allStaff[$key] = $staff;
+                $allStaff[$key]['name'] = $staffRepository->getFullName($staff['name'], $staff['middle_name'], $staff['last_name']);
+            }
             foreach($institutionStandards as $institutionStandard){
                 array_push($standardIds, $institutionStandard['institutionStandard_id']);
             }
@@ -50,7 +53,7 @@
                 'staffSubcategory' => $staffSubCategory,
                 'institutionStandards' => $institutionStandards,
                 'standardSubjects' => $standardSubjects,
-                'teachingStaffs' => $teachingStaffs
+                'teachingStaffs' => $allStaff
             );
 
             return $output;
@@ -90,11 +93,9 @@
                 }
 
                 if($recepient){
-
                     foreach($recepient as $rec){
                         $recepientData .= $rec['recipient_type'].', ';
                     }
-
                     $recepientData = substr($recepientData, 0, -2);
                 }
 
@@ -298,6 +299,12 @@
 
             $eventAttachment = $eventAttachmentRepository->fetch($idEvent);
 
+            foreach($eventAttachment as $key => $attachment){
+                $ext = pathinfo($attachment['file_url'], PATHINFO_EXTENSION);
+                $eventAttachment[$key] = $attachment;
+                $eventAttachment[$key]['extension'] = $ext;
+            }
+
             $selectedStaffCategoryData = array();
             $selectedStaffSubCategoryData = array();
             $selectedStaffCategory = array();
@@ -431,12 +438,8 @@
             if($updateData){
 
                 if($eventData->eventAttachment != ""){
-
-                    $deleteAttachment = $eventAttachmentRepository->delete($id);
-
+                    //$deleteAttachment = $eventAttachmentRepository->delete($id);
                     if($eventData->hasfile('eventAttachment')){
-
-                        $path = 'Event';
 
                         foreach($eventData->eventAttachment as $attachment){
 
@@ -663,4 +666,3 @@
             return $output;
         }
     }
-?>

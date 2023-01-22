@@ -2,7 +2,9 @@
     namespace App\Services;
     use App\Models\AttendanceSettings;
     use App\Repositories\AttendanceSettingRepository;
+    use App\Repositories\AttendanceRepository;
     use App\Services\InstitutionStandardService;
+    use App\Services\AssignmentService;
     use Carbon\Carbon;
     use Session;
 
@@ -13,25 +15,28 @@
 
             $attendanceSettingRepository = New AttendanceSettingRepository();
             $institutionStandardService = New InstitutionStandardService();
-
-            $attendanceSettings = $attendanceSettingRepository->all($institutionId, $academicYear);
+            $attendanceSettings = array();
             $arrayData = array();
+            $attendanceSettings = $attendanceSettingRepository->all($institutionId, $academicYear);
+       
+            if(count($attendanceSettings) > 0){
+                
+                foreach($attendanceSettings as $key => $attendanceSetting){
 
-            foreach($attendanceSettings as $key => $attendanceSetting){
+                    $standard = $institutionStandardService->fetchStandardByUsingId($attendanceSetting->id_standard);
 
-                $standard = $institutionStandardService->fetchStandardByUsingId($attendanceSetting->id_standard);
-
-                $data = array(
-                    'id' => $attendanceSetting->id,
-                    'attendance_type' => $attendanceSetting->attendance_type,
-                    'id_standard' => $standard,
-                    // 'id_template' => $attendanceSetting->id_template,
-                    'display_subject' => $attendanceSetting->display_subject,
-                    'classtimetable_dependent' => $attendanceSetting->is_subject_classtimetable_dependent,
-                    'created_by' => $attendanceSetting->created_by,
-                    'modified_by' => $attendanceSetting->modified_by,
-                );
-                array_push($arrayData, $data);
+                    $data = array(
+                        'id' => $attendanceSetting->id,
+                        'attendance_type' => $attendanceSetting->attendance_type,
+                        'id_standard' => $standard,
+                        // 'id_template' => $attendanceSetting->id_template,
+                        'display_subject' => $attendanceSetting->display_subject,
+                        'classtimetable_dependent' => $attendanceSetting->is_subject_classtimetable_dependent,
+                        'created_by' => $attendanceSetting->created_by,
+                        'modified_by' => $attendanceSetting->modified_by,
+                    );
+                    array_push($arrayData, $data);
+                }
             }
 
             return $arrayData;
@@ -40,8 +45,8 @@
         // Get particular attendance settings
         public function find($id){
 
-            $attendanceSettingRepository = New AttendanceSettingRepository();
-            $institutionStandardService = New InstitutionStandardService();
+            $attendanceSettingRepository = new AttendanceSettingRepository();
+            $institutionStandardService = new InstitutionStandardService();
 
             $settingsData = array();
             $standard= $template= '';
@@ -65,12 +70,12 @@
         }
 
         // Attendance settings data
-        public function getAttendanceData($allSessions){
+        public function getAttendanceData(){
 
-            $attendanceSettingRepository = New AttendanceSettingRepository();
-            $institutionStandardService = New InstitutionStandardService();
+            $attendanceSettingRepository = new AttendanceSettingRepository();
+            $institutionStandardService = new InstitutionStandardService();
 
-            $standard = $institutionStandardService->fetchStandard($allSessions);
+            $standard = $institutionStandardService->fetchStandard();
 
             $output = array(
                 'standard' => $standard,
@@ -81,18 +86,20 @@
         // Insert attendance settings
         public function add($settingsData){
 
-            $attendanceSettingRepository = New AttendanceSettingRepository();
-            $institutionStandardService = New InstitutionStandardService();
+            $attendanceSettingRepository = new AttendanceSettingRepository();
+            $institutionStandardService = new InstitutionStandardService();
 
             if($settingsData->standard[0] !=''){
 
                 foreach($settingsData->standard as $key => $standards){
 
-                    $check = AttendanceSettings::where('id_standard', $standards)->withTrashed()->first();
+                    $check = AttendanceSettings::where('id_standard', $standards)->first();
 
                     if(!$check){
 
                         $data = array(
+                            'id_institute' => $settingsData->id_institute,
+                            'id_academic' => $settingsData->id_academic,
                             'attendance_type' => $settingsData->attendanceType,
                             'id_standard' => $standards,
                             // 'id_template' => $settingsData->attendanceTemplate,
@@ -131,8 +138,8 @@
         // Update attendance settings
         public function update($settingsData, $id){
 
-            $attendanceSettingRepository = New AttendanceSettingRepository();
-            $institutionStandardService = New InstitutionStandardService();
+            $attendanceSettingRepository = new AttendanceSettingRepository();
+            $institutionStandardService = new InstitutionStandardService();
 
             $check = AttendanceSettings::where('id_standard', $settingsData->standard)
                                         ->where('id', '!=', $id)
@@ -177,8 +184,8 @@
         // Get all attendance settings
         public function getAttendanceTypeData($attendanceType){
 
-            $attendanceSettingRepository = New AttendanceSettingRepository();
-            $institutionStandardService = New InstitutionStandardService();
+            $attendanceSettingRepository = new AttendanceSettingRepository();
+            $institutionStandardService = new InstitutionStandardService();
 
             $attendanceSettings = $attendanceSettingRepository->allData($attendanceType);
             $arrayData = array();
@@ -206,16 +213,25 @@
         }
 
         // Delete attendance settings
-        public function delete($id){
+        public function delete($id, $allSessions){
 
-            $attendanceSettingRepository = New AttendanceSettingRepository();
+            $attendanceSettingRepository = new AttendanceSettingRepository();
+            $attendanceRepository = new AttendanceRepository();
+            $attendanceSettingDetails = $attendanceSettingRepository->fetch($id);
+            $idInstitutionStandard = $attendanceSettingDetails->id_standard;
 
-            $attendanceSetting = $attendanceSettingRepository->delete($id);
+            $check = $attendanceRepository->checkAttendanceForStandard($idInstitutionStandard, $allSessions);
+            if(!$check){
+                $attendanceSetting = $attendanceSettingRepository->delete($id);
 
-            if($attendanceSetting){
+                if($attendanceSetting){
 
-                $signal = 'success';
-                $msg = 'Attendance Setting deleted successfully!';
+                    $signal = 'success';
+                    $msg = 'Attendance Setting deleted successfully!';
+                }
+            }else{
+                $signal = 'failure';
+                $msg = "Can't delete!! Attendance already added for this standard";
             }
 
             $output = array(
@@ -279,6 +295,13 @@
             );
 
             return $output;
+        }
+
+        public function fetchStandardAttendanceSetting($standardId, $attendanceType,  $allSessions){
+
+            $attendanceSettingRepository = new AttendanceSettingRepository();
+            $assignmentService = new AssignmentService();
+            return $attendanceSettingRepository->getStandardAttendanceSettingDetails($standardId, $attendanceType,  $allSessions);
         }
     }
 ?>

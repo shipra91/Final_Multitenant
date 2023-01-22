@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HolidayAttachment;
 use Illuminate\Http\Request;
+use App\Services\HolidayAttachmentService;
 
 class HolidayAttachmentController extends Controller
 {
@@ -78,8 +79,24 @@ class HolidayAttachmentController extends Controller
      * @param  \App\Models\HolidayAttachment  $holidayAttachment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(HolidayAttachment $holidayAttachment)
+    public function removeHolidayAttachments(Request $request)
     {
-        //
+        $holidayAttachmentService = new HolidayAttachmentService();
+
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $holidayAttachmentService->delete($request->holidayId);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
     }
 }

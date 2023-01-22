@@ -8,13 +8,28 @@
     <nav class="navbar navbar-primary navbar-transparent navbar-absolute">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">
-                    <img class="logo-alt" style="width:140px" src="{{ $domainDetail->logo }}" alt="logo">
+                <a class="navbar-brand" href=" # ">
+                    @if($domainDetail == 'error')
+                        @php 
+                            $logo = "http://egenius-s3.s3.ap-south-1.amazonaws.com/MDES/INSTITUTION_DETAILS/10330251001653397178.png";
+                            $name = "eGenius";
+                            $domainId = '';
+                            $domainInstitutionId = '';
+                        @endphp                        
+                    @else
+                        @php 
+                            $logo = $domainDetail->logo;
+                            $name = $domainDetail->name;
+                            $domainId = $domainDetail->id;
+                            $domainInstitutionId = $domainDetail->institution_id;
+                        @endphp
+                    @endif
+                    <img class="logo-alt" style="width:140px" src="{{ $logo }}" alt="logo">
                 </a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-left" style="margin-top:18px;font-weight:900;font-size:28px;">
-				    <p style="margin-top:10px;">{{ $domainDetail->name }}</p>
+                    <p style="margin-top:10px;">{{ $name }}</p> 		
                 </ul>
             </div>
         </div>
@@ -30,8 +45,8 @@
                             <div class="card card-login card-hidden">
                                 <div class="card-header text-center" data-background-color="mediumaquamarine">
                                     <h4 class="card-title">Login</h4>
-                                    <input type="hidden" name="id_organization" value={{ $domainDetail->id }} />
-                                    <input type="hidden" name="id_institution" value={{ $domainDetail->institution_id }} />
+                                    <input type="hidden" name="id_organization" value={{ $domainId }} />
+                                    <input type="hidden" name="id_institution" value={{ $domainInstitutionId }} />
                                 </div>
 
                                 <div class="card-content">

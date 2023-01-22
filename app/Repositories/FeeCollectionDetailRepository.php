@@ -250,28 +250,5 @@
             // dd(DB::getQueryLog());
             return $paymentDetail;
         }
-
-        
-  
-        public function getStudentFeeCancelledDetailWithDetail($studentId, $fromDate, $toDate, $allSessions){
-            DB::enableQueryLog();
-
-            $institutionId = $allSessions['institutionId'];
-            $academicId = $allSessions['academicYear'];
-            $paidHistoryArray = array();
-
-            $paymentDetail = CollectionDetail::select('tbl_fee_collection_details.*', 'tbl_fee_collections.*')
-            ->join('tbl_fee_collections', 'tbl_fee_collections.id', '=', 'tbl_fee_collection_details.id_fee_collection')
-            ->where('tbl_fee_collections.id_student', $studentId)
-            ->where('tbl_fee_collections.id_institute', $institutionId)
-            ->where('tbl_fee_collections.id_academic_year', $academicId)
-            ->where('tbl_fee_collections.cancelled', 'YES')
-            ->whereBetween('tbl_fee_collections.paid_date', [$fromDate, $toDate])
-            ->groupBy('tbl_fee_collection_details.id_fee_collection')
-            ->get();
-
-            // dd(DB::getQueryLog());
-            return $paymentDetail;
-        }
     }
 ?>

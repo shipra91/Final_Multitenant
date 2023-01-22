@@ -124,13 +124,13 @@
                 {data: 'UID', name: 'UID'},
                 {data: 'name', name: 'name'},
                 {data: 'class', name: 'class'},
-                {data: 'remark', name: 'remark'},
+                {data: 'remark', name: 'remark', className:"capitalize"},
                 {data: 'detention_date', name: 'detention_date'},
                 {data: 'action', name: 'action', orderable: false, searchable: false, className:"text-center"},
             ]
         });
 
-        // Get students
+        // Get student details
         $('#autocomplete').autocomplete({
             source: function( request, response ){
 

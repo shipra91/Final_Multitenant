@@ -355,7 +355,7 @@
         public function fetchSubjectStandards($subjectId){
 
             $standardSubjectRepository = new StandardSubjectRepository();
-            $subjectStandards = $standardSubjectRepository->fetchSubjectStandards($subjectId);
+            $subjectStandards = $standardSubjectRepository->fetchExamSubjectStandards($subjectId);
 
             return $subjectStandards;
         }

@@ -40,6 +40,7 @@
  
             $response = FeeInstallment::join('tbl_fee_assign_setting', 'tbl_fee_assign_setting.id', '=', 'tbl_fee_installment.id_fee_assign')
             ->where('id_fee_master', $idFeeMaster)
+            ->whereNull('tbl_fee_assign_setting.deleted_at')
             ->get(['tbl_fee_assign_setting.id_fee_heading', 'tbl_fee_assign_setting.amount as headingAmount', 'tbl_fee_installment.*']);
             // dd(DB::getQueryLog());
              // dd($response);

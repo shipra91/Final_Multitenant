@@ -20,163 +20,177 @@
                                 <h4 class="card-title">Staff Details</h4>
                                 <div class="row">
 									<div class="col-lg-12">
-										<h5 class="viewStaff-firstChild">Basic Details</h5>
+										<h5 class="viewStaff-firstChild mb-10">Basic Details</h5>
 									</div>
 								</div>
 
                                 <div class="row">
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Name</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($staffData->name)}}" disabled />
+                                            <label class="control-label mt-0">First Name</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->name }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Date Of Birth</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->date_of_birth}}" disabled />
+                                            <label class="control-label mt-0">Middle Name</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->middle_name }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Staff / Employee ID</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->employee_id}}" disabled />
+                                            <label class="control-label mt-0">Last Name</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->last_name }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Date Of Joining</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->joining_date}}" disabled />
+                                            <label class="control-label mt-0">Date Of Birth</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->date_of_birth }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Gender</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->gender}}" disabled />
+                                            <label class="control-label mt-0">Staff / Employee ID</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->employee_id }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Blood Group</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->bloodGroup}}" disabled />
+                                            <label class="control-label mt-0">Date Of Joining</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->joining_date }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Designation</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($staffData->designation)}}" disabled />
+                                            <label class="control-label mt-0">Gender</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->gender }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Department</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($staffData->department)}}" disabled />
+                                            <label class="control-label mt-0">Blood Group</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->bloodGroup }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Staff Roll</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($staffData->role)}}" disabled />
+                                            <label class="control-label mt-0">Designation</label>
+                                            <input type="text" class="form-control" value ="{{ ucwords($staffData->designation) }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Staff Category</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($staffData->staffCategory)}}" disabled />
+                                            <label class="control-label mt-0">Department</label>
+                                            <input type="text" class="form-control" value ="{{ ucwords($staffData->department) }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Staff Subcategory</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($staffData->staffSubcategory)}}" disabled />
+                                            <label class="control-label mt-0">Staff Roll</label>
+                                            <input type="text" class="form-control" value ="{{ ucwords($staffData->role) }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Phone No</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->primary_contact_no}}" disabled />
+                                            <label class="control-label mt-0">Staff Category</label>
+                                            <input type="text" class="form-control" value ="{{ ucwords($staffData->staffCategory) }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Emergency Phone No</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->secondary_contact_no}}" disabled />
+                                            <label class="control-label mt-0">Staff Subcategory</label>
+                                            <input type="text" class="form-control" value ="{{ ucwords($staffData->staffSubcategory) }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Email</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->email_id}}" disabled />
+                                            <label class="control-label mt-0">Phone No</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->primary_contact_no }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Duration Of Employment</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->duration_employment}}" disabled />
+                                            <label class="control-label mt-0">Emergency Phone No</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->secondary_contact_no }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Email</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->email_id }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Duration Of Employment</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->duration_employment }}" disabled />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h5 class="viewStaff">Address</h5>
+                                        <h5 class="viewStaff mb-10">Address</h5>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Pincode</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->pincode}}" disabled />
+                                            <label class="control-label mt-0">Pincode</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->pancard_no }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Post Office</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->post_office}}" disabled />
+                                            <label class="control-label mt-0">Post Office</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->post_office }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">City/Taluk</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($staffData->taluk)}}" disabled />
+                                            <label class="control-label mt-0">City/Taluk</label>
+                                            <input type="text" class="form-control" value ="{{ ucwords($staffData->taluk) }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">District</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($staffData->district)}}" disabled />
+                                            <label class="control-label mt-0">District</label>
+                                            <input type="text" class="form-control" value ="{{ ucwords($staffData->district) }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-8 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Address</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->address}}" disabled />
+                                            <label class="control-label mt-0">Address</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->address }}" disabled />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h5 class="viewStaff">Family Details</h5>
+                                        <h5 class="viewStaff mb-10">Family Details</h5>
                                     </div>
                                 </div>
 
@@ -184,22 +198,22 @@
                                     <div class="row">
                                         <div class="col-lg-4 col-lg-offset-0">
                                             <div class="form-group">
-                                                <label class="control-label">Name</label>
-                                                <input type="text" class="form-control" value ="{{$data->name}}" disabled />
+                                                <label class="control-label mt-0">Name</label>
+                                                <input type="text" class="form-control" value ="{{ $data->name }}" disabled />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4 col-lg-offset-0">
                                             <div class="form-group">
-                                                <label class="control-label">Phone</label>
-                                                <input type="text" class="form-control" value ="{{$data->phone}}" disabled />
+                                                <label class="control-label mt-0">Phone</label>
+                                                <input type="text" class="form-control" value ="{{ $data->phone }}" disabled />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4 col-lg-offset-0">
                                             <div class="form-group">
-                                                <label class="control-label">Relation</label>
-                                                <input type="text" class="form-control" value ="{{$data->relation}}" disabled />
+                                                <label class="control-label mt-0">Relation</label>
+                                                <input type="text" class="form-control" value ="{{ $data->relation }}" disabled />
                                             </div>
                                         </div>
                                     </div>
@@ -207,85 +221,85 @@
 
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h5 class="viewStaff">Additional Details</h5>
+                                        <h5 class="viewStaff mb-10">Additional Details</h5>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Nationality</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($staffData->nationality)}}" disabled />
+                                            <label class="control-label mt-0">Nationality</label>
+                                            <input type="text" class="form-control" value ="{{ ucwords($staffData->nationality) }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Religion</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($staffData->religion)}}" disabled />
+                                            <label class="control-label mt-0">Religion</label>
+                                            <input type="text" class="form-control" value ="{{ ucwords($staffData->religion) }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Cast</label>
-                                            <input type="text" class="form-control" value ="{{ucwords($staffData->cast)}}" disabled />
+                                            <label class="control-label mt-0">Cast</label>
+                                            <input type="text" class="form-control" value ="{{ ucwords($staffData->cast) }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Aadhaar Card Number</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->aadhaar_no}}" disabled />
+                                            <label class="control-label mt-0">Aadhaar Card Number</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->aadhaar_no }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">PAN Card Number</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->pancard_no}}" disabled />
+                                            <label class="control-label mt-0">PAN Card Number</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->pancard_no }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">PF UAN Number</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->pf_uan_no}}" disabled />
+                                            <label class="control-label mt-0">PF UAN Number</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->pf_uan_no }}" disabled />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h5 class="viewStaff">Configuration</h5>
+                                        <h5 class="viewStaff mb-10">Configuration</h5>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-12 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Board</label>
+                                            <label class="control-label mt-0">Board</label>
                                             <input type="text" class="form-control" value ="{{ $staffData['selectedBoard'] }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-12 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Subject Specialization</label>
+                                            <label class="control-label mt-0">Subject Specialization</label>
                                             <input type="text" class="form-control" value ="{{ $staffData['selectedSubject'] }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-6 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Recruited as head teacher?</label>
-                                            <input type="text" class="form-control" value ="{{$staffData->head_teacher}}" disabled />
+                                            <label class="control-label mt-0">Recruited as head teacher?</label>
+                                            <input type="text" class="form-control" value ="{{ $staffData->head_teacher }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-6 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Working hours?</label>
+                                            <label class="control-label mt-0">Working hours?</label>
                                             @php
                                                 if($staffData->working_hours == 'FULL_TIME'){
                                                     $workingHours = 'Full Time';
@@ -300,7 +314,7 @@
 
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h5 class="viewStaff">Other Details</h5>
+                                        <h5 class="viewStaff mb-10">Other Details</h5>
                                     </div>
                                 </div>
 
@@ -308,7 +322,7 @@
                                     @foreach($customFieldDetails as $custom)
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label class="control-label">{{$custom->custom_field_name}}</label>
+                                                <label class="control-label mt-0">{{$custom->custom_field_name}}</label>
                                                 <input type="text" class="form-control" value="{{$custom->field_value}}" disabled>
                                             </div>
                                         </div>
@@ -338,7 +352,8 @@
                                 @endif
                             </div>
 
-                            <h4 class="card-name text-center">{{ucwords($staffData->name)}}</h4>
+                            <h4 class="card-name text-center">{{ $staffData['fullname'] }}</h4>
+                            {{-- <h4 class="card-name text-center">{{ ucwords($staffData->name) . ' ' . ucwords($staffData->middle_name) . ' ' . ucwords($staffData->last_name) }}</h4> --}}
 
                             <div class="card-content border-top text-center">
                                 <div class="row">

@@ -89,7 +89,7 @@
                                                         <tr id="{{$attendance->id}}" style="background-color: #d9edf7">
                                                             <td>{{$index + 1}}</td>
                                                             <td>{{$attendance->staff_uid}}</td>
-                                                            <td>{{ucwords($attendance->name)}}</td>
+                                                            <td>{{ucwords($attendance->staffName)}}</td>
                                                             <td>
                                                                 <div class="form-group label-floating">
                                                                     <div class="radio col-lg-4" style="margin-top:10px;">

@@ -41,6 +41,9 @@
                     @if($fineSettingDetails['label_fine_option'])
                         @if(Helper::checkAccess('fine-setting', 'create'))
                             <div class="row">
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>Note:</strong> Once you add the setting add option will be disabled.
+                                </div>
                                 <form method="POST" id="fineSettingForm">
                                     <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
                                     <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
@@ -54,9 +57,7 @@
                                             </div>
                                             <div class="card-content">
                                                 <h4 class="card-title">Add Setting</h4>
-                                                <div class="alert alert-danger" role="alert">
-                                                    <strong>Note:</strong> Once you add the setting add option will be disabled.
-                                                </div>
+                                                
                                                 <div id="repeater">
                                                     <input type="hidden" name="totalCount" id="totalCount" value="1">
 
@@ -155,7 +156,7 @@
                         <div class="row">
                             <div class="col-sm-12 col-sm-offset-0">
                                 <div class="alert alert-danger" role="alert">
-                                    <strong>Note:</strong> If you want to add the new setting, please delete the exist setting.
+                                    <strong>Note:</strong> If you want to add the new setting, please delete the existing setting.
                                 </div>
                             </div>
                             <div class="col-sm-12 col-sm-offset-0">

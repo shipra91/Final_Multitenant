@@ -30,10 +30,12 @@
 
             $preadmissionRepository = new PreadmissionRepository();
             $institutionStandardService = new InstitutionStandardService();
+            $studentMappingRepository = new StudentMappingRepository();
 
             $applicationDetails = $preadmissionRepository->fetch($id);
             //dd($applicationDetails);
             $standard = $institutionStandardService->fetchPreadmissionStandardByUsingId($applicationDetails->id_standard);
+            $studentName = $studentMappingRepository->getFullName($applicationDetails->name, $applicationDetails->middle_name, $applicationDetails->last_name);
 
             $birthDate = date('d-m-Y', strtotime($applicationDetails->date_of_birth));
             $currentDate = date("d-m-Y");
@@ -42,6 +44,7 @@
 
             $applicationDetails ['standard'] = $standard;
             $applicationDetails ['current_age'] = $currentAge;
+            $applicationDetails ['studentName'] = $studentName;
             //dd($applicationDetails);
 
             return $applicationDetails;
@@ -115,10 +118,12 @@
                     $mobileNumber = $data->mother_mobile_number;
                 }
 
+                $studentName = $studentMappingRepository->getFullName($data->name, $data->middle_name, $data->last_name);
+
                 $applicationDetails = array(
                     'id' => $data->id,
                     'application_number'=>$data->application_number,
-                    'name'=>$data->name,
+                    'name'=>$studentName,
                     'class'=>$standard,
                     'father_name'=>$data->father_name,
                     'phone_number'=>$mobileNumber,
@@ -827,6 +832,7 @@
             $institutionStandardService = new InstitutionStandardService();
             $institutionStandardRepository = new InstitutionStandardRepository();
             $preadmissionRepository = new PreadmissionRepository();
+            $studentMappingRepository = new StudentMappingRepository();
             $genderRepository = new GenderRepository();
 
             $allApplications = array();
@@ -840,11 +846,12 @@
 
                     $gender = $genderRepository->fetch($data->id_gender);
                     $standard = $institutionStandardService->fetchPreadmissionStandardByUsingId($data->id_standard);
+                    $studentName = $studentMappingRepository->getFullName($data->name, $data->middle_name, $data->last_name);
 
                     $applicationDetails = array(
                         'id' => $data->id,
                         'application_number'=>$data->application_number,
-                        'name'=>$data->name,
+                        'name'=>$studentName,
                         'class'=>$standard,
                         'gender'=>$gender->name,
                         'dob'=>$data->date_of_birth,
@@ -1114,7 +1121,6 @@
                                 }
 
                                 $admitCount ++;
-                                
                             }else{
                                 $failureCount ++;
                             }
@@ -1137,7 +1143,6 @@
                 $signal = 'failure';
                 $msg = 'Error inserting data!';
             }
-            
             $output = array(
                 'signal'=>$signal,
                 'message'=>$msg
@@ -1147,26 +1152,25 @@
         }
 
         public function checkLoginCredentials($request){
-         
+
             $phoneNumber = $request->get('phone_number');
             $studentFirstName = $request->get('student_first_name');
-      
+
             $check = Preadmission::where('father_mobile_number', $phoneNumber)->where('name', $studentFirstName)->first();
             if(!$check){
 
                 $response = array(
                     'status' =>'new'
                 );
-                
+
             }else{
-             
+
                 $response = array(
                     'status' =>'exist',
                     'id' => $check->id
                 );
             }
-          
+
             return $response;
         }
     }
-?>

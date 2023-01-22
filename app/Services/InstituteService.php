@@ -348,16 +348,6 @@
                         $signal = 'success';
                         $msg = 'Data inserted successfully!';
 
-                        //send mail $institutionEmail
-                        $mailData = [
-                            'title' => 'Admin Login Credential',
-                            'body' => 'Please try login '.$instituteData->institutionName.' with the below credential:
-                                        <p>Username : '.$instituteData->username.'</p>
-                                        <p>Password : '.str_replace(" ", "_", $instituteData->password).'</p>'
-                        ];
-                        
-                        Mail::to(Session::get('userId'))->cc([$institutionEmail, $instituteData->areaPartnerEmail, $instituteData->zonalPartnerEmail])->send(new SendEmail($mailData));
-
                     }else{
                         $signal = 'failure';
                         $msg = 'Error inserting data!';

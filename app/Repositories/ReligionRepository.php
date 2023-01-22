@@ -28,5 +28,9 @@
         public function delete($id){
             return Religion::find($id)->delete();
         }
+
+        public function fetchReligionId($religion){
+            return Religion::where("name", $religion)->first();
+        }
     }
 ?>

@@ -8,12 +8,6 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-12 col-sm-offset-0 text-right">
-                        <a href="{{url('homework')}}" class="btn btn-finish btn-fill btn-wd btn btn-info"><i class="material-icons">arrow_back</i> Back</a>
-                    </div>
-                </div>
-
-                <div class="row">
                     <div class="col-sm-12 col-sm-offset-0">
                         <div class="card">
                             <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
@@ -57,27 +51,27 @@
             <div class="modal-content">
                 <div class="card1">
                     <div class="card-header card-header-tabs" data-background-color="mediumaquamarine">
-                        <h4 class="card-title1" id="homework_name"></h4>
-                        <p style="margin:0;display:inline;" id="staff_name">&nbsp;</p>
-                        <p style="margin:5px;display:inline;border-right:1px solid rgba(255, 255, 255, 0.62);;font-size:11px;"></p>
-                        <p style="margin:5px;display:inline" align="right" id="subject_name"></p>
+                        <p class="card-title1 mb-5 font-15" id="homework_name"></p>
+                        <p class="font-15" style="margin:0; display:inline;" id="staff_name">&nbsp;</p>
+                        <p style="margin:5px; display:inline; border-right:1px solid rgba(255, 255, 255, 0.62); font-size:11px;"></p>
+                        <p class="font-15" style="margin:5px; display:inline" align="right" id="subject_name"></p>
                     </div>
                 </div>
 
-                <div class="modal-body1 col-lg-12 col-sm-12 mb-20">
+                <div class="modal-body">
                     <div class="row" id="resubmission_option">
                     </div>
                     <div class="row d-none" id="resubmission_date_time">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="control-label">Re-submission Date</label>
+                                <label class="control-label mt-0">Re-submission Date</label>
                                 <input type="text" class="form-control datepicker" name="resubmission_date" id="resubmission_date" data-parsley-trigger="change" value="{{date('d-m-Y')}}" />
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="control-label">Re-submission Time</label>
-                                <input type="text" class="form-control timepicker" name="resubmission_time"  id="resubmission_time" />
+                                <label class="control-label mt-0">Re-submission Time</label>
+                                <input type="text" class="form-control timepicker" name="resubmission_time" id="resubmission_time" />
                             </div>
                         </div>
                     </div>
@@ -87,7 +81,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="pull-right">
-                                <button type="submit" class="btn btn-finish btn-fill btn-info btn-wd mr-5" id="submit" name="submit">Submit</button>
+                                <button type="submit" class="btn btn-info btn-wd mr-5" id="submit" name="submit">Submit</button>
                                 <button type="button" class="btn btn-danger btn-wd" data-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -97,7 +91,7 @@
             </div>
         </form>
     </div>
-</div><!-- Before submission end -->
+</div>
 
 <!-- After submission start -->
 <div class="modal fade" id="homework_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -111,19 +105,19 @@
             <div class="modal-content">
                 <div class="card1">
                     <div class="card-header card-header-tabs" data-background-color="mediumaquamarine">
-                        <h4 class="card-title1" id="homework_name"></h4>
-                        <p style="margin:0;display:inline;" id="staff_name">&nbsp;</p>
-                        <p style="margin:5px;display:inline;border-right:1px solid rgba(255, 255, 255, 0.62);;font-size:11px;"></p>
-                        <p style="margin:5px;display:inline" align="right" id="subject_name"></p>
+                        <p class="card-title1 mb-5 font-15" id="homework_name"></p>
+                        <p class="font-15" style="margin:0; display:inline;" id="staff_name">&nbsp;</p>
+                        <p style="margin:5px; display:inline; border-right:1px solid rgba(255, 255, 255, 0.62); font-size:11px;"></p>
+                        <p class="font-15" style="margin:5px; display:inline" align="right" id="subject_name"></p>
                     </div>
                 </div>
 
-                <div class="modal-body1 col-lg-12 col-sm-12 mb-20">
+                <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="control-label">Add Comment </label>
-                                <textarea class="form-control" name="comment" id="comment" rows="5"></textarea>
+                                <label class="control-label mt-0">Add Comment </label>
+                                <textarea class="form-control" name="comment" id="comment" rows="1"></textarea>
                             </div>
                         </div>
                     </div>
@@ -134,13 +128,13 @@
                     <div class="row d-none" id="resubmissionDateTime">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="control-label">Re-submission Date</label>
+                                <label class="control-label mt-0">Re-submission Date</label>
                                 <input type="text" class="form-control datepicker" name="resubmissionDate" id="resubmissionDate" data-parsley-trigger="change" value="{{date('d-m-Y')}}" />
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="control-label">Re-submission Time</label>
+                                <label class="control-label mt-0">Re-submission Time</label>
                                 <input type="text" class="form-control timepicker" name="resubmissionTime"  id="resubmissionTime"/>
                             </div>
                         </div>
@@ -159,7 +153,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="pull-right">
-                                <button type="submit" class="btn btn-finish btn-fill btn-info btn-wd mr-5" id="submit" name="submit">Submit</button>
+                                <button type="submit" class="btn btn-info btn-wd mr-5" id="submit" name="submit">Submit</button>
                                 <button type="button" class="btn btn-danger btn-wd" data-dismiss="modal">Close</button>
                             </div>
                         </div>
@@ -169,7 +163,7 @@
             </div>
         </form>
     </div>
-</div><!-- After submission end -->
+</div>
 @endsection
 
 @section('script-content')
@@ -221,7 +215,7 @@
 
                     resubmissionOption += '<div class="col-md-6">';
                     resubmissionOption += '<div class="form-group">';
-                    resubmissionOption += '<label class="control-label">Resubmission Allowed?</label>';
+                    resubmissionOption += '<label class="control-label mt-0">Resubmission Allowed?</label>';
                     resubmissionOption += '<select class="selectpicker resubmission_allowed" name="resubmission_allowed" id="resubmission_allowed" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" >';
                     resubmissionOption += '<option value ="YES"'; if(response.resubmission_allowed == 'YES') resubmissionOption += 'selected'; resubmissionOption +='>YES</option>';
                     resubmissionOption += '<option value ="NO"'; if(response.resubmission_allowed == 'NO') resubmissionOption += 'selected'; resubmissionOption +='>NO</option>';
@@ -345,7 +339,7 @@
 
                     resubmissionOption += '<div class="col-md-6">';
                     resubmissionOption += '<div class="form-group">';
-                    resubmissionOption += '<label class="control-label">Resubmission Allowed?</label>';
+                    resubmissionOption += '<label class="control-label mt-0">Resubmission Allowed?</label>';
                     resubmissionOption += '<select class="selectpicker resubmissionAllowed" name="resubmissionAllowed" id="resubmissionAllowed" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" >';
                     resubmissionOption += '<option value ="YES"'; if(response.resubmission_allowed == 'YES') resubmissionOption += 'selected'; resubmissionOption +='>YES</option>';
                     resubmissionOption += '<option value ="NO"'; if(response.resubmission_allowed == 'NO') resubmissionOption += 'selected'; resubmissionOption +='>NO</option>';
@@ -362,10 +356,9 @@
                             if(response.grading_option == 'GRADE'){
 
                                 gradeValue += '<div class="form-group">';
-                                gradeValue += '<label class="control-label">Select Grade <span class="text-danger">*</span></label>';
-                                gradeValue += '<select class="selectpicker grade" name="grade_obtained" id="grade_obtained" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select"> ';
-                                response.grade_values.forEach((item)=>
-                                {
+                                gradeValue += '<label class="control-label mt-0">Grade</label>';
+                                gradeValue += '<select class="selectpicker grade" name="grade_obtained" id="grade_obtained" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select">';
+                                response.grade_values.forEach((item)=> {
                                     gradeValue += '<option value ="'+item+'"'; if(response.obtained_marks == item) gradeValue += 'selected'; gradeValue +='>'+item+'</option>';
                                 });
                                 gradeValue += '</select>';
@@ -376,7 +369,7 @@
                             }else if(response.grading_option == 'MARKS'){
 
                                 marksValue += '<div class="form-group">';
-                                marksValue += '<label class="control-label">MARKS</label>';
+                                marksValue += '<label class="control-label mt-0">MARKS</label>';
                                 marksValue += '<input type="number" name="obtained_mark" id="obtained_mark" class="form-control obtained_mark" min="0" value="'+response.obtained_marks+'"/>';
                                 marksValue += '</div>';
                                 $('#grade').addClass('d-none');
@@ -515,10 +508,9 @@
                 if(grading_option == 'GRADE'){
 
                     gradeValue += '<div class="form-group">';
-                    gradeValue += '<label class="control-label">Select Grade<span class="text-danger">*</span></label>';
+                    gradeValue += '<label class="control-label mt-0">Grade</label>';
                     gradeValue += '<select class="selectpicker grade" name="grade_obtained" id="grade_obtained" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select">';
-                    gradeValues.forEach((item)=>
-                    {
+                    gradeValues.forEach((item)=> {
                         gradeValue += '<option value ="'+item+'"'; if(obtainedMark == item) gradeValue += 'selected'; gradeValue +='>'+item+'</option>';
                     });
                     gradeValue += '</select>';
@@ -529,7 +521,7 @@
                 }else if(grading_option == 'MARKS'){
 
                     marksValue += '<div class="form-group">';
-                    marksValue += '<label class="control-label">MARKS</label>';
+                    marksValue += '<label class="control-label mt-0">MARKS</label>';
                     marksValue += '<input type="number" name="obtained_mark" id="obtained_mark" class="form-control obtained_mark" min="0" value="'+obtainedMark+'"/>';
                     marksValue += '</div>';
                     $('#grade').addClass('d-none');

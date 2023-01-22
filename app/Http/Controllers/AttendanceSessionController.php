@@ -142,14 +142,19 @@ class AttendanceSessionController extends Controller
 
         $attendanceSessionService = new AttendanceSessionService();
         //dd($attendanceSessionService->getDeletedRecords());
-        $allSessions = session()->all();
 
         if($request->ajax()){
             $deletedData = $attendanceSessionService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        $btn ='';
+                        if(Helper::checkAccess('attendance-session', 'create')){
+                            $btn .= '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        }else{
+                            $btn .= 'No Access';
+                        }
+
                         return $btn;
                     })
                     ->rawColumns(['action'])

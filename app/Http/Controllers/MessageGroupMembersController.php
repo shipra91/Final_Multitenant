@@ -6,6 +6,9 @@ use App\Models\MessageGroupMembers;
 use Illuminate\Http\Request;
 use App\Services\MessageGroupMembersService;
 use App\Services\MessageGroupNameService;
+use App\Imports\MessageGroupMembersImport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExportGroupSample;
 use DataTables;
 
 class MessageGroupMembersController extends Controller
@@ -180,4 +183,17 @@ class MessageGroupMembersController extends Controller
 
         return view('MessageCenter/messageGroupMemberDetails')->with("page", "message_group_member");
     }
+    
+    public function exportGroupSample()
+    {
+        return (new ExportGroupSample())->download('sampleGroup.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    public function storeGroupMemberData(Request $request)
+    {
+        $file = $request->file('file');
+        Excel::import(new MessageGroupMembersImport, $file);
+        return back()->withStatus('Excel file imported successfully');
+    }
+
 }

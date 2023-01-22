@@ -22,6 +22,7 @@
                                 ->where('tbl_fee_assign.id_fee_category', $idFeeCategory)
                                 ->where('tbl_fee_assign_details.action_type', 'ASSIGNED')
                                 ->whereNull('tbl_fee_assign.deleted_at')
+                                ->whereNull('tbl_fee_assign_details.deleted_at')
                                 ->select('tbl_fee_assign_details.*','tbl_fee_mapping.display_name')
                                 ->orderBy('tbl_fee_mapping.display_name', 'ASC')
                                 ->orderBy('tbl_fee_assign_details.installment_no', 'ASC')

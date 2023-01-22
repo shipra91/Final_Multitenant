@@ -10,7 +10,6 @@
         @include('navigation')
         <div class="content">
             <div class="container-fluid">
-
                 @if(Helper::checkAccess('batch-creation', 'view'))
                     <div class="row">
                         <div class="col-md-12 col-md-offset-0">
@@ -92,14 +91,14 @@
                                                     @foreach($studentData as $index => $student)
                                                         <tr>
                                                             <td>{{ $index + 1 }}</td>
-                                                            <td>{{ $student->egenius_uid }}</td>
-                                                            <td>{{ ucwords($student->name) }}</td>
+                                                            <td>{{ $student['UID'] }}</td>
+                                                            <td>{{ ucwords($student['name']) }}</td>
                                                             @for ($i=0;$i<$_REQUEST['batch_no'];$i++)
                                                                 @if (array_key_exists($i, $batchDetails))
                                                                     <td>
                                                                         <div class="radio">
                                                                             <label>
-                                                                                <input type="radio" <?php if($_REQUEST['batch_no'] == $i){ echo "checked";} ?> name="student[{{ $student->id_student }}]" value="batch_{{ $i }}" @if(in_array($student->id_student, $batchDetails[$i]['student'])) {{ "checked" }} @endif>
+                                                                                <input type="radio" <?php if($_REQUEST['batch_no'] == $i){ echo "checked";} ?> name="student[{{ $student['id_student'] }}]" value="batch_{{ $i }}" @if(in_array($student['id_student'], $batchDetails[$i]['student'])) {{ "checked" }} @endif>
                                                                             </label>
                                                                         </div>
                                                                     </td>
@@ -107,7 +106,7 @@
                                                                 <td>
                                                                     <div class="radio">
                                                                         <label>
-                                                                            <input type="radio" <?php if($_REQUEST['batch_no'] == $i){ echo "checked";} ?> name="student[{{ $student->id_student }}]" value="batch_{{ $i }}">
+                                                                            <input type="radio" <?php if($_REQUEST['batch_no'] == $i){ echo "checked";} ?> name="student[{{ $student['id_student'] }}]" value="batch_{{ $i }}">
                                                                         </label>
                                                                     </div>
                                                                 </td>

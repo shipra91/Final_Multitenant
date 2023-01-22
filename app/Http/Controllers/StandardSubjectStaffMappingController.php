@@ -59,7 +59,6 @@ class StandardSubjectStaffMappingController extends Controller
                 "error" => $e->getMessage()
             ];
         }
-        
         return response()->json($result, $result['status']);
     }
 

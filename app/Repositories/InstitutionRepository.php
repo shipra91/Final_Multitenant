@@ -19,8 +19,13 @@
         }
 
         public function fetch($id){
-            $institution = $Institution = Institution::find($id);
+            $institution = Institution::find($id);
             return $institution;
+        }
+
+        public function getInstitutionId($institutionName){
+            return Institution::where('name', $institutionName)->first();
+
         }
 
         public function update($data){

@@ -250,6 +250,16 @@ class CircularController extends Controller
         return response()->json($result, $result['status']);
     }
 
+    // public function getCircularDetails($idCircular){
+
+    //     $circularService = new CircularService();
+    //     $circularData = $circularService->getCircularData();
+    //     $selectedData = $circularService->getCircularSelectedData($idCircular);
+    //     // dd($selectedData);
+
+    //     return view('Circular/view_circular_detail', ['circularData' => $circularData, 'selectedData' => $selectedData]);
+    // }
+
     public function downloadCircularFiles($id){
 
         $circularService = new CircularService();

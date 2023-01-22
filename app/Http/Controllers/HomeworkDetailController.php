@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HomeworkDetail;
 use Illuminate\Http\Request;
+use App\Services\HomeworkAttachmentService;
 
 class HomeworkDetailController extends Controller
 {
@@ -78,8 +79,24 @@ class HomeworkDetailController extends Controller
      * @param  \App\Models\HomeworkDetail  $homeworkDetail
      * @return \Illuminate\Http\Response
      */
-    public function destroy(HomeworkDetail $homeworkDetail)
+    public function removeHomeworkAttachments(Request $request)
     {
-        //
+        $homeworkAttachmentService = new HomeworkAttachmentService();
+
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $homeworkAttachmentService->delete($request->homeworkId);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
     }
 }

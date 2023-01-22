@@ -24,5 +24,9 @@
         public function delete($id){
             return Gender::find($id)->delete();
         }
+
+        public function getGenderId($genderName){
+            return Gender::where('name', $genderName)->first();
+        }
     }
 ?>

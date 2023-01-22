@@ -26,16 +26,21 @@ class ProjectSubmissionController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
 
-                        if($row['resubmission'] == 'show'){
-                            $label = 'Re-Upload Files';
-                        }else{
-                            $label = 'Upload Files';
-                        }
+                        $label = '';
 
-                        if($row['submission'] == 'show' || $row['resubmission'] == 'show' ){
-                            $submission = '<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="'.$label.'"class="text-success projectSubmissionDetail"><i class="material-icons">file_upload</i></a>';
-                        }else{
-                            $submission = '';
+                        if($row['submission_type'] == 'ONLINE'){
+
+                            if($row['resubmission'] == 'show'){
+                                $label = 'Re-Upload Files';
+                            }else{
+                                $label = 'Upload Files';
+                            }
+
+                            if($row['submission'] == 'show' || $row['resubmission'] == 'show' ){
+                                $submission = '<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="'.$label.'"class="text-success projectSubmissionDetail"><i class="material-icons">file_upload</i></a>';
+                            }else{
+                                $submission = '';
+                            }
                         }
 
                         if($row['submitted'] == 'YES'){
@@ -122,7 +127,7 @@ class ProjectSubmissionController extends Controller
                             $btn = '<a href="javascript:void();" data-id="'.$row['id'].'" project-id="'.$row['id_project'].'" rel="tooltip" title="Give Resubmission Permission" class="text-warning giveResubmissionPermission"><i class="material-icons">edit</i></a>
                             ';
 
-                        }else {
+                        }else{
                             $btn = 'Not Submitted';
                         }
                         return $btn;

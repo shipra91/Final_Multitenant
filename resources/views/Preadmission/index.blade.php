@@ -12,7 +12,12 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12 col-sm-offset-0 text-right">
-                        <a href="{{ url('admit-preadmission') }}" type="button" class="btn btn-primary mr-5"><i class="material-icons">add</i> Admit Students</a>
+                        @if(Helper::checkAccess('preadmission', 'create'))
+                            <a href="{{ url('preadmission/create') }}" type="button" class="btn btn-success mr-5"><i class="material-icons">add</i> Add Preadmission</a>
+                        @endif
+                        @if(Helper::checkAccess('preadmission', 'create'))
+                            <a href="{{ url('admit-preadmission') }}" type="button" class="btn btn-primary"><i class="material-icons">add</i> Admit Students</a>
+                        @endif
                     </div>
                 </div>
                 <div class="row">

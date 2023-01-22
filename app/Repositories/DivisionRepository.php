@@ -17,7 +17,11 @@
 
         public function fetch($id){
             return Division::find($id);
-        }        
+        }  
+
+        public function getDivisionId($division){
+            return Division::where('name',$division)->first();
+        }    
 
         public function update($data){
             return $data->save();

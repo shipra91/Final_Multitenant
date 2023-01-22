@@ -111,12 +111,14 @@
                         $student_gender = '';
                     }
 
+                    $studentName = $studentMappingRepository->getFullName($data->name, $data->middle_name, $data->last_name);
+
                     $studentDetails = array(
                         'id_student'=>$data->id_student,
                         'UID'=>$data->egenius_uid,
-                        'name'=>$data->name,
+                        'name'=>$studentName,
                         'class'=>$standard,
-                        'father_name'=>$data->name,
+                        'father_name'=>$data->father_name,
                         'phone_number'=>$mobileNumber,
                         'gender'=>$student_gender
                     );
@@ -174,7 +176,7 @@
 
                 $lastUpdate = $studentMappingRepository->getLatestUpdate($data->id_student);
                 $updatedDate = Carbon::createFromFormat('Y-m-d H:i:s', $lastUpdate->updated_at)->format('Y-m-d H:i:s');
-
+                $studentName = $studentMappingRepository->getFullName($data->name, $data->middle_name, $data->last_name);
                 $standard = $institutionStandardService->fetchStandardByUsingId($data->id_standard);
 
                 if($data->father_mobile_number != ''){
@@ -189,7 +191,7 @@
                 $studentDetails = array(
                     'id_student'=>$data->id_student,
                     'UID'=>$data->egenius_uid,
-                    'name'=>$data->name,
+                    'name'=>$studentName,
                     'class'=>$standard,
                     'father_name'=>$data->name,
                     'phone_number'=>$mobileNumber,
@@ -202,6 +204,7 @@
             return $allStudent;
         }
 
+        // Get particular Student
         public function find($id){
 
             $genderRepository = new GenderRepository();
@@ -221,15 +224,15 @@
             $electiveSubjectIds = array();
             $studentDetails = $studentMappingRepository->fetchStudent($id);
 
+            $studentName = $studentMappingRepository->getFullName($studentDetails->name, $studentDetails->middle_name, $studentDetails->last_name);
             $studentElectiveSubjects = $studentElectivesRepository->fetchStudentSubjects($id);
 
-            foreach($studentElectiveSubjects as $subjectData) {
+            foreach($studentElectiveSubjects as $subjectData){
                 $electiveSubjectIds[] = $subjectData->id_elective;
             }
-           
+
             $standardSubjects = $standardSubjectService->fetchSubject($studentDetails->id_standard);
             $standard = $institutionStandardService->fetchStandardByUsingId($studentDetails->id_standard);
-
             $firstLanguage = $subjectRepository->fetch($studentDetails->id_first_language);
             $secondLanguage = $subjectRepository->fetch($studentDetails->id_second_language);
             $thirdLanguage = $subjectRepository->fetch($studentDetails->id_third_language);
@@ -310,11 +313,12 @@
             $studentDetails['current_age'] = $currentAge;
             $studentDetails['standard_subjects'] = $standardSubjects;
             $studentDetails['selected_elective'] = $electiveSubjectIds;
-           
+            $studentDetails['studentName'] = $studentName;
             //dd($studentDetails);
             return $studentDetails;
         }
 
+        // Custom field values details
         public function fetchCustomFieldValues($id){
 
             $studentCustomRepository = new StudentCustomRepository();
@@ -347,6 +351,7 @@
             return $customFieldDetails;
         }
 
+        // Custom file value details
         public function fetchCustomFileValues($id){
 
             $studentCustomRepository = new StudentCustomRepository();
@@ -431,7 +436,8 @@
             $feeAssignService = new FeeAssignService();
 
             $check = Student::where('name', $studentData->student_name)
-                            ->where('father_mobile_number', $studentData->father_mobile_number)->first();
+                            ->where('father_mobile_number', $studentData->father_mobile_number)
+                            ->first();
 
             if(!$check){
 
@@ -546,7 +552,9 @@
                     'mother_profession' => $studentData->mother_profession,
                     'mother_email' => $studentData->mother_email_id,
                     'mother_annual_income' => $studentData->mother_annual_income,
-                    'guardian_name' => $studentData->guardian_name,
+                    'guardian_name' => $studentData->guardian_first_name,
+                    'guardian_middle_name' => $studentData->guardian_middle_name,
+                    'guardian_last_name' => $studentData->guardian_last_name,
                     'guardian_aadhaar_no' => $studentData->guardian_aadhaar_number,
                     'guardian_contact_no' => $studentData->guardian_phone,
                     'guardian_email' => $studentData->guardian_email_id,
@@ -583,7 +591,7 @@
                         $thirdLanguage = $studentData->third_language;
                     }
 
-                    // Insert Student Mapping
+                    // Insert student mapping
                     if($studentData->standard !=''){
 
                         $data = array(
@@ -605,9 +613,13 @@
 
                     // Electives
                     if($studentData->elective_subject != ''){
-                        foreach($studentData->elective_subject as $electiveSubjcts) {
+
+                        foreach($studentData->elective_subject as $electiveSubjcts){
+
                             $electiveSubjects = explode('||', $electiveSubjcts);
-                            foreach($electiveSubjects as $elective) {
+
+                            foreach($electiveSubjects as $elective){
+
                                 $data = array(
                                     'id_student' => $lastInsertedId,
                                     'id_institute' => $institutionId,
@@ -621,7 +633,7 @@
                         }
                     }
 
-                    // Insert Custom Field
+                    // Insert custom field
                     $studentCustoms = $customFieldRepository->fetchCustomField($institutionId, 'student');
 
                     foreach($studentCustoms as $index=> $field){
@@ -657,12 +669,12 @@
                             'created_by' => Session::get('userId'),
                             'created_at' => Carbon::now()
                         );
-                        
+
                         $storeCustomData = $studentCustomRepository->store($customData);
                     }
 
-                    //FEE ASSIGN
-                    if(!empty($studentData->fee_type)) {
+                    // Fee assign
+                    if(!empty($studentData->fee_type)){
                         $studentFeeAssign = $feeAssignService->assignFeeForStudent($studentData->standard, $studentData->fee_type, $idStudent);
                     }
 
@@ -709,10 +721,10 @@
             $feeCategorySettingRepository = new FeeCategorySettingRepository();
             $feeAssignService = new FeeAssignService();
 
-
-            $firstLanguage = $secondLanguage = $thirdLanguage = $electiveSubject ='';
-            $check = Student::where('name', $studentData->student_name)->where('father_mobile_number', $studentData->father_mobile_number)->where('id', '!=', $id)->first();
-            $casteCategory = $registerNumber = $rollNumber = $standard = $admissionNumber = $secondLanguage = $thirdLanguage = $electiveSubject = $motherTongue = $satsNumber = $feeType = $fatherAadhaarNumber = $fatherEducation = $fatherProfession = $fatherEmailId = $fatherAnnualIncome = $motherAadhaarNumber = $motherEducation = $bloodGroup = $guardianAddresss = $relationWithGuardian = $guardianEmailId = $caste = $guardianAadhaarNumber = $guardianPhone = $guardianName = $motherAnnualIncome = $motherEmailId = $motherProfession = '';
+            $check = Student::where('name', $studentData->student_name)
+                            ->where('father_mobile_number', $studentData->father_mobile_number)
+                            ->where('id', '!=', $id)
+                            ->first();
 
             if(!$check){
 
@@ -725,122 +737,6 @@
                     $usn = $studentData->usn;
                 }else{
                     $usn = 0;
-                }
-
-                if($studentData->register_number !=''){
-                    $registerNumber = $studentData->register_number;
-                }
-
-                if($studentData->rollnumber !=''){
-                    $rollNumber = $studentData->rollnumber;
-                }
-
-                if($studentData->standard !=''){
-                    $standard = $studentData->standard;
-                }
-
-                if($studentData->admission_number !=''){
-                    $admissionNumber = $studentData->admission_number;
-                }
-
-                if($studentData->second_language !=''){
-                    $secondLanguage = $studentData->second_language;
-                }
-
-                if($studentData->third_language !=''){
-                    $thirdLanguage = $studentData->third_language;
-                }
-
-                if($studentData->elective_subject !=''){
-                    $electiveSubject = $studentData->elective_subject;
-                }
-
-                if($studentData->mother_tongue !=''){
-                    $motherTongue = $studentData->mother_tongue;
-                }
-
-                if($studentData->sats_number !=''){
-                    $satsNumber = $studentData->sats_number;
-                }
-
-                if($studentData->fee_type !=''){
-                    $feeType = $studentData->fee_type;
-                }
-
-                if($studentData->father_aadhaar_number !=''){
-                    $fatherAadhaarNumber = $studentData->father_aadhaar_number;
-                }
-
-                if($studentData->father_education !=''){
-                    $fatherEducation = $studentData->father_education;
-                }
-
-                if($studentData->father_profession !=''){
-                    $fatherProfession = $studentData->father_profession;
-                }
-
-                if($studentData->father_email_id !=''){
-                    $fatherEmailId = $studentData->father_email_id;
-                }
-
-                if($studentData->father_annual_income !=''){
-                    $fatherAnnualIncome = $studentData->father_annual_income;
-                }
-
-                if($studentData->mother_aadhaar_number !=''){
-                    $motherAadhaarNumber = $studentData->mother_aadhaar_number;
-                }
-
-                if($studentData->mother_education !=''){
-                    $motherEducation = $studentData->mother_education;
-                }
-
-                if($studentData->mother_profession !=''){
-                    $motherProfession = $studentData->mother_profession;
-                }
-
-                if($studentData->mother_email_id !=''){
-                    $motherEmailId = $studentData->mother_email_id;
-                }
-
-                if($studentData->mother_annual_income !=''){
-                    $motherAnnualIncome = $studentData->mother_annual_income;
-                }
-
-                if($studentData->guardian_name !=''){
-                    $guardianName = $studentData->guardian_name;
-                }
-
-                if($studentData->guardian_phone !=''){
-                    $guardianPhone = $studentData->guardian_phone;
-                }
-
-                if($studentData->guardian_aadhaar_number !=''){
-                    $guardianAadhaarNumber = $studentData->guardian_aadhaar_number;
-                }
-
-                if($studentData->caste !=''){
-                    $caste = $studentData->caste;
-                }
-
-                if($studentData->guardian_email_id !=''){
-                    $guardianEmailId = $studentData->guardian_email_id;
-                }
-
-                if($studentData->relation_with_guardian !=''){
-                    $relationWithGuardian = $studentData->relation_with_guardian;
-                }
-
-                if($studentData->guardian_addresss !=''){
-                    $guardianAddresss = $studentData->guardian_addresss;
-                }
-
-                if($studentData->blood_group !=''){
-                    $bloodGroup = $studentData->blood_group;
-                }
-
-                if($studentData->caste_category !=''){
-                    $casteCategory = $studentData->caste_category;
                 }
 
                 // S3 file upload function call
@@ -909,18 +805,18 @@
                 $data->date_of_birth = $dateOfBirth;
                 $data->id_gender = $studentData->gender;
                 $data->usn = $usn;
-                $data->register_number = $registerNumber;
-                $data->roll_number = $rollNumber;
+                $data->register_number = $studentData->register_number;
+                $data->roll_number = $studentData->rollnumber;
                 $data->admission_date = $admissionDate;
-                $data->admission_number = $admissionNumber;
-                $data->sats_number = $satsNumber;
+                $data->admission_number = $studentData->admission_number;
+                $data->sats_number = $studentData->sats_number;
                 $data->student_aadhaar_number = $studentData->student_aadhaar_number;
                 $data->id_nationality = $studentData->nationality;
                 $data->id_religion = $studentData->religion;
-                $data->caste = $caste;
-                $data->id_caste_category = $casteCategory;
-                $data->mother_tongue = $motherTongue;
-                $data->id_blood_group = $bloodGroup;
+                $data->caste = $studentData->caste;
+                $data->id_caste_category = $studentData->caste_category;
+                $data->mother_tongue = $studentData->mother_tongue;
+                $data->id_blood_group = $studentData->blood_group;
                 $data->address = $studentData->student_address;
                 $data->city = $studentData->student_city;
                 $data->taluk = $studentData->student_taluk;
@@ -932,26 +828,28 @@
                 $data->father_middle_name = $studentData->father_middle_name;
                 $data->father_last_name = $studentData->father_last_name;
                 $data->father_mobile_number = $studentData->father_mobile_number;
-                $data->father_aadhaar_number = $fatherAadhaarNumber;
-                $data->father_education = $fatherEducation;
-                $data->father_profession = $fatherProfession;
-                $data->father_email = $fatherEmailId;
-                $data->father_annual_income = $fatherAnnualIncome;
+                $data->father_aadhaar_number = $studentData->father_aadhaar_number;
+                $data->father_education = $studentData->father_education;
+                $data->father_profession = $studentData->father_profession;
+                $data->father_email = $studentData->father_email_id;
+                $data->father_annual_income = $studentData->father_annual_income;
                 $data->mother_name = $studentData->mother_first_name;
                 $data->mother_middle_name = $studentData->mother_middle_name;
                 $data->mother_last_name = $studentData->mother_last_name;
                 $data->mother_mobile_number = $studentData->mother_mobile_number;
-                $data->mother_aadhaar_number = $motherAadhaarNumber;
-                $data->mother_education = $motherEducation;
-                $data->mother_profession = $motherProfession;
-                $data->mother_email = $motherEmailId;
-                $data->mother_annual_income = $motherAnnualIncome;
-                $data->guardian_name = $guardianName;
-                $data->guardian_aadhaar_no = $guardianAadhaarNumber;
-                $data->guardian_contact_no = $guardianPhone;
-                $data->guardian_email = $guardianEmailId;
-                $data->guardian_relation = $relationWithGuardian;
-                $data->guardian_address = $guardianAddresss;
+                $data->mother_aadhaar_number = $studentData->mother_aadhaar_number;
+                $data->mother_education = $studentData->mother_education;
+                $data->mother_profession = $studentData->mother_profession;
+                $data->mother_email = $studentData->mother_email_id;
+                $data->mother_annual_income = $studentData->mother_annual_income;
+                $data->guardian_name = $studentData->guardian_first_name;
+                $data->guardian_middle_name = $studentData->guardian_middle_name;
+                $data->guardian_last_name = $studentData->guardian_last_name;
+                $data->guardian_aadhaar_no = $studentData->guardian_aadhaar_number;
+                $data->guardian_contact_no = $studentData->guardian_phone;
+                $data->guardian_email = $studentData->guardian_email_id;
+                $data->guardian_relation = $studentData->relation_with_guardian;
+                $data->guardian_address = $studentData->guardian_addresss;
                 $data->sms_for = $studentData->sms_sent_for;
                 $data->attachment_student_photo = $studentProfile;
                 $data->attachment_student_aadhaar = $studentAadhaarCardAttachement;
@@ -968,27 +866,15 @@
 
                 if($response){
 
-                    if($studentData->first_language !=''){
-                        $firstLanguage = $studentData->first_language;
-                    }
-
-                    if($studentData->second_language !=''){
-                        $secondLanguage = $studentData->second_language;
-                    }
-
-                    if($studentData->third_language !=''){
-                        $thirdLanguage = $studentData->third_language;
-                    }
-
                     if($studentData->standard !=''){
 
                         $studentMappingData = $studentMappingRepository->fetch($id);
 
                         $studentMappingData->id_organization = $organizationId;
                         $studentMappingData->id_standard = $studentData->standard;
-                        $studentMappingData->id_first_language = $firstLanguage;
-                        $studentMappingData->id_second_language = $secondLanguage;
-                        $studentMappingData->id_third_language = $thirdLanguage;
+                        $studentMappingData->id_first_language = $studentData->first_language;
+                        $studentMappingData->id_second_language = $studentData->second_language;
+                        $studentMappingData->id_third_language = $studentData->third_language;
                         $studentMappingData->id_fee_type = $studentData->fee_type;
                         $studentMappingData->modified_by = Session::get('userId');
                         $studentMappingData->updated_at = Carbon::now();
@@ -1001,10 +887,13 @@
                             $deleteExistingElectives = $studentElectivesRepository->delete($id);
 
                             if($studentData->elective_subject != ''){
-                                foreach($studentData->elective_subject as $electiveSubjcts) {
+
+                                foreach($studentData->elective_subject as $electiveSubjcts){
 
                                     $electiveSubjects = explode('||', $electiveSubjcts);
-                                    foreach($electiveSubjects as $elective) {
+
+                                    foreach($electiveSubjects as $elective){
+
                                         $data = array(
                                             'id_student' => $id,
                                             'id_institute' => $institutionId,
@@ -1015,7 +904,6 @@
                                         );
                                         $storeStudentData = $studentElectivesRepository->store($data);
                                     }
-
                                 }
                             }
 
@@ -1056,15 +944,19 @@
                                     $customFieldValue = '';
                                 }
 
-                                //CUSTOM FIELDS UPDATE
+                                // Custom fields update
                                 $getCustomData = $studentCustomRepository->fetchExistingData($id, $field->id);
+
                                 if($getCustomData){
+
                                     $getCustomData->field_value = $customFieldValue;
                                     $getCustomData->modified_by = Session::get('userId');
                                     $getCustomData->updated_at = Carbon::now();
 
                                     $storeCustomData = $studentCustomRepository->update($getCustomData);
+
                                 }else{
+
                                     $customData = array(
                                         'id_student' => $id,
                                         'id_custom_field' => $field->id,
@@ -1072,14 +964,12 @@
                                         'created_by' => Session::get('userId'),
                                         'created_at' => Carbon::now()
                                     );
-                                    
+
                                     $storeCustomData = $studentCustomRepository->store($customData);
-                                }                               
-                                
+                                }
                             }
 
                             if(!empty($studentData->fee_type)){
-
                                 $studentFeeAssign = $feeAssignService->assignFeeForStudent($studentData->standard, $studentData->fee_type, $id);
                                 //dd($studentFeeAssign);
                             }
@@ -1119,7 +1009,7 @@
 
             if($studentMappingDeletion){
                 $signal = 'success';
-                $msg = 'student deleted successfully!';
+                $msg = 'Data deleted successfully!';
             }
 
             $output = array(
@@ -1189,12 +1079,14 @@
                         $student_gender = '';
                     }
 
+                    $studentName = $studentMappingRepository->getFullName($data->name, $data->middle_name, $data->last_name);
+
                     $studentDetails = array(
                         'id'=>$data->id,
                         'UID'=>$data->egenius_uid,
-                        'name'=>$data->name,
+                        'name'=>$studentName,
                         'class'=>$standard,
-                        'father_name'=>$data->name,
+                        'father_name'=>$data->father_name,
                         'phone_number'=>$mobileNumber,
                         'gender'=>$student_gender
                     );
@@ -1206,9 +1098,11 @@
             return $allStudent;
         }
 
+        // Restore student records
         public function restore($id){
 
             $studentMappingRepository = new StudentMappingRepository();
+
             $students = $studentMappingRepository->restore($id);
 
             if($students){
@@ -1247,8 +1141,8 @@
             $institutionSubjectRepository = new InstitutionSubjectRepository();
             $subjectTypeRepository = new SubjectTypeRepository();
             $studentMappingRepository = new StudentMappingRepository();
-            $allStudent = array();
 
+            $allStudent = array();
             $subjectId = $request['subjectId'];
             $subjectData = $institutionSubjectRepository->find($subjectId);
             $subjectType = $subjectTypeRepository->fetchSubjectDetails($subjectData->id_subject);
@@ -1305,8 +1199,9 @@
                     if(!in_array($details->id_student, $studentId)){
                         $studentId[] = $details->id_student;
                         $studentDetails[$index]['id_student'] = $details->id_student;
-                        $studentDetails[$index]['name'] = $details->name;
+                        $studentDetails[$index]['name'] = $studentName;
                     }
+
                     $index++;
                 }
             }
@@ -1314,7 +1209,7 @@
             return $studentDetails;
         }
 
-        //convert to words
+        // Convert to words
         function translateToWords($num){
 
             $ones = array(
@@ -1416,7 +1311,6 @@
             $studentCustomRepository = new StudentCustomRepository();
 
             $studentDetails = $studentMappingRepository->fetchStudent($idStudent);
-
             $standardSubjects = $standardSubjectService->fetchSubject($studentDetails->id_standard);
             $standard = $institutionStandardService->fetchStandardByUsingId($studentDetails->id_standard);
 

@@ -22,46 +22,30 @@
                                 <form method="POST" id="paymentGatewayForm">
                                     <div class="row">
                                         <div class="col-lg-6 col-lg-offset-0">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                    <i class="material-icons icon-middle">view_headline</i>
-                                                </span>
-                                                <div class="form-group">
-                                                    <label class="control-label">Payment Gateway<span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" name="paymentGateway" id="paymentGateway" required />
-                                                </div>
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Payment Gateway<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="paymentGateway" id="paymentGateway" required />
                                             </div>
-                                            <input type="hidden" class="form-control" name="paymentGatewayKey" id="paymentGatewayKey" />
                                         </div>
+                                        <input type="hidden" class="form-control" name="paymentGatewayKey" id="paymentGatewayKey" />
 
                                         <div class="col-lg-12 col-lg-offset-0">
                                             <div id="repeater">
-                                                <input type="hidden" name="totalCount" id="totalCount" class="form-control" value="1">
-                                                <div class="row" id="section_1" data-id="1" style="margin-top: -20px;">
+                                                <input type="hidden" name="totalCount" id="totalCount" value="1">
+                                                <div class="row" id="section_1" data-id="1">
                                                     <div class="col-lg-5 col-lg-offset-0">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">
-                                                                <i class="material-icons icon-middle">view_headline</i>
-                                                            </span>
-                                                            <div class="form-group">
-                                                                <label class="control-label">Label<span class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control" name="fieldLabel[]" id="fieldLabel_1" required />
-                                                            </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label mt-0">Label<span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control mt-0" name="fieldLabel[]" id="fieldLabel_1" required />
                                                         </div>
                                                     </div>
 
                                                     <div class="col-lg-5 col-lg-offset-0">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">
-                                                                <i class="material-icons icon-middle">view_headline</i>
-                                                            </span>
-                                                            <div class="form-group">
-                                                                <label class="control-label">Key<span class="text-danger">*</span></label>
-                                                                <input type="text" class="form-control" name="fieldKey[]" id="fieldKey_1" required />
-                                                            </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label mt-0">Key<span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="fieldKey[]" id="fieldKey_1" required />
                                                         </div>
                                                     </div>
-
                                                     {{-- <div class="col-lg-1 col-lg-offset-0 text-right">
                                                         <button type="button" id="1" class="btn btn-danger btn-sm remove_button mt-30"><i class="material-icons">highlight_off</i></button>
                                                     </div> --}}
@@ -91,7 +75,7 @@
                             <div class="card-content">
                                 <h4 class="card-title">Payment Gateway List</h4>
                                 <div class="material-datatables">
-                                    <table class="table table-striped table-no-bordered table-hover data-table" cellspacing="0" width="100%" style="width:100%">
+                                    <table class="table table-striped table-no-bordered table-hover data-table" cellspacing="0" style="width:100%">
                                         <thead style="font-size:12px;">
                                             <tr>
                                                 <th><b>S.N.</b></th>
@@ -125,7 +109,7 @@
         });
 
         // Autogenerate payment gateway key
-        $("body").delegate("#paymentGateway", "keyup", function(e) {
+        $("body").delegate("#paymentGateway", "keyup", function(e){
             e.preventDefault();
 
             var gatewayKey = $(this).val().trim();
@@ -139,9 +123,9 @@
             autoWidth: false,
             ajax: "payment-gateway",
             columns: [
-                {data: 'DT_RowIndex', name: 'id', "width": "10%"},
-                {data: 'gateway_name', name: 'gateway_name', "width": "75%"},
-                {data: 'action', name: 'action', orderable: false, searchable: false, "width": "15%"},
+                {data: 'DT_RowIndex', name: 'id', "width": "8%"},
+                {data: 'gateway_name', name: 'gateway_name', "width": "77%"},
+                {data: 'action', name: 'action', orderable: false, searchable: false, "width": "15%", className:"text-center"},
             ]
         });
 
@@ -154,32 +138,24 @@
             count++;
 
             html += '<div class="row" id="section_'+count+'" data-id="'+count+'">';
-            html += '<div class="col-lg-5 form-group col-lg-offset-0">';
-            html += '<div class="input-group">';
-            html += '<span class="input-group-addon">';
-            html += '<i class="material-icons icon-middle">view_headline</i>';
-            html += '</span>';
+
+            html += '<div class="col-lg-5 col-lg-offset-0">';
             html += '<div class="form-group">';
-            html += '<label class="control-label">Label<span class="text-danger">*</span></label>';
+            html += '<label class="control-label mt-0">Label<span class="text-danger">*</span></label>';
             html += '<input type="text" class="form-control" name="fieldLabel[]" id="fieldLabel_'+count+'" required />';
             html += '</div>';
             html += '</div>';
-            html += '</div>';
 
-            html += '<div class="col-lg-5 form-group col-lg-offset-0">';
-            html += '<div class="input-group">';
-            html += '<span class="input-group-addon">';
-            html += '<i class="material-icons icon-middle">view_headline</i>';
-            html += '</span>';
+            html += '<div class="col-lg-5 col-lg-offset-0">';
             html += '<div class="form-group">';
-            html += '<label class="control-label">Key<span class="text-danger">*</span></label>';
+            html += '<label class="control-label mt-0">Key<span class="text-danger">*</span></label>';
             html += '<input type="text" class="form-control" name="fieldKey[]" id="fieldKey_'+count+'" required />';
             html += '</div>';
             html += '</div>';
-            html += '</div>';
 
-            html += ' <div class="col-lg-1 form-group col-lg-offset-0 text-right">';
-            html += '<button type="button" id="'+count+'" class="btn btn-danger btn-sm remove_button mt-30"><i class="material-icons">highlight_off</i></button>';
+            html += '<div class="col-lg-1 col-lg-offset-0 text-right">';
+            html += '<div class="form-group">';
+            html += '<button type="button" id="'+count+'" class="btn btn-danger btn-sm remove_button mt-15"><i class="material-icons">highlight_off</i></button>';
             html += '</div>';
             html += '</div>';
             html += '</div>';

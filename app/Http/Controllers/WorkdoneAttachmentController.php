@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\WorkdoneAttachment;
 use Illuminate\Http\Request;
+use App\Services\WorkdoneAttachmentService;
 
 class WorkdoneAttachmentController extends Controller
 {
@@ -78,8 +79,24 @@ class WorkdoneAttachmentController extends Controller
      * @param  \App\Models\WorkdoneAttachment  $workdoneAttachment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(WorkdoneAttachment $workdoneAttachment)
+    public function removeWorkdoneAttachments(Request $request)
     {
-        //
+        $workdoneAttachmentService = new WorkdoneAttachmentService();
+
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $workdoneAttachmentService->delete($request->workdoneId);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
     }
 }

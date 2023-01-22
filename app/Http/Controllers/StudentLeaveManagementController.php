@@ -27,17 +27,23 @@ class StudentLeaveManagementController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
                         $btn = '';
-
                         if($row['leaveStatus'] !== 'Pending'){
+
                             if(Helper::checkAccess('leave', 'view')){
                                 $btn .= '<a href="/leave-management-detail/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>';
                             }
+
                         }else{
+
                             if(Helper::checkAccess('leave', 'edit')){
                                 $btn .= '<a href="/leave-management/'.$row['id'].'" rel="tooltip" title="Edit" class="text-success"><i class="material-icons">edit</i></a>';
                             }
                             if(Helper::checkAccess('leave', 'view')){
                                 $btn .= '<a href="/leave-management-detail/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>';
+
+                                if($row['leaveApplicationStatus'] == 'file_found'){
+                                    $btn .= '<a href="/leave-management-download/'.$row['id'].'" rel="tooltip" title="Download Files" class="text-success" target="_blank"><i class="material-icons">file_download</i></a>';
+                                }
                             }
                             if(Helper::checkAccess('leave', 'delete')){
                                 $btn .= '<a href="javascript:void();" type="button" data-id="'.$row['id'].'" rel="tooltip" title="Delete" class="text-danger delete"><i class="material-icons">delete</i></a>';
@@ -198,7 +204,10 @@ class StudentLeaveManagementController extends Controller
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        $btn = '';
+                        if(Helper::checkAccess('leave', 'delete')){
+                            $btn .= '<a href="javascript:void();" type="button" data-id="'.$row['id'].'" rel="tooltip" title="Delete" class="text-danger delete"><i class="material-icons">delete</i></a>';
+                        }
                         return $btn;
                     })
                     ->rawColumns(['action'])

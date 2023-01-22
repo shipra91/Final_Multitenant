@@ -5,7 +5,6 @@
 @extends('layouts.master')
 
 @section('content')
-
 <div class="wrapper">
     @include('sliderbar')
     <div class="main-panel">
@@ -32,7 +31,7 @@
                                         <div class="row">
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label mt-0">Choose Category</label>
+                                                    <label class="control-label mt-0">Staff Category</label>
                                                     <select class="selectpicker" name="staffCategory" id="staffCategory" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select">
                                                         @foreach($staffDetails['staffCategory'] as $staffCategory)
                                                             <option value="{{$staffCategory->id}}" @if(isset($_GET["staffCategory"]) && ($_GET["staffCategory"] == $staffCategory->id)) {{"selected"}} @endif>{{ucwords($staffCategory->name)}}</option>
@@ -47,11 +46,71 @@
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
-                                    <form method="POST" id="sampleExportForm">
-                                        <a href="{{ url('/export-staff_sample') }}">Sample File</a>
-                                        <button type="submit"></button>
-                                    </form>
+                @if(Helper::checkAccess('staff', 'view') || Helper::checkAccess('staff', 'export'))
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel-group" id="accordion1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-default">
+                                    <div class="panel-header panel-header-icon" data-background-color="mediumaquamarine">
+                                        <i class="material-icons">file_download</i>
+                                    </div>
+                                    <div class="panel-heading" role="tab" id="headingOne">
+                                        <h4 class="panel-title">
+                                            <a role="button" class="h4" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1" aria-expanded="true" aria-controls="collapseOne"><i class="more-less material-icons">expand_more</i> Import Staffs</a>
+                                        </h4>
+                                    </div>
+
+                                    <div id="collapseOne1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                        <div class="panel-body">
+                                            @if(session('status'))
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="alert alert-success" role="alert">
+                                                            {{ session('status') }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                            <div class="row">
+                                                <form method="POST" id="sampleExportForm">
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label mt-0">Download Sample File</label><br>
+                                                            <a href="{{ url('/export-staff-sample') }}" class="btn btn-info btn-sm">Download</a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                                <div class="col-lg-6">
+                                                    <form action="/staff-import" method="POST" enctype="multipart/form-data">
+                                                        @csrf
+                                                        <div class="form-group">
+                                                            <label class="control-label mt-0">Import File</label><br>
+                                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                <div class="fileinput-preview fileinput-exists thumbnail mt-10"></div>
+                                                                <div>
+                                                                    <span class="btn btn-info btn-file btn-sm">
+                                                                        <span class="fileinput-new">Select Files</span>
+                                                                        <span class="fileinput-exists">Change</span>
+                                                                        <input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                                                    </span>
+                                                                    <a href="#pablo" class="btn btn-danger btn-square fileinput-exists btn-sm"
+                                                                    data-dismiss="fileinput"><i class="material-icons">highlight_off</i></a>
+                                                                </div>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-success btn-sm" id="submit" name="submit">Submit</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -63,6 +122,9 @@
                         <div class="col-lg-12">
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                 <div class="panel panel-default">
+                                    <div class="panel-header panel-header-icon" data-background-color="mediumaquamarine">
+                                        <i class="material-icons">file_upload</i>
+                                    </div>
                                     <div class="panel-heading" role="tab" id="headingOne">
                                         <h4 class="panel-title">
                                             <a role="button" class="h4" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="more-less material-icons">expand_more</i> Export Staffs</a>
@@ -89,7 +151,7 @@
                                                     </div>
 
                                                     <div class="col-lg-4 mt-15">
-                                                        <button type="submit" id="export" class="btn btn-info btn-wd"><i class="material-icons">get_app</i> Export To Excel</button>
+                                                        <button type="submit" id="export" class="btn btn-info btn-wd">Export To Excel</button>
                                                     </div>
                                                 </div>
 
@@ -205,10 +267,11 @@
                 {data: 'primary_contact_no', name: 'primary_contact_no', "width": "10%"},
                 {data: 'designation', name: 'designation', "width": "15%", className:"capitalize"},
                 {data: 'show', name: 'working', "width": "14%"},
-                {data: 'action', name: 'action', orderable: false, searchable: false, "width": "23%"},
+                {data: 'action', name: 'action', orderable: false, searchable: false, "width": "23%", className:"text-center"},
             ]
         });
 
+        // Checkbox selectall
         $('#selectall').click(function(){
             if($(this).is(':checked')){
                 $('div input[type="checkbox"]').attr('checked', true);

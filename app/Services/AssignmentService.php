@@ -2,23 +2,23 @@
     namespace App\Services;
 
     use App\Models\Assignment;
-    use App\Services\AssignmentService;
+    use App\Repositories\AssignmentRepository;
+    use App\Repositories\AssignmentDetailRepository;
+    use App\Repositories\AssignmentSubmissionPermissionRepository;
+    use App\Repositories\StaffSubjectMappingRepository;
+    use App\Repositories\StandardSubjectRepository;
+    use App\Repositories\StandardSubjectStaffMappingRepository;
+    use App\Repositories\StaffRepository;
+    use App\Repositories\SubjectTypeRepository;
+    use App\Repositories\SubjectRepository;
+    use App\Repositories\InstitutionSubjectRepository;
+    use App\Services\InstitutionStandardService;
     use App\Services\InstitutionSubjectService;
     use App\Services\StaffService;
     use App\Services\UploadService;
     use App\Services\StandardSubjectService;
     use App\Services\SubjectService;
     use App\Services\AssignmentViewedDetailsService;
-    use App\Repositories\AssignmentRepository;
-    use App\Repositories\StaffSubjectMappingRepository;
-    use App\Repositories\AssignmentDetailRepository;
-    use App\Repositories\StandardSubjectRepository;
-    use App\Repositories\StandardSubjectStaffMappingRepository;
-    use App\Repositories\AssignmentSubmissionPermissionRepository;
-    use App\Repositories\StaffRepository;
-    use App\Repositories\SubjectTypeRepository;
-    use App\Repositories\SubjectRepository;
-    use App\Repositories\InstitutionSubjectRepository;
     use Carbon\Carbon;
     use Session;
     use ZipArchive;
@@ -64,7 +64,6 @@
                     'subject_type' => $subject->subject_type
                 );
             }
-
             // dd($allSubjects);
             return $subjectDetails;
         }
@@ -153,6 +152,8 @@
             $standardName = $institutionStandardService->fetchStandardByUsingId($assignmentData->id_standard);
             $subjectName =  $institutionSubjectService->getSubjectName($assignmentData->id_subject, $allSessions);
             $staffDetails = $staffService->find($assignmentData->id_staff, $allSessions);
+            
+            $staffName = $staffRepository->getFullName($staffDetails->name, $staffDetails->middle_name, $staffDetails->last_name);
 
             foreach($assignmentAttachments as $key => $attachment){
                 $ext = pathinfo($attachment['file_url'], PATHINFO_EXTENSION);
@@ -163,9 +164,10 @@
             $output = array(
                 'assignmentData' => $assignmentData,
                 'assignmentAttachment' => $assignmentAttachment,
-                'className'=>$standardName,
-                'subjectName'=>$subjectName,
-                'staffName'=>$staffDetails->name,
+                'className'=> $standardName,
+                'subjectName'=> $subjectName,
+                // 'staffName'=> $staffDetails->name,
+                'staffName'=> $staffName,
             );
             //dd($output);
             return $output;
@@ -445,9 +447,7 @@
                     $lastInsertedId = $id;
 
                     if($assignmentData->attachmentAssignment){
-
-                        $assignmentDetailRepository->delete($lastInsertedId);
-
+                        //$assignmentDetailRepository->delete($lastInsertedId);
                         foreach($assignmentData->attachmentAssignment as $attachment){
 
                             $path = 'Assignment';
@@ -520,7 +520,9 @@
             $staffSubjectDetails = $standardSubjectStaffMappingRepository->getStaffs($subjectId, $standardId, $allSessions);
 
             foreach($staffSubjectDetails as $index => $details){
-                $staffs[$index] = $staffRepository->fetch($details->id_staff);
+                $staffData = $staffRepository->fetch($details->id_staff);
+                $staffs[$index] = $staffData;
+                $staffs[$index]['name'] = $staffRepository->getFullName($staffData->name, $staffData->middle_name, $staffData->last_name);
             }
 
             $assignmentDetails['staff'] = $staffs;

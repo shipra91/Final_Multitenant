@@ -213,7 +213,7 @@
                 type:"post",
                 data : {attendanceType : attendanceType},
                 success:function(result){
-
+                    
                     var html = '';
 
                     if(attendanceType !== 'periodwise'){

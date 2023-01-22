@@ -78,7 +78,6 @@ class MenuPermissionController extends Controller
     public function store(Request $request)
     {
         $menuPermissionService = new MenuPermissionService();
-        
         $result = ["status" => 200];
 
         try{

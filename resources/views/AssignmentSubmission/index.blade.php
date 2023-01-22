@@ -21,7 +21,7 @@
                                 <i class="material-icons">assignment</i>
                             </div>
                             <div class="card-content">
-                                <h4 class="card-title">Assignment Submission List</h4>
+                                <h4 class="card-title">Assignment List</h4>
                                 <div class="material-datatables">
                                     <table class="table table-striped table-no-bordered table-hover data-table" cellspacing="0" style="width:100%">
                                         <thead style="font-size:12px;">
@@ -50,16 +50,17 @@
     </div>
 </div>
 
-<div class="modal fade" id="assignment_modal">
+<!-- Assignment detail modal -->
+{{-- <div class="modal fade" id="assignment_modal">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="card1">
                 <div class="card-header card-header-tabs" data-background-color="mediumaquamarine">
-                    <h4 class="card-title1" id="assignment_name"></h4>
-                    <p style="margin:0;display:inline;" id="staff_name">&nbsp;</p>
-                    <p style="margin:5px;display:inline;border-right:1px solid rgba(255, 255, 255, 0.62);;font-size:11px;">
+                    <p class="card-title1 mb-5 font-15" id="assignment_name"></p>
+                    <p class="font-15" style="margin:0; display:inline;" id="staff_name">&nbsp;</p>
+                    <p style="margin:5px; display:inline; border-right:1px solid rgba(255, 255, 255, 0.62); font-size:11px;">
                     </p>
-                    <p style="margin:5px;display:inline" align="right" id="subject_name">Name : </p>
+                    <p class="font-15" style="margin:5px; display:inline" align="right" id="subject_name">Name : </p>
                 </div>
             </div>
 
@@ -70,37 +71,37 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="control-label">Chapter Name</label>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="chapter_name" disabled/>
+                            <label class="control-label">Chapter Name</label>
+                            <input type="text" class="form-control" id="chapter_name" disabled />
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="control-label">Submission Type</label>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="submission_type" disabled/>
+                            <label class="control-label">Submission Type</label>
+                            <input type="text" class="form-control" id="submission_type" disabled />
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="control-label">Start Time</label>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="start_time" disabled/>
+                            <label class="control-label mt-0">Start Time</label>
+                            <input type="text" class="form-control" id="start_time" disabled />
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="control-label">End Time</label>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="end_time" disabled/>
+                            <label class="control-label mt-0">End Time</label>
+                            <input type="text" class="form-control" id="end_time" disabled />
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="control-label">Grading Required</label>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="grading_required" disabled/>
+                            <label class="control-label mt-0">Grading Required</label>
+                            <input type="text" class="form-control" id="grading_required" disabled />
                         </div>
                     </div>
 
@@ -114,23 +115,23 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label class="control-label">Read receipt from recipients required?</label>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="read_receipt" disabled/>
+                            <label class="control-label mt-0">Read receipt from recipients required?</label>
+                            <input type="text" class="form-control" id="read_receipt" disabled />
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="control-label">SMS alert to recipients required</label>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="sms_alert" disabled/>
+                            <label class="control-label mt-0">SMS alert to recipients required</label>
+                            <input type="text" class="form-control" id="sms_alert" disabled />
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="control-label">Re-submission Required</label>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="resubmission_required" disabled/>
+                            <label class="control-label mt-0">Re-submission Required</label>
+                            <input type="text" class="form-control" id="resubmission_required" disabled />
                         </div>
                     </div>
 
@@ -140,7 +141,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="alert alert-danger">
+                        <div class="alert alert-danger mt-5 mb-5">
                             <strong id="submit_date"></strong>
                         </div>
                     </div>
@@ -152,8 +153,9 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
+<!-- Assignment submission modal -->
 <div class="modal fade" id="assignment_submission_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
@@ -194,6 +196,7 @@
     </div>
 </div>
 
+<!-- Assignment valuation modal -->
 <div class="modal fade" id="assignment_valuation_modal">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -231,7 +234,71 @@
             }
         });
 
-        // View assignment submission
+        // Multiple file upload with preview
+        var fileArr = [];
+        $("#attachmentAssignment").change(function(){
+            // check if fileArr length is greater than 0
+            if(fileArr.length > 0) fileArr = [];
+
+            $('#image_preview').html("");
+            var total_file = document.getElementById("attachmentAssignment").files;
+            if(!total_file.length) return;
+
+            for(var i = 0; i < total_file.length; i++){
+
+                var extension = total_file[i].name.substr((total_file[i].name.lastIndexOf('.') + 1));
+                var fileType = '';
+                // console.log(extension);
+
+                fileArr.push(total_file[i]);
+
+                if(extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
+
+                    fileType += '<div class="img_div" id="img_div' + i + '">';
+                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) + '" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
+
+                }else if(extension == "pdf"){
+
+                    fileType += '<div class="img_div" id="img_div' + i + '">';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
+
+                }else if(extension == "docs" || extension == "doc" || extension == "docx"){
+
+                    fileType += '<div class="img_div" id="img_div' + i + '">';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
+                }
+
+                $('#image_preview').append(fileType);
+            }
+        });
+
+        $('body').on('click', '#action-icon', function(evt){
+
+            var divName = this.value;
+            var fileName = $(this).attr('role');
+
+            $(`#${divName}`).remove();
+            for(var i = 0; i < fileArr.length; i++){
+                if(fileArr[i].name === fileName){
+                    fileArr.splice(i, 1);
+                }
+            }
+            document.getElementById('attachmentAssignment').files = FileListItem(fileArr);
+            evt.preventDefault();
+        });
+
+        function FileListItem(file){
+            file = [].slice.call(Array.isArray(file) ? file : arguments)
+            for(var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
+            if(!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+            for(b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
+            return b.files
+        }
+
+        // View assignment
         var table = $('.data-table').DataTable({
             processing: true,
             serverSide: true,
@@ -249,149 +316,151 @@
             ]
         });
 
-        // Delete assignment submission
-        $(document).on('click', '.delete', function(e){
-            e.preventDefault();
+        // Delete assignment
+        // $(document).on('click', '.delete', function(e){
+        //     e.preventDefault();
 
-            var id = $(this).data('id');
+        //     var id = $(this).data('id');
 
-            if (confirm("Are you sure you want to delete this?")){
+        //     if(confirm("Are you sure you want to delete this?")){
 
-                $.ajax({
-                    type: "DELETE",
-                    url: "/assignment/" + id,
-                    dataType: "json",
-                    data: {id: id},
-                    success: function(result){
+        //         $.ajax({
+        //             type: "DELETE",
+        //             url: "/assignment/" + id,
+        //             dataType: "json",
+        //             data: {id: id},
+        //             success: function(result){
 
-                        if(result['status'] == "200"){
+        //                 if(result['status'] == "200"){
 
-                            if (result.data['signal'] == "success"){
+        //                     if(result.data['signal'] == "success"){
 
-                                swal({
-                                    title: result.data['message'],
-                                    buttonsStyling: false,
-                                    confirmButtonClass: "btn btn-success"
-                                }).then(function() {
-                                    window.location.reload();
-                                }).catch(swal.noop)
+        //                         swal({
+        //                             title: result.data['message'],
+        //                             buttonsStyling: false,
+        //                             confirmButtonClass: "btn btn-success"
+        //                         }).then(function() {
+        //                             window.location.reload();
+        //                         }).catch(swal.noop)
 
-                            }else{
+        //                     }else{
 
-                                swal({
-                                    title: result.data['message'],
-                                    buttonsStyling: false,
-                                    confirmButtonClass: "btn btn-danger"
-                                });
-                            }
+        //                         swal({
+        //                             title: result.data['message'],
+        //                             buttonsStyling: false,
+        //                             confirmButtonClass: "btn btn-danger"
+        //                         });
+        //                     }
 
-                        }else{
+        //                 }else{
 
-                            swal({
-                                title: 'Server error',
-                                buttonsStyling: false,
-                                confirmButtonClass: "btn btn-danger"
-                            })
-                        }
-                    }
-                });
-            }
+        //                     swal({
+        //                         title: 'Server error',
+        //                         buttonsStyling: false,
+        //                         confirmButtonClass: "btn btn-danger"
+        //                     })
+        //                 }
+        //             }
+        //         });
+        //     }
 
-            return false;
-        });
+        //     return false;
+        // });
 
-        $("body").delegate(".assignmentDetail", "click", function(event){
-            event.preventDefault();
+        // View assignment details
+        // $("body").delegate(".assignmentDetail", "click", function(event){
+        //     event.preventDefault();
 
-            var assignmentId = $(this).attr('data-id');
+        //     var assignmentId = $(this).attr('data-id');
 
-            $.ajax({
-                url: "{{ url('/assignment-detail') }}",
-                type: "post",
-                dataType: "json",
-                data: {
-                    assignmentId: assignmentId,
-                    login_type: 'student'
-                },
-                success: function(response){
-                    //console.log(response);
-                    var html = '';
-                    var gradingOption = '';
-                    var gradeValue = '';
-                    var marksValue = '';
-                    var resubmissionDate = '';
-                    var resubmissionTime = '';
+        //     $.ajax({
+        //         url: "{{ url('/assignment-detail') }}",
+        //         type: "post",
+        //         dataType: "json",
+        //         data: {
+        //             assignmentId: assignmentId,
+        //             login_type: 'student'
+        //         },
+        //         success: function(response){
+        //             //console.log(response);
+        //             var html = '';
+        //             var gradingOption = '';
+        //             var gradeValue = '';
+        //             var marksValue = '';
+        //             var resubmissionDate = '';
+        //             var resubmissionTime = '';
 
-                    $("#assignment_modal").find("#assignment_name").text("Assignment Name: " + response.assignment_name);
-                    $("#assignment_modal").find("#staff_name").text("Staff Name: " + response.staff_name);
-                    $("#assignment_modal").find("#subject_name").text("Subject Name: " + response.subject_name);
-                    //$("#assignment_modal").find("#description").html(response.description);
-                    $("#assignment_modal").find(CKEDITOR.instances.description.setData(response.description));
-                    $("#assignment_modal").find(CKEDITOR.instances.description.setReadOnly(true));
-                    $("#assignment_modal").find("#submit_date").text("Submit Before: " + response.to_date + " - " + response.end_time);
-                    $("#assignment_modal").find("#chapter_name").val(response.chapter_name);
-                    $("#assignment_modal").find("#submission_type").val(response.submission_type);
-                    $("#assignment_modal").find("#grading_required").val(response.grading_required);
-                    $("#assignment_modal").find("#read_receipt").val(response.read_receipt);
-                    $("#assignment_modal").find("#sms_alert").val(response.sms_alert);
-                    $("#assignment_modal").find("#start_time").val(response.start_time);
-                    $("#assignment_modal").find("#end_time").val(response.end_time);
-                    $("#assignment_modal").find("#resubmission_required").val(response.resubmission_required);
+        //             $("#assignment_modal").find("#assignment_name").text("Assignment Name: " + response.assignment_name);
+        //             $("#assignment_modal").find("#staff_name").text("Staff Name: " + response.staff_name);
+        //             $("#assignment_modal").find("#subject_name").text("Subject Name: " + response.subject_name);
+        //             //$("#assignment_modal").find("#description").html(response.description);
+        //             $("#assignment_modal").find(CKEDITOR.instances.description.setData(response.description));
+        //             $("#assignment_modal").find(CKEDITOR.instances.description.setReadOnly(true));
+        //             $("#assignment_modal").find("#submit_date").text("Submit Before: " + response.to_date + " - " + response.end_time);
+        //             $("#assignment_modal").find("#chapter_name").val(response.chapter_name);
+        //             $("#assignment_modal").find("#submission_type").val(response.submission_type);
+        //             $("#assignment_modal").find("#grading_required").val(response.grading_required);
+        //             $("#assignment_modal").find("#read_receipt").val(response.read_receipt);
+        //             $("#assignment_modal").find("#sms_alert").val(response.sms_alert);
+        //             $("#assignment_modal").find("#start_time").val(response.start_time);
+        //             $("#assignment_modal").find("#end_time").val(response.end_time);
+        //             $("#assignment_modal").find("#resubmission_required").val(response.resubmission_required);
 
-                    if(response.resubmission_required == 'YES'){
+        //             if(response.resubmission_required == 'YES'){
 
-                        resubmissionDate += '<label class="control-label">Resubmission Date</label>';
-                        resubmissionDate += '<div class="form-group">';
-                        resubmissionDate += '<input type="text" class="form-control" value="' + response.resubmission_date + '" disabled/>';
-                        resubmissionDate += '</div>';
+        //                 resubmissionDate += '<div class="form-group">';
+        //                 resubmissionDate += '<label class="control-label mt-0">Resubmission Date</label>';
+        //                 resubmissionDate += '<input type="text" class="form-control" value="' + response.resubmission_date + '" disabled />';
+        //                 resubmissionDate += '</div>';
 
-                        resubmissionTime += '<label class="control-label">Resubmission Time</label>';
-                        resubmissionTime += '<div class="form-group">';
-                        resubmissionTime += '<input type="text" class="form-control" value="' + response.resubmission_time + '" disabled/>';
-                        resubmissionTime += '</div>';
+        //                 resubmissionTime += '<div class="form-group">';
+        //                 resubmissionTime += '<label class="control-label mt-0">Resubmission Time</label>';
+        //                 resubmissionTime += '<input type="text" class="form-control" value="' + response.resubmission_time + '" disabled />';
+        //                 resubmissionTime += '</div>';
 
-                        $("#assignment_modal").find("#resubmission_date").html(resubmissionDate);
-                        $("#assignment_modal").find("#resubmission_time").html(resubmissionTime);
-                    }
+        //                 $("#assignment_modal").find("#resubmission_date").html(resubmissionDate);
+        //                 $("#assignment_modal").find("#resubmission_time").html(resubmissionTime);
+        //             }
 
-                    if(response.grading_required == 'YES'){
+        //             if(response.grading_required == 'YES'){
 
-                        gradingOption += '<label class="control-label">Grading Option</label>';
-                        gradingOption += '<div class="form-group">';
-                        gradingOption += '<input type="text" class="form-control" value="' + response.grading_option + '" disabled/>';
-                        gradingOption += '</div>';
+        //                 gradingOption += '<div class="form-group">';
+        //                 gradingOption += '<label class="control-label mt-0">Grading Option</label>';
+        //                 gradingOption += '<input type="text" class="form-control" value="' + response.grading_option + '" disabled/>';
+        //                 gradingOption += '</div>';
 
-                        if(response.grading_option == 'GRADE'){
+        //                 if(response.grading_option == 'GRADE'){
 
-                            gradeValue += '<label class="control-label">GRADES</label>';
-                            gradeValue += '<div class="form-group">';
-                            gradeValue += '<input type="text" class="form-control" value="' + response.grade + '" disabled/>';
-                            gradeValue += '</div>';
-                            $('#grade').removeClass('d-none');
-                            $('#marks').addClass('d-none');
+        //                     gradeValue += '<div class="form-group">';
+        //                     gradeValue += '<label class="control-label mt-0">GRADES</label>';
+        //                     gradeValue += '<input type="text" class="form-control" value="' + response.grade + '" disabled/>';
+        //                     gradeValue += '</div>';
+        //                     $('#grade').removeClass('d-none');
+        //                     $('#marks').addClass('d-none');
 
-                        }else if (response.grading_option == 'MARKS'){
+        //                 }else if (response.grading_option == 'MARKS'){
 
-                            marksValue += '<label class="control-label">MARKS</label>';
-                            marksValue += '<div class="form-group">';
-                            marksValue += '<input type="text" class="form-control" value ="' + response.marks + '" disabled/>';
-                            marksValue += '</div>';
-                            $('#grade').addClass('d-none');
-                            $('#marks').removeClass('d-none');
-                        }
-                    }
+        //                     marksValue += '<div class="form-group">';
+        //                     marksValue += '<label class="control-label mt-0">MARKS</label>';
+        //                     marksValue += '<input type="text" class="form-control" value ="' + response.marks + '" disabled/>';
+        //                     marksValue += '</div>';
+        //                     $('#grade').addClass('d-none');
+        //                     $('#marks').removeClass('d-none');
+        //                 }
+        //             }
 
-                    $("#assignment_modal").find("#grading_option").html(gradingOption);
-                    $("#assignment_modal").find("#grade").html(gradeValue);
-                    $("#assignment_modal").find("#marks").html(marksValue);
+        //             $("#assignment_modal").find("#grading_option").html(gradingOption);
+        //             $("#assignment_modal").find("#grade").html(gradeValue);
+        //             $("#assignment_modal").find("#marks").html(marksValue);
 
-                    $("#assignment_modal").find('tbody').html(html);
-                    $("#assignment_modal").modal('show');
-                }
-            });
-        });
+        //             $("#assignment_modal").find('tbody').html(html);
+        //             $("#assignment_modal").modal('show');
+        //         }
+        //     });
+        // });
 
-        $("body").delegate(".valuationDetails", "click", function(event) {
+        // View assignment valuation details
+        $("body").delegate(".valuationDetails", "click", function(event){
             event.preventDefault();
 
             var assignmentId = $(this).attr('data-id');
@@ -401,29 +470,28 @@
                 url: "{{ url('/assignment-verified-details') }}",
                 type: "post",
                 dataType: "json",
-                data: {
-                    assignmentId: assignmentId,
-                    studentId: studentId
-                },
-                success: function(response) {
-                    console.log(response.valuation_details);
+                data: {assignmentId: assignmentId, studentId: studentId},
+                success: function(response){
+                    //console.log(response.valuation_details);
                     var marksCommentDetails = '';
                     var html = '';
+
                     $("#assignment_valuation_modal").find("#assignment_name").text("Assignment Name: " + response.assignment_name);
                     $("#assignment_valuation_modal").find("#staff_name").text("Staff Name: " + response.staff_name);
                     $("#assignment_valuation_modal").find("#subject_name").text("Subject Name: " + response.subject_name);
 
                     response.valuation_details.forEach((item) => {
+
                         marksCommentDetails += '<div class="col-md-8">';
-                        marksCommentDetails += '<label class="control-label mt-0">Comments</label>';
                         marksCommentDetails += '<div class="form-group">';
+                        marksCommentDetails += '<label class="control-label mt-0">Comments</label>';
                         marksCommentDetails += '<input type="text" class="form-control" value="' + item.comments + '" disabled/>';
                         marksCommentDetails += '</div>';
                         marksCommentDetails += '</div>';
 
                         marksCommentDetails += '<div class="col-md-4">';
-                        marksCommentDetails += '<label class="control-label mt-0">Obtained Grade/Marks</label>';
                         marksCommentDetails += '<div class="form-group">';
+                        marksCommentDetails += '<label class="control-label mt-0">Obtained Grade/Marks</label>';
                         marksCommentDetails += '<input type="text" class="form-control" value="' + item.obtained_marks + '" disabled/>';
                         marksCommentDetails += '</div>';
                         marksCommentDetails += '</div>';
@@ -436,6 +504,7 @@
             });
         })
 
+        // View assignment submission detail
         $("body").delegate(".assignmentSubmissionDetail", "click", function(event){
             event.preventDefault();
 
@@ -444,82 +513,6 @@
             $("#assignment_submission_modal").find("#id_assignment").val(assignmentId);
             $("#assignment_submission_modal").modal('show');
         });
-
-        // Multiple file upload with preview
-        var fileArr = [];
-        $("#attachmentAssignment").change(function(){
-            // check if fileArr length is greater than 0
-            if (fileArr.length > 0) fileArr = [];
-
-            $('#image_preview').html("");
-            var total_file = document.getElementById("attachmentAssignment").files;
-            if (!total_file.length) return;
-            for (var i = 0; i < total_file.length; i++) {
-
-                var extension = total_file[i].name.substr((total_file[i].name.lastIndexOf('.') + 1));
-                var fileType = '';
-                // console.log(extension);
-
-                fileArr.push(total_file[i]);
-
-                if (extension != "pdf" && extension != "docs" && extension != "doc" && extension !=
-                    "docx") {
-
-                    fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) +
-                        '" class="multiple_image img-responsive" title="' + total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
-
-                } else if (extension == "pdf") {
-
-                    fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://listimg.pinclipart.com/picdir/s/336-3361375_pdf-svg-png-icon-free-download-adobe-acrobat.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
-
-                } else if (extension == "docs" || extension == "doc" || extension == "docx") {
-
-                    fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://www.pngitem.com/pimgs/m/181-1816575_google-docs-png-five-feet-apart-google-docs.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
-                }
-                $('#image_preview').append(fileType);
-            }
-        });
-
-        $('body').on('click', '#action-icon', function(evt){
-            var divName = this.value;
-            var fileName = $(this).attr('role');
-            $(`#${divName}`).remove();
-
-            for (var i = 0; i < fileArr.length; i++) {
-                if (fileArr[i].name === fileName) {
-                    fileArr.splice(i, 1);
-                }
-            }
-            document.getElementById('attachmentAssignment').files = FileListItem(fileArr);
-            evt.preventDefault();
-        });
-
-        function FileListItem(file){
-            file = [].slice.call(Array.isArray(file) ? file : arguments)
-            for (var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
-            if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
-            for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
-            return b.files
-        }
 
         // Save assignment submission
         $('body').delegate('#assignmentSubmissionForm', 'submit', function(e){

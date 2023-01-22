@@ -83,6 +83,10 @@
                     <div class="col-lg-12">
                         <textarea id="description" class="ckeditor"></textarea>
                     </div>
+<<<<<<< HEAD
+
+=======
+>>>>>>> main
                     <div class="col-md-6">
                         <label class="control-label">Chapter Name</label>
                         <div class="form-group">

@@ -13,7 +13,11 @@
     class FeeReceiptSettingService {
 
         // Get all settings
+<<<<<<< HEAD
+        public function getAll(){
+=======
         public function getAll($allSessions){
+>>>>>>> main
 
             $feeReceiptSettingRepository = new FeeReceiptSettingRepository();
             $feeReceiptSettingCategoryRepository = new FeeReceiptSettingCategoryRepository();
@@ -21,7 +25,11 @@
             $feeCollectionRepository = new FeeCollectionRepository();
             $feeReceiptData = array();
 
+<<<<<<< HEAD
+            $getResult = $feeReceiptSettingRepository->all();
+=======
             $getResult = $feeReceiptSettingRepository->all($allSessions);
+>>>>>>> main
             // dd($getResult);
             foreach($getResult as $index => $data){
 
@@ -39,7 +47,11 @@
                 }
 
                 $feeReceiptSettingCategory = substr($feeReceiptSettingCategory, 0, -2);
+<<<<<<< HEAD
+                $feeCollectionDetails = $feeCollectionRepository->getCollectionForReceiptSetting($data->id);
+=======
                 $feeCollectionDetails = $feeCollectionRepository->getCollectionForReceiptSetting($data->id, $allSessions);
+>>>>>>> main
 
                 if(count($feeCollectionDetails) > 0){
                     $deleteStatus = "hide";
@@ -63,8 +75,14 @@
         // Add fee receipt setting
         public function add($receiptSettingData){
 
+<<<<<<< HEAD
+            $allSessions = session()->all();
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+=======
             $institutionId = $receiptSettingData->id_institute;
             $academicId = $receiptSettingData->id_academic;
+>>>>>>> main
             $count = 0;
 
             $feeReceiptSettingRepository = new FeeReceiptSettingRepository();
@@ -144,19 +162,31 @@
             return $output;
         }
 
+<<<<<<< HEAD
+        public function getReceiptFeeCategories(){
+=======
         public function getReceiptFeeCategories($allSessions){
+>>>>>>> main
 
             $feeMappingRepository = new FeeMappingRepository();
             $feeReceiptSettingCategoryRepository = new FeeReceiptSettingCategoryRepository();
             $existingFeeCategory = array();
 
+<<<<<<< HEAD
+            $allReceiptSettingCategories = $feeReceiptSettingCategoryRepository->allReceiptSettingCategory();
+=======
             $allReceiptSettingCategories = $feeReceiptSettingCategoryRepository->allReceiptSettingCategory($allSessions);
+>>>>>>> main
 
             foreach($allReceiptSettingCategories as $feeCategory){
                 array_push($existingFeeCategory, $feeCategory->id_fee_category);
             }
 
+<<<<<<< HEAD
+            $feeCategories = $feeMappingRepository->getReceiptSettingCategory($existingFeeCategory);
+=======
             $feeCategories = $feeMappingRepository->getReceiptSettingCategory($existingFeeCategory, $allSessions);
+>>>>>>> main
 
             return $feeCategories;
         }

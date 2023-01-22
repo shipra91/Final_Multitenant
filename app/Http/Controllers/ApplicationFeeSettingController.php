@@ -104,6 +104,8 @@ class ApplicationFeeSettingController extends Controller
      */
     public function edit($id)
     {
+        $applicationFeeSettingService = new ApplicationFeeSettingService();
+        
         $selectedFeeSetting = $applicationFeeSettingService->find($id);
         return view('Preadmission/edit_fee_setting', ['selectedFeeSetting' => $selectedFeeSetting])->with("page", "preadmission_fee");
     }

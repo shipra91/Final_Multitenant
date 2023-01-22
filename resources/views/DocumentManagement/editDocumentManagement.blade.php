@@ -20,14 +20,14 @@
                         <div class="col-md-12 col-md-offset-0">
                             <div class="card">
                                 <div class="card-content">
-                                    <div class="row" style="padding: 10px 0px;">
+                                    <div class="row">
                                         <div class="col-lg-8 col-lg-offset-2">
                                             <h4 class="text-center">
-                                                <span class="fw-500">
+                                                <span class="fw-400 font-15">
                                                     UID : {{$selectedData['UID']}}
-                                                    <p style="margin: 5px; display: inline; border-right: 2px solid #3f51b5; font-size: 14px; padding-top: 2px;"></p>
+                                                    <p style="margin: 5px; display: inline; border-right: 1px solid #3c4858; font-size: 14px; padding-top: 2px;"></p>
                                                     NAME : {{ucwords($selectedData['studentName'])}}
-                                                    <p style="margin: 5px; display: inline; border-right: 2px solid #3f51b5; font-size: 14px; padding-top: 2px;"></p>
+                                                    <p style="margin: 5px; display: inline; border-right: 1px solid #3c4858; font-size: 14px; padding-top: 2px;"></p>
                                                     CLASS : {{$selectedData['studentStandard']}}
                                                 </span>
                                             </h4>

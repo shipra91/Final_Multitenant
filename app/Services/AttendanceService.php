@@ -121,10 +121,12 @@
                 if($studentAttendance){
                     $attendanceStatus = $studentAttendance->attendance_status;
                 }
-                // dd($attendanceStatus);
+
+                $studentName = $studentMappingRepository->getFullName($student->name, $student->middle_name, $student->last_name);
 
                 $studentData[$key] = $studentDetails;
                 $studentData[$key]['attendanceStatus'] = $attendanceStatus;
+                $studentData[$key]['studentName'] = $studentName;
             }
             // dd($studentData);
             return $studentData;

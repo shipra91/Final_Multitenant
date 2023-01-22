@@ -23,11 +23,12 @@
             foreach($detainedStudents as $key => $data){
 
                 $standard = $institutionStandardService->fetchStandardByUsingId($data->id_standard);
-
+                $studentName = $studentMappingRepository->getFullName($data->name, $data->middle_name, $data->last_name);
+            
                 $studentDetails = array(
                     'id_student'=>$data->id_student,
                     'UID'=>$data->egenius_uid,
-                    'name'=>$data->name,
+                    'name'=>$studentName,
                     'class'=>$standard,
                     'remark'=>$data->remark,
                     'detention_date'=>$data->detention_date,
@@ -53,9 +54,11 @@
                 $standard = $institutionStandardService->fetchStandardByUsingId($studentData->id_standard);
                 //dd($standard);
 
-                $detail =  $studentData['name'].' | '.$standard.' | '.$studentData['father_mobile_number'].' | '.$studentData['egenius_uid'].' | '.$studentData['usn'];
+                $studentName = $studentMappingRepository->getFullName($studentData->name, $studentData->middle_name, $studentData->last_name);
 
-                $allValues = $detail."@".$studentData['id']."@".$studentData['name']."@".$standard."@".$studentData['father_mobile_number']."@".$studentData['egenius_uid'];
+                $detail =  $studentName.' | '.$standard.' | '.$studentData['father_mobile_number'].' | '.$studentData['egenius_uid'].' | '.$studentData['usn'];
+
+                $allValues = $detail."@".$studentData['id']."@".$studentName."@".$standard."@".$studentData['father_mobile_number']."@".$studentData['egenius_uid'];
 
                 $studentDetails[$key] = $allValues;
             }
@@ -137,12 +140,12 @@
             foreach($students as $key => $studentData){
 
                 $standard = $institutionStandardService->fetchStandardByUsingId($studentData->id_standard);
-                //dd($standard);
+                $studentName = $studentMappingRepository->getFullName($studentData->name, $studentData->middle_name, $studentData->last_name);
                 $type = "STUDENT";
 
-                $detail =  $studentData['name'].' | '.$standard.' | '.$type.' | '.$studentData['egenius_uid'].' | '.$studentData['usn'];
+                $detail =  $studentName.' | '.$standard.' | '.$type.' | '.$studentData['egenius_uid'].' | '.$studentData['usn'];
 
-                $allValues = $detail."@".$studentData['id']."@".$studentData['name']."@".$standard."@".$studentData['father_mobile_number']."@".$studentData['egenius_uid']."@".$type;
+                $allValues = $detail."@".$studentData['id']."@".$studentName."@".$standard."@".$studentData['father_mobile_number']."@".$studentData['egenius_uid']."@".$type;
 
                 $details[] = $allValues;
             }
@@ -152,56 +155,17 @@
             foreach($staffs as $key => $staffData){
                 //dd($standard);
                 $standard = '-';
+                $staffName = $staffRepository->getFullName($staffData->name, $staffData->middle_name, $staffData->last_name);
                 $type = "STAFF";
-                $detail =  $staffData['name'].' | '.$standard.' | '.$type.' | '.$staffData['staff_uid'];
+                $detail =  $staffName.' | '.$standard.' | '.$type.' | '.$staffData['staff_uid'];
 
-                $allValues = $detail."@".$staffData['id']."@".$staffData['name']."@".$standard."@".$staffData['primary_contact_no']."@".$staffData['staff_uid']."@".$type;
-
-                $details[] = $allValues;
-            }
-
-            return $details;
-        }
-
-
-        public function getStaffStudentDetailsForMessageCenter($term, $allSessions){
-
-            $studentRepository = new StudentRepository();
-            $staffRepository = new StaffRepository();
-            $institutionStandardService = new InstitutionStandardService();
-
-            $details = array();
-            
-            $students = $studentRepository->fetchStudents($term, $allSessions);
-
-            foreach($students as $key => $studentData){
-
-                $standard = $institutionStandardService->fetchStandardByUsingId($studentData->id_standard);
-                //dd($standard);
-                $type = "STUDENT";
-
-                $detail =  $studentData['name'].' | '.$standard.' | '.$type.' | '.$studentData['egenius_uid'].' | '.$studentData['usn'];
-
-                $allValues = $detail."@".$studentData['id']."@".$studentData['name']."@".$standard."@".$studentData['father_mobile_number']."@".$studentData['egenius_uid']."@".$type;
+                $allValues = $detail."@".$staffData['id']."@".$staffName."@".$standard."@".$staffData['primary_contact_no']."@".$staffData['staff_uid']."@".$type;
 
                 $details[] = $allValues;
             }
 
-            $staffs = $staffRepository->fetchStaffs($term, $allSessions);
+            if(count($students) == 0 && count($staffs) == 0 ){
 
-            foreach($staffs as $key => $staffData){
-                //dd($standard);
-                $standard = '-';
-                $type = "STAFF";
-                $detail =  $staffData['name'].' | '.$standard.' | '.$type.' | '.$staffData['staff_uid'];
-
-                $allValues = $detail."@".$staffData['id']."@".$staffData['name']."@".$standard."@".$staffData['primary_contact_no']."@".$staffData['staff_uid']."@".$type;
-
-                $details[] = $allValues;
-            }
-
-            if(count($students) == 0 && count($staffs) == 0 )
-            {
                 $standard = '-';
                 $type = "-";
                 $detail =  $term;

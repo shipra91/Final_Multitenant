@@ -35,14 +35,22 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
+<<<<<<< HEAD
+                                                <label class="control-label mt-0">Start Date<span class="text-danger">*</span></label>
+=======
                                                 <label class="control-label">Start Date<span class="text-danger">*</span></label>
+>>>>>>> main
                                                 <input type="text" class="form-control datepicker startDate" name="start_date" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
+<<<<<<< HEAD
+                                                <label class="control-label mt-0">End Date<span class="text-danger">*</span></label>
+=======
                                                 <label class="control-label">End Date<span class="text-danger">*</span></label>
+>>>>>>> main
                                                 <input type="text" class="form-control datepicker endDate" name="end_date" required autocomplete="off"/>
                                             </div>
                                         </div>
@@ -50,8 +58,13 @@
 
                                     <div class="row">
                                         <div class="col-lg-12">
+<<<<<<< HEAD
+                                            <label class="control-label">Holiday Details</label>
+                                            <div class="form-group">
+=======
                                             <div class="form-group">
                                                 <label class="control-label form-group">Holiday Details</label>
+>>>>>>> main
                                                 <textarea class="ckeditor" name="holiday_details" rows="5"></textarea>
                                             </div>
                                         </div>
@@ -168,6 +181,15 @@
         $("#attachment").change(function(){
 
             // check if fileArr length is greater than 0
+<<<<<<< HEAD
+            if(fileArr.length > 0) fileArr = [];
+
+            $('#image_preview').html("");
+            var total_file = document.getElementById("attachment").files;
+            if(!total_file.length) return;
+
+            for(var i = 0; i < total_file.length; i++){
+=======
             if (fileArr.length > 0) fileArr = [];
 
             $('#image_preview').html("");
@@ -175,6 +197,7 @@
             if (!total_file.length) return;
 
             for (var i = 0; i < total_file.length; i++){
+>>>>>>> main
 
                 var extension = total_file[i].name.substr((total_file[i].name.lastIndexOf('.') + 1));
                 var fileType = '';
@@ -182,6 +205,13 @@
 
                 fileArr.push(total_file[i]);
 
+<<<<<<< HEAD
+                if(extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
+
+                    fileType += '<div class="img_div" id="img_div' + i + '">';
+                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) + '" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
+=======
                 if (extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
@@ -191,10 +221,15 @@
                     fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
                         '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
                         '"><i class="fa fa-trash"></i></button></div></div>';
+>>>>>>> main
 
                 }else if (extension == "pdf"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
+<<<<<<< HEAD
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
+=======
                     fileType +=
                         '<img src="https://listimg.pinclipart.com/picdir/s/336-3361375_pdf-svg-png-icon-free-download-adobe-acrobat.png" class="multiple_image img-responsive" title="' +
                         total_file[i].name +
@@ -202,10 +237,15 @@
                     fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
                         '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
                         '"><i class="fa fa-trash"></i></button></div></div>';
+>>>>>>> main
 
                 }else if (extension == "docs" || extension == "doc" || extension == "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
+<<<<<<< HEAD
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
+=======
                     fileType +=
                         '<img src="https://www.pngitem.com/pimgs/m/181-1816575_google-docs-png-five-feet-apart-google-docs.png" class="multiple_image img-responsive" title="' +
                         total_file[i].name +
@@ -213,6 +253,7 @@
                     fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
                         '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
                         '"><i class="fa fa-trash"></i></button></div></div>';
+>>>>>>> main
                 }
 
                 $('#image_preview').append(fileType);
@@ -220,12 +261,22 @@
         });
 
         $('body').on('click', '#action-icon', function(evt){
+<<<<<<< HEAD
+
+            var divName = this.value;
+            var fileName = $(this).attr('role');
+
+            $(`#${divName}`).remove();
+            for(var i = 0; i < fileArr.length; i++){
+                if(fileArr[i].name === fileName){
+=======
             var divName = this.value;
             var fileName = $(this).attr('role');
             $(`#${divName}`).remove();
 
             for (var i = 0; i < fileArr.length; i++){
                 if (fileArr[i].name === fileName){
+>>>>>>> main
                     fileArr.splice(i, 1);
                 }
             }
@@ -236,9 +287,15 @@
 
         function FileListItem(file){
             file = [].slice.call(Array.isArray(file) ? file : arguments)
+<<<<<<< HEAD
+            for(var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
+            if(!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+            for(b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
+=======
             for (var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
             if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
             for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
+>>>>>>> main
             return b.files
         }
 
@@ -278,7 +335,11 @@
 
             var btn = $('#submit');
 
+<<<<<<< HEAD
+            if($('#holidayForm').parsley().isValid()){
+=======
             if ($('#holidayForm').parsley().isValid()){
+>>>>>>> main
 
                 $.ajax({
                     url:"/holiday",

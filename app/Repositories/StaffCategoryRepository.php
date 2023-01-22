@@ -28,5 +28,9 @@
         public function delete($id){
             return StaffCategory::find($id)->delete();
         }
+
+        public function fetchStaffCategoryId($staffCategory){
+            return StaffCategory::where("name", $staffCategory)->first();
+        }
     }
 ?>

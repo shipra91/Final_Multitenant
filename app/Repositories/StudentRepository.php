@@ -60,11 +60,13 @@
                             ->where("id_institute", $institutionId)
                             ->where("id_organization", $organizationId)
                             ->where("id_academic_year", $academicYear)
+                            ->whereNull('tbl_student_mapping.deleted_at')    
                             ->where("name", 'LIKE','%'.$term.'%')
                             ->orWhere("egenius_uid", 'LIKE','%'.$term.'%')
                             ->orWhere("usn", 'LIKE','%'.$term.'%')
                             ->orWhere("father_mobile_number", 'LIKE','%'.$term.'%')
-                            ->groupBy('tbl_student_mapping.id_student')->get();
+                            ->groupBy('tbl_student_mapping.id_student')
+                            ->get();
             return $students;
         }
 
@@ -78,6 +80,7 @@
                             ->join('tbl_student_mapping', 'tbl_student_mapping.id_student', '=', 'tbl_student.id')
                             ->where('tbl_student_mapping.id_institute', $institutionId)
                             ->where('tbl_student_mapping.id_academic_year', $academicYear)
+                            ->whereNull('tbl_student_mapping.deleted_at') 
                             ->whereIn('id_standard', $idStandards)
                             ->where("name", 'LIKE','%'.$term.'%')
                             ->orWhere("egenius_uid", 'LIKE','%'.$term.'%')
@@ -100,6 +103,7 @@
                             ->leftJoin('tbl_student_electives', 'tbl_student.id', '=', 'tbl_student_electives.id_student')
                             ->where('tbl_student_mapping.id_institute', $institutionId)
                             ->where('tbl_student_mapping.id_academic_year', $academicYear)
+                            ->whereNull('tbl_student_mapping.deleted_at') 
                             ->where(function($q) use($subjectId){
                                 $q->where('id_first_language', $subjectId)
                                 ->orWhere('id_second_language', $subjectId)
@@ -128,6 +132,7 @@
                         ->join('tbl_student_mapping', 'tbl_student_mapping.id_student', '=', 'tbl_student.id')
                         ->where('tbl_student_mapping.id_institute', $institutionId)
                         ->where('tbl_student_mapping.id_academic_year', $academicYear)
+                        ->whereNull('tbl_student_mapping.deleted_at') 
                         ->whereIn('id_standard', $idStandards)
                         ->get();
 
@@ -146,6 +151,7 @@
                         ->leftJoin('tbl_student_electives', 'tbl_student.id', '=', 'tbl_student_electives.id_student')
                         ->where('tbl_student_mapping.id_institute', $institutionId)
                         ->where('tbl_student_mapping.id_academic_year', $academicYear)
+                        ->whereNull('tbl_student_mapping.deleted_at') 
                         ->where('id_first_language', $subjectId)
                         ->orWhere('id_second_language', $subjectId)
                         ->orWhere('id_third_language', $subjectId)
@@ -163,6 +169,7 @@
             $studentData = Student::Select('tbl_student.*', 'tbl_student_mapping.id_standard')
                         ->join('tbl_student_mapping', 'tbl_student_mapping.id_student', '=', 'tbl_student.id')
                         ->where("id_institute", $institutionId)
+                        ->whereNull('tbl_student_mapping.deleted_at') 
                         // ->where("id_academic_year", $academicYear)
                         ->where("father_mobile_number", $mobileNumber)
                         ->orWhere("mother_mobile_number", $mobileNumber)
@@ -181,6 +188,7 @@
                         ->join('tbl_student_mapping', 'tbl_student_mapping.id_student', '=', 'tbl_student.id')
                         ->where('tbl_student_mapping.id_institute', $institutionId)
                         ->where('tbl_student_mapping.id_academic_year', $academicYear)
+                        ->whereNull('tbl_student_mapping.deleted_at') 
                         ->first();
             return $students;
         }
@@ -202,6 +210,7 @@
 
             $studentData = Student::join('tbl_student_mapping', 'tbl_student_mapping.id_student', '=', 'tbl_student.id')
                         ->where('tbl_student_mapping.id_institute', $institutionId)
+                        ->whereNull('tbl_student_mapping.deleted_at') 
                         ->where(function($query) use ($mobile){
                             $query->where('father_mobile_number', $mobile)
                             ->orWhere('mother_mobile_number', $mobile);
@@ -222,7 +231,9 @@
                         ->join('tbl_batch_student', 'tbl_student_mapping.id_student', '=', 'tbl_batch_student.id_student')
                         ->where('tbl_student_mapping.id_institute', $institutionId)
                         ->where('tbl_student_mapping.id_academic_year', $academicYear)
-                        ->where('tbl_batch_student.id_batch_detail', $batchStudentId)->get();
+                        ->where('tbl_batch_student.id_batch_detail', $batchStudentId)
+                        ->whereNull('tbl_student_mapping.deleted_at') 
+                        ->get();
             // dd(\DB::getQueryLog());
             return $students;
         }

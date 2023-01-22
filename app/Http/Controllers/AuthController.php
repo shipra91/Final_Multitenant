@@ -22,14 +22,16 @@ use Helper;
 
 class AuthController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         //show organization details in login page and then redirect to login page
         $domainDetail = Helper::domainCheck();
         // dd($domainDetail);
         return view('login', ['domainDetail' => $domainDetail]);
     }
 
-    public function newUser(){
+    public function newUser()
+    {
         //show organization details in login page and then redirect to login page
         $domainDetail = Helper::domainCheck();
 
@@ -44,9 +46,6 @@ class AuthController extends Controller
         $studentRepository = new StudentRepository();
         $staffRepository = new StaffRepository();
         $roleRepository = new RoleRepository();
-        
-        $domainDetail = Helper::domainCheck();
-        $institutionId = $domainDetail->id;
 
         $register_mPIN = $mobileLoginService->createmPIN($request);
 
@@ -75,7 +74,9 @@ class AuthController extends Controller
                         $institutteId = $staffCheckData->id_institute;
                         $organizationId = $staffCheckData->id_organization;
                         $userName = $staffCheckData->name;
+
                     }else{
+
                         $roleDetail = $roleRepository->getRoleID('student');
                         $roleId = $roleDetail->id;
                         $institutteId = $studentCheckData->id_institute;
@@ -83,27 +84,26 @@ class AuthController extends Controller
                         $userName = $studentCheckData->name;
                     }
 
-                    //ALL USERS
+                    // All users
                     $staffCount = 0;
                     $studentCount = 0;
                     $getAllStaffWithMobile = $staffRepository->allStaffExist(Auth::user()->username, $institutteId);
 
                     if($getAllStaffWithMobile){
+
                         foreach($getAllStaffWithMobile as $staffData){
-
                             $allUsers[$staffCount] = $staffData;
-
                             $staffCount++ ;
                         }
                     }
 
                     $getAllStudentWithMobile = $studentRepository->allStudentExist(Auth::user()->username, $institutteId);
+
                     if($getAllStudentWithMobile){
+
                         foreach($getAllStudentWithMobile as $studentData){
                             $studentCount = $studentCount + $staffCount;
-
                             $allUsers[$studentCount] = $studentData;
-
                             $studentCount++ ;
                         }
                     }
@@ -131,7 +131,6 @@ class AuthController extends Controller
                             $logo = $institutionData->institution_logo;
                             $institutionName = $institutionData->name;
                         }
-
                     }
 
                     $data = array(
@@ -202,57 +201,71 @@ class AuthController extends Controller
                         $organizationId = $staffCheckData->id_organization;
                         $userName = $staffCheckData->name;
                         $userId = $staffCheckData->id;
+
                     }else{
+
                         $roleDetail = $roleRepository->getRoleID('student');
                         $roleId = $roleDetail->id;
                         $institutteId = $studentCheckData->id_institute;
                         $organizationId = $studentCheckData->id_organization;
                         $userName = $studentCheckData->name;
                         $userId = $studentCheckData->id;
-                    } 
+                    }
 
-                    //ALL USERS
+                    // All users
                     $getAllStaffWithMobile = $staffRepository->allStaffExist(Auth::user()->username, $institutteId);
+
                     if($getAllStaffWithMobile){
+
                         foreach($getAllStaffWithMobile as $staffData){
+
                             $allInstitutions = array();
                             $roleData = $roleRepository->fetch($staffData->id_role);
+
+                            $staffName = $staffRepository->getFullName($staffData->name, $staffData->middle_name, $staffData->last_name);
+
                             if($roleData->label === 'superadmin'){
                                 $allInstitutions = $institutionRepository->fetchInstitution($organizationId);
                             }
+
                             $data = array(
                                 'id' => $staffData->id,
-                                'name' => $staffData->name,
+                                'name' => $staffName,
                                 'uid' => $staffData->staff_uid,
                                 'userRole' => $roleData->id,
                                 'userRoleLabel' => $roleData->label,
                                 'allInstitutions' => $allInstitutions
                             );
+
                             array_push($allUsers, $data);
                         }
-                    }                
+                    }
 
                     $getAllStudentWithMobile = $studentRepository->allStudentExist(Auth::user()->username, $institutteId);
+
                     if($getAllStudentWithMobile){
+
                         foreach($getAllStudentWithMobile as $studentData){
-                            $name = $studentMappingRepository->studentName($studentData->name, $studentData->middle_name, $studentData->last_name);
+
+                            $studentName = $studentMappingRepository->getFullName($studentData->name, $studentData->middle_name, $studentData->last_name);
                             $allInstitutions = array();
                             $roleData = $roleRepository->getRoleID('student');
-                            
+
                             $data = array(
                                 'id' => $studentData->id_student,
-                                'name' => $name,
+                                'name' => $studentName,
                                 'uid' => $studentData->egenius_uid,
                                 'userRole' => $roleData->id,
                                 'userRoleLabel' => $roleData->label,
                                 'allInstitutions' => $allInstitutions
                             );
+
                             array_push($allUsers, $data);
                         }
                     }
-                    
+
                     $academicData = $academicYearMappingRepository->getInstitutionDefaultAcademics($institutteId);
-                    $institutionData = $institutionRepository->fetch($institutteId);                    
+                    $institutionData = $institutionRepository->fetch($institutteId);
 
                     if($academicData){
                         $defaultAcademicYear = $academicData->idAcademicMapping;
@@ -278,20 +291,20 @@ class AuthController extends Controller
                         'allInstitutions' => $allUsers[0]['allInstitutions'],
                         'allUsers' => $allUsers
                     );
-                    
                     Session::put($data);
                     // return redirect()->intended('dashboard')->withSuccess('Signed in');
                     $signal = 'success';
                     $msg = 'Logged in successfully !';
+
                 }else{
                     $signal = 'failure';
                     $msg = 'Authentication failed !';
-                }                
+                }
+
             }else{
                 $signal = 'failure';
                 $msg = 'Invalid credential !';
             }
-            
         }else{
             $signal = 'invalid_user';
             $msg = 'This number is not registered with us';
@@ -301,9 +314,8 @@ class AuthController extends Controller
             'signal' => $signal,
             'msg' => $msg
         );
-        
-        return $output;       
 
+        return $output;
         // return redirect("/")->withSuccess('Login details are not valid');
     }
 
@@ -328,12 +340,12 @@ class AuthController extends Controller
         return redirect("/")->withSuccess('are not allowed to access');
     }
 
-
-    public function signOut() {
+    public function signOut()
+    {
         Session::flush();
         Auth::logout();
 
         return Redirect('/');
     }
-
 }
+?>

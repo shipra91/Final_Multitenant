@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\StudentLeaveAttachment;
 use Illuminate\Http\Request;
+use App\Services\LeaveApplicationAttachmentService;
 
 class StudentLeaveAttachmentController extends Controller
 {
@@ -78,8 +79,24 @@ class StudentLeaveAttachmentController extends Controller
      * @param  \App\Models\StudentLeaveAttachment  $studentLeaveAttachment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StudentLeaveAttachment $studentLeaveAttachment)
+    public function removeLeaveAttachments(Request $request)
     {
-        //
+        $leaveApplicationAttachmentService = new LeaveApplicationAttachmentService();
+
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $leaveApplicationAttachmentService->delete($request->applicationId);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
     }
 }

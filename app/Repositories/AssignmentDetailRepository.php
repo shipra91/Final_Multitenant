@@ -22,6 +22,6 @@
         }
 
         public function delete($id){
-            return $assignmentDetail = AssignmentDetail::find($id)->delete();
+            return $data = AssignmentDetail::find($id)->delete();
         }
     }

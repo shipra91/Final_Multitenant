@@ -203,7 +203,6 @@ class InstitutionBankDetailsController extends Controller
     public function getBankDetails(Request $request){
         $institutionBankDetailsService = new InstitutionBankDetailsService();
         $bankId = $request->bankDetailId;
-        
         return $institutionBankDetailsService->find($bankId);
     }
 }

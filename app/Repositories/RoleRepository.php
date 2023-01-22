@@ -61,6 +61,10 @@
         public function getRoleDetail($userType = ''){
             return Role::where('label', $userType)->get();  
         }
+
+        public function fetchRoleId($role){
+            return Role::where("display_name", $role)->first();
+        }
         
     }
 ?>

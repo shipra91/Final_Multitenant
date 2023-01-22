@@ -68,7 +68,7 @@
                 <input type="hidden" id="applicationId" name="applicationId">
                 <div class="card1">
                     <div class="card-header card-header-tabs" data-background-color="mediumaquamarine">
-                        <h4 class="card-title1 text-center">Leave Application Approval</h4>
+                        <p class="card-title1 text-center mb-0 font-15">Leave Application Approval</p>
                     </div>
                 </div>
 

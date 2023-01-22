@@ -22,6 +22,6 @@
         }
 
         public function delete($id){
-            return $homeworkDetail = HomeworkDetail::where('id_homework', $id)->delete();
+            return $data = HomeworkDetail::find($id)->delete();
         }
     }

@@ -29,7 +29,7 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label class="control-label mt-0">Title<span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="leaveTitle" required autocomplete="off" value="{{$selectedData['applicationData']->title}}" />
+                                                <input type="text" class="form-control" name="leaveTitle" required autocomplete="off" value="{{ $selectedData['applicationData']->title }}" />
                                             </div>
                                         </div>
                                     </div>
@@ -37,13 +37,13 @@
                                     <div class="row">
                                         <div class="col-lg-4 col-lg-offset-0">
                                             <div class="form-group">
-                                                <label class="control-label">Student<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Student<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="student" id="student" data-style="select-with-transition" data-live-search="true" data-size="4" title="Select" required="required">
                                                     {{-- @foreach($studentData as $student)
                                                         <option value="{{$student->id}}">{{ucwords($student->name)}}</option>
                                                     @endforeach --}}
                                                     @foreach($studentData as $student)
-                                                        <option value="{{$student->id}}" @if($student->id == $selectedData['applicationData']['id_student']) {{'selected'}} @endif>{{ucwords($student->name)}}</option>
+                                                        <option value="{{ $student['id'] }}" @if($student['id'] == $selectedData['applicationData']['id_student']) {{'selected'}} @endif>{{ ucwords($student['studentData']) }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -51,24 +51,24 @@
 
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label class="control-label">From Date<span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control datepicker" name="leaveFromDate" required value="{{$selectedData['applicationData']->fromDate}}" />
+                                                <label class="control-label mt-0">From Date<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control datepicker" name="leaveFromDate" required value="{{ $selectedData['applicationData']->fromDate }}" />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label class="control-label">To Date<span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control datepicker" name="leaveToDate" required value="{{$selectedData['applicationData']->toDate}}" />
+                                                <label class="control-label mt-0">To Date<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control datepicker" name="leaveToDate" required value="{{ $selectedData['applicationData']->toDate }}" />
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <div class="col-lg-12">
+                                            <label class="control-label">Application Details<span class="text-danger">*</span></label>
                                             <div class="form-group">
-                                                <label class="control-label form-group mb-8">Application Details<span class="text-danger">*</span></label>
-                                                <textarea class="ckeditor" name="leaveDetail" rows="5" required>{{$selectedData['applicationData']->leave_detail}}</textarea>
+                                                <textarea class="ckeditor" name="leaveDetail" rows="5" required>{{ $selectedData['applicationData']->leave_detail }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -104,6 +104,38 @@
                                     </div>
                                 </div>
                             </div>
+
+                            @if(count($selectedData['applicationAttachment']) > 0)
+                                <div class="card">
+                                    <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
+                                        <i class="material-icons">attachment</i>
+                                    </div>
+                                    <div class="card-content">
+                                        <h4 class="card-title">Attachment</h4>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    @foreach($selectedData['applicationAttachment'] as $key =>$attachment)
+                                                        @if($attachment['extension'] =="pdf")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @elseif($attachment['extension'] =="doc" || $attachment['extension'] =="docx")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @else
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="{{ $attachment['file_url'] }}" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -123,18 +155,18 @@
             }
         });
 
-        // Multiple image upload with preview
-        var fileArr = [];
+         // Multiple image upload with preview
+         var fileArr = [];
         $("#leaveAttachment").change(function(){
 
             // check if fileArr length is greater than 0
-            if (fileArr.length > 0) fileArr = [];
+            if(fileArr.length > 0) fileArr = [];
 
             $('#image_preview').html("");
             var total_file = document.getElementById("leaveAttachment").files;
-            if (!total_file.length) return;
+            if(!total_file.length) return;
 
-            for (var i = 0; i < total_file.length; i++){
+            for(var i = 0; i < total_file.length; i++){
 
                 var extension = total_file[i].name.substr((total_file[i].name.lastIndexOf('.') + 1));
                 var fileType = '';
@@ -142,37 +174,23 @@
 
                 fileArr.push(total_file[i]);
 
-                if (extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
+                if(extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) +
-                        '" class="multiple_image img-responsive" title="' + total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) + '" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
                 }else if (extension == "pdf"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://listimg.pinclipart.com/picdir/s/336-3361375_pdf-svg-png-icon-free-download-adobe-acrobat.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
                 }else if (extension == "docs" || extension == "doc" || extension == "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://www.pngitem.com/pimgs/m/181-1816575_google-docs-png-five-feet-apart-google-docs.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
                 }
 
                 $('#image_preview').append(fileType);
@@ -180,12 +198,13 @@
         });
 
         $('body').on('click', '#action-icon', function(evt){
+
             var divName = this.value;
             var fileName = $(this).attr('role');
-            $(`#${divName}`).remove();
 
-            for (var i = 0; i < fileArr.length; i++){
-                if (fileArr[i].name === fileName){
+            $(`#${divName}`).remove();
+            for(var i = 0; i < fileArr.length; i++){
+                if(fileArr[i].name === fileName){
                     fileArr.splice(i, 1);
                 }
             }
@@ -196,9 +215,9 @@
 
         function FileListItem(file){
             file = [].slice.call(Array.isArray(file) ? file : arguments)
-            for (var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
-            if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
-            for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
+            for(var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
+            if(!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+            for(b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
             return b.files
         }
 

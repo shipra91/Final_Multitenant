@@ -34,17 +34,45 @@
         }
 
         // Get all students
-        public function getStudentsData($request, $allSessions){
+        // public function getStudentsData($request){
+
+        //     $batchRepository = new BatchRepository();
+        //     $studentMappingRepository = new StudentMappingRepository();
+        //     $studentRepository = new StudentRepository();
+
+        //     $batch = $batchRepository->all();
+        //     $standard = $request->get('standard');
+
+        //     $studentData = $studentMappingRepository->fetchInstitutionStandardStudents($standard);
+        //     return $studentData;
+        // }
+
+        // Get all students
+        public function getStudentsData($request){
 
             $batchRepository = new BatchRepository();
             $studentMappingRepository = new StudentMappingRepository();
             $studentRepository = new StudentRepository();
 
+            $arrayData = array();
             $batch = $batchRepository->all($allSessions);
             $standard = $request->get('standard');
 
             $studentData = $studentMappingRepository->fetchInstitutionStandardStudents($standard, $allSessions);
-            return $studentData;
+            foreach($studentData as $key => $data){
+                //dd($data);
+                $studentName = $studentMappingRepository->getFullName($data->name, $data->middle_name, $data->last_name);
+
+                $studentDetails = array(
+                    'id_student'=>$data->id_student,
+                    'UID'=>$data->egenius_uid,
+                    'name'=>$studentName,
+                );
+
+                array_push($arrayData, $studentDetails);
+            }
+
+            return $arrayData;
         }
 
         // Get particular batch

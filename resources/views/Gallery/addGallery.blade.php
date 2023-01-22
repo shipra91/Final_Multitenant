@@ -28,48 +28,22 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label class="control-label">Gallery Name<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Gallery Name<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="galleryName" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label class="control-label">Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker" name="galleryDate" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-12">
+                                            <label class="control-label">Gallery Details</label>
                                             <div class="form-group">
-                                                <label class="control-label form-group">Gallery Details</label>
                                                 <textarea class="ckeditor" name="galleryDetails" rows="5"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <label class="control-label">Upload Cover Image</label>
-                                            <div class="form-group">
-                                                <div class="fileinput fileinput-new text-center"
-                                                    data-provides="fileinput">
-                                                    <div class="fileinput-new thumbnail img-square ">
-                                                        <img src="//cdn.egenius.in/img/placeholder.jpg" alt="Image">
-                                                    </div>
-                                                    <div
-                                                        class="fileinput-preview fileinput-exists thumbnail img-square">
-                                                    </div>
-                                                    <div>
-                                                        <span class="btn btn-square btn-info btn-file btn-sm">
-                                                            <span class="fileinput-new">Add</span>
-                                                            <span class="fileinput-exists">Change</span>
-                                                            <input type="file" name="coverImage" required data-parsley-errors-container=".coverImageError" />
-                                                        </span>
-                                                        <a href="#pablo" class="btn btn-danger btn-square fileinput-exists btn-sm" data-dismiss="fileinput"><i class="material-icons">highlight_off</i></a>
-                                                    </div>
-                                                    <div class="coverImageError"></div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -88,7 +62,7 @@
                                         <div id="staffDiv" style="display:none">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Category</label>
+                                                    <label class="control-label mt-0">Staff Category</label>
                                                     <select class="selectpicker" name="staffCategory[]" id="staffCategory" data-style="select-with-transition" data-live-search="true" title="Select" data-selected-text-format="count > 1" multiple data-actions-box="true">
                                                         @foreach($gallerydata['staffCategory'] as $staffCategory)
                                                             <option value="{{$staffCategory->id}}">{{ucwords($staffCategory->name)}}</option>
@@ -99,7 +73,7 @@
 
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Subcategory</label>
+                                                    <label class="control-label mt-0">Staff Subcategory</label>
                                                     <select class="selectpicker" name="staffSubcategory[]" id="staffSubcategory" data-style="select-with-transition" data-live-search="true" title="Select" data-selected-text-format="count > 1" multiple data-actions-box="true">
 
                                                     </select>
@@ -116,7 +90,7 @@
                                         <div id="studentDiv" style="display:none">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Standard</label>
+                                                    <label class="control-label mt-0">Standard</label>
                                                     <select class="selectpicker" name="standard[]" id="standard" data-style="select-with-transition" data-live-search="true" data-size="5" title="Select" data-selected-text-format="count > 1" multiple data-actions-box="true" data-container="body">
                                                         @foreach($gallerydata['institutionStandards'] as $standard)
                                                             <option value="{{$standard['institutionStandard_id']}}">{{$standard['class']}}</option>
@@ -142,11 +116,39 @@
                                     <i class="material-icons">attachment</i>
                                 </div>
                                 <div class="card-content">
-                                    <h4 class="card-title">Upload Gallery Image</h4>
+                                    <h4 class="card-title">Upload Cover Image</h4>
+                                    <div class="form-group text-center">
+                                        <div class="fileinput fileinput-new text-center mb-0" data-provides="fileinput">
+                                            <div class="fileinput-new thumbnail img-square ">
+                                                <img src="//cdn.egenius.in/img/placeholder.jpg" alt="Image">
+                                            </div>
+                                            <div
+                                                class="fileinput-preview fileinput-exists thumbnail img-square">
+                                            </div>
+                                            <div>
+                                                <span class="btn btn-square btn-info btn-file btn-sm">
+                                                    <span class="fileinput-new">Select file</span>
+                                                    <span class="fileinput-exists">Change</span>
+                                                    <input type="file" name="coverImage" accept="image/*" required data-parsley-errors-container=".coverImageError" />
+                                                </span>
+                                                <a href="#pablo" class="btn btn-danger btn-square fileinput-exists btn-sm" data-dismiss="fileinput"><i class="material-icons">highlight_off</i></a>
+                                            </div>
+                                            <div class="coverImageError"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
+                                    <i class="material-icons">attachment</i>
+                                </div>
+                                <div class="card-content">
+                                    <h4 class="card-title">Upload Image</h4>
                                     <div class="text-center">
                                         <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                             <span class="btn btn-square btn-info btn-file btn-sm">
-                                                <span class="fileinput-new">Add</span>
+                                                <span class="fileinput-new">Select file</span>
                                                 <span class="fileinput-exists">Change</span>
                                                 <input type="file" name="galleryImg[]" id="galleryImg" accept="image/*" multiple />
                                             </span>
@@ -186,9 +188,9 @@
 
             $('#image_preview').html("");
             var total_file = document.getElementById("galleryImg").files;
-            if (!total_file.length) return;
+            if(!total_file.length) return;
 
-            for (var i = 0; i < total_file.length; i++){
+            for(var i = 0; i < total_file.length; i++){
 
                 var extension = total_file[i].name.substr((total_file[i].name.lastIndexOf('.') + 1));
                 var fileType = '';
@@ -196,37 +198,23 @@
 
                 fileArr.push(total_file[i]);
 
-                if (extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
+                if(extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) +
-                        '" class="multiple_image img-responsive" title="' + total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) + '" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
                 }else if (extension == "pdf"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://listimg.pinclipart.com/picdir/s/336-3361375_pdf-svg-png-icon-free-download-adobe-acrobat.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
                 }else if (extension == "docs" || extension == "doc" || extension == "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://www.pngitem.com/pimgs/m/181-1816575_google-docs-png-five-feet-apart-google-docs.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
                 }
 
                 $('#image_preview').append(fileType);
@@ -234,12 +222,13 @@
         });
 
         $('body').on('click', '#action-icon', function(evt){
+
             var divName = this.value;
             var fileName = $(this).attr('role');
-            $(`#${divName}`).remove();
 
-            for (var i = 0; i < fileArr.length; i++){
-                if (fileArr[i].name === fileName){
+            $(`#${divName}`).remove();
+            for(var i = 0; i < fileArr.length; i++){
+                if(fileArr[i].name === fileName){
                     fileArr.splice(i, 1);
                 }
             }
@@ -250,9 +239,9 @@
 
         function FileListItem(file){
             file = [].slice.call(Array.isArray(file) ? file : arguments)
-            for (var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
-            if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
-            for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
+            for(var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
+            if(!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+            for(b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
             return b.files
         }
 

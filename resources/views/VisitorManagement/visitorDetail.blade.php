@@ -12,11 +12,6 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-12 col-sm-offset-0 text-right">
-                        <a href="{{url('visitor')}}" class="btn btn-finish btn-fill btn-wd btn btn-info"><i class="material-icons">arrow_back</i> Back</a>
-                    </div>
-                </div>
-                <div class="row">
                     <form method="POST" class="demo-form" id="visitorForm">
                         <div class="col-lg-12">
                             <div class="card">
@@ -125,6 +120,19 @@
                                             </div>
                                         </div>
                                     </div>
+<<<<<<< HEAD
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="pull-right">
+                                                <a href="/visitor/{{$visitorData['id']}}" type="button" class="btn btn-success btn-wd mr-5">Edit</a>
+                                                <a href="{{url('visitor')}}" class="btn btn-wd btn btn-danger">Close</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+=======
+>>>>>>> main
                                 </div>
                             </div>
                         </div>

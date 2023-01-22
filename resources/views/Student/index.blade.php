@@ -25,16 +25,12 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
-                                <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
-                                    <i class="material-icons">face</i>
-                                </div>
                                 <div class="card-content">
-                                    <h4 class="card-title">Filter Students</h4>
                                     <form method="GET" id="search-form">
                                         <div class="row">
                                             <div class="col-lg-3">
                                                 <div class="form-group">
-                                                    <label class="control-label mt-0">Choose Standard</label>
+                                                    <label class="control-label mt-0">Standard</label>
                                                     <select class="selectpicker" name="standard[]" id="standard" data-style="select-with-transition" data-size="3" multiple title="Select" data-live-search="true" data-selected-text-format="count" data-actions-box="true">
                                                         @foreach($fieldDetails['standard'] as $index => $data)
                                                             <option value="{{$data['institutionStandard_id']}}" @if(isset($_GET['standard']) && (in_array($data['institutionStandard_id'], $_GET['standard']))) {{"selected"}} @endif>{{$data['class']}} </option>
@@ -45,7 +41,7 @@
 
                                             <div class="col-lg-3">
                                                 <div class="form-group">
-                                                    <label class="control-label mt-0">Choose Gender</label>
+                                                    <label class="control-label mt-0">Gender</label>
                                                     <select class="selectpicker" name="gender" id="gender" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true">
                                                         @foreach($fieldDetails['gender'] as $data)
                                                             <option value="{{$data['id']}}" @if(isset($_GET["gender"]) && ($_GET["gender"] == $data['id'])) {{"selected"}} @endif>{{$data['name']}}</option>
@@ -56,7 +52,7 @@
 
                                             <div class="col-lg-3">
                                                 <div class="form-group">
-                                                    <label class="control-label mt-0">Choose Fee Type</label>
+                                                    <label class="control-label mt-0">Fee Type</label>
                                                     <select class="selectpicker" name="fee_type" id="fee_type" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true">
                                                         @foreach($fieldDetails['fee_type'] as $data)
                                                             <option value="{{$data['id']}}" @if(isset($_GET["fee_type"]) && ($_GET["fee_type"] == $data['id'])) {{"selected"}} @endif>{{$data['name']}}</option>
@@ -65,11 +61,77 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-lg-3 mt-5">
-                                                <button class="btn btn-info" type="submit" id="extraSearch"><i class="material-icons">search</i> Search</button>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <button class="btn btn-info" type="submit" id="extraSearch"><i class="material-icons">search</i> Search</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                @if(Helper::checkAccess('student', 'view') || Helper::checkAccess('student', 'export'))
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="panel-group" id="accordion1" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-default">
+                                    <div class="panel-header panel-header-icon" data-background-color="mediumaquamarine">
+                                        <i class="material-icons">file_download</i>
+                                    </div>
+                                    <div class="panel-heading" role="tab" id="headingOne">
+                                        <h4 class="panel-title">
+                                            <a role="button" class="h4" data-toggle="collapse" data-parent="#accordion1" href="#collapseOne1" aria-expanded="true" aria-controls="collapseOne"><i class="more-less material-icons">expand_more</i> Import Students</a>
+                                        </h4>
+                                    </div>
+
+                                    <div id="collapseOne1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                        <div class="panel-body">
+                                            @if(session('status'))
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="alert alert-success" role="alert">{{ session('status') }}</div>
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            <div class="row">
+                                                <form method="POST" id="sampleExportForm">
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="control-label mt-0">Download Sample File</label><br>
+                                                            <a href="{{ url('/export-student-sample') }}" class="btn btn-info btn-sm">Download</a>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                                <div class="col-lg-6">
+                                                    <form action="/student-import" method="POST" enctype="multipart/form-data">
+                                                        @csrf
+                                                        <div class="form-group">
+                                                            <label class="control-label mt-0">Import File</label><br>
+                                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                <div class="fileinput-preview fileinput-exists thumbnail mt-10"></div>
+                                                                <div>
+                                                                    <span class="btn btn-info btn-file btn-sm">
+                                                                        <span class="fileinput-new">Select Files</span>
+                                                                        <span class="fileinput-exists">Change</span>
+                                                                        <input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                                                    </span>
+                                                                    <a href="#pablo" class="btn btn-danger btn-square fileinput-exists btn-sm"
+                                                                    data-dismiss="fileinput"><i class="material-icons">highlight_off</i></a>
+                                                                </div>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-success btn-sm" id="submit" name="submit">Submit</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -81,6 +143,9 @@
                         <div class="col-lg-12">
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                 <div class="panel panel-default">
+                                    <div class="panel-header panel-header-icon" data-background-color="mediumaquamarine">
+                                        <i class="material-icons">file_upload</i>
+                                    </div>
                                     <div class="panel-heading" role="tab" id="headingOne">
                                         <h4 class="panel-title"><a role="button" class="h4" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="more-less material-icons">expand_more</i>Export Students</a></h4>
                                     </div>
@@ -106,7 +171,7 @@
                                                     </div>
 
                                                     <div class="col-lg-4 mt-15">
-                                                        <button type="submit" id="export" class="btn btn-info btn-wd"><i class="material-icons">get_app</i> Export To Excel</button>
+                                                        <button type="submit" id="export" class="btn btn-info btn-wd">Export To Excel</button>
                                                     </div>
                                                 </div>
 
@@ -222,6 +287,15 @@
                 {data: 'phone_number', name: 'phone_number'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
+        });
+
+        // Checkbox selectall
+        $('#selectall').click(function(){
+            if($(this).is(':checked')){
+                $('div input[type="checkbox"]').attr('checked', true);
+            }else{
+                $('div input[type="checkbox"]').attr('checked', false);
+            }
         });
 
         // Delete student

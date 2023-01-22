@@ -23,6 +23,11 @@
 
         public function delete($id){
             return Course::find($id)->delete();
-        }
+        }  
+
+        public function getCourseId($course){
+            return Course::where('name',$course)->first();
+        }    
+
     }
 ?>

@@ -60,14 +60,14 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Chapter Name</label>
+                                                <label class="control-label mt-0">Chapter Name</label>
                                                 <input type="text" class="form-control" name="assignment_chapter_name" />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Assignment Title<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Assignment Title<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control" name="assignment_name" required />
                                             </div>
                                         </div>
@@ -76,28 +76,28 @@
                                     <div class="row">
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Start Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Start Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker startDate" name="assignment_start_date" data-parsley-trigger="change" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">End Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">End Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker endDate" name="assignment_end_date" data-parsley-trigger="change" required autocomplete="off"/>
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Start Time<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Start Time<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control timepicker" name="assignment_start_time" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">End Time<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">End Time<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control timepicker" name="assignment_end_time" required />
                                             </div>
                                         </div>
@@ -105,11 +105,9 @@
 
                                     <div class="row">
                                         <div class="col-md-12">
+                                            <label class="control-label">Assignment Details</label>
                                             <div class="form-group">
-                                                <label class="control-label">Assignment Details</label>
-                                                <div class="form-group">
-                                                    <textarea class="ckeditor" name="assignment_details" rows="5"></textarea>
-                                                </div>
+                                                <textarea class="ckeditor" name="assignment_details" rows="5"></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -117,7 +115,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Submission Type<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Submission Type<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="submission_type" id="submission_type" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".typeError">
                                                     <option value="ONLINE">ONLINE</option>
                                                     <option value="OFFLINE">OFFLINE</option>
@@ -128,7 +126,7 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Grade/Marks Adding Option Required?<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Grade/Marks Adding Option Required?<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="grading_required" id="grading_required" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".gradeError">
                                                     <option value="YES">YES</option>
                                                     <option value="NO">NO</option>
@@ -141,7 +139,7 @@
                                     <div class="row">
                                         <div class="col-lg-6" id="grading_options">
                                             <div class="form-group">
-                                                <label class="control-label">Grading Options?</label>
+                                                <label class="control-label mt-0">Grading Options?</label>
                                                 <select class="selectpicker" name="grading_option" id="grading_option" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" data-parsley-errors-container=".gradeOptionError">
                                                     <option value="GRADE">GRADE</option>
                                                     <option value="MARKS">MARKS</option>
@@ -152,14 +150,14 @@
 
                                         <div class="col-lg-6" id="grade">
                                             <div class="form-group">
-                                                <label class="control-label">Grade</label>
+                                                <label class="control-label mt-0">Grade</label>
                                                 <input type="text" class="form-control" name="assignment_grade" placeholder="Mention grade here (eg:A+,A,B...)" />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6" id="marks">
                                             <div class="form-group">
-                                                <label class="control-label">Marks</label>
+                                                <label class="control-label mt-0">Marks</label>
                                                 <input type="text" class="form-control" name="assignment_mark" placeholder="Mention max mark here" />
                                             </div>
                                         </div>
@@ -168,7 +166,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Read receipt from recipients required?<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Read receipt from recipients required?<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="read_receipt" id="read_receipt" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".receiptError">
                                                     <option value="YES">YES</option>
                                                     <option value="NO">NO</option>
@@ -179,7 +177,7 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">SMS alert to recipients required?(cost may apply)<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">SMS alert to recipients required?(cost may apply)<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="sms_alert" id="sms_alert" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".smsError">
                                                     <option value="YES"> YES</option>
                                                     <option value="NO"> NO</option>

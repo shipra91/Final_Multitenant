@@ -124,26 +124,26 @@ class InstitutionFeeTypeMappingController extends Controller
      * @param  \App\Models\InstitutionFeeTypeMapping  $institutionFeeTypeMapping
      * @return \Illuminate\Http\Response
      */
-    // public function update(Request $request, $id)
-    // {
-    //     $institutionFeeTypeMappingService = new InstitutionFeeTypeMappingService();
+    public function update(Request $request, $id)
+    {
+        $institutionFeeTypeMappingService = new InstitutionFeeTypeMappingService();
 
-    //     $result = ["status" => 200];
+        $result = ["status" => 200];
 
-    //     try{
+        try{
 
-    //         $result['data'] = $institutionFeeTypeMappingService->update($request, $id);
+            $result['data'] = $institutionFeeTypeMappingService->update($request, $id);
 
-    //     }catch(Exception $e){
+        }catch(Exception $e){
 
-    //         $result = [
-    //             "status" => 500,
-    //             "error" => $e->getMessage()
-    //         ];
-    //     }
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
 
-    //     return response()->json($result, $result['status']);
-    // }
+        return response()->json($result, $result['status']);
+    }
 
     /**
      * Remove the specified resource from storage.

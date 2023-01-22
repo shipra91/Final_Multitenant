@@ -1,9 +1,9 @@
-<?php 
+<?php
     $pdf = \App::make('dompdf.wrapper');
     // dd($hallTicketDetails);
     $html = '';
-    foreach($hallTicketDetails['student_subject'] as $data) {
-   
+    foreach($hallTicketDetails['student_subject'] as $data){
+
         $html.= '<table border ="1" width="100%" style="margin-bottom:13px;">
                     <tr>
                         <td>
@@ -31,7 +31,7 @@
                             <table class="main" width="100%">
                                 <tbody>
                                     <tr>
-                                        <td class="ff" width=50%" >Student Name : '.$data['student']->name.'</</td>
+                                        <td class="ff" width=50%" >Student Name : '.ucwords($data['studentName']).'</</td>
                                         <td class="ff" align="right" width="50%">Standard : '.$data['student']->standard.'</td>
                                     </tr>
                                 </tbody>
@@ -40,16 +40,16 @@
                             <table class="main" id="gg" width="100%" style="border-collapse: collapse;" cellspacing="5" cellpadding="1">
                                 <tbody>
                                     <tr>
-                                        <td class="fff" width="11%" style="border:1px solid black;padding:7px 3px;" align="center">DATE</td> 
+                                        <td class="fff" width="11%" style="border:1px solid black;padding:7px 3px;" align="center">DATE</td>
                                         <td class="fff" width="11%" style="border:1px solid black;padding:7px 3px;" align="center">DAY</td>
                                         <td class="fff" width="32%" style="border:1px solid black;padding:7px 3px;" align="center">SUBJECTS</td>
                                         <td class="fff" width="20%" style="border:1px solid black;padding:7px 3px;" align="center">TIMINGS</td>
                                         <td class="fff" width="26%" style="border:1px solid black;padding:7px 3px;" align="center">INVIGILATOR'."'".'S SIGN</td>
                                     </tr>';
-                          
+
                                     foreach($data['exam_subject_data'] as $subjectData){
                                         $html .='<tr>
-                                            <td class="fff" width="11%" style="border:1px solid black;padding:7px 3px;" align="center">'.$subjectData->exam_date.'</td> 
+                                            <td class="fff" width="11%" style="border:1px solid black;padding:7px 3px;" align="center">'.$subjectData->exam_date.'</td>
                                             <td class="fff" width="11%" style="border:1px solid black;padding:7px 3px;" align="center">'.$subjectData->exam_day.'</td>
                                             <td class="fff" width="32%" style="border:1px solid black;padding:7px 3px;" align="left">'.$subjectData->name.'</td>
                                             <td class="fff" width="20%" style="border:1px solid black;padding:7px 3px;" align="center">'.$subjectData->start_time.' - '.$subjectData->end_time.'</td>
@@ -68,7 +68,7 @@
                                         <td class="fff" width="85%" valign="bottom" align="left">CLASS TEACHER</td>
                                         <td class="fff" width="15%" valign="bottom" align="center">HEAD MASTER</td>
                                     </tr>
-                                </tbody> 
+                                </tbody>
                             </table>
                         </td>
                     </tr>
@@ -76,7 +76,7 @@
                // $pdf->loadHTML($html);
     }
     print_r($html);
-    
+
         // $pdf->setPaper('A4', 'P');
         // $pdf->stream();
 ?>

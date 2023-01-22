@@ -20,7 +20,6 @@
                             <div class="card-content">
                                 <h4 class="card-title">Admit Student Preadmission</h4>
                                 <form method="GET" class="demo-form" id="getPreadmission">
-                                    
                                     <div class="row">
                                         <div class="col-lg-4 col-lg-offset-0">
                                             <div class="form-group">
@@ -81,7 +80,7 @@
                                                             <label><input type="checkbox" class="preadmissionSelect" name="preadmissionSelect[]" id="preadmissionSelect" value="{{ $students['id'] }}" /></label>
                                                         </td>
                                                         <td>{{ $students['application_number'] }}</td>
-                                                        <td>{{ $students['name'] }}</td>
+                                                        <td>{{ ucwords($students['name']) }}</td>
                                                         <td>{{ $students['gender'] }}</td>
                                                         <td>{{ $students['father_name'] }}</td>
                                                         <td>{{ $students['phone_number'] }}</td>

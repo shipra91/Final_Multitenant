@@ -46,5 +46,9 @@
             $data = StaffSubCategory::where('id', $idSubCategory)->where('id_staff_categories', $idCategory)->first();
             return $data;
         }
+
+        public function fetchStaffSubCategoryId($staffSubCategory){
+            return StaffSubCategory::where("name", $staffSubCategory)->first();
+        }
     }
 ?>

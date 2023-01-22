@@ -5,6 +5,7 @@
     use App\Repositories\StudentLeaveManagementRepository;
     use App\Repositories\StudentLeaveAttachmentRepository;
     use App\Repositories\StudentRepository;
+    use App\Repositories\StudentMappingRepository;
     use Carbon\Carbon;
     use ZipArchive;
     use Session;
@@ -31,23 +32,26 @@
             foreach($applicationData as $key => $application){
 
                 $student = $studentRepository->fetch($application->id_student);
+                $leaveAttachment = $studentLeaveAttachmentRepository->fetch($application->id);
+                $studentName = $studentMappingRepository->getFullName($student->name, $student->middle_name, $student->last_name);
 
                 if($application->leave_status == "PENDING"){
-
                     $status = 'Pending';
-
                 }elseif($application->leave_status == "APPROVE"){
-
                     $status = 'Approve';
-
                 }elseif($application->leave_status == "REJECT"){
-
                     $status = 'Reject';
+                }
+
+                if(count($leaveAttachment) > 0){
+                    $leaveApplicationStatus = 'file_found';
+                }else{
+                    $leaveApplicationStatus = 'file_not_found';
                 }
 
                 $applicationArray = array(
                     'id' => $application->id,
-                    'student'=>$student->name,
+                    'student'=>$studentName,
                     'leaveTitle'=>$application->title,
                     'fromDate'=>$application->from_date,
                     'toDate'=>$application->from_date,
@@ -55,6 +59,8 @@
                 );
 
                 $applicationDetails[$key]= $applicationArray;
+                $applicationDetails[$key]['leaveAttachment']= $leaveAttachment;
+                $applicationDetails[$key]['leaveApplicationStatus']= $leaveApplicationStatus;
             }
 
             return $applicationDetails;
@@ -62,17 +68,26 @@
 
         // Get particular leave application
         public function getSelectedData($id_application){
-            // dd($idDocument);
+
             $studentLeaveManagementRepository = new studentLeaveManagementRepository();
             $studentLeaveAttachmentRepository = new StudentLeaveAttachmentRepository();
             $studentRepository = new StudentRepository();
+            $studentMappingRepository = new StudentMappingRepository();
 
             $applicationData = array();
+            $applicationAttachment = array();
 
             $applicationDetails = $studentLeaveManagementRepository->fetch($id_application);
             $applicationAttachment = $studentLeaveAttachmentRepository->fetch($id_application);
             $studentDetails = $studentRepository->fetch($applicationDetails->id_student);
             //dd($applicationDetails);
+            $studentName = $studentMappingRepository->getFullName($studentDetails->name, $studentDetails->middle_name, $studentDetails->last_name);
+
+            foreach($applicationAttachment as $key => $attachment){
+                $ext = pathinfo($attachment['file_url'], PATHINFO_EXTENSION);
+                $applicationAttachment[$key] = $attachment;
+                $applicationAttachment[$key]['extension'] = $ext;
+            }
 
             $applicationDetails['fromDate'] = Carbon::createFromFormat('Y-m-d', $applicationDetails->from_date)->format('d/m/Y');;
             $applicationDetails['toDate'] = Carbon::createFromFormat('Y-m-d', $applicationDetails->to_date)->format('d/m/Y');
@@ -80,7 +95,8 @@
             $output = array(
                 'applicationData' => $applicationDetails,
                 'students' => $studentDetails,
-                'applicationAttachment' => $applicationAttachment
+                'applicationAttachment' => $applicationAttachment,
+                'studentName' => $studentName,
             );
 
             return $output;
@@ -93,8 +109,8 @@
             $studentLeaveAttachmentRepository = new StudentLeaveAttachmentRepository();
             $uploadService = new UploadService();
 
-            $institutionId = $allSessions['id_institute'];
-            $academicYear = $allSessions['id_academic'];
+            $institutionId = $leaveData['id_institute'];
+            $academicYear = $leaveData['id_academic'];
 
             $leaveTitle = $leaveData->leaveTitle;
             $student = $leaveData->student;
@@ -199,9 +215,7 @@
             if($updateData){
 
                 if($leaveData->leaveAttachment != ""){
-
-                    $deleteAttachment = $studentLeaveAttachmentRepository->delete($id);
-
+                    //$deleteAttachment = $studentLeaveAttachmentRepository->delete($id);
                     if($leaveData->hasfile('leaveAttachment')){
 
                         foreach($leaveData->leaveAttachment as $attachment){
@@ -270,23 +284,19 @@
             foreach($applicationData as $key => $application){
 
                 $student = $studentRepository->fetch($application->id_student);
+                $studentName = $studentMappingRepository->getFullName($student->name, $student->middle_name, $student->last_name);
 
                 if($application->leave_status == "PENDING"){
-
                     $status = 'Pending';
-
                 }elseif($application->leave_status == "APPROVE"){
-
                     $status = 'Approve';
-
                 }elseif($application->leave_status == "REJECT"){
-
                     $status = 'Reject';
                 }
 
                 $applicationArray = array(
                     'id' => $application->id,
-                    'student'=>$student->name,
+                    'student'=>$studentName,
                     'leaveTitle'=>$application->title,
                     'fromDate'=>$application->from_date,
                     'toDate'=>$application->from_date,

@@ -35,5 +35,9 @@
         public function delete($id){
             return YearSem::find($id)->delete();
         }
+
+        public function getYearSemId($semName){
+            return YearSem::where('sem_label', $semName)->first();
+        }
     }
 ?>

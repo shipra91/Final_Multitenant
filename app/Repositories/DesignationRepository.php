@@ -28,5 +28,9 @@
         public function fetchDesignation($term){
             return Designation::where("name", 'LIKE','%'.$term.'%')->get();
         }
+
+        public function fetchDesignationId($designation){
+            return Designation::where("name", $designation)->first();
+        }
     }
 ?>

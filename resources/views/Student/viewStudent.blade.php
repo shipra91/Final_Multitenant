@@ -20,398 +20,461 @@
                                 <h4 class="card-title">Student Details</h4>
                                 <div class="row">
 									<div class="col-lg-12">
-										<h5 class="viewStaff-firstChild">Basic Details</h5>
+										<h5 class="viewStaff-firstChild mb-10">Basic Details</h5>
 									</div>
 								</div>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-lg-offset-0">
+                                    <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">USN</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->usn}}" disabled />
+                                            <label class="control-label mt-0">First Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->name }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Standard</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->standard}}" disabled />
+                                            <label class="control-label mt-0">Middle Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->middle_name }}" disabled />
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-2 col-lg-offset-0">
+                                    <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">UID</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->egenius_uid}}" disabled />
+                                            <label class="control-label mt-0">Last Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->last_name }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Date Of Birth</label>
+                                            <label class="control-label mt-0">USN</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->usn }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Standard</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->standard }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-2 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">UID</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->egenius_uid }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Date Of Birth</label>
                                             <input type="text" class="form-control" value ="{{Carbon::createFromFormat('Y-m-d', $studentDetails->date_of_birth)->format('d-m-Y')}}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Age</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->current_age}}" disabled />
+                                            <label class="control-label mt-0">Age</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->current_age }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Gender</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->gender}}" disabled />
+                                            <label class="control-label mt-0">Gender</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->gender }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Register Number</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->register_number}}" disabled />
+                                            <label class="control-label mt-0">Register Number</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->register_number }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Roll Number</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->roll_number}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Admission Date</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->admission_date}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Admission Number</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->admission_number}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">First Language</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->first_language}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Second Language</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->second_language}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Third Language</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->third_language}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Elective Subject</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->elective}}" disabled />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <h5 class="viewStaff">Additional Details</h5>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Mother Tongue</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->mother_tongue}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">SATs Number</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->sats_number}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Student Aadhaar Number</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->student_aadhaar_number}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Nationality</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->nationality}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Religion</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->religion}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Caste</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->caste}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-2 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Blood Group</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->blood_group}}" disabled />
+                                            <label class="control-label mt-0">Roll Number</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->roll_number }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Fee Type</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->fee_type}}" disabled />
+                                            <label class="control-label mt-0">Admission Date</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->admission_date }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Admission Number</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->admission_number }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">First Language</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->first_language }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Second Language</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->second_language }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Third Language</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->third_language }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Elective Subject</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->elective }}" disabled />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h5 class="viewStaff">Address and Contact Details</h5>
+                                        <h5 class="viewStaff mb-10">Additional Details</h5>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Mother Tongue</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->mother_tongue }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">SATs Number</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->sats_number }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Student Aadhaar Number</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->student_aadhaar_number }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Nationality</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->nationality }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Religion</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->religion }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Caste</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->caste }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-2 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Blood Group</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->blood_group }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Fee Type</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->fee_type }}" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h5 class="viewStaff mb-10">Address and Contact Details</h5>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-12 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Adress</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->address}}" disabled />
+                                            <label class="control-label mt-0">Adress</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->address }}" disabled />
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-3 col-lg-offset-0">
+                                    <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">City</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->city}}" disabled />
+                                            <label class="control-label mt-0">City</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->city }}" disabled />
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-3 col-lg-offset-0">
+                                    <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Area</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->area}}" disabled />
+                                            <label class="control-label mt-0">Area</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->area }}" disabled />
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-3 col-lg-offset-0">
+                                    <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Taluk</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->taluk}}" disabled />
+                                            <label class="control-label mt-0">Taluk</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->taluk }}" disabled />
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-3 col-lg-offset-0">
+                                    <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">State</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->state}}" disabled />
+                                            <label class="control-label mt-0">State</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->state }}" disabled />
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-3 col-lg-offset-0">
+                                    <div class="col-lg-4 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Pincode</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->pincode}}" disabled />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <h5 class="viewStaff">Father Details</h5>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Name</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->father_name}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Mobile Number</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->father_mobile_number}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Aadhaar Number</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->father_aadhaar_number}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Education</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->father_education}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Profession</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->father_profession}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Email-ID</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->father_email}}" disabled />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3 col-lg-offset-0">
-                                        <div class="form-group">
-                                            <label class="control-label">Annual Income</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->father_annual_income}}" disabled />
+                                            <label class="control-label mt-0">Pincode</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->pincode }}" disabled />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h5 class="viewStaff">Mother Details</h5>
+                                        <h5 class="viewStaff mb-10">Father Details</h5>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Name</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->mother_name}}" disabled />
+                                            <label class="control-label mt-0">First Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->father_name }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Mobile Number</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->mother_mobile_number}}" disabled />
+                                            <label class="control-label mt-0">Middle Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->father_middle_name }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Aadhaar Number</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->mother_aadhaar_number}}" disabled />
+                                            <label class="control-label mt-0">Last Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->father_last_name }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Education</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->mother_education}}" disabled />
+                                            <label class="control-label mt-0">Mobile Number</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->father_mobile_number }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Profession</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->mother_profession}}" disabled />
+                                            <label class="control-label mt-0">Aadhaar Number</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->father_aadhaar_number }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Email-ID</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->mother_email}}" disabled />
+                                            <label class="control-label mt-0">Education</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->father_education }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Annual Income</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->mother_annual_income}}" disabled />
+                                            <label class="control-label mt-0">Profession</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->father_profession }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Email-ID</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->father_email }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Annual Income</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->father_annual_income }}" disabled />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h5 class="viewStaff">Guardian Details</h5>
+                                        <h5 class="viewStaff mb-10">Mother Details</h5>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Name</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->guardian_name}}" disabled />
+                                            <label class="control-label mt-0">First Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->mother_name }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Mobile Number</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->guardian_contact_no}}" disabled />
+                                            <label class="control-label mt-0">Middle Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->mother_middle_name }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Aadhaar Number</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->guardian_aadhaar_no}}" disabled />
+                                            <label class="control-label mt-0">Last Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->mother_last_name }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Email-ID</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->guardian_email}}" disabled />
+                                            <label class="control-label mt-0">Mobile Number</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->mother_mobile_number }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Relation With Guardian</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->guardian_relation}}" disabled />
+                                            <label class="control-label mt-0">Aadhaar Number</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->mother_aadhaar_number }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Education</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->mother_education }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Profession</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->mother_profession }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Email-ID</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->mother_email }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Annual Income</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->mother_annual_income }}" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h5 class="viewStaff mb-10">Guardian Details</h5>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">First Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->guardian_name }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Middle Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->guardian_middle_name }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Last Name</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->guardian_last_name }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Mobile Number</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->guardian_contact_no }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Aadhaar Number</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->guardian_aadhaar_no }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Email-ID</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->guardian_email }}" disabled />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3 col-lg-offset-0">
+                                        <div class="form-group">
+                                            <label class="control-label mt-0">Relation With Guardian</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->guardian_relation }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-9 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">Address</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->guardian_address}}" disabled />
+                                            <label class="control-label mt-0">Address</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->guardian_address }}" disabled />
                                         </div>
                                     </div>
 
                                     <div class="col-lg-3 col-lg-offset-0">
                                         <div class="form-group">
-                                            <label class="control-label">SMS Sent For</label>
-                                            <input type="text" class="form-control" value ="{{$studentDetails->sms_for}}" disabled />
+                                            <label class="control-label mt-0">SMS Sent For</label>
+                                            <input type="text" class="form-control" value ="{{ $studentDetails->sms_for }}" disabled />
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h5 class="viewStaff">Other Details</h5>
+                                        <h5 class="viewStaff mb-10">Other Details</h5>
                                     </div>
                                 </div>
 
@@ -419,16 +482,19 @@
                                     @foreach($customFieldDetails as $custom)
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label class="control-label">{{$custom->custom_field_name}}</label>
-                                                <input type="text" class="form-control" value="{{$custom->field_value}}" disabled>
+                                                <label class="control-label mt-0">{{$custom->custom_field_name}}</label>
+                                                <input type="text" class="form-control" value="{{ $custom->field_value }}" disabled>
                                             </div>
                                         </div>
                                     @endforeach
+                                </div>
 
-                                </div><div class="row">
+                                <div class="row">
                                     <div class="col-md-12">
                                         <div class="pull-right">
-                                            <a href="/student/{{$studentDetails->id}}" type="button" rel="tooltip" title="Edit" class="btn btn-success btn-wd mr-5">Edit</a>
+                                            @if(Helper::checkAccess('student', 'edit'))
+                                                <a href="/student/{{$studentDetails->id_student}}" type="button" class="btn btn-success btn-wd mr-5">Edit</a>
+                                            @endif
                                             <a href="{{ url('all-student') }}" class="btn btn-finish btn-fill btn-wd btn btn-danger">Close</a>
                                         </div>
                                     </div>
@@ -448,7 +514,8 @@
                                 @endif
                             </div>
 
-                            <h4 class="card-name text-center">{{ucwords($studentDetails->name)}}</h4>
+                            {{-- <h4 class="card-name text-center">{{ ucwords($studentDetails->name) . ' ' . ucwords($studentDetails->middle_name) . ' ' . ucwords($studentDetails->last_name) }}</h4> --}}
+                            <h4 class="card-name text-center">{{ ucwords($studentDetails['studentName']) }}</h4>
 
                             <div class="card-content border-top text-center">
                                 <div class="row">

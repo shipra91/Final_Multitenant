@@ -31,7 +31,6 @@
                                 </div>
                                 <div class="card-content">
                                     <h4 class="card-title">Workdone List</h4>
-                                    <div class="toolbar"></div>
                                     <div class="material-datatables">
                                         <table class="table table-striped table-no-bordered table-hover data-table" cellspacing="0" style="width:100%">
                                             <thead style="font-size:12px;">
@@ -55,61 +54,6 @@
                         </div>
                     </div>
                 @endif
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="workdone_modal">
-    <div class="modal-dialog modal-md">
-        <div class="modal-content">
-            <div class="card1">
-                <div class="card-header card-header-tabs" data-background-color="mediumaquamarine">
-                    <h4 class="card-title1" id="workdone_name"></h4>
-                    <p style="margin:0;display:inline;" id="staff_name">&nbsp;</p>
-                    <p style="margin:5px;display:inline;border-right:1px solid rgba(255, 255, 255, 0.62);;font-size:11px;"></p>
-                    <p style="margin:5px;display:inline" align="right" id="subject_name"></p>
-                </div>
-            </div>
-
-            <div class="modal-body col-lg-12">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="well" id="description">
-                        </div>
-                    </div>
-
-                    <div class="col-md-12" style="margin-top: -20px;">
-                        <div class="form-group">
-                            <label class="control-label">Date</label>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="date" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="control-label">Start Time</label>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="start_time" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="control-label">End Time</label>
-                            <div class="form-group">
-                                <input type="text" class="form-control" id="end_time" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger pull-right btn-wd" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -193,34 +137,6 @@
 
             return false;
         });
-
-        // View workdone details
-        $("body").delegate(".workdoneDetail", "click", function(event){
-            event.preventDefault();
-
-            var workdoneId=$(this).attr('data-id');
-
-            $.ajax({
-                url:"{{ url('/workdone-detail') }}",
-                type : "post",
-                dataType : "json",
-                data : {workdoneId:workdoneId,login_type:''},
-                success : function(response){
-                    console.log(response);
-                    var html = '';
-                    $("#workdone_modal").find("#workdone_name").text("Workdone Name: "+response.workdone_name);
-                    $("#workdone_modal").find("#staff_name").text("Staff Name: "+response.staff_name);
-                    $("#workdone_modal").find("#subject_name").text("Subject Name: "+response.subject_name);
-                    $("#workdone_modal").find("#description").html("Description: "+response.description);
-                    $("#workdone_modal").find("#date").val(response.date);
-                    $("#workdone_modal").find("#start_time").val(response.start_time);
-                    $("#workdone_modal").find("#end_time").val(response.end_time);
-
-                    $("#workdone_modal").find('tbody').html(html);
-                    $("#workdone_modal").modal('show');
-                }
-            });
-        })
     });
 </script>
 @endsection

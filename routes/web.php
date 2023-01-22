@@ -75,6 +75,7 @@ use App\Http\Controllers\StudentDetentionController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AssignmentDetailController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectDetailController;
 use App\Http\Controllers\StandardYearController;
 use App\Http\Controllers\StandardSubjectStaffMappingController;
 use App\Http\Controllers\FeeAssignDetailController;
@@ -96,13 +97,16 @@ use App\Http\Controllers\CircularController;
 use App\Http\Controllers\CircularAttachmentController;
 use App\Http\Controllers\SeminarController;
 use App\Http\Controllers\HomeworkController;
+use App\Http\Controllers\HomeworkDetailController;
 use App\Http\Controllers\HomeworkSubmissionController;
 use App\Http\Controllers\FineSettingController;
 use App\Http\Controllers\MessageCreditDetailsController;
 use App\Http\Controllers\HolidayController;
+use App\Http\Controllers\HolidayAttachmentController;
 use App\Http\Controllers\MessageSenderEntityController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\WorkdoneController;
+use App\Http\Controllers\WorkdoneAttachmentController;
 use App\Http\Controllers\InstitutionSmsTemplatesController;
 use App\Http\Controllers\ClassTimeTableSettingsController;
 use App\Http\Controllers\ClassTimeTableController;
@@ -147,7 +151,8 @@ use App\Http\Controllers\StudentClassTimeTableController;
 use App\Http\Controllers\InstitutionFeeTypeMappingController;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\GradeDetailController;
-
+use App\Http\Controllers\SeminarAttachmentController;
+use App\Http\Controllers\AssignmentSubmissionPermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -645,7 +650,8 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('staff-deleted-records', 'getDeletedRecords');
         Route::get('staff/restore/{id}', 'restore');
         Route::get('staff/restore-all', 'restoreAll');
-        Route::get('/export-staff_sample', 'exportStaffSample');
+        Route::get('/export-staff-sample', 'exportStaffSample');
+        Route::POST('/staff-import', 'storeImportData');
     });
 
     Route::controller(StaffFamilyDetailsController::class)->group(function (){
@@ -713,6 +719,8 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('student/restore-all', 'restoreAll');
         Route::post('get-subject-students', 'getStudents');
         Route::post('get-standard-students', 'getStandardStudents');
+        Route::get('/export-student-sample', 'exportStudentSample');
+        Route::POST('/student-import', 'storeImportData');
     });
 
     Route::controller(PromotionController::class)->group(function (){
@@ -758,6 +766,7 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('attendance-settings-deleted-records', 'getDeletedRecords');
         Route::get('attendance-settings/restore/{id}', 'restore');
         Route::get('attendance-settings/restore-all', 'restoreAll');
+        Route::POST('standard-attendance-setting', 'getStandardAttendanceSetting');
     });
 
     Route::controller(ApplicationFeeSettingController::class)->group(function (){
@@ -819,7 +828,7 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::post('assignment/{id}', 'update');
         Route::delete('assignment/{id}', 'destroy');
         Route::post('assignment-subjects', 'getSubjects');
-        // Route::post('assignment-detail', 'getAssignmentDetails');
+        Route::post('assignment-detail', 'getAssignmentDetails');
         Route::get('assignment-download/{id}/{type}', 'downloadAssignmentFiles');
         Route::get('assignment-deleted-records', 'getDeletedRecords');
         Route::get('assignment/restore/{id}', 'restore');
@@ -844,7 +853,8 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('homework', 'index');
         Route::get('homework/create', 'create');
         Route::post('homework', 'store');
-        Route::post('homework/{id}', 'show');
+        //Route::post('homework-detail/{id}', 'show');
+        Route::get('homework-detail/{id}', 'show');
         Route::get('homework/{id}', 'edit');
         Route::post('homework/{id}', 'update');
         Route::delete('homework/{id}', 'destroy');
@@ -853,6 +863,10 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('homework-deleted-records', 'getDeletedRecords');
         Route::get('homework/restore/{id}', 'restore');
         Route::get('homework/restore-all', 'restoreAll');
+    });
+
+    Route::controller(HomeworkDetailController::class)->group(function (){
+        Route::post('homework-remove', 'removeHomeworkAttachments');
     });
 
     Route::controller(HomeworkSubmissionController::class)->group(function (){
@@ -869,7 +883,8 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('project', 'index');
         Route::get('project/create', 'create');
         Route::post('project', 'store');
-        Route::post('project/{id}', 'show');
+        // Route::post('project/{id}', 'show');
+        Route::get('project-detail/{id}', 'show');
         Route::get('project/{id}', 'edit');
         Route::post('project/{id}', 'update');
         Route::delete('project/{id}', 'destroy');
@@ -879,6 +894,10 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('project-deleted-records', 'getDeletedRecords');
         Route::get('project/restore/{id}', 'restore');
         Route::get('project/restore-all', 'restoreAll');
+    });
+
+    Route::controller(ProjectDetailController::class)->group(function (){
+        Route::post('project-remove', 'removeProjectAttachments');
     });
 
     Route::controller(ProjectSubmissionController::class)->group(function (){
@@ -924,6 +943,7 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('ClassTimeTable/{id}', 'edit');
         Route::post('ClassTimeTable/{id}', 'update');
         Route::delete('ClassTimeTable/{id}', 'destroy');
+        Route::post('class-timetable-period-subjects', 'getPeriodSubjects');
     });
 
     Route::controller(InstitutionTypeController::class)->group(function (){
@@ -1167,6 +1187,7 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('circular/{id}', 'edit');
         Route::post('circular/{id}', 'update');
         Route::delete('circular/{id}', 'destroy');
+        // Route::get('circular-detail/{id}', 'getCircularDetails');
         Route::post('all-circular', 'getRecipientCircular');
         Route::get('circular-download/{id}', 'downloadCircularFiles');
         Route::get('circular-deleted-records', 'getDeletedRecords');
@@ -1182,16 +1203,20 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('seminar', 'index');
         Route::get('seminar/create', 'create');
         Route::post('seminar', 'store');
-        Route::post('seminar/{id}', 'show');
+        Route::get('seminar-detail/{id}', 'show');
         Route::get('seminar/{id}', 'edit');
         Route::post('seminar/{id}', 'update');
         Route::delete('seminar/{id}', 'destroy');
         Route::post('seminar-subjects', 'getSubjects');
-        Route::post('seminar-detail', 'getSeminarDetails');
+        //Route::post('seminar-detail', 'getSeminarDetails');
         Route::get('seminar-download/{id}/{type}', 'downloadSeminarFiles');
         Route::get('seminar-deleted-records', 'getDeletedRecords');
         Route::get('seminar/restore/{id}', 'restore');
         Route::get('seminar/restore-all', 'restoreAll');
+    });
+
+    Route::controller(SeminarAttachmentController::class)->group(function (){
+        Route::post('seminar-remove', 'removeSeminarAttachments');
     });
 
     Route::controller(SeminarConductedByController::class)->group(function (){
@@ -1205,7 +1230,7 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('holiday', 'index');
         Route::get('holiday/create', 'create');
         Route::post('holiday', 'store');
-        Route::post('holiday/{id}', 'show');
+        Route::get('holiday/{id}', 'show');
         Route::get('holiday/{id}', 'edit');
         Route::post('holiday/{id}', 'update');
         Route::delete('holiday/{id}', 'destroy');
@@ -1214,6 +1239,10 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('holiday-download/{id}', 'downloadHolidayFiles');
         Route::get('holiday/restore/{id}', 'restore');
         Route::get('holiday/restore-all', 'restoreAll');
+    });
+
+    Route::controller(HolidayAttachmentController::class)->group(function (){
+        Route::post('holiday-remove', 'removeHolidayAttachments');
     });
 
     Route::controller(FineSettingController::class)->group(function (){
@@ -1250,15 +1279,19 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::get('workdone', 'index');
         Route::get('workdone/create', 'create');
         Route::post('workdone', 'store');
-        Route::post('workdone/{id}', 'show');
+        Route::get('workdone-detail/{id}', 'show');
         Route::get('workdone/{id}', 'edit');
         Route::post('workdone/{id}', 'update');
         Route::delete('workdone/{id}', 'destroy');
         Route::get('workdone-deleted-records', 'getDeletedRecords');
         Route::get('workdone/restore/{id}', 'restore');
         Route::get('workdone/restore-all', 'restoreAll');
-        Route::post('workdone-detail', 'getWorkdoneDetails');
+        // Route::post('workdone-detail', 'getWorkdoneDetails');
         Route::get('workdone-download/{id}/{type}', 'downloadWorkdoneFiles');
+    });
+
+    Route::controller(WorkdoneAttachmentController::class)->group(function (){
+        Route::post('workdone-remove', 'removeWorkdoneAttachments');
     });
 
     Route::controller(CertificateController::class)->group(function (){
@@ -1346,6 +1379,8 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::delete('message-group-members/{id}', 'destroy');
         Route::get('get-group-member-details', 'getGroupMembersDetails');
         Route::post('message-group-members-data', 'getGroupMembersData');
+        Route::get('/export-group-sample', 'exportGroupSample');
+        Route::POST('/group-member-import', 'storeGroupMemberData');
     });
 
     Route::controller(MessageGroupNameController::class)->group(function (){
@@ -1472,6 +1507,10 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::post('leave-approval-store/{id}', 'storeLeaveApproval');
     });
 
+    Route::controller(StudentLeaveAttachmentController::class)->group(function (){
+        Route::post('leave-management-remove', 'removeLeaveAttachments');
+    });
+
     Route::controller(StudentLeaveReportController::class)->group(function (){
         Route::get('student-leave-report', 'index');
         Route::post('/student-leave-report-data', 'getReport');
@@ -1558,5 +1597,12 @@ Route::group(['middleware'=>'auth:web'],function(){
     Route::controller(GradeDetailController::class)->group(function (){
         Route::delete('grade-detail/{id}', 'destroy');
     });
+
+    Route::controller(AssignmentSubmissionPermissionController::class)->group(function (){
+        Route::get('assignment-submission-permission', 'index');
+        Route::post('assignment-submission-permission', 'store');
+        Route::post('assignment-submission-permission/{id}', 'update');
+    });
 });
 
+?>

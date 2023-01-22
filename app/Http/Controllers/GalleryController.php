@@ -34,6 +34,10 @@ class GalleryController extends Controller
                         }
                         if(Helper::checkAccess('gallery', 'view')){
                             $btn .= '<a href="/gallery-details/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>';
+
+                            if($row['status'] == 'file_found'){
+                                $btn .= '<a href="/gallery-download/'.$row['id'].'" rel="tooltip" title="Download Files" class="text-success" target="_blank"><i class="material-icons">file_download</i></a>';
+                            }
                         }
                         if(Helper::checkAccess('gallery', 'delete')){
                             $btn .= '<a href="javascript:void();" type="button" data-id="'.$row['id'].'" rel="tooltip" title="Delete" class="text-danger delete"><i class="material-icons">delete</i></a>';
@@ -202,7 +206,12 @@ class GalleryController extends Controller
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        $btn ='';
+                        if(Helper::checkAccess('gallery', 'create')){
+                            $btn .= '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        }else{
+                            $btn .= 'No Access';
+                        }
                         return $btn;
                     })
                     ->rawColumns(['action'])

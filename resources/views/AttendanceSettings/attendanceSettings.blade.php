@@ -1,7 +1,3 @@
-@php
-
-@endphp
-
 @extends('layouts.master')
 
 @section('content')
@@ -20,6 +16,12 @@
                             <div class="card-content">
                                 <h4 class="card-title">Add Attendance Settings</h4>
                                 <form method="POST" id="attendanceSettingsFrom">
+<<<<<<< HEAD
+                                <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+=======
+>>>>>>> main
                                     <div class="row">
                                         <div class="col-lg-3 col-lg-offset-0">
                                             <div class="form-group">
@@ -57,7 +59,11 @@
                                         <div class="col-lg-3 col-lg-offset-0 d-none" id="displaySubject">
                                             <div class="form-group">
                                                 <label class="control-label mt-0">Display Subject</label>
+<<<<<<< HEAD
+                                                <select class="selectpicker" name="displaySubject"  id="displaySubjectField" data-style="select-with-transition" title="Select">
+=======
                                                 <select class="selectpicker" name="displaySubject" id="displaySubject" data-style="select-with-transition" title="Select">
+>>>>>>> main
                                                     <option value="yes">YES</option>
                                                     <option value="no">NO</option>
                                                 </select>
@@ -129,6 +135,20 @@
             }
         });
 
+<<<<<<< HEAD
+        $("#displaySubjectField").on("change", function(event){
+            event.preventDefault();
+
+            var displaySubject = $(this).val();
+            if(displaySubject == 'no') {
+                $("#timetableDependent").addClass('d-none');
+            }else{
+                $("#timetableDependent").removeClass('d-none');
+            }
+        });
+
+=======
+>>>>>>> main
         $("#attendanceSettingsFrom").parsley({
             triggerAfterFailure: 'input change focusout changed.bs.select'
         });

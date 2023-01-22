@@ -82,7 +82,7 @@
                 {data: 'DT_RowIndex', name: 'created_at', "width": "10%"},
                 {"data": "coverImage" ,
                     "render": function (data){
-                        return "<img src='"+data+"' style='width:50px; height:50px;' class='rounded'>";
+                        return "<img src='"+data+"' style='max-width:60px; max-height:60px;' class='rounded'>";
                     },
                     "width": "20%"
                 },

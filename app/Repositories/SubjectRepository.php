@@ -53,5 +53,9 @@
         public function fetchSubjectNameCount($subjectName){
             return Subject::where('name', $subjectName)->get();
         }
+
+        public function getMasterSubjectId($subjectName){
+            return Subject::where('name', $subjectName)->first();
+        }
     }
 ?>

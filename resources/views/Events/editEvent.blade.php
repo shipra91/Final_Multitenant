@@ -31,28 +31,28 @@
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Start Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Start Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker startDate" name="eventStartDate" value="{{$selectedData['eventData']->startDate}}" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">End Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">End Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker endDate" name="eventEndDate" value="{{$selectedData['eventData']->endDate}}" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">Start Time<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Start Time<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control timepicker" name="eventStartTime" value="{{$selectedData['eventData']->start_time}}" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="control-label">End Time<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">End Time<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control timepicker" name="eventEndTime" value="{{$selectedData['eventData']->end_time}}" required />
                                             </div>
                                         </div>
@@ -60,8 +60,8 @@
 
                                     <div class="row">
                                         <div class="col-lg-12">
+                                            <label class="control-label">Event Details</label>
                                             <div class="form-group">
-                                                <label class="control-label form-group">Event Details</label>
                                                 <textarea class="ckeditor" name="eventDetails" rows="5">{{$selectedData['eventData']->event_detail}}</textarea>
                                             </div>
                                         </div>
@@ -70,7 +70,7 @@
                                     <div class="row">
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label class="control-label">Event Type<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Event Type<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="eventType" id="eventType" data-style="select-with-transition" title="Select" required="required">
                                                     <option value ="ONLINE" @if($selectedData['eventData']->event_type == 'ONLINE'){{'selected'}} @endif>Online</option>
                                                     <option value ="OFFLINE"  @if($selectedData['eventData']->event_type == 'OFFLINE'){{'selected'}} @endif>Offline</option>
@@ -80,7 +80,7 @@
 
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label class="control-label">Event Attendance Required?<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Event Attendance Required?<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="attendanceRequired" id="attendanceRequired" data-style="select-with-transition" title="Select" required="required">
                                                     <option value ="YES" @if($selectedData['eventData']->attendance_required == 'YES'){{'selected'}} @endif>Yes</option>
                                                     <option value ="NO" @if($selectedData['eventData']->attendance_required == 'NO'){{'selected'}} @endif>No</option>
@@ -90,7 +90,7 @@
 
                                         <div class="col-lg-4">
                                             <div class="form-group">
-                                                <label class="control-label">Read Receipt Required?<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Read Receipt Required?<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="receiptRequired" id="receiptRequired" data-style="select-with-transition" title="Select" required="required">
                                                     <option value ="YES" @if($selectedData['eventData']->receipt_required == 'YES'){{'selected'}} @endif>Yes</option>
                                                     <option value ="NO"  @if($selectedData['eventData']->receipt_required == 'NO'){{'selected'}} @endif>No</option>
@@ -99,7 +99,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row mt-30">
+                                    <div class="row mt-20">
                                         <div class="col-lg-12">
                                             <h4 class="card-title">Applicable To</h4>
                                         </div>
@@ -113,7 +113,7 @@
                                         <div id="staffDiv" @if(!in_array("STAFF", $selectedData['recepientTypes'])) {{ 'style="display:none"'; }} @endif>
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Category</label>
+                                                    <label class="control-label mt-0">Staff Category</label>
                                                     <select class="selectpicker" name="staffCategory[]" id="staffCategory" data-style="select-with-transition" data-live-search="true" title="Select" data-selected-text-format="count > 1" multiple data-actions-box="true">
                                                         @foreach($eventData['staffCategory'] as $staffCategory)
                                                             <option value="{{$staffCategory->id}}" @if(in_array($staffCategory->id, $selectedData['selectedStaffCategory'])) {{"selected"}} @endif>{{ucwords($staffCategory->name)}}</option>
@@ -124,7 +124,7 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Subcategory</label>
+                                                    <label class="control-label mt-0">Staff Subcategory</label>
                                                     <select class="selectpicker" name="staffSubcategory[]" id="staffSubcategory" data-style="select-with-transition" data-live-search="true" title="Select" data-selected-text-format="count > 1" multiple data-actions-box="true">
                                                         @foreach($eventData['staffSubcategory'] as $staffSubcategory)
                                                             <option value="{{$staffSubcategory->id}}" @if(in_array($staffSubcategory->id, $selectedData['selectedStaffSubCategory'])) {{"selected"}} @endif>{{ucwords($staffSubcategory->name)}}</option>
@@ -135,7 +135,7 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff</label>
+                                                    <label class="control-label mt-0">Staff</label>
                                                     <select class="selectpicker" name="staff[]" id="staff" data-style="select-with-transition" data-live-search="true" title="Select" multiple data-actions-box="true" data-selected-text-format="count > 1">
                                                         @foreach($selectedData['allStaffs'] as $staff)
                                                             <option value="{{$staff['id']}}" @if(in_array($staff['id'], $selectedData['selectedStaffs'])) {{"selected"}} @endif>{{ucwords($staff['name'])}}</option>
@@ -154,7 +154,7 @@
                                         <div id="studentDiv" @if(!in_array("STUDENT", $selectedData['recepientTypes'])) {{ 'style="display:none"'; }} @endif>
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Standard</label>
+                                                    <label class="control-label mt-0">Standard</label>
                                                     <select class="selectpicker" name="standard[]" id="standard" data-style="select-with-transition" data-live-search="true" data-size="4" title="Select" multiple data-actions-box="true" data-selected-text-format="count > 1">
                                                         @foreach($eventData['institutionStandards'] as $standard)
                                                             <option value="{{$standard['institutionStandard_id']}}" @if(in_array($standard['institutionStandard_id'], $selectedData['selectedStandards'])) {{"selected"}} @endif>{{$standard['class']}}</option>
@@ -165,7 +165,7 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Subject</label>
+                                                    <label class="control-label mt-0">Subject</label>
                                                     <select class="selectpicker" name="subject[]" id="subject" data-style="select-with-transition" data-live-search="true" title="Select" data-size="4" multiple data-actions-box="true" data-selected-text-format="count > 1">
                                                         @foreach($eventData['standardSubjects'] as $standardSubject)
                                                             <option value="{{$standardSubject['id']}}" @if(in_array($standardSubject['id'], $selectedData['selectedStandardSubject'])) {{"selected"}} @endif>{{$standardSubject['name']}}</option>
@@ -176,7 +176,7 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Student</label>
+                                                    <label class="control-label mt-0">Student</label>
                                                     <select class="selectpicker" name="student[]" id="student" data-style="select-with-transition" data-live-search="true" title="Select" data-size="4" multiple data-actions-box="true" data-selected-text-format="count > 1">
                                                         @if(count($selectedData['allStudents']) > 0)
                                                             @foreach($selectedData['allStudents'] as $student)
@@ -223,6 +223,9 @@
 
                             @if(count($selectedData['eventAttachment']) > 0)
                                 <div class="card">
+                                    <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
+                                        <i class="material-icons">attachment</i>
+                                    </div>
                                     <div class="card-content">
                                         <h4 class="card-title">Attachment</h4>
                                         <div class="row">

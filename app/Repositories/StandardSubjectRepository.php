@@ -179,5 +179,21 @@
                                 ->groupBy('tbl_institution_subject.id_subject')
                                 ->get();
         }
+
+        public function fetchExamSubjectStandards($idSubject){
+
+            $allSessions = session()->all();
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            //DB::enableQueryLog();
+            $data = StandardSubject::join('tbl_attendance_settings', 'tbl_attendance_settings.id_standard', '=', 'tbl_standard_subject.id_standard')
+                                    ->where('id_institute', $institutionId)
+                                    ->where('id_academic_year', $academicId)
+                                    ->where('id_institution_subject', $idSubject)
+                                    ->get();
+            //dd(DB::getQueryLog());
+            return $data;
+        }
     }
 ?>

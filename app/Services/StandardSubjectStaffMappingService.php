@@ -43,6 +43,8 @@ class StandardSubjectStaffMappingService {
             foreach($standardSubjects as $key => $subjectData){
 
                 $staffArray = array();
+                $staffDetails = array();
+
                 if(!in_array($subjectData['id'], $checkSubject)){
 
                     $staffSubjectDetails = $staffSubjectMappingRepository->fetchSubjectStaffs($subjectData['id']);
@@ -66,9 +68,9 @@ class StandardSubjectStaffMappingService {
                 }
             }
         }
-        // dd($allSubject);
 
         $staffSubject = array();
+
         foreach($allSubject as $key => $subject){
 
             foreach($combinationDivision as $index => $standard){
@@ -123,13 +125,13 @@ class StandardSubjectStaffMappingService {
                     foreach($staffIds as $staffId){
 
                         $data = array(
-                        'id_academic_year' => $academicYear,
-                        'id_institute' => $institutionId,
-                        'id_standard' => $standardId,
-                        'id_subject' => $subjectId,
-                        'id_staff' => $staffId,
-                        'created_by' => Session::get('userId'),
-                        'created_at' => Carbon::now()
+                            'id_academic_year' => $academicYear,
+                            'id_institute' => $institutionId,
+                            'id_standard' => $standardId,
+                            'id_subject' => $subjectId,
+                            'id_staff' => $staffId,
+                            'created_by' => Session::get('userId'),
+                            'created_at' => Carbon::now()
                         );
 
                         $store = $standardSubjectStaffMappingRepository->store($data);
@@ -148,8 +150,8 @@ class StandardSubjectStaffMappingService {
         }
 
         $output = array(
-                'signal'=>$signal,
-                'message'=>$msg
+            'signal'=>$signal,
+            'message'=>$msg
         );
 
         return $output;
@@ -169,18 +171,24 @@ class StandardSubjectStaffMappingService {
         if($role == 'admin' || $role == 'superadmin'){
 
             $staffDetail = $standardSubjectStaffMappingRepository->getStaffs($subjectId, $standardId, $allSessions);
-
             foreach($staffDetail as $index => $details){
-                $staffs[$index] = $staffRepository->fetch($details->id_staff);
+                $staffData = $staffRepository->fetch($details->id_staff);
+                $allStaffs[$index] = $staffData;
+                $allStaffs[$index]['name'] = $staffRepository->getFullName($staffData->name, $staffData->middle_name, $staffData->last_name);
             }
 
         }else{
-            $staffs[0] = $staffRepository->fetch($idStaff);
+
+            $staffDetail[0] = $staffRepository->fetch($idStaff);
+            foreach($staffDetail as $index => $details){
+                $allStaffs[$index] = $details;
+                $allStaffs[$index]['name'] = $staffRepository->getFullName($details->name, $details->middle_name, $details->last_name);
+            }
         }
 
-        return $staffs;
+        return $allStaffs;
     }
-
+    
     public function fetchSubjectStaffStudents($request, $allSessions){
 
         $subjectId = $request['subjectId'];
@@ -221,8 +229,19 @@ class StandardSubjectStaffMappingService {
                 $students = $studentMappingRepository->fetchStudentUsingSubject($request, $allSessions);
             }
 
-            $studentStaffDetails['student'] = $students;
-            $studentStaffDetails['staff'] = $staffs;
+            foreach($students as $key => $student){
+                $allStudents[$key] = $student;
+                $allStudents[$key]['name'] = $studentMappingRepository->getFullName($student['name'], $student['middle_name'], $student['last_name']);
+            }
+
+            foreach($staffs as $key => $staff){
+                $allStaff[$key] = $staff;
+                $allStaff[$key]['name'] = $staffRepository->getFullName($staff['name'], $staff['middle_name'], $staff['last_name']);
+            }
+
+            $studentStaffDetails['student'] = $allStudents;
+            $studentStaffDetails['staff'] = $allStaff;
+            
         }
 
         return $studentStaffDetails;
@@ -243,10 +262,16 @@ class StandardSubjectStaffMappingService {
         $studentMappingRepository = new StudentMappingRepository();
         $institutionSubjectRepository = new InstitutionSubjectRepository();
         $standardSubjectStaffMappingRepository = new StandardSubjectStaffMappingRepository();
-        $staffs = array();
-        $studentStaffDetails = array();
+
+        $subjectId = $request['subjectId'];
+        $standardId = $request['standardId'];
+
         $role = $allSessions['role'];
         $idStaff = $allSessions['userId'];
+        
+        $staffs = array();
+        $studentStaffDetails = array();
+
 
         if($role == 'admin' || $role == 'superadmin'){
 

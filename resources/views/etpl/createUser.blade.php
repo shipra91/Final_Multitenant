@@ -49,8 +49,27 @@
 
                                         <div class="col-lg-4 col-lg-offset-0">
                                             <div class="form-group">
+<<<<<<< HEAD
+                                                <label class="control-label mt-0">First Name<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="staffName" id="staffName" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" required />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-lg-offset-0">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Middle Name</label>
+                                                <input type="text" class="form-control" name="staffMiddleName" id="staffMiddleName" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-4 col-lg-offset-0">
+                                            <div class="form-group">
+                                                <label class="control-label mt-0">Last Name<span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="staffLastName" id="staffLastName" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" required />
+=======
                                                 <label class="control-label mt-0">Name<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control input" name="staffName" id="staffName" minlength="2" required />
+>>>>>>> main
                                             </div>
                                         </div>
 

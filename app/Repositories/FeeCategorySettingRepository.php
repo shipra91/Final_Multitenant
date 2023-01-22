@@ -41,6 +41,7 @@
 
             $response = FeeCategorySetting::join('tbl_category_fee_heading_masters', 'tbl_category_fee_heading_masters.id_category_setting', '=', 'tbl_fee_category_setting.id')
             ->where('id_fee_master', $idFeeMaster)
+            ->whereNull('tbl_category_fee_heading_masters.deleted_at')
             ->orderBy('collection_priority', 'ASC')
             ->get(['tbl_category_fee_heading_masters.*']);
             // dd(DB::getQueryLog());

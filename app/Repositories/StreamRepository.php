@@ -24,5 +24,10 @@
         public function delete($id){
             return Stream::find($id)->delete();
         }
+
+        public function getStreamId($stream){
+            return Stream::where('name',$stream)->first();
+        }    
+
     }
 ?>

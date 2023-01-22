@@ -43,7 +43,7 @@
                                         <div class="tab-pane wizard-pane" id="basic">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5 class="tab-header mb-30">Personal Detail</h5>
+                                                    <h5 class="tab-header mt-0">Personal Detail</h5>
                                                 </div>
                                                 <div class="col-sm-4 text-center">
                                                     <div class="fileinput fileinput-new text-center"
@@ -78,7 +78,7 @@
                                                                     <i class="material-icons icon-middle">account_circle</i>
                                                                 </span>
                                                                 <div class="form-group">
-                                                                    <label class="control-label">First Name<span class="text-danger">*</span></label>
+                                                                    <label class="control-label mt-0">First Name<span class="text-danger">*</span></label>
                                                                     <input type="text" class="form-control" name="student_first_name" id="student_first_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$preadmissionDetails->name}}" required />
                                                                 </div>
                                                             </div>
@@ -90,7 +90,7 @@
                                                                     <i class="material-icons icon-middle">account_circle</i>
                                                                 </span>
                                                                 <div class="form-group">
-                                                                    <label class="control-label">Middle Name</label>
+                                                                    <label class="control-label mt-0">Middle Name</label>
                                                                     <input type="text" class="form-control" name="student_middle_name" id="student_middle_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$preadmissionDetails->middle_name}}" />
                                                                 </div>
                                                             </div>
@@ -102,7 +102,7 @@
                                                                     <i class="material-icons icon-middle">account_circle</i>
                                                                 </span>
                                                                 <div class="form-group">
-                                                                    <label class="control-label">Last Name<span class="text-danger">*</span></label>
+                                                                    <label class="control-label mt-0">Last Name<span class="text-danger">*</span></label>
                                                                     <input type="text" class="form-control" name="student_last_name" id="student_last_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$preadmissionDetails->last_name}}" required/>
                                                                 </div>
                                                             </div>
@@ -116,7 +116,7 @@
                                                                     <i class="material-icons icon-middle">event</i>
                                                                 </span>
                                                                 <div class="form-group">
-                                                                    <label class="control-label">Date of Birth <span class="text-danger">*</span></label>
+                                                                    <label class="control-label mt-0">Date of Birth <span class="text-danger">*</span></label>
                                                                     <input type="text" class="form-control custom_datepicker" name="date_of_birth" id="date_of_birth" data-parsley-trigger="change" value="{{Carbon::createFromFormat('Y-m-d', $preadmissionDetails->date_of_birth)->format('d/m/Y')}}" data-parsley-trigger="change" required />
                                                                 </div>
                                                             </div>
@@ -128,7 +128,7 @@
                                                                     <i class="material-icons icon-middle">cake</i>
                                                                 </span>
                                                                 <div class="form-group">
-                                                                    <label class="control-label">Age</label>
+                                                                    <label class="control-label mt-0">Age</label>
                                                                     <input type="text" class="form-control" name="age" id="age" value="{{$preadmissionDetails->current_age}}" readonly />
                                                                 </div>
                                                             </div>
@@ -144,7 +144,7 @@
                                                             <i class="material-icons icon-middle">wc</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Gender<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Gender<span class="text-danger">*</span></label>
                                                             <select class="selectpicker" name="gender" id="gender" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true" required data-parsley-errors-container=".genderError">
                                                                 @foreach($fieldDetails['gender'] as $genderFields)
                                                                     <option value="{{$genderFields['id']}}" @if($preadmissionDetails->id_gender == $genderFields['id'] ) {{ "selected" }} @endif>{{$genderFields['name']}}</option>
@@ -161,7 +161,7 @@
                                                             <i class="material-icons icon-middle">local_library</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Admission Class<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Admission Class<span class="text-danger">*</span></label>
                                                             <select class="selectpicker" name="standard" id="standard" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true" required data-parsley-errors-container=".standardError">
                                                                 @foreach($fieldDetails['standard'] as $index => $class)
                                                                     <option value="{{$class['institutionStandard_id']}}"@if($preadmissionDetails->id_standard == $class['institutionStandard_id'] ) {{"selected" }} @endif>{{$class['class']}} </option>
@@ -178,7 +178,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Mother Tongue</label>
+                                                            <label class="control-label mt-0">Mother Tongue</label>
                                                             <input type="text" class="form-control" name="mother_tongue" id="mother_tongue" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$preadmissionDetails->mother_tongue}}" />
                                                         </div>
                                                     </div>
@@ -190,7 +190,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Student Aadhaar Number</label>
+                                                            <label class="control-label mt-0">Student Aadhaar Number</label>
                                                             <input type="text" class="form-control" name="student_aadhaar_number" id="student_aadhaar_number" maxlength='12' minlength='12' onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$preadmissionDetails->student_aadhaar_number}}" />
                                                         </div>
                                                     </div>
@@ -204,7 +204,7 @@
                                                             <i class="material-icons icon-middle">language</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Nationality<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Nationality<span class="text-danger">*</span></label>
                                                             <select class="selectpicker" name="nationality" id="nationality" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" required data-parsley-errors-container=".nationalityError">
                                                                 @foreach($fieldDetails['nationality'] as $fields)
                                                                     <option value="{{$fields['id']}}" @if($preadmissionDetails->id_nationality == $fields['id'] ) {{ "selected" }}@endif>{{$fields['name']}}</option>
@@ -221,7 +221,7 @@
                                                             <i class="material-icons icon-middle">people</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Religion<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Religion<span class="text-danger">*</span></label>
                                                             <select class="selectpicker" name="religion" id="religion" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" required data-parsley-errors-container=".religionError">
                                                                 @foreach($fieldDetails['religion'] as $fields)
                                                                     <option value="{{$fields['id']}}" @if($preadmissionDetails->id_religion == $fields['id'] ) {{ "selected" }} @endif>{{$fields['name']}}</option>
@@ -238,7 +238,7 @@
                                                             <i class="material-icons icon-middle">people</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Caste<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Caste<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="caste" id="caste" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$preadmissionDetails->caste}}" required />
                                                         </div>
                                                     </div>
@@ -250,7 +250,7 @@
                                                             <i class="material-icons icon-middle">people</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Caste Category</label>
+                                                            <label class="control-label mt-0">Caste Category</label>
                                                             <select class="selectpicker" name="caste_category" id="caste_category" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true">
                                                                 @foreach($fieldDetails['caste_category'] as $fields)
                                                                     <option value="{{$fields['id']}}" @if($preadmissionDetails->id_caste_category == $fields['id'] ){{ "selected" }} @endif>{{$fields['name']}}</option>
@@ -268,7 +268,7 @@
                                                             <i class="material-icons icon-middle">opacity</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Blood Group</label>
+                                                            <label class="control-label mt-0">Blood Group</label>
                                                             <select class="selectpicker" name="blood_group" id="blood_group" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true">
                                                                 @foreach($fieldDetails['blood_group'] as $fields)
                                                                     <option value="{{$fields['id']}}" @if($preadmissionDetails->id_blood_group == $fields['id'] ) {{ "selected" }} @endif>{{$fields['name']}}</option>
@@ -283,7 +283,7 @@
                                         <div class="tab-pane wizard-pane" id="contact">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5 class="tab-header mb-30">Address Details</h5>
+                                                    <h5 class="tab-header mt-0">Address Details</h5>
                                                 </div>
                                                 <div class="col-lg-3 col-lg-offset-0">
                                                     <div class="input-group">
@@ -351,7 +351,7 @@
 
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <h5 class="tab-header mt-30">Father Details</h5>
+                                                    <h5 class="tab-header">Father Details</h5>
                                                 </div>
                                             </div>
 
@@ -362,7 +362,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">First Name<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">First Name<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="father_first_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" required value="{{$preadmissionDetails->father_name}}" />
                                                         </div>
                                                     </div>
@@ -374,7 +374,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Middle Name</label>
+                                                            <label class="control-label mt-0">Middle Name</label>
                                                             <input type="text" class="form-control" name="father_middle_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$preadmissionDetails->father_middle_name}}" />
                                                         </div>
                                                     </div>
@@ -386,7 +386,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Last Name<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Last Name<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="father_last_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$preadmissionDetails->father_last_name}}" required/>
                                                         </div>
                                                     </div>
@@ -398,7 +398,7 @@
                                                             <i class="material-icons icon-middle">phone</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Mobile Number<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Mobile Number<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="father_mobile_number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" minlength="10" maxlength="10" number="true" onblur="this" required value="{{$preadmissionDetails->father_mobile_number}}" />
                                                         </div>
                                                     </div>
@@ -412,7 +412,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Aadhaar Number</label>
+                                                            <label class="control-label mt-0">Aadhaar Number</label>
                                                             <input type="text" class="form-control" name="father_aadhaar_number" minlength="12" maxlength="12" maxlength='12' minlength='12' onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$preadmissionDetails->father_aadhaar_number}}" />
                                                         </div>
                                                     </div>
@@ -424,7 +424,7 @@
                                                             <i class="material-icons icon-middle">school</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Education</label>
+                                                            <label class="control-label mt-0">Education</label>
                                                             <input type="text" class="form-control" name="father_education" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$preadmissionDetails->father_education}}" />
                                                         </div>
                                                     </div>
@@ -436,7 +436,7 @@
                                                             <i class="material-icons icon-middle">work</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Profession</label>
+                                                            <label class="control-label mt-0">Profession</label>
                                                             <input type="text" class="form-control" name="father_profession" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$preadmissionDetails->father_profession}}" />
                                                         </div>
                                                     </div>
@@ -448,7 +448,7 @@
                                                             <i class="material-icons icon-middle">mail</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Email-ID</label>
+                                                            <label class="control-label mt-0">Email-ID</label>
                                                             <input type="email" class="form-control" name="father_email_id" value="{{$preadmissionDetails->father_email}}" />
                                                         </div>
                                                     </div>
@@ -462,7 +462,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Annual Income</label>
+                                                            <label class="control-label mt-0">Annual Income</label>
                                                             <input type="text" class="form-control" name="father_annual_income" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$preadmissionDetails->father_annual_income}}" />
                                                         </div>
                                                     </div>
@@ -471,7 +471,7 @@
 
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <h5 class="tab-header mt-30">Mother Details</h5>
+                                                    <h5 class="tab-header">Mother Details</h5>
                                                 </div>
                                             </div>
 
@@ -482,7 +482,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">First Name<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">First Name<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="mother_first_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" required value="{{$preadmissionDetails->mother_name}}" />
                                                         </div>
                                                     </div>
@@ -494,7 +494,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Middle Name</label>
+                                                            <label class="control-label mt-0">Middle Name</label>
                                                             <input type="text" class="form-control" name="mother_middle_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$preadmissionDetails->mother_middle_name}}" />
                                                         </div>
                                                     </div>
@@ -506,7 +506,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Last Name<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Last Name<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="mother_last_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$preadmissionDetails->mother_last_name}}" required/>
                                                         </div>
                                                     </div>
@@ -518,7 +518,7 @@
                                                             <i class="material-icons icon-middle">phone</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Mobile Number<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Mobile Number<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="mother_mobile_number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" minlength="10" maxlength="10" number="true" onblur="this" required value="{{$preadmissionDetails->mother_mobile_number}}" />
                                                         </div>
                                                     </div>
@@ -532,7 +532,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Aadhaar Number</label>
+                                                            <label class="control-label mt-0">Aadhaar Number</label>
                                                             <input type="text" class="form-control" name="mother_aadhaar_number" minlength="12" maxlength="12" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$preadmissionDetails->mother_aadhaar_number}}" />
                                                         </div>
                                                     </div>
@@ -544,7 +544,7 @@
                                                             <i class="material-icons icon-middle">school</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Education</label>
+                                                            <label class="control-label mt-0">Education</label>
                                                             <input type="text" class="form-control" name="mother_education" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$preadmissionDetails->mother_education}}" />
                                                         </div>
                                                     </div>
@@ -556,7 +556,7 @@
                                                             <i class="material-icons icon-middle">work</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Profession</label>
+                                                            <label class="control-label mt-0">Profession</label>
                                                             <input type="text" class="form-control" name="mother_profession" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$preadmissionDetails->mother_profession}}" />
                                                         </div>
                                                     </div>
@@ -568,7 +568,7 @@
                                                             <i class="material-icons icon-middle">mail</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Email-ID</label>
+                                                            <label class="control-label mt-0">Email-ID</label>
                                                             <input type="email" class="form-control" name="mother_email_id" value="{{$preadmissionDetails->mother_email}}" />
                                                         </div>
                                                     </div>
@@ -582,7 +582,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Annual Income</label>
+                                                            <label class="control-label mt-0">Annual Income</label>
                                                             <input type="text" class="form-control" name="mother_annual_income" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$preadmissionDetails->mother_annual_income}}" />
                                                         </div>
                                                     </div>
@@ -591,7 +591,7 @@
 
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <h5 class="tab-header mt-30">Guardian Details</h5>
+                                                    <h5 class="tab-header">Guardian Details</h5>
                                                 </div>
                                             </div>
 
@@ -602,7 +602,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">First Name</label>
+                                                            <label class="control-label mt-0">First Name</label>
                                                             <input type="text" class="form-control" name="guardian_first_name" nkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$preadmissionDetails->guardian_name}}" />
                                                         </div>
                                                     </div>
@@ -614,7 +614,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Middle Name</label>
+                                                            <label class="control-label mt-0">Middle Name</label>
                                                             <input type="text" class="form-control" name="guardian_middle_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$preadmissionDetails->guardian_middle_name}}" />
                                                         </div>
                                                     </div>
@@ -626,7 +626,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Last Name</label>
+                                                            <label class="control-label mt-0">Last Name</label>
                                                             <input type="text" class="form-control" name="guardian_last_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$preadmissionDetails->guardian_last_name}}" />
                                                         </div>
                                                     </div>
@@ -638,7 +638,7 @@
                                                             <i class="material-icons icon-middle">phone</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Mobile Number</label>
+                                                            <label class="control-label mt-0">Mobile Number</label>
                                                             <input type="text" class="form-control" name="guardian_phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" minlength="10" maxlength="10" number="true" onblur="this" value="{{$preadmissionDetails->guardian_contact_no}}" />
                                                         </div>
                                                     </div>
@@ -652,7 +652,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Aadhaar Number</label>
+                                                            <label class="control-label mt-0">Aadhaar Number</label>
                                                             <input type="text" class="form-control" name="guardian_aadhaar_number" minlength="12" maxlength="12" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$preadmissionDetails->guardian_aadhaar_no}}" />
                                                         </div>
                                                     </div>
@@ -664,7 +664,7 @@
                                                             <i class="material-icons icon-middle">mail</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Email-ID</label>
+                                                            <label class="control-label mt-0">Email-ID</label>
                                                             <input type="email" class="form-control" name="guardian_email_id" value="{{$preadmissionDetails->guardian_email}}" />
                                                         </div>
                                                     </div>
@@ -676,7 +676,7 @@
                                                             <i class="material-icons icon-middle">face</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Relation With Guardian</label>
+                                                            <label class="control-label mt-0">Relation With Guardian</label>
                                                             <input type="text" class="form-control" name="relation_with_guardian" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$preadmissionDetails->guardian_relation}}" />
                                                         </div>
                                                     </div>
@@ -690,7 +690,7 @@
                                                             <i class="material-icons icon-middle">location_on</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Address</label>
+                                                            <label class="control-label mt-0">Address</label>
                                                             <textarea class="form-control mt-10" rows="1" name="guardian_addresss" id="guardian_addresss">{{$preadmissionDetails->guardian_address}}</textarea>
                                                         </div>
                                                     </div>
@@ -699,7 +699,7 @@
 
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5 class="tab-header mt-30">SMS Detail</h5>
+                                                    <h5 class="tab-header">SMS Detail</h5>
                                                 </div>
                                                 <div class="col-lg-4 col-lg-offset-0">
                                                     <div class="input-group">
@@ -707,7 +707,7 @@
                                                             <i class="material-icons icon-middle">sms</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">SMS For<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">SMS For<span class="text-danger">*</span></label>
                                                             <select class="selectpicker" name="sms_sent_for" id="sms_sent_for" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" required data-parsley-errors-container=".smsError">
                                                                 <option value="Father" @if($preadmissionDetails->sms_for == 'Father') {{ "selected" }} @endif>FATHER</option>
                                                                 <option value="Mother" @if($preadmissionDetails->sms_for == 'Mother') {{ "selected" }} @endif>MOTHER</option>

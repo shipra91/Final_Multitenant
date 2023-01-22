@@ -43,7 +43,7 @@
                                     <div class="row pull-right">
                                         <div class="col-lg-12 col-lg-offset-0 form-group">
                                             <button type="submit" class="btn btn-finish btn-fill btn-info btn-wd mr-5" id="submit" name="submit">Submit</button>
-                                            <a href="{{url('/etpl/result')}}" class="btn btn-finish btn-fill btn-wd btn btn-danger">Close</a>
+                                            <a href="{{ url('/etpl/fee-category') }}" class="btn btn-finish btn-fill btn-wd btn btn-danger">Close</a>
                                         </div>
                                     </div>
                                 </form>

@@ -15,6 +15,7 @@ use App\Http\Requests\StoreStaffRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportStaff;
 use App\Exports\ExportStaffSample;
+use App\Imports\StaffImport;
 use DataTables;
 use Helper;
 
@@ -46,12 +47,11 @@ class StaffController extends Controller
                     })
                     ->addColumn('action', function($row){
                         $btn = '';
-
                         if(Helper::checkAccess('staff', 'edit')){
                             $btn .= '<a href="/staff/'.$row['id'].'" rel="tooltip" title="Edit" class="text-success"><i class="material-icons">edit</i></a>';
                         }
                         if(Helper::checkAccess('staff', 'view')){
-                            $btn .='<a href="/staff-detail/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>';
+                            $btn .='<a href="/staff-detail/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">account_box</i></a>';
                         }
                         if(Helper::checkAccess('staff', 'create')){
                             if($row['working_hours'] == 'PART_TIME'){
@@ -240,7 +240,12 @@ class StaffController extends Controller
                     })
                     ->addColumn('action', function($row){
 
-                        $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-xs restore"><i class="material-icons">delete</i> Restore</button>';
+                        $btn ='';
+                        if(Helper::checkAccess('staff', 'create')){
+                            $btn .= '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        }else{
+                            $btn .= 'No Access';
+                        }
 
                         return $btn;
                     })
@@ -295,8 +300,18 @@ class StaffController extends Controller
         return response()->json($result, $result['status']);
     }
 
-    public function exportStaffSample(){
-        return (new ExportStaffSample())->download('sampleStaff.xlsx');
+    // Download export staff sample file
+    public function exportStaffSample()
+    {
+        return (new ExportStaffSample())->download('sampleStaff.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    // Save import staff details
+    public function storeImportData(Request $request)
+    {
+        $file = $request->file('file');
+        Excel::import(new StaffImport, $file);
+        // (new StaffImport)->import($file); // using importable from StaffImport.php
+        return back()->withStatus('Excel file imported successfully');
     }
 }
-?>

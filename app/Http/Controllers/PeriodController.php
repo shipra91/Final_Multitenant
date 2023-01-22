@@ -143,13 +143,19 @@ class PeriodController extends Controller
 
         $periodService = new PeriodService();
         $allSessions = session()->all();
+        //dd($periodService->getDeletedRecords($allSessions));
 
         if($request->ajax()){
             $deletedData = $periodService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        $btn ='';
+                        if(Helper::checkAccess('event', 'create')){
+                            $btn .= '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        }else{
+                            $btn .= 'No Access';
+                        }
                         return $btn;
                     })
                     ->rawColumns(['action'])

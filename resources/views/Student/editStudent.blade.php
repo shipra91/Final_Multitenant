@@ -53,7 +53,7 @@
                                         <div class="tab-pane wizard-pane" id="basic">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5 class="tab-header mb-30">Personal Detail</h5>
+                                                    <h5 class="tab-header mt-0">Personal Detail</h5>
                                                 </div>
                                                 <div class="col-sm-4 text-center">
                                                     <div class="fileinput fileinput-new text-center"
@@ -76,7 +76,6 @@
                                                             </span>
                                                             <a href="#pablo" class="btn btn-danger btn-square fileinput-exists btn-sm" data-dismiss="fileinput"><i class="material-icons">highlight_off</i></a>
                                                             <input type="hidden" name="old_student_profile" value="{{$data->attachment_student_photo}}" />
-
                                                             <input type="hidden" name="idFeeCategory" id="idFeeCategory" value="3a3d9600-dfc8-475e-88cc-3f734d1b8c18">
                                                             <input type="hidden" name="student_id" id="student_id" value="{{ $data->id_student }}" />
                                                         </div>
@@ -91,25 +90,8 @@
                                                                     <i class="material-icons icon-middle">account_circle</i>
                                                                 </span>
                                                                 <div class="form-group">
-                                                                    <label class="control-label">First Name<span class="text-danger">*</span></label>
+                                                                    <label class="control-label mt-0">First Name<span class="text-danger">*</span></label>
                                                                     <input type="text" class="form-control input" name="student_first_name" id="student_first_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->name}}" required />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-sm-4">
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon">
-                                                                    <i
-                                                                        class="material-icons icon-middle">account_circle</i>
-                                                                </span>
-                                                                <div class="form-group">
-                                                                    <label class="control-label">Middle Name</label>
-                                                                    <input type="text" class="form-control input"
-                                                                        name="student_middle_name"
-                                                                        id="student_middle_name"
-                                                                        onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)"
-                                                                        value="{{$data->middle_name}}" />
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -120,7 +102,19 @@
                                                                     <i class="material-icons icon-middle">account_circle</i>
                                                                 </span>
                                                                 <div class="form-group">
-                                                                    <label class="control-label">Last Name<span class="text-danger">*</span></label>
+                                                                    <label class="control-label mt-0">Middle Name</label>
+                                                                    <input type="text" class="form-control input" name="student_middle_name" id="student_middle_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->middle_name}}" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-4">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon">
+                                                                    <i class="material-icons icon-middle">account_circle</i>
+                                                                </span>
+                                                                <div class="form-group">
+                                                                    <label class="control-label mt-0">Last Name<span class="text-danger">*</span></label>
                                                                     <input type="text" class="form-control input" name="student_last_name" id="student_last_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->last_name}}" required/>
                                                                 </div>
                                                             </div>
@@ -134,7 +128,7 @@
                                                                     <i class="material-icons icon-middle">person</i>
                                                                 </span>
                                                                 <div class="form-group">
-                                                                    <label class="control-label">USN</label>
+                                                                    <label class="control-label mt-0">USN</label>
                                                                     <input type="text" class="form-control" name="usn" id="usn" value="{{$data->usn}}" />
                                                                 </div>
                                                             </div>
@@ -146,7 +140,7 @@
                                                                     <i class="material-icons icon-middle">event</i>
                                                                 </span>
                                                                 <div class="form-group">
-                                                                    <label class="control-label">Date of Birth <span class="text-danger">*</span></label>
+                                                                    <label class="control-label mt-0">Date of Birth <span class="text-danger">*</span></label>
                                                                     <input type="text" class="form-control custom_datepicker" name="date_of_birth" id="date_of_birth" value="{{Carbon::createFromFormat('Y-m-d', $data->date_of_birth)->format('d/m/Y')}}" data-parsley-trigger="change" required />
                                                                 </div>
                                                             </div>
@@ -158,7 +152,7 @@
                                                                     <i class="material-icons icon-middle">cake</i>
                                                                 </span>
                                                                 <div class="form-group">
-                                                                    <label class="control-label">Age</label>
+                                                                    <label class="control-label mt-0">Age</label>
                                                                     <input type="text" class="form-control" name="age" id="age" value="{{$data->current_age}}" readonly />
                                                                 </div>
                                                             </div>
@@ -169,7 +163,7 @@
 
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <h5 class="tab-header mt-30">Father Details</h5>
+                                                    <h5 class="tab-header">Father Details</h5>
                                                 </div>
                                             </div>
 
@@ -180,7 +174,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">First Name<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">First Name<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="father_first_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->father_name}}" required />
                                                         </div>
                                                     </div>
@@ -192,7 +186,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Middle Name</label>
+                                                            <label class="control-label mt-0">Middle Name</label>
                                                             <input type="text" class="form-control" name="father_middle_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->father_middle_name}}" />
                                                         </div>
                                                     </div>
@@ -204,7 +198,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Last Name<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Last Name<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="father_last_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->father_last_name}}" required/>
                                                         </div>
                                                     </div>
@@ -216,7 +210,7 @@
                                                             <i class="material-icons icon-middle">phone</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Mobile Number<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Mobile Number<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="father_mobile_number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" minlength="10" maxlength="10" number="true" onblur="this" value="{{$data->father_mobile_number}}" required />
                                                         </div>
                                                     </div>
@@ -230,7 +224,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Aadhaar Number</label>
+                                                            <label class="control-label mt-0">Aadhaar Number</label>
                                                             <input type="text" class="form-control" name="father_aadhaar_number" minlength="12" maxlength="12" maxlength='12' minlength='12' onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$data->father_aadhaar_number}}" />
                                                         </div>
                                                     </div>
@@ -242,7 +236,7 @@
                                                             <i class="material-icons icon-middle">school</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Education</label>
+                                                            <label class="control-label mt-0">Education</label>
                                                             <input type="text" class="form-control" name="father_education" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$data->father_education}}" />
                                                         </div>
                                                     </div>
@@ -254,7 +248,7 @@
                                                             <i class="material-icons icon-middle">work</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Profession</label>
+                                                            <label class="control-label mt-0">Profession</label>
                                                             <input type="text" class="form-control" name="father_profession" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$data->father_profession}}" />
                                                         </div>
                                                     </div>
@@ -266,7 +260,7 @@
                                                             <i class="material-icons icon-middle">mail</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Email-ID</label>
+                                                            <label class="control-label mt-0">Email-ID</label>
                                                             <input type="email" class="form-control" name="father_email_id" value="{{$data->father_email}}" />
                                                         </div>
                                                     </div>
@@ -280,7 +274,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Annual Income</label>
+                                                            <label class="control-label mt-0">Annual Income</label>
                                                             <input type="text" class="form-control" name="father_annual_income" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$data->father_annual_income}}" />
                                                         </div>
                                                     </div>
@@ -289,7 +283,7 @@
 
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <h5 class="tab-header mt-30">Mother Details</h5>
+                                                    <h5 class="tab-header">Mother Details</h5>
                                                 </div>
                                             </div>
 
@@ -300,7 +294,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">First Name<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">First Name<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="mother_first_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->mother_name}}" required />
                                                         </div>
                                                     </div>
@@ -312,7 +306,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Middle Name</label>
+                                                            <label class="control-label mt-0">Middle Name</label>
                                                             <input type="text" class="form-control" name="mother_middle_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->mother_middle_name}}" />
                                                         </div>
                                                     </div>
@@ -324,7 +318,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Last Name<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Last Name<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="mother_last_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->mother_last_name}}" required/>
                                                         </div>
                                                     </div>
@@ -336,7 +330,7 @@
                                                             <i class="material-icons icon-middle">phone</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Mobile Number<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Mobile Number<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="mother_mobile_number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" minlength="10" maxlength="10" number="true" onblur="this" value="{{$data->mother_mobile_number}}" required />
                                                         </div>
                                                     </div>
@@ -350,7 +344,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Aadhaar Number</label>
+                                                            <label class="control-label mt-0">Aadhaar Number</label>
                                                             <input type="text" class="form-control" name="mother_aadhaar_number" minlength="12" maxlength="12" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$data->mother_aadhaar_number}}" />
                                                         </div>
                                                     </div>
@@ -362,7 +356,7 @@
                                                             <i class="material-icons icon-middle">school</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Education</label>
+                                                            <label class="control-label mt-0">Education</label>
                                                             <input type="text" class="form-control" name="mother_education" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$data->mother_education}}" />
                                                         </div>
                                                     </div>
@@ -374,7 +368,7 @@
                                                             <i class="material-icons icon-middle">work</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Profession</label>
+                                                            <label class="control-label mt-0">Profession</label>
                                                             <input type="text" class="form-control" name="mother_profession" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$data->mother_profession}}" />
                                                         </div>
                                                     </div>
@@ -386,7 +380,7 @@
                                                             <i class="material-icons icon-middle">mail</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Email-ID</label>
+                                                            <label class="control-label mt-0">Email-ID</label>
                                                             <input type="email" class="form-control" name="mother_email_id" value="{{$data->mother_email}}" />
                                                         </div>
                                                     </div>
@@ -400,7 +394,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Annual Income</label>
+                                                            <label class="control-label mt-0">Annual Income</label>
                                                             <input type="text" class="form-control" name="mother_annual_income" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$data->mother_annual_income}}" />
                                                         </div>
                                                     </div>
@@ -409,7 +403,7 @@
 
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <h5 class="tab-header mt-30">Guardian Details</h5>
+                                                    <h5 class="tab-header">Guardian Details</h5>
                                                 </div>
                                             </div>
 
@@ -420,7 +414,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">First Name</label>
+                                                            <label class="control-label mt-0">First Name</label>
                                                             <input type="text" class="form-control" name="guardian_first_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->guardian_name}}" />
                                                         </div>
                                                     </div>
@@ -432,7 +426,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Middle Name</label>
+                                                            <label class="control-label mt-0">Middle Name</label>
                                                             <input type="text" class="form-control" name="guardian_middle_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->guardian_middle_name}}" />
                                                         </div>
                                                     </div>
@@ -444,7 +438,7 @@
                                                             <i class="material-icons icon-middle">account_circle</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Last Name</label>
+                                                            <label class="control-label mt-0">Last Name</label>
                                                             <input type="text" class="form-control" name="guardian_last_name" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123)" value="{{$data->guardian_last_name}}"/>
                                                         </div>
                                                     </div>
@@ -456,7 +450,7 @@
                                                             <i class="material-icons icon-middle">phone</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Mobile Number</label>
+                                                            <label class="control-label mt-0">Mobile Number</label>
                                                             <input type="text" class="form-control" name="guardian_phone" onkeypress="return event.charCode >= 48 && event.charCode <= 57" minlength="10" maxlength="10" number="true" onblur="this" value="{{$data->guardian_contact_no}}" />
                                                         </div>
                                                     </div>
@@ -470,7 +464,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Aadhaar Number</label>
+                                                            <label class="control-label mt-0">Aadhaar Number</label>
                                                             <input type="text" class="form-control" name="guardian_aadhaar_number" minlength="12" maxlength="12" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$data->guardian_aadhaar_no}}" />
                                                         </div>
                                                     </div>
@@ -482,7 +476,7 @@
                                                             <i class="material-icons icon-middle">mail</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Email-ID</label>
+                                                            <label class="control-label mt-0">Email-ID</label>
                                                             <input type="email" class="form-control" name="guardian_email_id" value="{{$data->guardian_email}}" />
                                                         </div>
                                                     </div>
@@ -494,7 +488,7 @@
                                                             <i class="material-icons icon-middle">face</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Relation With Guardian</label>
+                                                            <label class="control-label mt-0">Relation With Guardian</label>
                                                             <input type="text" class="form-control" name="relation_with_guardian" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$data->guardian_relation}}" />
                                                         </div>
                                                     </div>
@@ -508,8 +502,8 @@
                                                             <i class="material-icons icon-middle">location_on</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Address</label>
-                                                            <textarea class="form-control mt-10" rows="1" name="guardian_addresss" id="guardian_addresss">{{$data->guardian_address}}</textarea>
+                                                            <label class="control-label mt-0">Address</label>
+                                                            <textarea class="form-control" rows="1" name="guardian_addresss" id="guardian_addresss">{{$data->guardian_address}}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -517,13 +511,13 @@
 
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5 class="tab-header mt-30">Address Detail</h5>
+                                                    <h5 class="tab-header">Address Detail</h5>
                                                 </div>
                                                 <div class="col-lg-3 col-lg-offset-0">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><i class="material-icons icon-middle">fiber_pin</i></span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Pincode<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Pincode<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="student_pincode" id="student_pincode" value="{{$data->pincode}}" required />
 
                                                             <input type="hidden" name="student_city" id="student_city" value="{{$data->city}}" />
@@ -539,7 +533,7 @@
                                                             <i class="material-icons icon-middle">account_balance</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Post Office<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Post Office<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="student_post_office" id="student_post_office" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$data->post_office}}" required />
                                                         </div>
                                                     </div>
@@ -551,7 +545,7 @@
                                                             <i class="material-icons icon-middle">location_city</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">City/Taluk<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">City/Taluk<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="student_taluk" id="student_taluk" value="{{$data->taluk}}" required />
                                                         </div>
                                                     </div>
@@ -563,7 +557,7 @@
                                                             <i class="material-icons icon-middle">account_balance</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">District<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">District<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="student_district" id="student_district" value="{{$data->district}}" required />
                                                         </div>
                                                     </div>
@@ -575,7 +569,7 @@
                                                             <i class="material-icons icon-middle">location_on</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Address<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Address<span class="text-danger">*</span></label>
                                                             <textarea class="form-control" rows="1" name="student_address" id="student_address" required>{{$data->address}}</textarea>
                                                         </div>
                                                     </div>
@@ -586,7 +580,7 @@
                                         <div class="tab-pane wizard-pane" id="academic">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5 class="tab-header">Academics Detail</h5>
+                                                    <h5 class="tab-header mt-0">Academics Detail</h5>
                                                 </div>
 
                                                 <div class="col-lg-3 col-lg-offset-0">
@@ -595,8 +589,8 @@
                                                             <i class="material-icons icon-middle">local_library</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-academiclabel">Admission Class<span class="text-danger">*</span></label>
-                                                            <select class="selectpicker" name="standard" id="standard" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true" required data-parsley-errors-container=".standardError">
+                                                            <label class="control-label mt-0">Admission Class<span class="text-danger">*</span></label>
+                                                            <select class="selectpicker" name="standard" id="standard" data-style="select-with-transition" data-size="5" title="Select" data-live-search="true" required data-parsley-errors-container=".standardError">
                                                                 @foreach($fieldDetails['standard'] as $index => $class)
                                                                     <option value="{{$class['institutionStandard_id']}}"@if($data->id_standard == $class['institutionStandard_id'] ) {{"selected" }} @endif>{{$class['class']}} </option>
                                                                 @endforeach
@@ -612,8 +606,8 @@
                                                             <i class="material-icons icon-middle">wc</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Gender<span class="text-danger">*</span></label>
-                                                            <select class="selectpicker" name="gender" id="gender" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true" required data-parsley-errors-container=".genderError">
+                                                            <label class="control-label mt-0">Gender<span class="text-danger">*</span></label>
+                                                            <select class="selectpicker" name="gender" id="gender" data-style="select-with-transition" data-size="5" title="Select" data-live-search="true" required data-parsley-errors-container=".genderError">
                                                                 @foreach($fieldDetails['gender'] as $genderFields)
                                                                     <option value="{{$genderFields['id']}}" @if($data->id_gender == $genderFields['id'] ) {{ "selected" }} @endif>{{$genderFields['name']}}</option>
                                                                 @endforeach
@@ -629,7 +623,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Register Number</label>
+                                                            <label class="control-label mt-0">Register Number</label>
                                                             <input type="text" class="form-control" name="register_number" id="register_number" value="{{$data->register_number}}" />
                                                         </div>
                                                     </div>
@@ -641,7 +635,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Roll Number</label>
+                                                            <label class="control-label mt-0">Roll Number</label>
                                                             <input type="text" class="form-control" name="rollnumber" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$data->roll_number}}" />
                                                         </div>
                                                     </div>
@@ -655,7 +649,7 @@
                                                             <i class="material-icons icon-middle">event</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Admission Date<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Admission Date<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control custom_datepicker" name="admission_date" id="admission_date" value="{{Carbon::createFromFormat('Y-m-d', $data->admission_date)->format('d/m/Y')}}" data-parsley-trigger="change" requied />
                                                         </div>
                                                     </div>
@@ -667,7 +661,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Admission Number</label>
+                                                            <label class="control-label mt-0">Admission Number</label>
                                                             <input type="text" class="form-control" name="admission_number" id="admission_number" value="{{$data->admission_number}}" />
                                                         </div>
                                                     </div>
@@ -679,8 +673,8 @@
                                                             <i class="material-icons icon-middle">school</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">First Language</label>
-                                                            <select class="selectpicker" name="first_language" id="first_language" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true">
+                                                            <label class="control-label mt-0">First Language</label>
+                                                            <select class="selectpicker" name="first_language" id="first_language" data-style="select-with-transition" data-size="5" title="Select" data-live-search="true">
                                                                 @foreach($data->standard_subjects['all_language_subject']
                                                                 as $language)
                                                                     <option value="{{ $language['id'] }}" @if($language['id'] == $data->id_first_language){{'selected'}} @endif> {{ $language['name'] }}</option>
@@ -696,8 +690,8 @@
                                                             <i class="material-icons icon-middle">school</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Second Language</label>
-                                                            <select class="selectpicker" name="second_language" id="second_language" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true">
+                                                            <label class="control-label mt-0">Second Language</label>
+                                                            <select class="selectpicker" name="second_language" id="second_language" data-style="select-with-transition" data-size="5" title="Select" data-live-search="true">
                                                                 @foreach($data->standard_subjects['all_language_subject']
                                                                 as $language)
                                                                     <option value="{{ $language['id'] }}" @if($language['id'] == $data->id_second_language) {{'selected'}} @endif>{{ $language['name'] }}</option>
@@ -715,8 +709,8 @@
                                                             <i class="material-icons icon-middle">school</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Third Language</label>
-                                                            <select class="selectpicker" name="third_language" id="third_language" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true">
+                                                            <label class="control-label mt-0">Third Language</label>
+                                                            <select class="selectpicker" name="third_language" id="third_language" data-style="select-with-transition" data-size="5" title="Select" data-live-search="true">
                                                                 @foreach($data->standard_subjects['all_language_subject']
                                                                 as $language)
                                                                     <option value="{{ $language['id'] }}" @if($language['id'] == $data->id_third_language){{'selected'}} @endif>{{ $language['name'] }}</option>
@@ -732,8 +726,8 @@
                                                             <i class="material-icons icon-middle">school</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Electives</label>
-                                                            <select class="selectpicker" name="elective_subject[]" id="elective_subject" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true" multiple data-actions-box="true">
+                                                            <label class="control-label mt-0">Electives</label>
+                                                            <select class="selectpicker" name="elective_subject[]" id="elective_subject" data-style="select-with-transition" data-size="5" title="Select" data-live-search="true" multiple data-actions-box="true">
                                                                 @foreach($data->standard_subjects['all_elective_subject']
                                                                 as $elective)
                                                                     <option value="{{ $elective['id'] }}" @if (array_intersect(explode('||', $elective['id']), $data->selected_elective)) {{ "selected" }} @endif>{{ $elective['name'] }}</option>
@@ -746,7 +740,7 @@
 
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5 class="tab-header mt-30">Fee Detail</h5>
+                                                    <h5 class="tab-header">Fee Detail</h5>
                                                 </div>
 
                                                 <div class="col-lg-3 col-lg-offset-0">
@@ -755,8 +749,8 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Fee Type</label>
-                                                            <select class="selectpicker" name="fee_type" id="fee_type" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true">
+                                                            <label class="control-label mt-0">Fee Type</label>
+                                                            <select class="selectpicker" name="fee_type" id="fee_type" data-style="select-with-transition" data-size="5" title="Select" data-live-search="true">
                                                                 @foreach($fieldDetails['fee_type'] as $feeType)
                                                                     <option value="{{$feeType->id}}" @if($data->id_fee_type == $feeType->id ){{ "selected" }} @endif>{{$feeType->name}}</option>
                                                                 @endforeach
@@ -770,7 +764,7 @@
                                         <div class="tab-pane wizard-pane" id="additional">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5 class="tab-header">Additional Details</h5>
+                                                    <h5 class="tab-header mt-0">Additional Details</h5>
                                                 </div>
                                                 <div class="col-lg-3 col-lg-offset-0">
                                                     <div class="input-group">
@@ -778,7 +772,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Mother Tongue</label>
+                                                            <label class="control-label mt-0">Mother Tongue</label>
                                                             <input type="text" class="form-control" name="mother_tongue" id="mother_tongue" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$data->mother_tongue}}" />
                                                         </div>
                                                     </div>
@@ -790,7 +784,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">SATS Number</label>
+                                                            <label class="control-label mt-0">SATS Number</label>
                                                             <input type="text" class="form-control" name="sats_number" id="sats_number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$data->sats_number}}" />
                                                         </div>
                                                     </div>
@@ -802,7 +796,7 @@
                                                             <i class="material-icons icon-middle">view_headline</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Student Aadhaar Number</label>
+                                                            <label class="control-label mt-0">Student Aadhaar Number</label>
                                                             <input type="text" class="form-control" name="student_aadhaar_number" id="student_aadhaar_number" maxlength='12' minlength='12' onkeypress="return event.charCode >= 48 && event.charCode <= 57" value="{{$data->student_aadhaar_number}}" />
                                                         </div>
                                                     </div>
@@ -814,8 +808,8 @@
                                                             <i class="material-icons icon-middle">language</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Nationality<span class="text-danger">*</span></label>
-                                                            <select class="selectpicker" name="nationality" id="nationality" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" required data-parsley-errors-container=".nationalityError">
+                                                            <label class="control-label mt-0">Nationality<span class="text-danger">*</span></label>
+                                                            <select class="selectpicker" name="nationality" id="nationality" data-style="select-with-transition" data-size="5" data-live-search="true" title="Select" required data-parsley-errors-container=".nationalityError">
                                                                 @foreach($fieldDetails['nationality'] as $fields)
                                                                     <option value="{{$fields['id']}}" @if($data->id_nationality == $fields['id'] ) {{ "selected" }}@endif>{{$fields['name']}}</option>
                                                                 @endforeach
@@ -833,8 +827,8 @@
                                                             <i class="material-icons icon-middle">people</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Religion<span class="text-danger">*</span></label>
-                                                            <select class="selectpicker" name="religion" id="religion" data-style="select-with-transition" data-size="3" data-live-search="true" title="Select" required data-parsley-errors-container=".religionError">
+                                                            <label class="control-label mt-0">Religion<span class="text-danger">*</span></label>
+                                                            <select class="selectpicker" name="religion" id="religion" data-style="select-with-transition" data-size="5" data-live-search="true" title="Select" required data-parsley-errors-container=".religionError">
                                                                 @foreach($fieldDetails['religion'] as $fields)
                                                                     <option value="{{$fields['id']}}" @if($data->id_religion == $fields['id'] ) {{ "selected" }} @endif>{{$fields['name']}}</option>
                                                                 @endforeach
@@ -850,7 +844,7 @@
                                                             <i class="material-icons icon-middle">people</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Caste<span class="text-danger">*</span></label>
+                                                            <label class="control-label mt-0">Caste<span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="caste" id="caste" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode==32)" value="{{$data->caste}}" required />
                                                         </div>
                                                     </div>
@@ -862,8 +856,8 @@
                                                             <i class="material-icons icon-middle">people</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Caste Category</label>
-                                                            <select class="selectpicker" name="caste_category" id="caste_category" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true">
+                                                            <label class="control-label mt-0">Caste Category</label>
+                                                            <select class="selectpicker" name="caste_category" id="caste_category" data-style="select-with-transition" data-size="5" title="Select" data-live-search="true">
                                                                 @foreach($fieldDetails['caste_category'] as $fields)
                                                                     <option value="{{$fields['id']}}" @if($data->id_caste_category == $fields['id'] ){{ "selected" }} @endif>{{$fields['name']}}</option>
                                                                 @endforeach
@@ -878,8 +872,8 @@
                                                             <i class="material-icons icon-middle">opacity</i>
                                                         </span>
                                                         <div class="form-group">
-                                                            <label class="control-label">Blood Group</label>
-                                                            <select class="selectpicker" name="blood_group" id="blood_group" data-style="select-with-transition" data-size="3" title="Select" data-live-search="true">
+                                                            <label class="control-label mt-0">Blood Group</label>
+                                                            <select class="selectpicker" name="blood_group" id="blood_group" data-style="select-with-transition" data-size="5" title="Select" data-live-search="true">
                                                                 @foreach($fieldDetails['blood_group'] as $fields)
                                                                     <option value="{{$fields['id']}}" @if($data->id_blood_group == $fields['id'] ) {{ "selected" }} @endif>{{$fields['name']}}</option>
                                                                 @endforeach
@@ -1162,7 +1156,6 @@
                 </form>
             </div>
         </div>
-
     </div>
 </div>
 @endsection
@@ -1193,7 +1186,7 @@
             var currentyear = currentDate.getFullYear();
             var age = currentyear - birthYear;
 
-            if ((currentmonth < birthMonth) || ((currentmonth == birthMonth) && currentday < birthDay)) {
+            if((currentmonth < birthMonth) || ((currentmonth == birthMonth) && currentday < birthDay)) {
                 age--;
             }
 
@@ -1251,26 +1244,20 @@
             $.ajax({
                 url: "/standard-subjects",
                 type: "POST",
-                data: {
-                    id: standardId
-                },
+                data: {id: standardId},
                 success: function(data){
-
                     // Map elective & language
                     var electiveHtml = languageHtml = feeTypeHtml = '';
                     $.map(data['subject']['all_elective_subject'], function(elective, index){
-                        electiveHtml += '<option value="' + elective.id + '">' +
-                            elective.name + '</option>';
+                        electiveHtml += '<option value="' + elective.id + '">' + elective.name + '</option>';
                     });
 
                     $.map(data['subject']['all_language_subject'], function(language, index){
-                        languageHtml += '<option value="' + language.id + '">' +
-                            language.name + '</option>';
+                        languageHtml += '<option value="' + language.id + '">' + language.name + '</option>';
                     });
 
                     $.map(data['fee_type'], function(feeType, index){
-                        feeTypeHtml += '<option value="' + feeType.id + '">' +
-                        feeType.name + '</option>';
+                        feeTypeHtml += '<option value="' + feeType.id + '">' + feeType.name + '</option>';
                     });
 
                     $('#first_language').html(languageHtml);

@@ -32,14 +32,15 @@ class ProjectController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
                         $btn = '';
-
                         if(Helper::checkAccess('project', 'edit')){
                             $btn .= '<a href="/project/'.$row['id'].'" type="button" rel="tooltip" title="Edit" class="text-success"><i class="material-icons">edit</i></a>';
                         }
                         if(Helper::checkAccess('project', 'view')){
-                            $btn .='<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="View" class="text-info projectDetail"><i class="material-icons">visibility</i></a>';
+                            // $btn .='<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="View" class="text-info projectDetail"><i class="material-icons">visibility</i></a>';
+                            $btn .= '<a href="/project-detail/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>';
                         }
                         if($row['status'] == 'file_found'){
+
                             if(Helper::checkAccess('project', 'view')){
                                 $btn .= '<a href="/project-download/'.$row['id'].'/staff_admin" rel="tooltip" title="Download Files" class="text-success" target="_blank"><i class="material-icons">file_download</i></a>';
                             }
@@ -108,9 +109,15 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function show(Project $project)
+    public function show($id)
     {
-        //
+        $projectService = new ProjectService();
+
+        $project = $projectService->getProjectSelectedData($id);
+        $projectDetails = $projectService->getDetails($project['projectData']);
+        //dd($projectDetails);
+
+        return view('Projects/viewProjectDetail', ["project" => $project, 'projectDetails' => $projectDetails])->with("page", "project");
     }
 
     /**
@@ -222,7 +229,12 @@ class ProjectController extends Controller
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        $btn ='';
+                        if(Helper::checkAccess('project', 'create')){
+                            $btn .= '<button type="button" data-id="'.$row->id.'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        }else{
+                            $btn .= 'No Access';
+                        }
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -232,6 +244,7 @@ class ProjectController extends Controller
         return view('Projects/viewDeletedRecord')->with("page", "project");
     }
 
+    // Restore project records
     public function restore($id)
     {
         $projectService = new ProjectService();

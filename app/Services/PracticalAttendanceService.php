@@ -65,7 +65,7 @@
             foreach($studentData as $key => $student){
 
                 $studentDetails = $studentRepository->fetch($student->id);
-
+                $studentName = $studentMappingRepository->getFullName($student->name, $student->middle_name, $student->last_name);
                 $studentAttendance = $practicalAttendanceRepository->fetch($idStandard, $idSubject, $student->id, $idPeriod, $idBatch, $heldOn);
 
                 if($studentAttendance){
@@ -75,6 +75,7 @@
 
                 $studentData[$key] = $studentDetails;
                 $studentData[$key]['attendanceStatus'] = $attendanceStatus;
+                $studentData[$key]['studentName'] = $studentName;
             }
             //dd($studentDetails);
 

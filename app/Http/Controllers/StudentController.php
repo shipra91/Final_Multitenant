@@ -10,6 +10,8 @@ use App\Http\Requests\StoreStudentRequest;
 use App\Interfaces\StudentMappingRepositoryInterface;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExportStudent;
+use App\Exports\ExportStudentSample;
+use App\Imports\StudentImport;
 use DataTables;
 use Helper;
 
@@ -43,7 +45,7 @@ class StudentController extends Controller
                             $btn .= '<a href="/student/'.$row['id_student'].'" type="button" rel="tooltip" title="Edit" class="text-success"><i class="material-icons">edit</i></a>';
                         }
                         if(Helper::checkAccess('student', 'view')){
-                            $btn .= '<a href="/student-detail/'.$row['id_student'].'" type="button" rel="tooltip" title="View"  class="text-success"><i class="material-icons">person</i></a>';
+                            $btn .= '<a href="/student-detail/'.$row['id_student'].'" type="button" rel="tooltip" title="View"  class="text-info"><i class="material-icons">account_box</i></a>';
                         }
                         if(Helper::checkAccess('student', 'delete')){
                             $btn .= '<a href="javascript:void();" type="button" data-id="'.$row['id_student'].'" rel="tooltip" title="Delete" class="text-danger delete"><i class="material-icons">delete</i></a>';
@@ -194,6 +196,7 @@ class StudentController extends Controller
         return response()->json($result, $result['status']);
     }
 
+    // Export student details
     public function ExportStudent(Request $request){
         // dd(new ExportStudent($request));
         // return (new ExportStudent($request))->download('students.xlsx', \Maatwebsite\Excel\Excel::XLSX);
@@ -211,25 +214,32 @@ class StudentController extends Controller
             return Datatables::of($deletedStudents)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){                        
-                        $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-xs restore"><i class="material-icons">delete</i> Restore</button>';
+                        $btn ='';
+                        if(Helper::checkAccess('student', 'create')){
+                            $btn .= '<button type="button" data-id="'.$row->id.'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
+                        }else{
+                            $btn .= 'No Access';
+                        }
                         return $btn;
                     })
                     ->rawColumns(['action'])
                     ->make(true);
         }
-          
+
         return view('Student/viewDeletedStudent')->with("page", "student");
     }
 
+    // Restore student records
     public function restore($id)
     {
-        $studentService = new StudentService();
         $result = ["status" => 200];
+
         try{
-            
-            $result['data'] = $studentService->restore($id);
+
+            $result['data'] = $this->studentService->restore($id);
 
         }catch(Exception $e){
+
             $result = [
                 "status" => 500,
                 "error" => $e->getMessage()
@@ -254,7 +264,6 @@ class StudentController extends Controller
                 "error" => $e->getMessage()
             ];
         }
-        
         return response()->json($result, $result['status']);
     }
 
@@ -276,5 +285,17 @@ class StudentController extends Controller
         $standardId = $request['standardId'];
         $studentDetails = $studentService->fetchStandardStudents($standardId, $allSessions);
         return $studentDetails;
+    }
+
+    public function exportStudentSample(){
+        return (new ExportStudentSample())->download('sampleStudent.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    public function storeImportData(Request $request){
+
+        $file = $request->file('file');
+        Excel::import(new StudentImport, $file);
+        return back()->withStatus('Excel file imported successfully');
+
     }
 }

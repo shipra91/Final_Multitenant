@@ -17,12 +17,26 @@
 
     class StaffClassTimeTableService {
 
-        public function getAllTeachingStaff($allSessions){
+        // Get all staff
+        public function getAll(){
 
             $staffRepository = new StaffRepository();
 
-            $staffData = $staffRepository->getTeachingStaff($allSessions);
+            $staffData = $staffRepository->allStaff();
             return $staffData;
+        }
+
+        // Get particular staff time table
+        public function getAllTeachingStaff($allSessions){
+
+            $staffRepository = new StaffRepository();
+            $arrayData = array();
+            $staffData = $staffRepository->getTeachingStaff($allSessions);
+            foreach($staffData as $key => $staffDetail){
+                $arrayData[$key] = $staffDetail;
+                $arrayData[$key]['name'] = $staffRepository->getFullName($staffDetail['name'], $staffDetail['middle_name'], $staffDetail['last_name']);
+            }
+            return $arrayData;
         }
 
         // Get particular staff time table
@@ -34,18 +48,20 @@
             $classTimeTableSettingsRepository = new ClassTimeTableSettingsRepository();
             $institutionStandardService = new InstitutionStandardService();
             $institutionSubjectService = new InstitutionSubjectService();
-            $periodRepository = new PeriodRepository(); 
+            $periodRepository = new PeriodRepository();
             $roomMasterRepository = new RoomMasterRepository();
+
             $classTimetableArray = [];
             $classTimetableDetalsArray = [];
 
             $daysArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-            $periodData = $periodRepository->getPeriodTypeWise($allSessions);
+            $periodData = $periodRepository->getPeriodTypeWise();
             $classTimetableDetalsArray['days'] = $daysArray;
             $classTimetableDetalsArray['periodData'] = $periodData;
-            
+
             $staffData = $staffRepository->fetch($staffId);
-            $classTimetableDetalsArray['staff_name'] = $staffData->name;
+            //$classTimetableDetalsArray['staff_name'] = $staffData->name;
+            $classTimetableDetalsArray['staff_name'] = $staffRepository->getFullName($staffData->name, $staffData->middle_name, $staffData->last_name);
 
             foreach($periodData as $index => $period){
 
@@ -56,10 +72,11 @@
                     $roomName = '';
 
                     if($timeTableData){
-                        
+
                         $periodDetails = $periodRepository->fetch($timeTableData->id_period);
                         $standardDetails = $institutionStandardService->fetchStandardByUsingId($timeTableData->id_standard);
                         $subjectDetails =  $institutionSubjectService->getSubjectName($timeTableData->id_subject);
+
                         if($timeTableData->id_room){
                             $roomDetails = $roomMasterRepository->fetch($timeTableData->id_room);
                             $roomName = '( '.$roomDetails->display_name.' )';

@@ -43,7 +43,8 @@
 
             foreach($studentData as $key => $student){
                 $studentArray[$key] = $student;
-                $studentName = $studentMappingRepository->studentName($student['name'], $student['middle_name'], $student['last_name']);
+                $studentName = $studentMappingRepository->getFullName($student['name'], $student['middle_name'], $student['last_name']);
+                
                 $studentArray[$key]['name'] = $studentName;
                 $studentArray[$key]['maxMark'] = $examTimetable->maxMark;
                 $studentArray[$key]['minMark'] = $examTimetable->minMark;
@@ -77,15 +78,15 @@
                 $studentData = $studentRepository->fetch($resultDetail['id_student']);
                 $type = $subjectTypeRepository->fetch($subjectData->id_type);
 
-                $studentName = $studentMappingRepository->studentName($studentData->name, $studentData->middle_name, $studentData->last_name);
+                $studentName = $studentMappingRepository->getFullName($studentData->name, $studentData->middle_name, $studentData->last_name);
 
                 $subjectNameCount = $subjectRepository->fetchSubjectNameCount($subjectData->name);
                 if(count($subjectNameCount) > 1){
                     $subjectType = ' ( '.$type->display_name.' )';
                 }else{
                     $subjectType = '';
-                }               
-                                            
+                }
+
                 $arrayData['result'][$key]['subject'] = $subjectData->display_name.$subjectType;
                 $arrayData['result'][$key]['external_score'] = $resultDetail['external_score'];
                 $arrayData['result'][$key]['internal_score'] = $resultDetail['internal_score'];
@@ -195,7 +196,7 @@
 
                     $external_score = $internal_max = $internal_score = $total_max = $total_score = $grade = '';
 
-                    $studentName = $studentMappingRepository->studentName($data->name, $data->middle_name, $data->last_name);
+                    $studentName = $studentMappingRepository->getFullName($data->name, $data->middle_name, $data->last_name);
 
                     $paramArray = array(
                         'id_institute'=>$idInstitution,
@@ -361,19 +362,18 @@
                 $finalGrand = '-';
 
                 $examSubjectConfiguration = $examSubjectConfigurationService->getExamSubjectConfigDataWithMaxMark($idInstitution, $idAcademics, $exam, $standardId, $student->id_student, $allSessions);
-                // dd($examSubjectConfiguration);
 
-                $studentName = $studentMappingRepository->studentName($student['name'], $student['middle_name'], $student['last_name']);
+                $studentName = $studentMappingRepository->getFullName($student['name'], $student['middle_name'], $student['last_name']);
 
                 $htmlTemplate .= '<style>
                                     table{
                                         border : 1px solid;
                                     }
                                     .outerborder{
-                                        border : 1px solid;                
+                                        border : 1px solid;
                                         display: inline-block;
                                         margin: 0.5%;
-                                    }            
+                                    }
                                     .text_center{
                                         text-align:center;
                                     }
@@ -444,15 +444,15 @@
                                         border: 1px dashed;
                                     }
                                 </style>
-                                <table width="100%" cellpadding="0" cellspacing="0"> 
+                                <table width="100%" cellpadding="0" cellspacing="0">
                                     <thead>
-                                        <tr> 
+                                        <tr>
                                             <th colspan="8">
                                                 <div class="media">
                                                     <img class="mr-3 logo" src="data:image/png;base64,'.base64_encode(file_get_contents($institutionData->institution_logo)).'" alt="logo">
                                                     <div class="media-body">
-                                                        <h5 class="mt-0 school_name font_18">Institution Name</h5>
-                                                        <p class="school_address font_13">Institution Address</p>  
+                                                        <h5 class="mt-0 school_name font_18">'.$institutionData['name'].'</h5>
+                                                        <p class="school_address font_13">'.$institutionData['address'].'</p>
                                                     </div>
                                                 </div>
                                             </th>
@@ -462,7 +462,7 @@
                                         </tr>
                                         <tr>
                                             <th class="text-left right_border" colspan="8">Standard : '.$standardName.'</th>
-                                        </tr>                                
+                                        </tr>
                                         <tr>
                                             <th class="top_border right_border" rowspan="2">SL.</th>
                                             <th class="top_border right_border" rowspan="2">SUBJECTS</th>
@@ -481,7 +481,6 @@
                                     <tbody>';
                                     // dd($examSubjectConfiguration);
                                         foreach($examSubjectConfiguration as $key => $examSubjectData){
-                                            
                                             $maxTheory = ($examSubjectData['theory_max'] === '-')?0:$examSubjectData['theory_max'];
                                             $maxPractical = ($examSubjectData['practical_max'] === '-')?0:$examSubjectData['practical_max'];
                                             $maxTheoryScore = ($examSubjectData['theory_score'] === '-')?0:$examSubjectData['theory_score'];
@@ -508,10 +507,10 @@
                                                                 <td class="top_border text_center right_border">'.$examSubjectData['percentage'].'</td>
                                                                 <td class="top_border text_center">'.$examSubjectData['grade'].'</td>
                                                             </tr>';
-                                                
+
                                         }
-                                           
-                                        
+
+
                     $htmlTemplate .= '  <tr>
                                             <th colspan="2" class="top_border right_border">TOTAL</th>
                                             <th colspan="2" class="top_border right_border">'.$grandTotalMax.'</th>

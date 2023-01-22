@@ -54,7 +54,6 @@ class InstitutionStandardController extends Controller
     public function create()
     {
         $institutionStandardService = new InstitutionStandardService();
-
         $standardDetails = $institutionStandardService->getData();
         // dd($standardDetails['boards']);
 
@@ -98,9 +97,9 @@ class InstitutionStandardController extends Controller
     public function show($id)
     {
         $institutionStandardService = new InstitutionStandardService();
+
         $institutionStandardDetails = $institutionStandardService->find($id);
         // dd($institutionStandardDetails);
-
         return view('Standard/viewInstitutionStandard', ["institutionStandardDetails" => $institutionStandardDetails] )->with("page", "institution_standard");
     }
 

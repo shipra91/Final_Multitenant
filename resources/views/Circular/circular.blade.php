@@ -33,14 +33,14 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Start Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Start Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker startDate" name="startDate" required />
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">End Date<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">End Date<span class="text-danger">*</span></label>
                                                 <input type="text" class="form-control datepicker endDate" name="endDate" required autocomplete="off"/>
                                             </div>
                                         </div>
@@ -48,8 +48,8 @@
 
                                     <div class="row">
                                         <div class="col-lg-12">
+                                            <label class="control-label">Circular Details</label>
                                             <div class="form-group">
-                                                <label class="control-label form-group">Circular Details</label>
                                                 <textarea class="ckeditor" name="circular_details" rows="5"></textarea>
                                             </div>
                                         </div>
@@ -58,7 +58,7 @@
                                     <div class="row">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">Read receipt from recipients required?<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">Read receipt from recipients required?<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="receiptRequired" id="receiptRequired" data-style="select-with-transition" title="Select" required="required">
                                                     <option value ="YES">Yes</option>
                                                     <option value ="NO">No</option>
@@ -68,7 +68,7 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="control-label">SMS alert to recipients required?<span class="text-danger">*</span></label>
+                                                <label class="control-label mt-0">SMS alert to recipients required?<span class="text-danger">*</span></label>
                                                 <select class="selectpicker" name="sms_alert" id="sms_alert" data-style="select-with-transition" title="Select" required="required">
                                                     <option value ="YES">Yes</option>
                                                     <option value ="NO">No</option>
@@ -77,7 +77,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="row mt-30">
+                                    <div class="row mt-20">
                                         <div class="col-lg-12">
                                             <h4 class="card-title">Applicable To</h4>
                                         </div>
@@ -91,7 +91,7 @@
                                         <div id="staffDiv" style="display:none">
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Category</label>
+                                                    <label class="control-label mt-0">Staff Category</label>
                                                     <select class="selectpicker" name="staffCategory[]" id="staffCategory" data-style="select-with-transition" data-live-search="true" title="Select"  data-selected-text-format="count > 1" multiple data-actions-box="true">
                                                         @foreach($circulardata['staffCategory'] as $staffCategory)
                                                             <option value="{{$staffCategory->id}}">{{ucwords($staffCategory->name)}}</option>
@@ -102,8 +102,8 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff Subcategory</label>
-                                                    <select class="selectpicker" name="staffSubcategory[]" id="staffSubcategory" data-style="select-with-transition" data-live-search="true" title="Select SubCategory" data-selected-text-format="count > 1" multiple data-actions-box="true">
+                                                    <label class="control-label mt-0">Staff Subcategory</label>
+                                                    <select class="selectpicker" name="staffSubcategory[]" id="staffSubcategory" data-style="select-with-transition" data-live-search="true" title="Select" data-selected-text-format="count > 1" data-size="5" multiple data-actions-box="true">
 
                                                     </select>
                                                 </div>
@@ -111,8 +111,8 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Staff</label>
-                                                    <select class="selectpicker" name="staff[]" id="staff" data-style="select-with-transition" data-live-search="true" title="Select Staffs" multiple data-actions-box="true" data-selected-text-format="count > 1">
+                                                    <label class="control-label mt-0">Staff</label>
+                                                    <select class="selectpicker" name="staff[]" id="staff" data-style="select-with-transition" data-live-search="true" title="Select" data-size="5" multiple data-actions-box="true" data-selected-text-format="count > 1">
 
                                                     </select>
                                                 </div>
@@ -128,10 +128,10 @@
                                         <div id="studentDiv" style="display:none">
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Standard</label>
+                                                    <label class="control-label mt-0">Standard</label>
                                                     <select class="selectpicker" name="standard[]" id="standard" data-style="select-with-transition" data-live-search="true" data-size="5" title="Select" multiple data-actions-box="true" data-selected-text-format="count > 1">
                                                         @foreach($circulardata['institutionStandards'] as $standard)
-                                                            <option value="{{$standard['institutionStandard_id']}}">{{$standard['class']}}</option>
+                                                            <option value="{{ $standard['institutionStandard_id'] }}">{{ $standard['class'] }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -139,7 +139,7 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Subject</label>
+                                                    <label class="control-label mt-0">Subject</label>
                                                     <select class="selectpicker" name="subject[]" id="subject" data-style="select-with-transition" data-live-search="true" title="Select" data-size="5" multiple data-actions-box="true" data-selected-text-format="count > 1">
 
                                                     </select>
@@ -148,8 +148,8 @@
 
                                             <div class="col-lg-4">
                                                 <div class="form-group">
-                                                    <label class="control-label">Student</label>
-                                                    <select class="selectpicker" name="student[]" id="student" data-style="select-with-transition" data-live-search="true" title="Select" multiple data-actions-box="true" data-selected-text-format="count > 1">
+                                                    <label class="control-label mt-0">Student</label>
+                                                    <select class="selectpicker" name="student[]" id="student" data-style="select-with-transition" data-live-search="true" title="Select" data-size="5" multiple data-actions-box="true" data-selected-text-format="count > 1">
 
                                                     </select>
                                                 </div>

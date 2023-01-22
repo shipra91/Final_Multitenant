@@ -1,9 +1,10 @@
 <?php
     namespace App\Repositories;
+
     use App\Models\StudentLeaveAttachment;
     use App\Interfaces\StudentLeaveAttachmentRepositoryInterface;
 
-    class StudentLeaveAttachmentRepository implements StudentLeaveAttachmentRepositoryInterface{
+    class StudentLeaveAttachmentRepository implements StudentLeaveAttachmentRepositoryInterface {
 
         public function all(){
             return StudentLeaveAttachment::all();
@@ -21,12 +22,11 @@
             return $data->save();
         }
 
-        // public function delete($id){
-        //     return $eventAttachment = EventAttachment::find($id)->delete();
-        // }
-
         public function delete($id){
-            return $data = StudentLeaveAttachment::where('id_leave_application', $id)->delete();
+            return $data = StudentLeaveAttachment::find($id)->delete();
         }
+
+        // public function delete($id){
+        //     return $data = StudentLeaveAttachment::where('id_leave_application', $id)->delete();
+        // }
     }
-?>

@@ -51,4 +51,10 @@
             return MessageGroupName::where('id_institute', $institutionId)->where('id_academic', $academicId)->onlyTrashed()->restore();
         }
 
+        public function getGroupNameId($groupName){
+            return MessageGroupName::where('group_name', $groupName)->first();
+        }
+
     }
+?>
+     

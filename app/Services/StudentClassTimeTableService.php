@@ -24,10 +24,10 @@
             $standardSubjectRepository = new StandardSubjectRepository();
             $institutionStandardService = new InstitutionStandardService();
             $institutionSubjectService = new InstitutionSubjectService();
-            $periodRepository = new PeriodRepository();   
+            $periodRepository = new PeriodRepository();
             $institutionSubjectRepository = new InstitutionSubjectRepository();
             $subjectService = new SubjectService();
-            $roomMasterRepository = new RoomMasterRepository(); 
+            $roomMasterRepository = new RoomMasterRepository();
             $staffRepository = new StaffRepository();
 
             $studentSubjects = array();
@@ -40,7 +40,7 @@
 
             $studentData = $studentMappingRepository->fetchStudent($studentId, $allSessions);
             $idStandard = $studentData->id_standard;
-            $classTimetableDetalsArray['student_name'] = $studentData->name;
+            $classTimetableDetalsArray['student_name'] = $studentMappingRepository->getFullName($studentData->name, $studentData->middle_name, $studentData->last_name);
 
             $data['standardId'] = $idStandard;
             $data['studentId'] = $studentId;
@@ -59,14 +59,13 @@
                     }
 
                 }else{
-
                     array_push($studentSubjects, $institutionSubjectId);
                 }
             }
-          
-            foreach($periodData as $index => $period) {
 
-                foreach($daysArray as $key => $day) {
+            foreach($periodData as $index => $period){
+
+                foreach($daysArray as $key => $day){
 
                     $classTimetableArray[$index]['timetable'][$key]['day'] = $day;
                     $timeTableData = $classTimeTableRepository->fetchStandardClassTimeTableData($studentSubjects, $idStandard, $day, $period['id'], $institutionId , $academicYear );

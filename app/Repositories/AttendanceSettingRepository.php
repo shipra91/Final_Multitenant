@@ -10,7 +10,8 @@
 
         public function all($institutionId, $academicYear){   
             
-            return AttendanceSettings::join('tbl_institution_standard', 'tbl_institution_standard.id', '=', 'tbl_attendance_settings.id_standard')
+            return AttendanceSettings::select('tbl_attendance_settings.*')
+            ->join('tbl_institution_standard', 'tbl_institution_standard.id', '=', 'tbl_attendance_settings.id_standard')
             ->where('tbl_institution_standard.id_institute', $institutionId)
             ->where('tbl_institution_standard.id_academic_year', $academicYear)
             ->get();
@@ -54,6 +55,16 @@
 
         public function restoreAll(){
             return AttendanceSettings::onlyTrashed()->restore();
+        }
+
+        public function getStandardAttendanceSettingDetails($standardId, $attendanceType,  $allSessions){
+            $institutionId = $allSessions['institutionId']; 
+            $academicYear  = $allSessions['academicYear']; 
+            return AttendanceSettings::where('id_institute', $institutionId)
+                                      ->where('id_academic', $academicYear)
+                                      ->where('id_standard', $standardId)
+                                      ->where('attendance_type', $attendanceType)
+                                      ->first();
         }
     }
 ?>

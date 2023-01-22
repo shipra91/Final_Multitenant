@@ -48,9 +48,7 @@
             return $staffSubjectMapping = StaffSubjectMapping::where('id_staff', $idStaff)->delete();
         }
 
-        public function fetchSubjectStaffs($subjectId){
-
+        public function fetchSubjectStaffs($subjectId){            
             return $allSubjectStaffs = StaffSubjectMapping::where('id_subject', $subjectId)->get(['id_staff']);
-            
         }
     }

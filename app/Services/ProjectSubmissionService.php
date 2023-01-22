@@ -1,5 +1,6 @@
-<?php 
+<?php
     namespace App\Services;
+
     use App\Models\ProjectSubmission;
     use App\Models\ProjectSubmissionPermission;
     use App\Services\InstitutionSubjectService;
@@ -98,135 +99,144 @@
                         $currentDateTime =  strtotime($currentDateTime);
 
                         $projectSubmissionDetails = $projectSubmissionRepository->fetch($data);
-                        if(count($projectSubmissionDetails)>0)
-                        {
+
+                        if(count($projectSubmissionDetails)>0){
+
                             $submitted = 'YES';
-                            if($resubmissionRequired == 'YES')
-                            {
-                                if($resubmissionDateTime >= $currentDateTime) {
-                                    $resubmission = 'show';
-                                }else{
-                                    $resubmission = 'hide';
-                                }
-                                
-                                $submission = 'hide';
-                            }
-                            else
-                            {
-                                $resubmission = 'hide';
-                                $submission = 'show';
-                            }
-                        }
-                        else
-                        {
-                            $submitted = 'NO';
-                            if($projectDateTime >= $currentDateTime) {
-                                $submission = 'show';
-                                $resubmission = 'hide';
-                            
-                            }else{
-                            //    dd($resubmissionDateTime.' '.$currentDateTime);
-                            
-                                if($resubmissionDateTime >= $currentDateTime) {
+
+                            if($resubmissionRequired == 'YES'){
+
+                                if($resubmissionDateTime >= $currentDateTime){
                                     $resubmission = 'show';
                                 }else{
                                     $resubmission = 'hide';
                                 }
 
+                                $submission = 'hide';
+
+                            }else{
+                                $resubmission = 'hide';
+                                $submission = 'show';
+                            }
+
+                        }else{
+
+                            $submitted = 'NO';
+
+                            if($projectDateTime >= $currentDateTime){
+                                $submission = 'show';
+                                $resubmission = 'hide';
+
+                            }else{
+                                // dd($resubmissionDateTime.' '.$currentDateTime);
+                                if($resubmissionDateTime >= $currentDateTime){
+                                    $resubmission = 'show';
+                                }else{
+                                    $resubmission = 'hide';
+                                }
                                 $submission = 'hide';
                             }
                         }
 
                         $projectSubmissionDetails = $projectSubmissionRepository->fetchActiveDetails($data);
-                        if($projectSubmissionDetails) {
-                            if($projectSubmissionDetails->obtained_marks != '') {
+
+                        if($projectSubmissionDetails){
+
+                            if($projectSubmissionDetails->obtained_marks != ''){
                                 $resubmission = 'hide';
                                 $submission = 'hide';
                             }
                         }
 
                         $projectImageDetails = $projectDetailRepository->fetch($details->id);
+
                         $projectDetails[] = array(
-                                'id'=>$details->id,
-                                'class_name'=>$standardName,
-                                'subject_name'=>$subjectName,
-                                'staff_name'=>$staffDetails->name,
-                                'project_name'=>$details->name,
-                                'description'=>$details->description,
-                                'from_date'=>$fromDate,
-                                'to_date'=>$toDate,
-                                'resubmission'=>$resubmission,
-                                'submission'=>$submission,
-                                'submitted'=>$submitted,
-                                'projectImageDetails'=>$projectImageDetails,
-                                'id_student'=>$idStudent
-                            );
+                            'id'=>$details->id,
+                            'class_name'=>$standardName,
+                            'subject_name'=>$subjectName,
+                            'staff_name'=>$staffDetails->name,
+                            'project_name'=>$details->name,
+                            'description'=>$details->description,
+                            'from_date'=>$fromDate,
+                            'to_date'=>$toDate,
+                            'resubmission'=>$resubmission,
+                            'submission'=>$submission,
+                            'submitted'=>$submitted,
+                            'submission_type'=>$details->submission_type,
+                            'projectImageDetails'=>$projectImageDetails,
+                            'id_student'=>$idStudent
+                        );
                     }
                 }
             }
+
             return $projectDetails;
         }
 
-        // Add Project submisson details
-        public function add($projectSubmissionData)
-        { 
+        // Insert project submisson
+        public function add($projectSubmissionData){
+
             $projectSubmissionRepository = new ProjectSubmissionRepository();
             $projectSubmissionDetailRepository = new ProjectSubmissionDetailRepository();
-            
             $uploadService = new UploadService();
 
             $idStudent = Session::get('userId');
             $idProject = $projectSubmissionData->id_project;
-            
+
             $projectSubmittedDate  = date('Y-m-d');
             $projectSubmittedTime  = date('H:i:s A');
-            
+
             $data['id_student'] = $idStudent;
             $data['id_project'] = $idProject;
+
             $projectSubmissionDetails = $projectSubmissionRepository->fetch($data);
-            if(count($projectSubmissionDetails)>0)
-            {
+
+            if(count($projectSubmissionDetails)>0){
                 $projectSubmissionRepository->delete($data);
             }
 
             $data = array(
-                'id_student' => $idStudent, 
-                'id_project' => $idProject, 
-                'submitted_date' => $projectSubmittedDate, 
-                'submitted_time' => $projectSubmittedTime, 
+                'id_student' => $idStudent,
+                'id_project' => $idProject,
+                'submitted_date' => $projectSubmittedDate,
+                'submitted_time' => $projectSubmittedTime,
                 'created_by' => Session::get('userId'),
                 'created_at' => Carbon::now()
             );
-            $storeData = $projectSubmissionRepository->store($data); 
 
-            if($storeData) {
+            $storeData = $projectSubmissionRepository->store($data);
+
+            if($storeData){
+
                 $lastInsertedId = $storeData->id;
-                if($projectSubmissionData->attachmentProject)
-                {
-                    foreach($projectSubmissionData->attachmentProject as $attachment)
-                    {   
+
+                if($projectSubmissionData->attachmentProject){
+
+                    foreach($projectSubmissionData->attachmentProject as $attachment){
+
                         $path = 'Project';
                         $attachmentProject = $uploadService->fileUpload($attachment, $path);
 
-                        $imageData = array( 
-                            'id_project_submission' => $lastInsertedId, 
-                            'submitted_file' => $attachmentProject, 
+                        $imageData = array(
+                            'id_project_submission' => $lastInsertedId,
+                            'submitted_file' => $attachmentProject,
                             'created_by' => Session::get('userId'),
                             'created_at' => Carbon::now()
                         );
-                        $storeImageData = $projectSubmissionDetailRepository->store($imageData);  
+
+                        $storeImageData = $projectSubmissionDetailRepository->store($imageData);
                     }
                 }
             }
-            if($storeData) 
-            {    
+
+            if($storeData){
                 $signal = 'success';
                 $msg = 'Data Submitted successfully!';
 
             }else{
                 $signal = 'failure';
                 $msg = 'Error inserting data!';
-            } 
+            }
 
             $output = array(
                 'signal'=>$signal,
@@ -244,8 +254,9 @@
             $institutionSubjectService = new InstitutionSubjectService();
             $projectSubmissionDetailRepository = new ProjectSubmissionDetailRepository();
             $projectAssignedStudentsRepository = new ProjectAssignedStudentsRepository();
+
             $studentProjectDetails = array();
-            $viewCount = 0; 
+            $viewCount = 0;
             $projectDetails = $projectRepository->fetch($idProject);
 
             $projectData['standardId'] = $projectDetails->id_standard;
@@ -255,18 +266,22 @@
             $projectAssignedStudentDetails = $projectAssignedStudentsRepository->fetch($idProject);
             $subjectName =  $institutionSubjectService->getSubjectName($projectDetails->id_subject, $allSessions);
 
-            foreach ($projectAssignedStudentDetails as $studentDetails) {
+            foreach ($projectAssignedStudentDetails as $studentDetails){
 
                 $student = $studentMappingRepository->fetchStudent($studentDetails->id_student, $allSessions);
-                
-                if($student) {
+                $studentName = $studentMappingRepository->getFullName($student->name, $student->middle_name, $student->last_name);
+
+                if($student){
+
                     $data['id_student'] = $student->id_student;
                     $data['id_project'] = $idProject;
+
                     $projectSubmissionDetails = $projectSubmissionRepository->fetchActiveDetails($data);
-                    if($projectSubmissionDetails) {
+
+                    if($projectSubmissionDetails){
                         $submittedDate = Carbon::createFromFormat('Y-m-d', $projectSubmissionDetails->submitted_date)->format('d-m-Y');
                         $submittedTime = $projectSubmissionDetails->submitted_time;
-                    } else {
+                    }else{
                         $submittedDate = '';
                         $submittedTime = '';
                     }
@@ -274,29 +289,30 @@
                     $projectDateTime = $projectDetails->end_date.' '.$projectDetails->end_time;
                     $currentDateTime =  strtotime($currentDateTime);
                     $projectDateTime =  strtotime($projectDateTime);
-                
+
                     $projectSubmittedFiles = $projectSubmissionDetailRepository->fetch($data);
 
-                    if(count($projectSubmittedFiles)>0) {
+                    if(count($projectSubmittedFiles)>0){
                         $status = 'submitted';
-                    } else {
+
+                    }else{
                         if($projectDateTime >= $currentDateTime) {
                             $status = 'not-submitted';
-                        } else {
+                        }else{
                             $status = 'due-date-crossed';
                         }
                     }
-                
-                    if($readReceipt == 'YES') {
+
+                    if($readReceipt == 'YES'){
                         $viewCount = $studentDetails->view_count;
-                    } else {
+                    }else{
                         $viewCount ='Not Applicable';
                     }
 
                     $studentProjectDetails[] = array(
                         'id'=>$student->id_student,
                         'id_project'=>$idProject,
-                        'student_name'=>$student->name,
+                        'student_name'=>$studentName,
                         'submitted_date'=>$submittedDate,
                         'submitted_time'=>$submittedTime,
                         'status'=>$status,
@@ -304,13 +320,15 @@
                     );
                 }
             }
-           
+
             return $studentProjectDetails;
         }
 
-        public function downloadProjectSubmittedFiles($idStudent, $idProject) {
-         
+        // Download project submission files
+        public function downloadProjectSubmittedFiles($idStudent, $idProject){
+
             $projectSubmissionDetailRepository = new ProjectSubmissionDetailRepository();
+
             $data['id_student'] = $idStudent;
             $data['id_project'] = $idProject;
 
@@ -319,11 +337,12 @@
             $zip->open($fileName, \ZipArchive::CREATE);
 
             $projectSubmittedFiles = $projectSubmissionDetailRepository->fetch($data);
-            foreach ($projectSubmittedFiles as $file) {
+
+            foreach ($projectSubmittedFiles as $file){
                 $files = explode('Project/', $file->submitted_file);
                 $zip->addFromString($files[1], file_get_contents($file->submitted_file));
             }
-            
+
             $zip->close();
             header('Content-disposition: attachment; filename='.time().'.zip');
             header('Content-type: application/zip');
@@ -339,16 +358,23 @@
             $projectRepository = new ProjectRepository();
             $projectSubmissionPermissionRepository = new ProjectSubmissionPermissionRepository();
             $staffService = new StaffService();
+
             $projectDetails = array();
+
+            $data['id_student'] = $details->studentId;
+            $data['id_project'] = $details->projectId;
+
             $resubmissionAllowed = 'NO';
             $resubmissionDate = date('d/m/Y');
             $resubmissionTime = '';
             $projectSubmissionId = '';
             $projectObtainedMarks = '';
             $projectComments = '';
+
             $project = $projectRepository->fetch($data['id_project']);
             $projectSubmissionDetails = $projectSubmissionRepository->fetchActiveDetails($data);
-            if($projectSubmissionDetails) {
+
+            if($projectSubmissionDetails){
                 $projectSubmissionId = $projectSubmissionDetails->id;
                 $projectObtainedMarks = $projectSubmissionDetails->obtained_marks;
                 $projectComments = $projectSubmissionDetails->comments;
@@ -391,15 +417,17 @@
         }
 
         public function fetchProjectVerifiedDetails($details, $allSessions) {
-          
+            
+            $projectDetails = array();           
+            $valuationDetails = array();
+            
             $data['id_student'] = $details->studentId;
             $data['id_project'] = $details->projectId;
+            
             $projectSubmissionRepository = new ProjectSubmissionRepository();
             $institutionSubjectService = new InstitutionSubjectService();
             $projectRepository = new ProjectRepository();
             $staffService = new StaffService();
-            $projectDetails = array();           
-            $valuationDetails = array();
             
             $project = $projectRepository->fetch($data['id_project']);
             $projectSubmissionDetails = $projectSubmissionRepository->fetch($data);
@@ -421,44 +449,47 @@
                 'project_name'=>$project->name,
                 'valuation_details'=>$valuationDetails
             );
+
             return $projectDetails;
         }
 
+        // Update project submission
+        public function update($valuationData, $id){
 
-        public function update($valuationData, $id) { 
             $projectSubmissionRepository = new ProjectSubmissionRepository();
             $projectSubmissionPermissionRepository = new ProjectSubmissionPermissionRepository();
+
             $resubmissionAllowed = 'NO';
             $resubmissionDate = '';
             $resubmissionTime = '';
-            $obtainedMark = ''; 
+            $obtainedMark = '';
             $comment = '';
-            if($valuationData->resubmissionAllowed) {
+
+            if($valuationData->resubmissionAllowed){
                 $resubmissionAllowed = $valuationData->resubmissionAllowed;
             }
 
-            if($resubmissionAllowed == 'YES') {
-
-                $resubmissionDate = Carbon::createFromFormat('d/m/Y', $valuationData->resubmissionDate)->format('Y-m-d');  
+            if($resubmissionAllowed == 'YES'){
+                $resubmissionDate = Carbon::createFromFormat('d/m/Y', $valuationData->resubmissionDate)->format('Y-m-d');
                 $resubmissionTime = $valuationData->resubmissionTime;
 
-            } else {
+            }else{
 
-                if($valuationData->obtained_mark) {
+                if($valuationData->obtained_mark){
                     $obtainedMark = $valuationData->obtained_mark;
                 }
-                if($valuationData->grade_obtained) {
+
+                if($valuationData->grade_obtained){
                     $obtainedMark = $valuationData->grade_obtained;
-                }    
+                }
             }
-          
-            if($valuationData->comment) {
+
+            if($valuationData->comment){
                 $comment = $valuationData->comment;
-            }
-            else{
+            }else{
                 $comment = '';
             }
-           
+
             $projectValuationDetails = $projectSubmissionRepository->fetchData($id);
             $projectValuationDetails = $projectSubmissionRepository->fetchData($id);
             $projectId = $projectValuationDetails->id_project;
@@ -466,7 +497,7 @@
 
             $permissionDetails = ProjectSubmissionPermission::where('id_project',$projectId)->where('id_student',$studentId)->first();
 
-            if($permissionDetails) {
+            if($permissionDetails){
                 $permissionDelete = $projectSubmissionPermissionRepository->delete($permissionDetails->id);
             }
 
@@ -475,7 +506,7 @@
                 'id_student'=>$studentId,
                 'resubmission_allowed'=>$resubmissionAllowed,
                 'resubmission_date'=>$resubmissionDate,
-                'resubmission_time'=>$resubmissionTime, 
+                'resubmission_time'=>$resubmissionTime,
                 'created_by' => Session::get('userId'),
                 'created_at' => Carbon::now()
             );
@@ -484,18 +515,18 @@
             $projectValuationDetails->obtained_marks = $obtainedMark;
             $projectValuationDetails->comments	 = $comment;
             $projectValuationDetails->modified_by = Session::get('userId');
-            $projectValuationDetails->updated_at = Carbon::now(); 
-                      
+            $projectValuationDetails->updated_at = Carbon::now();
+
             $updateData = $projectSubmissionRepository->update($projectValuationDetails);
 
-            if($updateData) {
+            if($updateData){
                 $signal = 'success';
                 $msg = 'Data Inserted successfully!';
 
             }else{
                 $signal = 'failure';
                 $msg = 'Error updating data!';
-            } 
+            }
 
             $output = array(
                 'signal'=>$signal,

@@ -120,5 +120,19 @@
             //dd(\DB::getQueryLog());
             return $data;
         }
+
+        public function getInstitutionStandardId($details, $allSessions){
+            $institutionId = $allSessions['institutionId'];
+            return InstitutionStandard::where('id_institute', $institutionId)
+                                        ->where('id_standard', $details['standardId'])
+                                        ->where('id_division', $details['divisionId'])
+                                        ->where('id_year', $details['yearId'])
+                                        ->where('id_sem', $details['semId'])
+                                        ->where('id_stream', $details['streamId'])
+                                        ->where('id_combination', $details['combinationId'])
+                                        ->where('id_board', $details['boardId'])
+                                        ->where('id_course', $details['courseId'])
+                                        ->first();
+        }
     }
 ?>

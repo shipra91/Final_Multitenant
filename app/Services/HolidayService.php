@@ -1,7 +1,7 @@
 <?php
     namespace App\Services;
+
     use App\Models\Holiday;
-    use App\Services\HolidayService;
     use App\Repositories\HolidayRepository;
     use App\Repositories\StaffCategoryRepository;
     use App\Repositories\StaffSubCategoryRepository;
@@ -52,6 +52,13 @@
                 $recepientData = '';
 
                 $recepient = $holidayApplicableForRepository->holidayRecepientType($holiday->id);
+                $holidayAttachment = $holidayAttachmentRepository->fetch($holiday->id);
+
+                if(count($holidayAttachment) > 0){
+                    $status = 'file_found';
+                }else{
+                    $status = 'file_not_found';
+                }
 
                 if($recepient){
                     foreach($recepient as $rec){
@@ -60,7 +67,9 @@
                     $recepientData = substr($recepientData, 0, -2);
                 }
 
-               $holidayDetail[$key]['recepient'] = $recepientData;
+                $holidayDetail[$key]['recepient'] = $recepientData;
+                $holidayDetail[$key]['holidayAttachment'] = $holidayAttachment;
+                $holidayDetail[$key]['status'] = $status;
             }
 
             return $holidayData;
@@ -223,9 +232,7 @@
             if($storeData){
 
                 if($holidayData->attachment != ""){
-
-                    $deleteAttachment = $holidayAttachmentRepository->delete($id);
-
+                    //$deleteAttachment = $holidayAttachmentRepository->delete($id);
                     if($holidayData->hasfile('attachment')){
 
                         $path = 'Holiday';
@@ -350,6 +357,12 @@
 
             $holidayData = $holidayRepository->fetch($idHoliday);
             $holidayAttachments = $holidayAttachmentRepository->fetch($idHoliday);
+
+            foreach($holidayAttachments as $key => $attachment){
+                $ext = pathinfo($attachment['file_url'], PATHINFO_EXTENSION);
+                $holidayAttachments[$key] = $attachment;
+                $holidayAttachments[$key]['extension'] = $ext;
+            }
 
             $holidayData['startDate'] = Carbon::createFromFormat('Y-m-d', $holidayData->start_date)->format('d/m/Y');;
             $holidayData['endDate'] = Carbon::createFromFormat('Y-m-d', $holidayData->end_date)->format('d/m/Y');;

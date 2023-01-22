@@ -1,8 +1,5 @@
-<?php
-    use Carbon\Carbon;
-?>
 @php
-
+    use Carbon\Carbon;
 @endphp
 
 @extends('layouts.master')
@@ -31,96 +28,39 @@
                                     <div class="card-content">
                                         <h4 class="card-title">Edit Homework</h4>
                                         <div class="row">
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label class="control-label mt-0">Standard<span class="text-danger">*</span></label>
                                                     <select class="selectpicker" name="homework_class" id="homework_class" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".homeworkError">
                                                         @foreach($homeworkDetails['standard'] as $standard)
-                                                            <option value="{{ $standard['institutionStandard_id'] }}" @if($homework->id_standard == $standard['institutionStandard_id']) {{'selected'}} @endif>{{ $standard['class'] }}</option>
+                                                            <option value="{{ $standard['institutionStandard_id'] }}" @if($homework['homeworkData']->id_standard == $standard['institutionStandard_id']) {{'selected'}} @endif>{{ $standard['class'] }}</option>
                                                         @endforeach
                                                     </select>
                                                     <div class="homeworkError"></div>
                                                 </div>
                                             </div>
 
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label class="control-label mt-0">Subject<span class="text-danger">*</span></label>
                                                     <select class="selectpicker" name="homework_subject" id="homework_subject" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".subjectError">
                                                         @foreach($homeworkDetails['subject'] as $subject)
-                                                            <option value="{{ $subject['id'] }}" @if($homework->id_subject == $subject['id'] ) {{'selected'}} @endif>{{ $subject['name'] }}</option>
+                                                            <option value="{{ $subject['id'] }}" @if($homework['homeworkData']->id_subject == $subject['id'] ) {{'selected'}} @endif>{{ $subject['name'] }}</option>
                                                         @endforeach
                                                     </select>
                                                     <div class="subjectError"></div>
                                                 </div>
                                             </div>
 
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-4">
                                                 <div class="form-group">
                                                     <label class="control-label mt-0">Teacher<span class="text-danger">*</span></label>
                                                     <select class="selectpicker" name="homework_staff" id="homework_staff" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".teacherError">
                                                         @foreach($homeworkDetails['staff'] as $staff)
-                                                            <option value="{{ $staff->id }}" @if($homework->id_staff == $staff->id ) {{'selected'}} @endif>{{ $staff->name }}</option>
+                                                            <option value="{{ $staff->id }}" @if($homework['homeworkData']->id_staff == $staff->id ) {{'selected'}} @endif>{{ $staff->name }}</option>
                                                         @endforeach
                                                     </select>
                                                     <div class="teacherError"></div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label class="control-label mt-0">Chapter Name</label>
-                                                    <input type="text" class="form-control" name="homework_chapter_name" value="{{$homework->chapter_name}}" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label class="control-label">Start Date</label>
-                                                    <input type="text" class="form-control datepicker startDate" name="homework_start_date" value="{{ Carbon::createFromFormat('Y-m-d', $homework->start_date)->format('d/m/Y') }}" data-parsley-trigger="change" />
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label class="control-label">End Date<span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control datepicker endDate" name="homework_end_date" value="{{  Carbon::createFromFormat('Y-m-d', $homework->end_date)->format('d/m/Y') }}" required data-parsley-trigger="change" autocomplete="off"/>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label class="control-label">Start Time</label>
-                                                    <input type="text" class="form-control timepicker" name="homework_start_time" value="{{$homework->start_time}}" data-parsley-trigger="change" />
-                                                </div>
-                                            </div>
-
-                                            <div class="col-lg-3">
-                                                <div class="form-group">
-                                                    <label class="control-label">End Time<span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control timepicker" name="homework_end_time" value="{{$homework->end_time}}" required data-parsley-trigger="change" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">Homework Name<span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" name="homework_name" value="{{$homework->name}}" required />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">Homework Details</label>
-                                                    <div class="form-group">
-                                                        <textarea class="ckeditor" name="homework_details" rows="5">{{$homework->description}}</textarea>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -128,10 +68,65 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Submission Type<span class="text-danger">*</span></label>
+                                                    <label class="control-label mt-0">Chapter Name</label>
+                                                    <input type="text" class="form-control" name="homework_chapter_name" value="{{ $homework['homeworkData']->chapter_name }}" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label class="control-label mt-0">Homework Name<span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="homework_name" value="{{ $homework['homeworkData']->name }}" required />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label class="control-label mt-0">Start Date</label>
+                                                    <input type="text" class="form-control datepicker startDate" name="homework_start_date" value="{{ Carbon::createFromFormat('Y-m-d', $homework['homeworkData']->start_date)->format('d/m/Y') }}" data-parsley-trigger="change" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label class="control-label mt-0">End Date<span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control datepicker endDate" name="homework_end_date" value="{{  Carbon::createFromFormat('Y-m-d', $homework['homeworkData']->end_date)->format('d/m/Y') }}" required data-parsley-trigger="change" autocomplete="off"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label class="control-label mt-0">Start Time</label>
+                                                    <input type="text" class="form-control timepicker" name="homework_start_time" value="{{ $homework['homeworkData']->start_time }}" data-parsley-trigger="change" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label class="control-label mt-0">End Time<span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control timepicker" name="homework_end_time" value="{{ $homework['homeworkData']->end_time }}" required data-parsley-trigger="change" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="control-label">Homework Details</label>
+                                                <div class="form-group">
+                                                    <textarea class="ckeditor" name="homework_details" rows="5">{{ $homework['homeworkData']->description }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="control-label mt-0">Submission Type<span class="text-danger">*</span></label>
                                                     <select class="selectpicker" name="submission_type" id="submission_type" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".typeError">
-                                                        <option value="ONLINE" @if($homework->submission_type == 'ONLINE'){{'selected'}} @endif>ONLINE</option>
-                                                        <option value="OFFLINE" @if($homework->submission_type == 'OFFLINE'){{'selected'}} @endif>OFFLINE</option>
+                                                        <option value="ONLINE" @if($homework['homeworkData']->submission_type == 'ONLINE'){{'selected'}} @endif>ONLINE</option>
+                                                        <option value="OFFLINE" @if($homework['homeworkData']->submission_type == 'OFFLINE'){{'selected'}} @endif>OFFLINE</option>
                                                     </select>
                                                     <div class="typeError"></div>
                                                 </div>
@@ -139,10 +134,10 @@
 
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Grading Required?<span class="text-danger">*</span></label>
+                                                    <label class="control-label mt-0">Grading Required?<span class="text-danger">*</span></label>
                                                     <select class="selectpicker" name="grading_required" id="grading_required" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".gradeError">
-                                                        <option value="YES" @if($homework->grading_required == 'YES'){{'selected'}} @endif>YES</option>
-                                                        <option value="NO" @if($homework->grading_required == 'NO'){{'selected'}} @endif>NO</option>
+                                                        <option value="YES" @if($homework['homeworkData']->grading_required == 'YES'){{'selected'}} @endif>YES</option>
+                                                        <option value="NO" @if($homework['homeworkData']->grading_required == 'NO'){{'selected'}} @endif>NO</option>
                                                     </select>
                                                     <div class="gradeError"></div>
                                                 </div>
@@ -152,28 +147,28 @@
                                         <div class="row">
                                             <div class="col-lg-6" id="grading_options">
                                                 <div class="form-group">
-                                                    <label class="control-label">Grading Options?<span class="text-danger">*</span></label>
+                                                    <label class="control-label mt-0">Grading Options?<span class="text-danger">*</span></label>
                                                     <select class="selectpicker" name="grading_option" id="grading_option" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" data-parsley-errors-container=".gradeOptionError">
-                                                        <option value="GRADE" @if($homework->grading_option == 'GRADE'){{'selected'}} @endif>GRADE</option>
-                                                        <option value="MARKS" @if($homework->grading_option == 'MARKS'){{'selected'}} @endif>MARKS</option>
+                                                        <option value="GRADE" @if($homework['homeworkData']->grading_option == 'GRADE'){{'selected'}} @endif>GRADE</option>
+                                                        <option value="MARKS" @if($homework['homeworkData']->grading_option == 'MARKS'){{'selected'}} @endif>MARKS</option>
                                                     </select>
-                                                    <input type="hidden" id="grading_required_value" value="{{ $homework->grading_required }}">
+                                                    <input type="hidden" id="grading_required_value" value="{{ $homework['homeworkData']->grading_required }}">
                                                     <div class="gradeOptionError"></div>
                                                 </div>
                                             </div>
 
                                             <div class="col-lg-6" id="grade">
                                                 <div class="form-group">
-                                                    <label class="control-label">Grade</label>
-                                                    <input type="text" class="form-control" name="homework_grade" placeholder="Mention grade here (eg:A+,A,B...)" value="{{$homework->grade}}" />
-                                                    <input type="hidden" id="grading_option_value" value="{{ $homework->grading_option }}">
+                                                    <label class="control-label mt-0">Grade</label>
+                                                    <input type="text" class="form-control" name="homework_grade" placeholder="Mention grade here (eg:A+,A,B...)" value="{{ $homework['homeworkData']->grade }}" />
+                                                    <input type="hidden" id="grading_option_value" value="{{ $homework['homeworkData']->grading_option }}">
                                                 </div>
                                             </div>
 
                                             <div class="col-lg-6" id="marks">
                                                 <div class="form-group">
-                                                    <label class="control-label">Marks</label>
-                                                    <input type="text" class="form-control" name="homework_mark" placeholder="Mention max mark here" value="{{$homework->marks}}" />
+                                                    <label class="control-label mt-0">Marks</label>
+                                                    <input type="text" class="form-control" name="homework_mark" placeholder="Mention max mark here" value="{{ $homework['homeworkData']->marks }}" />
                                                 </div>
                                             </div>
                                         </div>
@@ -181,10 +176,10 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">Read receipt from recipients required?<span class="text-danger">*</span></label>
+                                                    <label class="control-label mt-0">Read receipt from recipients required?<span class="text-danger">*</span></label>
                                                     <select class="selectpicker" name="read_receipt" id="read_receipt" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".receiptError">
-                                                        <option value="YES" @if($homework->read_receipt == 'YES'){{'selected'}} @endif>YES</option>
-                                                        <option value="NO" @if($homework->read_receipt =='NO'){{'selected'}} @endif>NO</option>
+                                                        <option value="YES" @if($homework['homeworkData']->read_receipt == 'YES'){{'selected'}} @endif>YES</option>
+                                                        <option value="NO" @if($homework['homeworkData']->read_receipt =='NO'){{'selected'}} @endif>NO</option>
                                                     </select>
                                                     <div class="receiptError"></div>
                                                 </div>
@@ -192,10 +187,10 @@
 
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="control-label">SMS alert to recipients required?*cost may apply<span class="text-danger">*</span></label>
+                                                    <label class="control-label mt-0">SMS alert to recipients required?(cost may apply)<span class="text-danger">*</span></label>
                                                     <select class="selectpicker" name="sms_alert" id="sms_alert" data-size="5" data-style="select-with-transition" data-live-search="true" title="Select" required="required" data-parsley-errors-container=".smsError">
-                                                        <option value="YES" @if($homework->sms_alert == 'YES'){{'selected'}} @endif>YES</option>
-                                                        <option value="NO" @if($homework->sms_alert == 'NO'){{'selected'}} @endif>NO</option>
+                                                        <option value="YES" @if($homework['homeworkData']->sms_alert == 'YES'){{'selected'}} @endif>YES</option>
+                                                        <option value="NO" @if($homework['homeworkData']->sms_alert == 'NO'){{'selected'}} @endif>NO</option>
                                                     </select>
                                                     <div class="smsError"></div>
                                                 </div>
@@ -209,32 +204,64 @@
                                         <div class="clearfix"></div>
                                     </div>
                                 </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
+                                    <i class="material-icons">attachment</i>
+                                </div>
+                                <div class="card-content">
+                                    <h4 class="card-title">Upload Attachment</h4>
+                                    <div class="text-center">
+                                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                            <span class="btn btn-square btn-info btn-file btn-sm">
+                                                <span class="fileinput-new">Add</span>
+                                                <span class="fileinput-exists">Change</span>
+                                                <input type="file" name="attachmentHomework[]" id="attachmentHomework" accept="image/*,.pdf,.doc,.docx" multiple />
+                                            </span>
+                                            <a href="#pablo" class="btn btn-danger btn-square fileinput-exists btn-sm" data-dismiss="fileinput"><i class="material-icons">highlight_off</i></a>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" id="image_preview">
+
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="col-lg-4">
+                            @if(count($homework['homeworkAttachment']) > 0)
                                 <div class="card">
                                     <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
                                         <i class="material-icons">attachment</i>
                                     </div>
                                     <div class="card-content">
                                         <h4 class="card-title">Attachment</h4>
-                                        <div class="text-center">
-                                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
-                                                <span class="btn btn-square btn-info btn-file btn-sm">
-                                                    <span class="fileinput-new">Add</span>
-                                                    <span class="fileinput-exists">Change</span>
-                                                    <input type="file" name="attachmentHomework[]" id="attachmentHomework" accept="image/*,.pdf,.doc,.docx" multiple />
-                                                </span>
-                                                <a href="#pablo" class="btn btn-danger btn-square fileinput-exists btn-sm" data-dismiss="fileinput"><i class="material-icons">highlight_off</i></a>
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    @foreach($homework['homeworkAttachment'] as $key =>$attachment)
+
+                                                        @if($attachment['extension'] =="pdf")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @elseif($attachment['extension'] =="doc" || $attachment['extension'] =="docx")
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @else
+                                                            <div class="img_div" id="img_div">
+                                                                <img src="{{ $attachment['file_url'] }}" class="multiple_image img-responsive" title="">
+                                                            </div>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                        </div>
-
-                                        <div class="form-group" id="image_preview">
-
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </form>
                 </div>
@@ -258,12 +285,13 @@
         var fileArr = [];
         $("#attachmentHomework").change(function(){
             // check if fileArr length is greater than 0
-            if (fileArr.length > 0) fileArr = [];
+            if(fileArr.length > 0) fileArr = [];
 
             $('#image_preview').html("");
             var total_file = document.getElementById("attachmentHomework").files;
-            if (!total_file.length) return;
-            for (var i = 0; i < total_file.length; i++) {
+            if(!total_file.length) return;
+
+            for(var i = 0; i < total_file.length; i++){
 
                 var extension = total_file[i].name.substr((total_file[i].name.lastIndexOf('.') + 1));
                 var fileType = '';
@@ -271,50 +299,36 @@
 
                 fileArr.push(total_file[i]);
 
-                if (extension != "pdf" && extension != "docs" && extension != "doc" && extension !=
-                    "docx") {
+                if(extension != "pdf" && extension != "docs" && extension != "doc" && extension != "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) +
-                        '" class="multiple_image img-responsive" title="' + total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="' + URL.createObjectURL(event.target.files[i]) + '" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
-                } else if (extension == "pdf") {
+                }else if (extension == "pdf"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://listimg.pinclipart.com/picdir/s/336-3361375_pdf-svg-png-icon-free-download-adobe-acrobat.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337946.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
 
-                } else if (extension == "docs" || extension == "doc" || extension == "docx") {
+                }else if (extension == "docs" || extension == "doc" || extension == "docx"){
 
                     fileType += '<div class="img_div" id="img_div' + i + '">';
-                    fileType +=
-                        '<img src="https://www.pngitem.com/pimgs/m/181-1816575_google-docs-png-five-feet-apart-google-docs.png" class="multiple_image img-responsive" title="' +
-                        total_file[i].name +
-                        '">';
-                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i +
-                        '" class="btn btn-danger btn-xs" role="' + total_file[i].name +
-                        '"><i class="fa fa-trash"></i></button></div></div>';
+                    fileType += '<img src="https://cdn-icons-png.flaticon.com/512/337/337932.png" class="multiple_image img-responsive" title="' + total_file[i].name + '">';
+                    fileType += '<div class="middle_div"><button id="action-icon" value="img_div' + i + '" class="btn btn-danger btn-xs" role="' + total_file[i].name + '"><i class="material-icons">delete</i></button></div></div>';
                 }
                 $('#image_preview').append(fileType);
             }
         });
 
         $('body').on('click', '#action-icon', function(evt){
+
             var divName = this.value;
             var fileName = $(this).attr('role');
-            $(`#${divName}`).remove();
 
-            for (var i = 0; i < fileArr.length; i++) {
-                if (fileArr[i].name === fileName) {
+            $(`#${divName}`).remove();
+            for(var i = 0; i < fileArr.length; i++){
+                if(fileArr[i].name === fileName){
                     fileArr.splice(i, 1);
                 }
             }
@@ -324,9 +338,9 @@
 
         function FileListItem(file){
             file = [].slice.call(Array.isArray(file) ? file : arguments)
-            for (var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
-            if (!d) throw new TypeError("expected argument to FileList is File or array of File objects")
-            for (b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
+            for(var c, b = c = file.length, d = !0; b-- && d;) d = file[b] instanceof File
+            if(!d) throw new TypeError("expected argument to FileList is File or array of File objects")
+            for(b = (new ClipboardEvent("")).clipboardData || new DataTransfer; c--;) b.items.add(file[c])
             return b.files
         }
 
@@ -348,7 +362,6 @@
                         }else{
                             subject_type = '';
                         }
-
                         options += '<option value="' + item.id + '">' + item.display_name + '' + subject_type + '</option>';
                     });
                     $("#homework_subject").html(options);

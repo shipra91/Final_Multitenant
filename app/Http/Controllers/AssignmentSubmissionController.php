@@ -29,27 +29,36 @@ class AssignmentSubmissionController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
 
-                        if($row['resubmission'] == 'show'){
-                            $label = 'Re-Upload Files';
-                        }else{
-                            $label = 'Upload Files';
-                        }
+                        $label = '';
 
-                        if($row['submission'] == 'show' || $row['resubmission'] == 'show'){
-                            $submission = '<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="'.$label.'" class="text-success assignmentSubmissionDetail"><i class="material-icons">file_upload</i></a>';
+                        if($row['submission_type'] == 'ONLINE'){
 
-                        }else{
-                            $submission = '';
+                            if($row['resubmission'] == 'show'){
+                                $label = 'Re-Upload Files';
+                            }else{
+                                $label = 'Upload Files';
+                            }
+
+                            if($row['submission'] == 'show' || $row['resubmission'] == 'show'){
+
+                                $submission = '<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="'.$label.'" class="text-success assignmentSubmissionDetail"><i class="material-icons">file_upload</i></a>';
+
+                            }else{
+                                $submission = '';
+                            }
                         }
 
                         if($row['submitted'] == 'YES'){
+
                             $valuationDetails = '<a href="javascript:void();" data-id="'.$row['id'].'" student-id="'.$row['id_student'].'"  rel="tooltip" title="View Mark And Comment" class="text-warning valuationDetails"><i class="material-icons">check_circle</i></a>
                             <a href="/assignment-download/'.$row['id'].'/student" rel="tooltip" title="Download Files" class="text-success" target="_blank"><i class="material-icons">file_download</i></a>';
+
                         }else{
                             $valuationDetails = '';
                         }
 
-                        $btn = '<a href="javascript:void();" data-id="'.$row['id'].'"  rel="tooltip" title="View" class="text-info assignmentDetail"><i class="material-icons">visibility</i></a>
+                        // $btn = '<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="View" class="text-info assignmentDetail"><i class="material-icons">visibility</i></a>
+                        $btn = '<a href="/assignment-detail/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>
 
                         '.$submission.'
                         '.$valuationDetails.' ';

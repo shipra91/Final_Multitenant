@@ -154,13 +154,14 @@ class AttendanceSettingsController extends Controller
      */
     public function destroy($id)
     {
+        $allSessions = session()->all();
         $attendanceSettingsService = new AttendanceSettingsService();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $attendanceSettingsService->delete($id);
+            $result['data'] = $attendanceSettingsService->delete($id, $allSessions);
 
         }catch(Exception $e){
 
@@ -216,4 +217,16 @@ class AttendanceSettingsController extends Controller
 
         return response()->json($result, $result['status']);
     }
+
+    public function getStandardAttendanceSetting(Request $request){
+
+        $attendanceSettingsService = new AttendanceSettingsService();
+        $allSessions = session()->all();
+        $standardId     = $request->standardId;
+        $attendanceType = $request->attendanceType;
+
+        return $attendanceSettingsService->fetchStandardAttendanceSetting($standardId, $attendanceType, $allSessions);
+    }
 }
+
+?>

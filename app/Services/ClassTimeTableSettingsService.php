@@ -213,8 +213,7 @@
                                     $check = ClassTimeTableSettings::where('id_period_setting', $lastInsertedId)
                                             ->where('id_period', $period)
                                             ->where('start_time', $startTime)
-                                            ->where('end_time', $endTime)
-                                            ->first();
+                                            ->where('end_time', $endTime)->first();
 
                                     if(!$check){
 

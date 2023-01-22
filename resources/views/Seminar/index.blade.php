@@ -27,7 +27,7 @@
                         <div class="col-sm-12 col-sm-offset-0">
                             <div class="card">
                                 <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
-                                    <i class="material-icons">pie_chart</i>
+                                    <i class="material-icons">school</i>
                                 </div>
                                 <div class="card-content">
                                     <h4 class="card-title">Seminar List</h4>
@@ -58,7 +58,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="seminar_modal" role="dialog">
+{{-- <div class="modal fade" id="seminar_modal" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="card1">
@@ -180,7 +180,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 @endsection
 
 @section('script-content')
@@ -261,99 +261,99 @@
         });
 
         // View seminar details
-        $("body").delegate(".seminarDetail", "click", function(event){
-            event.preventDefault();
+        // $("body").delegate(".seminarDetail", "click", function(event){
+        //     event.preventDefault();
 
-            var seminarId=$(this).attr('data-id');
+        //     var seminarId=$(this).attr('data-id');
 
-            $.ajax({
-                url:"{{ url('/seminar-detail') }}",
-                type : "post",
-                dataType : "json",
-                data : {seminarId:seminarId,login_type:''},
-                success : function(response){
-                    //console.log(response);
-                    var invitiesType = '';category
-                    var standard = '';
-                    var category = '';
-                    var subCategory = '';
-                    var conductedBy = '';
-                    var mentoredBy = '';
+        //     $.ajax({
+        //         url:"{{ url('/seminar-detail') }}",
+        //         type : "post",
+        //         dataType : "json",
+        //         data : {seminarId:seminarId,login_type:''},
+        //         success : function(response){
+        //             //console.log(response);
+        //             var invitiesType = '';category
+        //             var standard = '';
+        //             var category = '';
+        //             var subCategory = '';
+        //             var conductedBy = '';
+        //             var mentoredBy = '';
 
-                    $("#seminar_modal").find("#seminar_topic_name").text("Seminar Topic: "+response.seminar_topic);
-                    $("#seminar_modal").find("#description").html(response.description);
-                    $("#seminar_modal").find("#start_date").val(response.start_date);
-                    $("#seminar_modal").find("#end_date").val(response.end_date);
-                    $("#seminar_modal").find("#start_time").val(response.start_time);
-                    $("#seminar_modal").find("#end_time").val(response.end_time);
-                    $("#seminar_modal").find("#max_mark").val(response.max_mark);
-                    $("#seminar_modal").find("#sms_alert").val(response.sms_alert);
+        //             $("#seminar_modal").find("#seminar_topic_name").text("Seminar Topic: "+response.seminar_topic);
+        //             $("#seminar_modal").find("#description").html(response.description);
+        //             $("#seminar_modal").find("#start_date").val(response.start_date);
+        //             $("#seminar_modal").find("#end_date").val(response.end_date);
+        //             $("#seminar_modal").find("#start_time").val(response.start_time);
+        //             $("#seminar_modal").find("#end_time").val(response.end_time);
+        //             $("#seminar_modal").find("#max_mark").val(response.max_mark);
+        //             $("#seminar_modal").find("#sms_alert").val(response.sms_alert);
 
-                    response.conducted_by.forEach((item)=>
-                    {
-                        conductedBy += '<li class="fw-400">'+item+'</li>';
-                    });
+        //             response.conducted_by.forEach((item)=>
+        //             {
+        //                 conductedBy += '<li class="fw-400">'+item+'</li>';
+        //             });
 
-                    response.mentors.forEach((item)=>
-                    {
-                        mentoredBy += '<li class="fw-400">'+item+'</li>';
-                    });
+        //             response.mentors.forEach((item)=>
+        //             {
+        //                 mentoredBy += '<li class="fw-400">'+item+'</li>';
+        //             });
 
-                    response.invitiesType.forEach((item)=>
-                    {
-                        invitiesType += '<li class="fw-400">'+item+'</li>';
-                    });
+        //             response.invitiesType.forEach((item)=>
+        //             {
+        //                 invitiesType += '<li class="fw-400">'+item+'</li>';
+        //             });
 
-                    if(response.invitiesType.includes('STUDENT')){
-                        standard += '<div class="form-group">';
-                        standard += '<label class="control-label">Standard</label>';
-                        standard += '<div class="form-group" >';
-                        standard += '<ol type="i" class="pl-15" >';
-                        response.standard.forEach((item)=>
-                        {
-                            standard += '<li class="fw-400">'+item+'</li>';
-                        });
-                        standard += '</ol>';
-                        standard += '</div>';
-                        standard += '</div>';
-                    }
+        //             if(response.invitiesType.includes('STUDENT')){
+        //                 standard += '<div class="form-group">';
+        //                 standard += '<label class="control-label">Standard</label>';
+        //                 standard += '<div class="form-group" >';
+        //                 standard += '<ol type="i" class="pl-15" >';
+        //                 response.standard.forEach((item)=>
+        //                 {
+        //                     standard += '<li class="fw-400">'+item+'</li>';
+        //                 });
+        //                 standard += '</ol>';
+        //                 standard += '</div>';
+        //                 standard += '</div>';
+        //             }
 
-                    if(response.invitiesType.includes('STAFF')){
-                        category += '<div class="form-group">';
-                        category += '<label class="control-label">Category</label>';
-                        category += '<div class="form-group" >';
-                        category += '<ol type="i" class="pl-15" >';
-                        response.category.forEach((item)=>
-                        {
-                            category += '<li class="fw-400">'+item+'</li>';
-                        });
-                        category += '</ol>';
-                        category += '</div>';
-                        category += '</div>';
+        //             if(response.invitiesType.includes('STAFF')){
+        //                 category += '<div class="form-group">';
+        //                 category += '<label class="control-label">Category</label>';
+        //                 category += '<div class="form-group" >';
+        //                 category += '<ol type="i" class="pl-15" >';
+        //                 response.category.forEach((item)=>
+        //                 {
+        //                     category += '<li class="fw-400">'+item+'</li>';
+        //                 });
+        //                 category += '</ol>';
+        //                 category += '</div>';
+        //                 category += '</div>';
 
-                        subCategory += '<div class="form-group">';
-                        subCategory += '<label class="control-label">Sub Category</label>';
-                        subCategory += '<div class="form-group" >';
-                        subCategory += '<ol type="i" class="pl-15" >';
-                        response.sub_category.forEach((item)=>
-                        {
-                            subCategory += '<li class="fw-400">'+item+'</li>';
-                        });
-                        subCategory += '</ol>';
-                        subCategory += '</div>';
-                        subCategory += '</div>';
-                    }
+        //                 subCategory += '<div class="form-group">';
+        //                 subCategory += '<label class="control-label">Sub Category</label>';
+        //                 subCategory += '<div class="form-group" >';
+        //                 subCategory += '<ol type="i" class="pl-15" >';
+        //                 response.sub_category.forEach((item)=>
+        //                 {
+        //                     subCategory += '<li class="fw-400">'+item+'</li>';
+        //                 });
+        //                 subCategory += '</ol>';
+        //                 subCategory += '</div>';
+        //                 subCategory += '</div>';
+        //             }
 
-                    $("#seminar_modal").find("#conducted_by").html(conductedBy);
-                    $("#seminar_modal").find("#mentored_by").html(mentoredBy);
-                    $("#seminar_modal").find("#category").html(category);
-                    $("#seminar_modal").find("#subCategory").html(subCategory);
-                    $("#seminar_modal").find("#standard").html(standard);
-                    $("#seminar_modal").find("#invitiesType").html(invitiesType);
-                    $("#seminar_modal").modal('show');
-                }
-            });
-        })
+        //             $("#seminar_modal").find("#conducted_by").html(conductedBy);
+        //             $("#seminar_modal").find("#mentored_by").html(mentoredBy);
+        //             $("#seminar_modal").find("#category").html(category);
+        //             $("#seminar_modal").find("#subCategory").html(subCategory);
+        //             $("#seminar_modal").find("#standard").html(standard);
+        //             $("#seminar_modal").find("#invitiesType").html(invitiesType);
+        //             $("#seminar_modal").modal('show');
+        //         }
+        //     });
+        // })
     });
 </script>
 @endsection

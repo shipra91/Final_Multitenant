@@ -37,7 +37,7 @@
                                     <div class="col-lg-4">
                                         <div class="form-group">
                                             <label class="control-label mt-0">Teacher</label>
-                                            <input type="text" class="form-control" value="{{ $assignment['staffName'] }}" disabled />
+                                            <input type="text" class="form-control" value="{{ ucwords($assignment['staffName']) }}" disabled />
                                         </div>
                                     </div>
 
@@ -86,8 +86,8 @@
 
                                 <div class="row">
                                     <div class="col-lg-12">
+                                        <label class="control-label">Assignment Details</label>
                                         <div class="form-group">
-                                            <label class="control-label form-group mt-0">Assignment Details</label>
                                             <textarea class="ckeditor" name="eventDetails" rows="5" disabled>{{ $assignment['assignmentData']->description }}</textarea>
                                         </div>
                                     </div>
@@ -148,6 +148,14 @@
                                         <div class="form-group">
                                             <label class="control-label mt-0">SMS alert to recipients required?(cost may apply)</label>
                                             <input type="text" class="form-control" value="{{ $assignment['assignmentData']->sms_alert }}" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-10">
+                                    <div class="col-lg-12">
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>Submit Before: {{ Carbon::createFromFormat('Y-m-d', $assignment['assignmentData']->end_date)->format('d/m/Y') }} - {{ $assignment['assignmentData']->end_time }}</strong>
                                         </div>
                                     </div>
                                 </div>

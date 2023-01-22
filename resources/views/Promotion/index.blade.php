@@ -3,8 +3,19 @@
 @endphp
 
 @extends('layouts.master')
-
 @section('content')
+{{-- <style>
+    .bootstrap-select.btn-group .dropdown-menu.inner {
+    position: static;
+    float: none;
+    border: 0;
+    padding: 0px 0px 30px 0px!important;
+    margin: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -ms-overflow-style: auto;
+}
+</style> --}}
 <div class="wrapper">
     @include('sliderbar')
     <div class="main-panel">
@@ -73,16 +84,16 @@
                                 <div class="card-content">
                                     <h4 class="card-title">Student Promotion List</h4>
                                     <form method="POST" id="promotionForm">
-                                        <table class="table table-striped table-no-bordered table-hover data-table" cellspacing="0" style="width:100%">
+                                        <table class="table table-striped table-no-bordered table-hover" cellspacing="0" style="width:100%">
                                             <thead style="font-size:12px;">
                                                 <tr>
                                                     <th class="checkbox mt-10 p10" style="width:5%"><label><input type="checkbox" id="selectAll" value="" /></label></th>
-                                                    <th class="col-sm-1" style="width:5%"><b>UID</b></th>
-                                                    <th class="col-sm-2" style="width:15%"><b>Student</b></th>
-                                                    <th class="col-sm-2" style="width:15%"><b>Last Promoted</b></th>
-                                                    <th class="col-sm-2" style="width:15%"><b>To Standard</b><span class="text-danger">*</span></th>
-                                                    <th class="col-sm-2" style="width:15%"><b>To Academic</b><span class="text-danger">*</span></th>
-                                                    <th class="col-sm-3" style="width:30%"><b>To Institution</b><span class="text-danger">*</span></th>
+                                                    <th style="width:5%"><b>UID</b></th>
+                                                    <th style="width:15%"><b>Student</b></th>
+                                                    <th style="width:15%"><b>Last Promoted</b></th>
+                                                    <th style="width:15%"><b>To Standard</b><span class="text-danger">*</span></th>
+                                                    <th style="width:15%"><b>To Academic</b><span class="text-danger">*</span></th>
+                                                    <th style="width:30%"><b>To Institution</b><span class="text-danger">*</span></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -92,7 +103,7 @@
                                                             <label><input type="checkbox" class="promotionSelect" name="promotionSelect[]" id="promotionSelect" value="{{ $students['id_student'] }}" /></label>
                                                         </td>
                                                         <td>{{ $students['UID'] }}</td>
-                                                        <td>{{ $students['name'] }}
+                                                        <td>{{ ucwords($students['name']) }}
                                                         <td>@if($students['days_promoted_ago'] > 0){{ $students['days_promoted_ago'].' days ago' }}@else {{ 'Today' }}@endif</td>
                                                         <td>
                                                             <select class="selectpicker standard" name="standard[]" id="standard" data-size="4" data-style="select-with-transition" data-live-search="true" title="Select">
@@ -109,9 +120,9 @@
                                                             </select>
                                                         </td>
                                                         <td>
-                                                            <select class="selectpicker institution" name="institution[]" id="institution" data-size="4" data-style="select-with-transition" data-live-search="true" title="Select" data-container="body">
+                                                            <select class="selectpicker institution" name="institution[]" id="institution" data-size="4" data-style="select-with-transition" data-live-search="true" title="Select">
                                                                 @foreach($institutions as $institution)
-                                                                    <option value="{{$institution->id}}">{{$institution->name}}</option>
+                                                                    <option value="{{ $institution->id }}">{{ $institution->name }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </td>
@@ -146,6 +157,7 @@
                 }
             });
 
+            // Select all checkobox
             $("#selectAll").click(function(){
                 if(this.checked){
                     $('.promotionSelect').each(function(){

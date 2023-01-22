@@ -45,8 +45,11 @@
                     $attendanceStatus = $staffAttendance->status;
                 }
 
+                $staffName = $staffRepository->getFullName($staff->name, $staff->middle_name, $staff->last_name);
+
                 $staffData[$key] = $staff;
                 $staffData[$key]['attendanceStatus'] = $attendanceStatus;
+                $staffData[$key]['staffName'] = $staffName;
             }
 
             return $staffData;
@@ -142,7 +145,6 @@
                 $stafftData[$key]['presentDays'] = $totalPresentDays;
                 $stafftData[$key]['percentage'] = $percentage.'%';
             }
-
             // dd($stafftData);
             return $stafftData;
         }

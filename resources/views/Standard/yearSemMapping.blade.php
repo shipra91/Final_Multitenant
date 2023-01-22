@@ -62,13 +62,13 @@
                                                             </div>
                                                         </div>
 
-                                                        @if($yearSem['sem_name'] == '')
+                                                        <!-- @if($yearSem['sem_name'] == '')
                                                             <div class="col-lg-1 col-lg-offset-0 text-right">
                                                                 <div class="form-group">
                                                                     <button type="button" id="{{$yearLabel}}_{{$key + 1}}" class="btn btn-danger btn-sm remove_button mt-15"><i class="material-icons">highlight_off</i></button>
                                                                 </div>
                                                             </div>
-                                                        @endif
+                                                        @endif -->
                                                     </div>
                                                 @endforeach
                                             </div>

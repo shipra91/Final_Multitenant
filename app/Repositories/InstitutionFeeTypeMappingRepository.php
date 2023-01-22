@@ -48,10 +48,19 @@
 
         public function fetch($idInstitutionFeetype){
 
-            return InstitutionFeeTypeMapping::join('tbl_fee_type','tbl_fee_type.id', '=',                 'tbl_institution_fee_type_mapping.id_fee_type')
-                                                            ->where('tbl_institution_fee_type_mapping.id', $idInstitutionFeetype)
-                                                            ->select('tbl_fee_type.name')
-                                                            ->first();
+            return InstitutionFeeTypeMapping::join('tbl_fee_type','tbl_fee_type.id', '=', 'tbl_institution_fee_type_mapping.id_fee_type')
+                                            ->where('tbl_institution_fee_type_mapping.id', $idInstitutionFeetype)
+                                            ->select('tbl_fee_type.name')
+                                            ->first();
+        }
+
+        public function getInstitutionFeeTypeId($feeType){
+
+            return InstitutionFeeTypeMapping::join('tbl_fee_type','tbl_fee_type.id', '=',    'tbl_institution_fee_type_mapping.id_fee_type')
+                                            ->where('tbl_fee_type.name', $feeType)
+                                            ->first();
         }
 
     }
+
+    ?>

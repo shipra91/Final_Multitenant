@@ -55,7 +55,7 @@
             $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
-
+           
             DB::enableQueryLog();
             $students = ClassTimeTable::Select('tbl_class_time_table.id_standard', 'tbl_class_time_table.id_period', 'tbl_class_time_table_detail.id_subject', 'tbl_class_time_table_detail.id_room','tbl_class_time_table_setting.start_time', 'tbl_class_time_table_setting.end_time')
                         ->join('tbl_class_time_table_detail', 'tbl_class_time_table_detail.id_class_time_table', '=', 'tbl_class_time_table.id')
@@ -67,6 +67,7 @@
                         ->whereRaw('FIND_IN_SET(?, tbl_class_time_table_detail.id_staffs)',[$staffId])
                         ->where('tbl_class_time_table.day', $day)
                         ->where('tbl_class_time_table.id_period', $period)
+                        ->where('tbl_class_time_table_setting.id_period', $period)
                         ->whereNull('tbl_class_time_table_detail.deleted_at')
                         ->whereNull('tbl_class_time_table_setting.deleted_at')
                         ->first();
@@ -93,4 +94,24 @@
             // dd(\DB::getQueryLog());
             return $students;
         }
+
+        public function fetchStandardPeriodData($idStandard, $day, $period, $allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+
+            DB::enableQueryLog();
+            $classTimeTableData = ClassTimeTable::join('tbl_class_time_table_detail', 'tbl_class_time_table_detail.id_class_time_table', '=', 'tbl_class_time_table.id')
+                        ->where('tbl_class_time_table.id_institute', $institutionId)
+                        ->where('tbl_class_time_table.id_academic', $academicYear)
+                        ->where('tbl_class_time_table.day', $day)
+                        ->where('tbl_class_time_table.id_period', $period)
+                        ->where('tbl_class_time_table.id_standard', $idStandard)  
+                        ->whereNull('tbl_class_time_table_detail.deleted_at')
+                        ->get();
+            // dd(\DB::getQueryLog());
+            return $classTimeTableData;
+        }
+
+        
     }

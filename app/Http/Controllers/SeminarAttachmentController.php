@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SeminarAttachment;
 use Illuminate\Http\Request;
+use App\Services\SeminarAttachmentService;
 
 class SeminarAttachmentController extends Controller
 {
@@ -78,8 +79,24 @@ class SeminarAttachmentController extends Controller
      * @param  \App\Models\SeminarAttachment  $seminarAttachment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SeminarAttachment $seminarAttachment)
+    public function removeSeminarAttachments(Request $request)
     {
-        //
+        $seminarAttachmentService = new SeminarAttachmentService();
+
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $seminarAttachmentService->delete($request->seminarId);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
     }
 }

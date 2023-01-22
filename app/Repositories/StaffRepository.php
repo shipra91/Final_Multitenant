@@ -1,9 +1,9 @@
 <?php
     namespace App\Repositories;
+
     use App\Models\Staff;
     use App\Models\StaffAcademicMapping;
     use App\Interfaces\StaffRepositoryInterface;
-    use App\Repositories\RoleRepository;
     use Carbon\Carbon;
     use Session;
     use DB;
@@ -37,7 +37,9 @@
         }
 
         public function getMaxStaffId(){
+
             $staff = Staff::withTrashed()->max('staff_uid');
+
             if($staff){
                 $max = $staff + 1;
             }else{
@@ -138,13 +140,12 @@
             $academicId = $allSessions['academicYear'];
 
             $data = Staff::join('tbl_staff_categories', 'tbl_staff_categories.id', '=', 'tbl_staff.id_staff_category')
-            ->where('tbl_staff_categories.label', 'NONTEACHING')
-            ->where('tbl_staff.id_institute', $institutionId)
-            ->select('tbl_staff.*')
-            ->get();
+                        ->where('tbl_staff_categories.label', 'NONTEACHING')
+                        ->where('tbl_staff.id_institute', $institutionId)
+                        ->select('tbl_staff.*')
+                        ->get();
             return $data;
         }
-
 
         public function getStaff($request){
 
@@ -153,10 +154,10 @@
             $mobileNumber = $request->mobile;
 
             $staffData = Staff::where("id_institute", $institutionId)
-                    // ->where("id_academic_year", $academicYear)
-                    ->where("primary_contact_no", $mobileNumber)
-                    ->orWhere("secondary_contact_no", $mobileNumber)
-                    ->first();
+                            // ->where("id_academic_year", $academicYear)
+                            ->where("primary_contact_no", $mobileNumber)
+                            ->orWhere("secondary_contact_no", $mobileNumber)
+                            ->first();
 
             return $staffData;
         }
@@ -167,9 +168,9 @@
             $academicYear = $allSessions['academicYear'];
 
             $students = Staff::select(\DB::raw('COUNT(tbl_staff.id) as staffCount'))
-                    ->where('tbl_staff.id_institute', $institutionId)
-                    ->where('tbl_staff.id_academic_year', $academicYear)
-                    ->first();
+                            ->where('tbl_staff.id_institute', $institutionId)
+                            ->where('tbl_staff.id_academic_year', $academicYear)
+                            ->first();
 
             return $students;
         }
@@ -189,8 +190,8 @@
         }
 
         public function allStaffExist($mobile, $institutionId){
-            // \DB::enableQueryLog();
 
+            // \DB::enableQueryLog();
             $staffData = Staff::where('id_institute', $institutionId)
                                 ->where(function($query) use ($mobile){
                                     $query->where('primary_contact_no', $mobile)
@@ -217,7 +218,6 @@
         }
 
         public function userExistForInstitution($mobile, $institutionId){
-            
             $staffData = Staff::where(function($query) use ($mobile){
                                     $query->where('primary_contact_no', $mobile)
                                         ->orWhere('secondary_contact_no', $mobile);
@@ -238,22 +238,33 @@
             $date = Carbon::now();
 
             $data = Staff::whereMonth('date_of_birth', '>', $date->month)
+                        ->orWhere(function ($query) use ($date){
+                            $query->whereMonth('date_of_birth', '=', $date->month)
+                                ->whereDay('date_of_birth', '>=', $date->day);
+                        })
+                        //    ->orderByRaw("DAYOFMONTH('date_of_birth')",'ASC')
+                        //    ->take(3)
+                        ->get();
 
-           ->orWhere(function ($query) use ($date) {
-
-               $query->whereMonth('date_of_birth', '=', $date->month)
-
-                   ->whereDay('date_of_birth', '>=', $date->day);
-
-           })
-
-        //    ->orderByRaw("DAYOFMONTH('date_of_birth')",'ASC')
-
-        //    ->take(3)
-
-           ->get();
-
+                        
             return $data;
         }
+
+        // Get staff full name
+        public function getFullName($firstName, $secondName='', $thirdName=''){
+
+            $output = $firstName;
+
+            if($secondName != ''){
+                $output .= ' '.$secondName;
+            }
+
+            if($thirdName !=''){
+                $output .= ' '.$thirdName;
+            }
+
+            return $output;
+        }
+           
     }
 

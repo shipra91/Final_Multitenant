@@ -1174,6 +1174,13 @@
             var feeChallanAmount=$(this).attr('data-amount');
             $("#challan_approve_modal").find("#approve_challan_id").val(feeChallanId);
             $("#challan_approve_modal").find("#challan_amount").val(feeChallanAmount);
+<<<<<<< HEAD
+            $('#challan_paid_date').val();
+            $('#challan_paid_amount').val('');
+            $('#bank_transaction_id').val('');
+            $("#challan_approve").attr('disabled', true);
+=======
+>>>>>>> main
             $("#challan_approve_modal").modal('show');
         });
 
