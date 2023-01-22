@@ -23,7 +23,7 @@
 
     class ComposeMessageService {
 
-        public function getDetails() {
+        public function getDetails($allSessions) {
 
             $institutionSMSTemplateRepository = new InstitutionSMSTemplateRepository();
             $smsTemplateRepository = new SMSTemplateRepository();
@@ -42,7 +42,7 @@
             $allStudentCount = $allStaffCount = $allCount = 0;
 
             $smsFor = 'MESSAGE_CENTER';
-            $templateDetails = $institutionSMSTemplateRepository->fetchDetails($smsFor);            
+            $templateDetails = $institutionSMSTemplateRepository->fetchDetails($smsFor, $allSessions);            
             foreach($templateDetails as $smsTemplate) {
                 $smsTemplate = $smsTemplateRepository->fetch($smsTemplate->sms_template_id);
                 if($smsTemplate){
@@ -52,7 +52,7 @@
 
             //STAFF DETAILS
 
-            $staffDetails = $staffRepository->all($request);
+            $staffDetails = $staffRepository->all($request, $allSessions);
             if($staffDetails) {
                 $allStaffCount = count($staffDetails);
             }
@@ -63,14 +63,14 @@
                 $count = 0;
                 if($categoryDetails->label == 'TEACHING'){
 
-                    $teachingStaffDetails = $staffRepository->getTeachingStaff();
+                    $teachingStaffDetails = $staffRepository->getTeachingStaff($allSessions);
                     if($teachingStaffDetails) {
                         $count = count($teachingStaffDetails);
                     }
                 }
                 if($categoryDetails->label =='NONTEACHING'){
 
-                    $nonTeachingStaffDetails = $staffRepository->getNonTeachingStaff();
+                    $nonTeachingStaffDetails = $staffRepository->getNonTeachingStaff($allSessions);
                     if($nonTeachingStaffDetails) {
                         $count = count($nonTeachingStaffDetails);
                     }
@@ -79,16 +79,16 @@
             }
 
             //MESSAGE GROUP DETAILS
-            $messageGroupDetails = $messageGroupNameService->all();
+            $messageGroupDetails = $messageGroupNameService->all($allSessions);
 
             //STANDARD DETAILS
-            $standardDetails = $institutionStandardService->all();
+            $standardDetails = $institutionStandardService->all($allSessions);
             foreach($standardDetails as $key => $standard) {
                 $standardStudentCount = 0;
                 $institutionStandardDetails[$key]['id'] = $standard['id'];
                 $institutionStandardDetails[$key]['name'] = $institutionStandardService->fetchStandardByUsingId($standard['id']);
 
-                $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standard['id']);
+                $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standard['id'], $allSessions);
                 if($studentDetails) {
                     $standardStudentCount = count($studentDetails);
                 }
@@ -97,14 +97,14 @@
             }
 
             //STUDENT DETAILS
-            $studentDetails = $studentRepository->all();
+            $studentDetails = $studentRepository->all($allSessions);
             if($studentDetails){
                 $allStudentCount = count($studentDetails);
             }
 
             $allCount = (int) $allStudentCount + (int) $allStaffCount;
 
-            $msgCreditDetails = $this->getCreditCount();
+            $msgCreditDetails = $this->getCreditCount($allSessions);
 
             $allDetails['smsTemplateDetails']         = $smsTemplateDetails;
             $allDetails['staffCategoryDetails']       = $staffCategoryDetails;
@@ -119,10 +119,10 @@
             return $allDetails;
         }
 
-        public function updateSentMessage() {
+        public function updateSentMessage($allSessions) {
 
             $messageReportRepository = new MessageReportRepository(); 
-            $sentMessages = $messageReportRepository->fetchSentMessages();
+            $sentMessages = $messageReportRepository->fetchSentMessages($allSessions);
             $count = 0;
             foreach($sentMessages as $details) {
                
@@ -149,12 +149,11 @@
             return $output;
         }
 
-        public function getCreditCount(){
+        public function getCreditCount($allSessions){
 
             $messageCreditRepository = new MessageCreditRepository();
             $messageReportRepository = new MessageReportRepository(); 
 
-            $allSessions    = session()->all();
             $institutionId  = $allSessions['institutionId'];
             $msgCreditDetails  = array();
             $totalCredit = 0;
@@ -164,7 +163,7 @@
                 $totalCredit    = $creditData->total_credit_available;
             }
 
-            $consumedData   = $messageReportRepository->getTotalConsumedCredit();
+            $consumedData   = $messageReportRepository->getTotalConsumedCredit($allSessions);
             $consumedCredit = $consumedData->consumedCredit;
 
             $balanceCredit  = (int) $totalCredit - (int) $consumedCredit;
@@ -175,11 +174,11 @@
             return $msgCreditDetails;
         }
         
-        public function getPhoneNumbers($term){
+        public function getPhoneNumbers($term, $allSessions){
            
             $studentDetentionService = new StudentDetentionService();
             
-            $details = $studentDetentionService->getStaffStudentDetails($term);
+            $details = $studentDetentionService->getStaffStudentDetails($term, $allSessions);
             
            foreach($details as $data){
                 $values = explode('@', $data);
@@ -223,10 +222,10 @@
             return $alertCredits;
         }
 
-        public function addMessageCenterData($messageData, $senderId, $messageTo) {
+        public function addMessageCenterData($messageData, $senderId, $messageTo, $allSessions) {
 
             $composeMessageRepository = new ComposeMessageRepository(); 
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -248,11 +247,10 @@
             return $storeMessageData;
         }
 
-        public function addMessageReportData($reportDetails) {
+        public function addMessageReportData($reportDetails, $allSessions) {
 
             $messageReportRepository = new MessageReportRepository(); 
 
-            $allSessions   = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear  = $allSessions['academicYear'];
 
@@ -278,13 +276,12 @@
             $storeReportData = $messageReportRepository->store($reportData);
             return $storeReportData;
         }
-
-        public function sendMessageToStudent($lastInsertedId, $senderId, $description, $institutionStandardIds) {
+        
+        public function sendMessageToStudent($lastInsertedId, $senderId, $description, $institutionStandardIds, $allSessions) {
 
             $messageReportRepository = new MessageReportRepository(); 
             $studentRepository = new StudentRepository(); 
 
-            $allSessions   = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear  = $allSessions['academicYear'];
             $reportDetails = array();
@@ -326,12 +323,11 @@
             }
         }
 
-        public function sendMessageToStaff($lastInsertedId, $senderId, $description, $messageTo) {
+        public function sendMessageToStaff($lastInsertedId, $senderId, $description, $messageTo, $allSessions) {
             
             $messageReportRepository = new MessageReportRepository(); 
             $staffRepository = new StaffRepository();
            
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             $reportDetails = array();
@@ -369,17 +365,16 @@
             }
         }
 
-        public function sendMessageToGroup($lastInsertedId, $senderId, $description, $messageTo){
+        public function sendMessageToGroup($lastInsertedId, $senderId, $description, $messageTo, $allSessions){
 
             $messageGroupMembersRepository = new MessageGroupMembersRepository();
             $messageReportRepository = new MessageReportRepository(); 
            
-            $allSessions   = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear  = $allSessions['academicYear'];
             $reportDetails = array();
           
-            $messageGroupMemberDetails = $messageGroupMembersRepository->all($messageTo);
+            $messageGroupMemberDetails = $messageGroupMembersRepository->all($messageTo, $allSessions);
             foreach($messageGroupMemberDetails as $memberDetails) {
                 $phoneNumber = 0;
                 $phoneNumber = $memberDetails->phone_number;
@@ -394,22 +389,18 @@
                     $reportDetails['recipient_number'] = $phoneNumber;
                     $reportDetails['sms_description'] = $description;
 
-                    $storeReportData = $this->addMessageReportData($reportDetails);
+                    $storeReportData = $this->addMessageReportData($reportDetails, $allSessions);
                 }
             }
         }
 
-        public function add($messageData) {
+        public function add($messageData, $allSessions) {
 
             $institutionSMSTemplateService =  new InstitutionSMSTemplateService();
             $smsTemplateRepository = new SMSTemplateRepository();
             $messageReportRepository = new MessageReportRepository(); 
             $studentMappingRepository = new StudentMappingRepository(); 
             $staffRepository = new StaffRepository();
-
-            $allSessions   = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear  = $allSessions['academicYear'];
 
             $phoneNumberDetails = array();
 
@@ -444,22 +435,22 @@
 
                 $institutionStandardIds[] = 'all';
                 //INSERT TO MESSAGE CENTER
-                $storeMessageData = $this->addMessageCenterData($messageData, $senderId, $messageTo);
+                $storeMessageData = $this->addMessageCenterData($messageData, $senderId, $messageTo, $allSessions);
                 if($storeMessageData)
                 {   
                     //INSERT TO MESSAGE REPORT 
                     $lastInsertedId = $storeMessageData->id;
                    
                     if($messageTo == 'ALL') {
-                        $sendToStudent = $this->sendMessageToStudent($lastInsertedId, $senderId, $description, $institutionStandardIds);
-                        $sendToStaff = $this->sendMessageToStaff($lastInsertedId, $senderId, $description, 'ALLSTAFF');
+                        $sendToStudent = $this->sendMessageToStudent($lastInsertedId, $senderId, $description, $institutionStandardIds, $allSessions);
+                        $sendToStaff = $this->sendMessageToStaff($lastInsertedId, $senderId, $description, 'ALLSTAFF', $allSessions);
 
                     } else if($messageTo == 'ALLSTUDENT') {
-                        $sendToStudent = $this->sendMessageToStudent($lastInsertedId, $senderId, $description, $institutionStandardIds);
+                        $sendToStudent = $this->sendMessageToStudent($lastInsertedId, $senderId, $description, $institutionStandardIds, $allSessions);
 
                     } else if($messageTo == 'ALLSTAFF') {
 
-                        $sendToStaff = $this->sendMessageToStaff($lastInsertedId, $senderId, $description, $messageTo);
+                        $sendToStaff = $this->sendMessageToStaff($lastInsertedId, $senderId, $description, $messageTo, $allSessions);
                     }
                 }
 
@@ -479,39 +470,39 @@
                 }
                     
                 //INSERT TO MESSAGE CENTER
-                $storeMessageData = $this->addMessageCenterData($messageData, $senderId, $messageTo);
+                $storeMessageData = $this->addMessageCenterData($messageData, $senderId, $messageTo, $allSessions);
 
                 if($storeMessageData)
                 {   
                     //INSERT TO MESSAGE REPORT 
                     $lastInsertedId = $storeMessageData->id;  
-                    $sendToStaff = $this->sendMessageToStaff($lastInsertedId, $senderId, $description, $messageTo);
+                    $sendToStaff = $this->sendMessageToStaff($lastInsertedId, $senderId, $description, $messageTo, $allSessions);
                 }
 
             }else if(strcmp($sendTo, "STUDENT") == 0) { 
 
                 $messageTo = 'STUDENT';
                 //INSERT TO MESSAGE CENTER
-                $storeMessageData = $this->addMessageCenterData($messageData, $senderId,$messageTo);
+                $storeMessageData = $this->addMessageCenterData($messageData, $senderId, $messageTo, $allSessions);
                 if($storeMessageData)
                 {   
                     //INSERT TO MESSAGE REPORT 
                     $lastInsertedId = $storeMessageData->id;
                     $institutionStandardIds = $messageData->institutionStandard;
-                    $sendToStudent = $this->sendMessageToStudent($lastInsertedId, $senderId, $description, $institutionStandardIds);
+                    $sendToStudent = $this->sendMessageToStudent($lastInsertedId, $senderId, $description, $institutionStandardIds, $allSessions);
                 }
 
             }else if(strcmp($sendTo, "GROUP") == 0) { 
 
                 $messageTo = 'GROUP';
                 //INSERT TO MESSAGE CENTER
-                $storeMessageData = $this->addMessageCenterData($messageData, $senderId, $messageTo);
+                $storeMessageData = $this->addMessageCenterData($messageData, $senderId, $messageTo, $allSessions);
                 if($storeMessageData)
                 {   
                     //INSERT TO MESSAGE REPORT 
                     $lastInsertedId = $storeMessageData->id;
                     foreach($messageData->groups as $groupId ){
-                        $sendToGroup = $this->sendMessageToGroup($lastInsertedId, $senderId, $description, $groupId);
+                        $sendToGroup = $this->sendMessageToGroup($lastInsertedId, $senderId, $description, $groupId, $allSessions);
                     }
                 }
 
@@ -522,7 +513,7 @@
                 $idStaffStudent = explode(',',$messageData->individual_id_staff_student);
            
                 //INSERT TO MESSAGE CENTER
-                $storeMessageData = $this->addMessageCenterData($messageData, $senderId,$messageTo);
+                $storeMessageData = $this->addMessageCenterData($messageData, $senderId, $messageTo, $allSessions);
 
                 if($storeMessageData)
                 {   
@@ -535,7 +526,7 @@
 
                         if($idRecipient != '-') {
 
-                            $studentDetails = $studentMappingRepository->fetchStudent($idRecipient);
+                            $studentDetails = $studentMappingRepository->fetchStudent($idRecipient, $allSessions);
                             if($studentDetails) {
                                 $recipientType = 'STUDENT';
                             }else {
@@ -555,7 +546,7 @@
                             $reportDetails['recipient_number'] = $phoneNumber;
                             $reportDetails['sms_description'] = $description;
             
-                            $storeReportData = $this->addMessageReportData($reportDetails);
+                            $storeReportData = $this->addMessageReportData($reportDetails, $allSessions);
                         }
                     }
                 }
@@ -569,7 +560,7 @@
                 $phoneNumberDetails = explode(',',$messageData->tag_phone);
               
                 //INSERT TO MESSAGE CENTER
-                $storeMessageData = $this->addMessageCenterData($messageData, $senderId, $messageTo);
+                $storeMessageData = $this->addMessageCenterData($messageData, $senderId, $messageTo,$allSessions);
 
                 if($storeMessageData)
                 {   
@@ -589,7 +580,7 @@
                             $reportDetails['recipient_number'] = $phoneNumber;
                             $reportDetails['sms_description'] = $description;
         
-                            $storeReportData = $this->addMessageReportData($reportDetails);
+                            $storeReportData = $this->addMessageReportData($reportDetails, $allSessions);
                         }
                     }
                 }
@@ -887,10 +878,10 @@
             return $output;
         }
 
-        public function getAllMessages(){
+        public function getAllMessages($allSessions){
             $composeMessageRepository =  new ComposeMessageRepository();
             $allMessagesDetails = array();
-            $allMessages = $composeMessageRepository->all();
+            $allMessages = $composeMessageRepository->all($allSessions);
             foreach($allMessages as $index => $message) {
                 $allMessagesDetails[$index] = $message;
                 $allMessagesDetails[$index]['date_time'] = Carbon::createFromFormat('Y-m-d H:i:s', $message->message_date_time)->format('d-m-Y H:i:s');
@@ -898,13 +889,12 @@
             return $allMessagesDetails;
         }
 
-        public function getMessageReport($idMessageCenter) {
+        public function getMessageReport($idMessageCenter, $allSessions) {
             $messageReportRepository = new MessageReportRepository(); 
             $studentMappingRepository = new StudentMappingRepository(); 
             $staffRepository = new StaffRepository(); 
             $institutionRepository = new InstitutionRepository();
 
-            $allSessions   = session()->all();
             $institutionId = $allSessions['institutionId'];
 
             $messageReportData = array();
@@ -919,7 +909,7 @@
                 $smsCharge = 0;
                 if($details->recipient_type == 'STUDENT'){
 
-                    $studentDetails = $studentMappingRepository->fetchStudent($details->id_recipient);
+                    $studentDetails = $studentMappingRepository->fetchStudent($details->id_recipient, $allSessions);
                     $name = $studentDetails->name;
                     $uid = $studentDetails->egenius_uid;
 

@@ -48,6 +48,11 @@
                 @if(count($standardSubjectDetails['subject']) > 0)
 
                     <form method="POST" id="standardSubjectStaffForm">
+                        
+                        <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                        <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                        <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                         <input type="hidden" name="standard_stream" value="{{$_REQUEST['standard_stream']}}">
                         <div class="card">
                             <div class="card-content">

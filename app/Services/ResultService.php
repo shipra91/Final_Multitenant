@@ -22,28 +22,29 @@
     class ResultService {
 
         // Get all standards
-        public function getAllData(){
+        public function getAllData($allSessions){
 
             $institutionStandardService = new InstitutionStandardService();
 
-            $institutionStandards = $institutionStandardService->fetchStandard();
+            $institutionStandards = $institutionStandardService->fetchStandard($allSessions);
             return $institutionStandards;
         }
 
         // Get students data
-        public function getAllStudentData($request){
+        public function getAllStudentData($request, $allSessions){
 
             $studentMappingRepository = new StudentMappingRepository();
             $examTimetableRepository = new ExamTimetableRepository();
 
             $studentArray = array();
 
-            $examTimetable = $examTimetableRepository->getExamMinMax($request);
-            $studentData = $studentMappingRepository->fetchStudentUsingStandard($request['standardId']);
+            $examTimetable = $examTimetableRepository->getExamMinMax($request, $allSessions);
+            $studentData = $studentMappingRepository->fetchStudentUsingStandard($request['standardId'], $allSessions);
 
             foreach($studentData as $key => $student){
                 $studentArray[$key] = $student;
                 $studentName = $studentMappingRepository->getFullName($student['name'], $student['middle_name'], $student['last_name']);
+                
                 $studentArray[$key]['name'] = $studentName;
                 $studentArray[$key]['maxMark'] = $examTimetable->maxMark;
                 $studentArray[$key]['minMark'] = $examTimetable->minMark;
@@ -54,7 +55,7 @@
         }
 
         // Get result details
-        public function getResultDetail($request){
+        public function getResultDetail($request, $allSessions){
 
             $resultRepository = new ResultRepository();
             $institutionSubjectRepository = new InstitutionSubjectRepository();
@@ -67,7 +68,7 @@
             $examId = $request->examId;
             $studentId = $request->studentId;
 
-            $studentResultDetail = $resultRepository->fetchResultDetail($standardId,$examId,$studentId);
+            $studentResultDetail = $resultRepository->fetchResultDetail($standardId, $examId, $studentId, $allSessions);
             // dd($studentResultDetail);
             $arrayData = array();
 
@@ -99,10 +100,10 @@
         }
 
         // Get exam based on standard
-        public function getExamByStandard($standardId){
+        public function getExamByStandard($standardId, $allSessions){
 
             $examMasterRepository = new ExamMasterRepository();
-            $exams = $examMasterRepository->fetchExamByStandard($standardId);
+            $exams = $examMasterRepository->fetchExamByStandard($standardId, $allSessions);
             // dd($exams);
             $arrayData = array();
 
@@ -115,14 +116,14 @@
         }
 
         // Get subjects based on exam
-        public function getSubjectByExam($standardId, $examId){
+        public function getSubjectByExam($standardId, $examId, $allSessions){
 
             $institutionSubjectRepository = new InstitutionSubjectRepository();
             $examTimetableRepository = new ExamTimetableRepository();
             $subjectTypeRepository = new SubjectTypeRepository();
             $subjectRepository = new SubjectRepository();
 
-            $subjects = $examTimetableRepository->fetchSubjectsByExam($standardId, $examId);
+            $subjects = $examTimetableRepository->fetchSubjectsByExam($standardId, $examId, $allSessions);
             //dd($subjects);
 
             $arrayData = array();
@@ -130,7 +131,7 @@
             foreach($subjects as $key => $subject){
 
                 $subjectData = $institutionSubjectRepository->find($subject->id_institution_subject);
-                $subjectCount = $institutionSubjectRepository->findCount($subjectData->id_subject);
+                $subjectCount = $institutionSubjectRepository->findCount($subjectData->id_subject, $allSessions);
 
                 $type = $subjectTypeRepository->fetch($subjectData->id_type);
 
@@ -155,9 +156,8 @@
         }
 
         // Get students based on standard and subject
-        public function fetchStudent($request){
+        public function fetchStudent($request, $allSessions){
 
-            $sessionData = Session::all();
             $idInstitution = $sessionData['institutionId'];
             $idAcademics = $sessionData['academicYear'];
 
@@ -185,11 +185,11 @@
 
                 if($subjectType->label !='common'){
 
-                    $student = $studentMappingRepository->fetchStudentUsingSubject($data);
+                    $student = $studentMappingRepository->fetchStudentUsingSubject($data, $allSessions);
 
                 }else{
 
-                    $student = $studentMappingRepository->fetchStudentUsingStandard($data);
+                    $student = $studentMappingRepository->fetchStudentUsingStandard($data, $allSessions);
                 }
 
                 foreach($student as $data){
@@ -339,7 +339,7 @@
         //     return $institution;
         // }
 
-        public function generateMarksCard($idInstitution, $idAcademics, $exam, $standardId){
+        public function generateMarksCard($idInstitution, $idAcademics, $exam, $standardId, $allSessions){
 
             $examSubjectConfigurationService = new ExamSubjectConfigurationService();
             $institutionSubjectRepository = new InstitutionSubjectRepository();
@@ -350,19 +350,18 @@
             $resultRepository = new ResultRepository();
             $gradeRepository = new GradeRepository();
             $htmlTemplate = '';
-
-            $standardStudents = $studentMappingRepository->fetchStudentUsingStandard($standardId);
-            $examTimetable = $examTimetableRepository->fetchSubjectsByExam($standardId, $exam);
+        
+            $standardStudents = $studentMappingRepository->fetchStudentUsingStandard($standardId, $allSessions);
+            $examTimetable = $examTimetableRepository->fetchSubjectsByExam($standardId, $exam, $allSessions);
             $standardName = $institutionStandardService->fetchStandardByUsingId($standardId);
             $institutionData = $institutionRepository->fetch($idInstitution);
-
-
+            
+            
             foreach($standardStudents as $index => $student){
                 $grandTotalMax = $grandTotalScore = $grandTotalPercentage = 0;
                 $finalGrand = '-';
 
-                $examSubjectConfiguration = $examSubjectConfigurationService->getExamSubjectConfigDataWithMaxMark($idInstitution, $idAcademics, $exam, $standardId, $student->id_student);
-                // dd($examSubjectConfiguration);
+                $examSubjectConfiguration = $examSubjectConfigurationService->getExamSubjectConfigDataWithMaxMark($idInstitution, $idAcademics, $exam, $standardId, $student->id_student, $allSessions);
 
                 $studentName = $studentMappingRepository->getFullName($student['name'], $student['middle_name'], $student['last_name']);
 
@@ -482,7 +481,6 @@
                                     <tbody>';
                                     // dd($examSubjectConfiguration);
                                         foreach($examSubjectConfiguration as $key => $examSubjectData){
-
                                             $maxTheory = ($examSubjectData['theory_max'] === '-')?0:$examSubjectData['theory_max'];
                                             $maxPractical = ($examSubjectData['practical_max'] === '-')?0:$examSubjectData['practical_max'];
                                             $maxTheoryScore = ($examSubjectData['theory_score'] === '-')?0:$examSubjectData['theory_score'];

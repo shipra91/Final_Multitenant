@@ -31,10 +31,10 @@
         }
 
 
-        public function fetchHeadingDetail($idFeeMaster){
+        public function fetchHeadingDetail($idFeeMaster, $allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
  

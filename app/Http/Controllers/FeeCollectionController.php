@@ -17,7 +17,9 @@ class FeeCollectionController extends Controller
     public function index(Request $request)
     {
         $feeCollectionService = new FeeCollectionService();
-        $getStudentDetail = $feeCollectionService->studentFeeDetail($request);
+        $allSessions = session()->all();
+
+        $getStudentDetail = $feeCollectionService->studentFeeDetail($request, $allSessions);
         // dd($getStudentDetail);
         
         return view('FeeCollection/index', ['getStudentDetail' => $getStudentDetail])->with("page", "fee_collection");
@@ -43,10 +45,11 @@ class FeeCollectionController extends Controller
     {
         $result = ["status" => 200];
         $feeCollectionService = new FeeCollectionService();
+        $allSessions = session()->all();
 
         try{
 
-            $result['data'] = $feeCollectionService->add($request);
+            $result['data'] = $feeCollectionService->add($request, $allSessions);
 
         }catch(Exception $e){
 
@@ -68,7 +71,9 @@ class FeeCollectionController extends Controller
     public function show(Request $request)
     { 
         $feeCollectionService = new FeeCollectionService();
-        $paymentDetails = $feeCollectionService->getStudentFeeDetails($request);
+        $allSessions = session()->all();
+
+        $paymentDetails = $feeCollectionService->getStudentFeeDetails($request, $allSessions);
         return view('FeeCollection/feeCancellation',['paymentDetails' => $paymentDetails ])->with("page", "fee_cancellation");  
     }
 

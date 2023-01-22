@@ -67,7 +67,6 @@
 
 @section('script-content')
 <script>
-
 </script>
 @endsection
 

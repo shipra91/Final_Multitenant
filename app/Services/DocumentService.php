@@ -1,6 +1,5 @@
 <?php
     namespace App\Services;
-
     use App\Models\Document;
     use App\Models\DocumentDetail;
     use App\Services\DocumentService;
@@ -31,13 +30,12 @@
         }
 
         // Get all document
-        public function getAll(){
+        public function getAll($allSessions){
 
             $documentRepository = new DocumentRepository();
             $studentRepository = new StudentRepository();
-            $studentMappingRepository = new studentMappingRepository();
 
-            $documents = $documentRepository->all();
+            $documents = $documentRepository->all($allSessions);
 
             $documentDetails = array();
 
@@ -59,7 +57,7 @@
         }
 
         // Get particular document
-        public function getDocumentSelectedData($idDocument){
+        public function getDocumentSelectedData($idDocument, $allSessions){
             // dd($idDocument);
             $documentRepository = new DocumentRepository();
             $documentDetailRepository = new DocumentDetailRepository();
@@ -71,7 +69,7 @@
             $documentDetailData = array();
 
             $document = $documentRepository->fetch($idDocument);
-            $studentDetails = $studentMappingRepository->fetchStudent($document->id_student);
+            $studentDetails = $studentMappingRepository->fetchStudent($document->id_student, $allSessions);
             //dd($studentDetails);
             $studentName = $studentMappingRepository->getFullName($studentDetails->name, $studentDetails->middle_name, $studentDetails->last_name);
             $standard = $institutionStandardService->fetchStandardByUsingId($studentDetails->id_standard);
@@ -84,7 +82,6 @@
                 $docDetail[$key]['headerName'] = $headerData->name;
             }
 
-            //$documentData['studentName'] = $studentDetails->name;
             $documentData['studentName'] = $studentName;
             $documentData['studentStandard'] = $standard;
             $documentData['UID'] = $studentDetails->egenius_uid;
@@ -97,9 +94,8 @@
         // Insert document
         public function add($documentData){
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $documentData->id_institute;
+            $academicYear = $documentData->id_academic;
 
             $documentRepository = new DocumentRepository();
             $documentDetailRepository = new DocumentDetailRepository();

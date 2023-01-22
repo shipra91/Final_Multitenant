@@ -12,6 +12,7 @@ use App\Repositories\AssignmentDetailRepository;
 use App\Repositories\AssignmentRepository;
 use DataTables;
 use ZipArchive;
+use Session;
 use Helper;
 
 class AssignmentController extends Controller
@@ -24,9 +25,10 @@ class AssignmentController extends Controller
     public function index(Request $request)
     {
         $assignmentService = new AssignmentService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $assignment = $assignmentService->getAll();
+        if ($request->ajax()){
+            $assignment = $assignmentService->getAll($allSessions);
             // dd($assignment);
             return Datatables::of($assignment)
                     ->addIndexColumn()
@@ -65,9 +67,10 @@ class AssignmentController extends Controller
      */
     public function create()
     {
+        $allSessions = session()->all();
         $institutionStandardService = new InstitutionStandardService();
+        $standards = $institutionStandardService->fetchStaffStandard($allSessions);
 
-        $standards = $institutionStandardService->fetchStaffStandard();
         return view('Assignments/addAssignment', ['standards' => $standards])->with("page", "assignment");
     }
 
@@ -107,10 +110,12 @@ class AssignmentController extends Controller
     public function show($id)
     {
         $assignmentService = new AssignmentService();
+        $allSessions = session()->all();
 
-        $assignment = $assignmentService->getAssignmentSelectedData($id);
-        $assignmentDetails = $assignmentService->getDetails($assignment['assignmentData']);
+        $assignment = $assignmentService->getAssignmentSelectedData($id, $allSessions);
+        $assignmentDetails = $assignmentService->getDetails($assignment['assignmentData'], $allSessions);
         //dd($assignment);
+
         return view('Assignments/viewAssignmentDetail', ["assignment" => $assignment, 'assignmentDetails' => $assignmentDetails])->with("page", "assignment");
     }
 
@@ -123,10 +128,12 @@ class AssignmentController extends Controller
     public function edit($id)
     {
         $assignmentService = new AssignmentService();
+        $allSessions = session()->all();
 
-        $assignment = $assignmentService->getAssignmentSelectedData($id);
-        $assignmentDetails = $assignmentService->getDetails($assignment['assignmentData']);
+        $assignment = $assignmentService->getAssignmentSelectedData($id, $allSessions);
+        $assignmentDetails = $assignmentService->getDetails($assignment['assignmentData'], $allSessions);
         //dd($assignment);
+
         return view('Assignments/editAssignment', ["assignment" => $assignment, 'assignmentDetails' => $assignmentDetails])->with("page", "assignment");
     }
 
@@ -185,36 +192,30 @@ class AssignmentController extends Controller
         return response()->json($result, $result['status']);
     }
 
-    // Get all subject based on standard
     public function getSubjects(Request $request)
     {
         $assignmentService = new AssignmentService();
-
         $standardId = $request->standardId;
-        // return $standardSubjectService->getStandardsSubject($standardId);
-        return $assignmentService->allSubject($standardId);
+        $allSessions = session()->all();
+        
+        return $assignmentService->allSubject($standardId, $allSessions);
     }
 
-    public function getAssignmentDetails(Request $request)
-    {
-        $assignmentService = new AssignmentService();
-        return $assignmentService->fetchDetails($request);
-    }
-
-    // Download assignment attachment zip
     public function downloadAssignmentFiles($id, $type)
     {
         $assignmentService = new AssignmentService();
-        return $assignmentService->downloadAssignmentFiles($id, $type);
+        $allSessions = session()->all();
+
+        return $assignmentService->downloadAssignmentFiles($id, $type, $allSessions);
     }
 
-    // Deleted assignment records
     public function getDeletedRecords(Request $request)
     {
         $assignmentService = new AssignmentService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $deletedData = $assignmentService->getDeletedRecords();
+        if ($request->ajax()){
+            $deletedData = $assignmentService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

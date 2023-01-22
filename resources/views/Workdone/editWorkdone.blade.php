@@ -13,7 +13,12 @@
             <div class="container-fluid">
                 <div class="row">
                     <form method="POST" id="workdoneForm">
-                        <input type="hidden" name ="workdone_id" id ="workdone_id" value ="{{ $workdone['workdoneData']->id }}">
+                        
+                        <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                        <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                        <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                 
+                        <input type="hidden" name ="workdone_id" id ="workdone_id" value ="{{$workdone->id}}">
                         <div class="col-lg-8">
                             <div class="card">
                                 <div class="card-header card-header-icon" data-background-color="mediumaquamarine">

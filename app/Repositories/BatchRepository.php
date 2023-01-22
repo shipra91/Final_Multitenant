@@ -8,8 +8,14 @@
 
     class BatchRepository implements BatchRepositoryInterface {
 
-        public function all(){
-            return Batch::all();
+        public function all($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+
+            return Batch::where('id_institute', $institutionId)
+                        ->where('id_academic', $academicYear)
+                        ->get();
         }
 
         public function store($data){
@@ -32,9 +38,15 @@
             return Batch::find($id)->delete();
         }
 
-        public function fetchBatchNoByStandard($standardId){
+        public function fetchBatchNoByStandard($standardId, $allSessions){
             //\DB::enableQueryLog();
-            $data = Batch::where('id_standard', $standardId)->first();
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+
+            $data = Batch::where('id_institute', $institutionId)
+                        ->where('id_academic', $academicYear)
+                        ->where('id_standard', $standardId)
+                        ->first();
 
             if($data){
                 $no_of_column = $data->no_of_batch;
@@ -46,9 +58,8 @@
         }
 
         // Get batch details
-        public function getBatchDetails($idStandard){
+        public function getBatchDetails($idStandard, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 

@@ -37,11 +37,12 @@ class CustomFeeAssignmentController extends Controller
     public function store(Request $request)
     {
         $customFeeAssignmentService = new CustomFeeAssignmentService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
         try{
             
-            $result['data'] = $customFeeAssignmentService->add($request);    
+            $result['data'] = $customFeeAssignmentService->add($request, $allSessions);    
 
         }catch(Exception $e){
             $result = [

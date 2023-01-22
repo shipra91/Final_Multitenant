@@ -20,8 +20,10 @@ class CircularController extends Controller
     {
         $circularService = new CircularService();
         //dd($circularService->getAll());
+        $allSessions = session()->all();
+
         if ($request->ajax()){
-            $circulars = $circularService->getAll();
+            $circulars = $circularService->getAll($allSessions);
             return Datatables::of($circulars)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -56,8 +58,9 @@ class CircularController extends Controller
     public function create()
     {
         $circularService = new CircularService();
+        $allSessions = session()->all();
 
-        $circulardata = $circularService->getCircularData();
+        $circulardata = $circularService->getCircularData($allSessions);
         return view('Circular/circular', ['circulardata' => $circulardata])->with("page", "circular");
     }
 
@@ -97,9 +100,10 @@ class CircularController extends Controller
     public function show($id)
     {
         $circularService = new CircularService();
+        $allSessions = session()->all();
 
-        $circularData = $circularService->getCircularData();
-        $selectedData = $circularService->getCircularSelectedData($id);
+        $circularData = $circularService->getCircularData($allSessions);
+        $selectedData = $circularService->getCircularSelectedData($id, $allSessions);
         // dd($circularData);
 
         return view('Circular/view_circular_detail', ['circularData' => $circularData, 'selectedData' => $selectedData])->with("page", "circular");
@@ -114,9 +118,10 @@ class CircularController extends Controller
     public function edit($id)
     {
         $circularService = new CircularService();
+        $allSessions = session()->all();
 
-        $circulardata = $circularService->getCircularData();
-        $selectedData = $circularService->getCircularSelectedData($id);
+        $circulardata = $circularService->getCircularData($allSessions);
+        $selectedData = $circularService->getCircularSelectedData($id, $allSessions);
         //dd($selectedData);
 
         return view('Circular/editCircular', ['circulardata' => $circulardata, 'selectedData' => $selectedData])->with("page", "circular");
@@ -132,12 +137,13 @@ class CircularController extends Controller
     public function update(Request $request, $id)
     {
         $circularService = new CircularService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $circularService->update($request, $id);
+            $result['data'] = $circularService->update($request, $id, $allSessions);
 
         }catch(Exception $e){
 
@@ -180,9 +186,10 @@ class CircularController extends Controller
     public function getDeletedRecords(Request $request){
 
         $circularService = new CircularService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $deletedData = $circularService->getDeletedRecords();
+            $deletedData = $circularService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -257,5 +264,37 @@ class CircularController extends Controller
 
         $circularService = new CircularService();
         return $circularService->downloadCircularFiles($id);
+    }
+
+    public function getRecipientCircular(Request $request){
+        $circularService = new CircularService();
+        
+        if($request->ajax()){
+            $circulars = $circularService->viewOwnCirculars($allSessions);
+            return Datatables::of($circulars)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+                        $btn = '';
+                        if(Helper::checkAccess('circular', 'edit')){
+                            $btn = '<a href="/circular/'.$row['id'].'" rel="tooltip" title="Edit" class="text-success"><i class="material-icons">edit</i></a>';
+                        }
+                        if(Helper::checkAccess('circular', 'view')){
+                            $btn .= '<a href="/circular-detail/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>';
+
+                            if($row['status'] == 'file_found'){
+                                $btn .= '<a href="/circular-download/'.$row['id'].'" rel="tooltip" title="Download Files" class="text-success" target="_blank"><i class="material-icons">file_download</i></a>';
+                            }
+                        }
+                        if(Helper::checkAccess('circular', 'delete')){
+                            $btn .='<a href="javascript:void();" type="button" data-id="'.$row['id'].'" rel="tooltip" title="Delete" class="text-danger delete"><i class="material-icons">delete</i></a>';
+                        }
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+
+        return view('Circular/index')->with("page", "circular");
+
     }
 }

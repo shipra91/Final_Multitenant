@@ -51,8 +51,8 @@
             return ExamSubjectConfiguration::onlyTrashed()->restore();
         }
 
-        public function checkExistence($examId, $standardId, $subjectId){
-            $allSessions = session()->all();
+        public function checkExistence($examId, $standardId, $subjectId, $allSessions){
+            
             $idInstitution = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -66,10 +66,10 @@
             return $check;
         }
 
-        public function getExamStandardConfiguration($examId, $standardId, $subjectId){
+        public function getExamStandardConfiguration($examId, $standardId, $subjectId, $allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
+            
             $idInstitution = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -83,8 +83,8 @@
             return $check;
         }
 
-        public function getExamSubjectConfig($examId, $standardId){
-            $allSessions = session()->all();
+        public function getExamSubjectConfig($examId, $standardId, $allSessions){
+            
             $idInstitution = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -97,8 +97,8 @@
             return $configData;
         }
 
-        public function getExamStandardGrade($examId, $standardId){
-            $allSessions = session()->all();
+        public function getExamStandardGrade($examId, $standardId, $allSessions){
+            
             $idInstitution = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 

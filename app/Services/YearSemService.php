@@ -27,12 +27,12 @@
             return $year;
         }
 
-        public function getSem($id)
+        public function getSem($id, $allSessions)
         {
             $yearSemRepository = new YearSemRepository();
          
             $semDetails = '';
-            $sems = $yearSemRepository->fetchSem($id);
+            $sems = $yearSemRepository->fetchSem($id, $allSessions);
             foreach($sems as $data=>$semData)
             {
                 $semDetails.='<option value="'.$semData['id'].'" >'.$semData['sem_label'].'</option>';
@@ -40,7 +40,7 @@
             return $semDetails;
         }
 
-        public function getData(){
+        public function getData($allSessions){
             $yearSemRepository = new YearSemRepository();
             $yearRepository = new YearRepository();
             $yearDetails = $yearRepository->all();
@@ -52,7 +52,8 @@
                 $allYear[] = $year->name; 
                 $yearSemData[$index]['year']['year_id'] = $year->id; 
                 $yearSemData[$index]['year']['year_name'] = $year->name; 
-                $yearSemDetails = $yearSemRepository->all($year->id);
+
+                $yearSemDetails = $yearSemRepository->all($year->id, $allSessions);
                 if(count($yearSemDetails) > 0)
                 {
                     foreach($yearSemDetails as $key => $yearSem)
@@ -86,8 +87,9 @@
         //    dd($yearSemData);
             $yearSemRepository = new YearSemRepository();
             $yearRepository = new YearRepository();
-            $institutionId = Session::get('institutionId');
-            $academicYear = Session::get('academicYear');
+            
+            $institutionId = $yearSemData->id_institute;
+            $academicYear = $yearSemData->id_academic;
 
             $yearArray = array();
             $yearDetails = $yearRepository->all();

@@ -20,6 +20,12 @@
                             <div class="card-content">
                                 <h4 class="card-title">Edit Exam Master</h4>
                                 <form method="POST" class="demo-form" id="examMasterForm">
+<<<<<<< HEAD
+=======
+                                    <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                    <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                    <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+>>>>>>> main
                                     <input type="hidden" id="id_exam" value="{{$examDetails['id']}}">
                                     <div class="row">
                                         <div class="col-lg-3 col-lg-offset-0">

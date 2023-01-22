@@ -22,13 +22,11 @@ class InstitutionSubjectController extends Controller
     {
         $subjectService =  new SubjectService();
         $institutionSubjectService =  new InstitutionSubjectService();
+        $allSessions = session()->all();
 
         if ($request->ajax()) {
 
-            $page = $request->has('page') ? $request->get('page') : 1;
-            $limit = $request->has('limit') ? $request->get('limit') : 10;
-
-            $allSubjects = $institutionSubjectService->getAll($limit, $page);
+            $allSubjects = $institutionSubjectService->getAll($allSessions);
             // dd($allSubjects);
             return Datatables::of($allSubjects)
                     ->addIndexColumn()
@@ -170,8 +168,9 @@ class InstitutionSubjectController extends Controller
     public function getSubjects(Request $request){
 
         $standardSubjectService = new StandardSubjectService();
+        $allSessions = session()->all();
 
-        $response = $standardSubjectService->fetchInstitutionStandardSubjects($request->examId, $request->standardId);
+        $response = $standardSubjectService->fetchInstitutionStandardSubjects($request->examId, $request->standardId, $allSessions);
 
         return $response;
     }    
@@ -179,8 +178,9 @@ class InstitutionSubjectController extends Controller
     public function getStandardExamTimetableSubjects(Request $request){
 
         $standardSubjectService = new StandardSubjectService();
+        $allSessions = session()->all();
 
-        $response = $standardSubjectService->fetchInstitutionStandardExamTimetableSubjects($request->examId, $request->standardId);
+        $response = $standardSubjectService->fetchInstitutionStandardExamTimetableSubjects($request->examId, $request->standardId, $allSessions);
 
         return $response;
     }

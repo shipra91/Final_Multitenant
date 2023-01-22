@@ -18,9 +18,10 @@ class DocumentController extends Controller
     public function index(Request $request)
     {
         $documentService = new DocumentService();
-        //dd($documentService->getAll());
-        if($request->ajax()){
-            $documents = $documentService->getAll();
+        $allSessions = session()->all();
+
+        if ($request->ajax()){
+            $documents = $documentService->getAll($allSessions);
             return Datatables::of($documents)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -47,7 +48,6 @@ class DocumentController extends Controller
     public function create()
     {
         $documentService = new DocumentService();
-
         $docHeader = $documentService->allDocumentHeader();
 
         return view('DocumentManagement/documentManagementCreation', ["docHeader" => $docHeader])->with("page", "doc_management");
@@ -89,11 +89,13 @@ class DocumentController extends Controller
     public function show(Request $request)
     {
         $documentService = new DocumentService();
+        $allSessions = session()->all();
+
         $docHeader = $documentService->allDocumentHeader();
 
         if($request->ajax()){
-            $documentData = $documentService->getDocumentSelectedData(request()->route()->parameters['id']);
-            // dd($documentData['documentDetails']);
+            $documentData = $documentService->getDocumentSelectedData(request()->route()->parameters['id'], $allSessions);
+            
             return Datatables::of($documentData['documentDetails'])
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -123,13 +125,10 @@ class DocumentController extends Controller
     public function edit($id)
     {
         $documentService = new DocumentService();
+        $allSessions = session()->all();
 
         $docHeader = $documentService->allDocumentHeader();
-        //$selectedData = $documentService->find($id);
-        // dd($selectedData);
-
-        $selectedData = $documentService->getDocumentSelectedData($id);
-        //dd($selectedData);
+        $selectedData = $documentService->getDocumentSelectedData($id, $allSessions);
 
         return view('DocumentManagement/editDocumentManagement', ['docHeader' => $docHeader, 'selectedData' => $selectedData])->with("page", "doc_management");
     }

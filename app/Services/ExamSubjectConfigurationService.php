@@ -12,9 +12,15 @@
     class ExamSubjectConfigurationService {
 
         // Get all grade set
+<<<<<<< HEAD
         public function allGradeSet(){
             $gradeRepository = new GradeRepository();
             return $gradeRepository->all();
+=======
+        public function allGradeSet($allSessions){
+            $gradeRepository = new GradeRepository();
+            return $gradeRepository->all($allSessions);
+>>>>>>> main
         }
 
         public function getAll(){
@@ -24,11 +30,18 @@
             return $result;
         }
 
+<<<<<<< HEAD
         public function add($resultData){
 
             $allSessions = session()->all();
             $idInstitution = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
+=======
+        public function add($resultData, $allSessions){
+
+            $idInstitution = $resultData->id_institute;
+            $academicYear = $resultData->id_academic;
+>>>>>>> main
             $successCount = 0;
             $existingCount = 0;
 
@@ -36,7 +49,11 @@
 
                 $examSubjectConfigurationRepository = new ExamSubjectConfigurationRepository();
 
+<<<<<<< HEAD
                 $check = $examSubjectConfigurationRepository->checkExistence($resultData->exam, $resultData->standard, $subjectId);
+=======
+                $check = $examSubjectConfigurationRepository->checkExistence($resultData->exam, $resultData->standard, $subjectId, $allSessions);
+>>>>>>> main
 
                 if(!$check){
 
@@ -96,9 +113,14 @@
             return $output;
         }
 
+<<<<<<< HEAD
         public function getExamSubjectConfigDataWithMaxMark($idInstitution, $idAcademics, $exam, $standardId, $studentId){
 
             $sessionData = Session::all();
+=======
+        public function getExamSubjectConfigDataWithMaxMark($idInstitution, $idAcademics, $exam, $standardId, $studentId, $allSessions){
+
+>>>>>>> main
             $idInstitution = $sessionData['institutionId'];
             $idAcademics = $sessionData['academicYear'];
 
@@ -108,14 +130,22 @@
             $gradeRepository = new GradeRepository();
 
 
+<<<<<<< HEAD
             $examSubjectConfiguration = $examSubjectConfigurationRepository->getExamSubjectConfig($exam, $standardId);
+=======
+            $examSubjectConfiguration = $examSubjectConfigurationRepository->getExamSubjectConfig($exam, $standardId, $allSessions);
+>>>>>>> main
             $maxExamDataArray = [];
 
             foreach($examSubjectConfiguration as $index => $examSubjectConfig){
 
                 $maxExamDataArray[$index]['display_name'] = $examSubjectConfig->display_name;
 
+<<<<<<< HEAD
                 $getInstitutionSubjects = $institutionSubjectRepository->fetchSubjectDetail($examSubjectConfig->id_subject);
+=======
+                $getInstitutionSubjects = $institutionSubjectRepository->fetchSubjectDetail($examSubjectConfig->id_subject, $allSessions);
+>>>>>>> main
                 // dd($getInstitutionSubjects);
                 $theory_max = $practical_max = $theory_score = $practical_score = $grades = '-';
                 $totalScore = $totalMax = $totalPercentage = 0;

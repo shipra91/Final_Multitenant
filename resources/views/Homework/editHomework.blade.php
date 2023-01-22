@@ -13,9 +13,14 @@
             <div class="container-fluid">
                 <div class="row">
                     <form method="POST" class="demo-form" id="homeworkForm">
-                        <input type="hidden" name="homework_id" id="homework_id" value="{{ $homework['homeworkData']->id }}">
-
-                        <div class="col-lg-8">
+                                        
+                        <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                        <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                        <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
+                        <input type="hidden" name="homework_id" id="homework_id" value="{{$homework->id}}">
+                        <div class="row">
+                            <div class="col-lg-8">
                                 <div class="card">
                                     <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
                                         <i class="material-icons">assignment</i>
@@ -461,7 +466,6 @@
         var gradingOptionValue = $('#grading_option_value').val();
 
         if(gradingRequiredValue == "YES"){
-
             $('#grading_options').show();
             if(gradingOptionValue == "GRADE"){
                 $('#grade').show();

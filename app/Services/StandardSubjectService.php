@@ -16,7 +16,7 @@
 
     class StandardSubjectService {
 
-        public function all(){
+        public function all($allSessions){
 
             $institutionStandardService = new InstitutionStandardService();
             $subjectService = new SubjectService();
@@ -27,7 +27,7 @@
             $standardSubjectIds =  array();
             $standardSubjectsDetails = array();
 
-            $allStandardSubjects = $standardSubjectRepository->all();
+            $allStandardSubjects = $standardSubjectRepository->all($allSessions);
             // dd($allStandardSubjects);
 
             foreach($allStandardSubjects as $key => $subject){
@@ -67,8 +67,8 @@
                 $className = $institutionStandardService->fetchStandardByUsingId($index);
 
                 // Get student
-                $studentData = $studentService->fetchStandardStudents($index);
-                $mappedData = $standardSubjectStaffMappingService->fetchIfSubjectIsMapped($index);
+                $studentData = $studentService->fetchStandardStudents($index, $allSessions);
+                $mappedData = $standardSubjectStaffMappingService->fetchIfSubjectIsMapped($index, $allSessions);
 
                 // dd($mappedData);
                 if(count($studentData) > 0 || count($mappedData) > 0){
@@ -94,9 +94,8 @@
 
             $standardSubjectRepository = new StandardSubjectRepository();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $standardSubjectData->id_institute;
+            $academicYear = $standardSubjectData->id_academic;
 
             if($standardSubjectData->common_subject[0] !=''){
 
@@ -193,7 +192,7 @@
             return $output;
         }
 
-        public function fetchSubject($id){
+        public function fetchSubject($id, $allSessions){
 
             $standardSubjectRepository = new StandardSubjectRepository();
             $standardSubjectService = new StandardSubjectService();
@@ -208,7 +207,7 @@
             $allLanguageSubjets = array();
             $allSubjects = $subjectService->getSubjects();
 
-            $institutionStandardSubject =  $standardSubjectRepository->fetchStandardSubjects($id);
+            $institutionStandardSubject =  $standardSubjectRepository->fetchStandardSubjects($id, $allSessions);
 
             foreach($institutionStandardSubject as $index => $subject){
                 $standardSubjectIds[$index] = $subject->id_subject;
@@ -220,7 +219,7 @@
 
                 if(in_array($data->id, $standardSubjectIds)){
 
-                    $standardSubjectData = $standardSubjectRepository->getStandardsSubjectDetails($id, $data->id);
+                    $standardSubjectData = $standardSubjectRepository->getStandardsSubjectDetails($id, $data->id, $allSessions);
                     $allLanguageSubjets[$count]['id'] = $standardSubjectData->id_institution_subject;
                     $allLanguageSubjets[$count]['name'] = $standardSubjectData->display_name;
                     // $languageSubjectsDetails.='<option value="'.$data->id.'" >'.$data->name.'</option>';
@@ -237,7 +236,7 @@
 
                 if(in_array($data->id, $standardSubjectIds)){
 
-                    $standardSubjectData = $standardSubjectRepository->getStandardsSubjectDetails($id, $data->id);
+                    $standardSubjectData = $standardSubjectRepository->getStandardsSubjectDetails($id, $data->id, $allSessions);
                     $allCommonSubjets[$k]['id'] = $standardSubjectData->id_institution_subject;
                     $allCommonSubjets[$k]['name'] = $standardSubjectData->display_name;
                     // $commonSubjectsDetails.='<option value="'.$data->id.'" >'.$data->name.'</option>';
@@ -254,7 +253,7 @@
                 if(in_array($data->id, $standardSubjectIds)){
 
                     $institutionSubjectIdString = '';
-                    $standardSubjectData = $standardSubjectRepository->getInstituteSubjectIds($id, $data->id);
+                    $standardSubjectData = $standardSubjectRepository->getInstituteSubjectIds($id, $data->id, $allSessions);
 
                     foreach($standardSubjectData as $institutionSubjectId){
                         $institutionSubjectIdString .= $institutionSubjectId->id.'||';
@@ -281,7 +280,7 @@
             return $standardSubjectDetails;
         }
 
-        public function fetchStandardSubjects($standardId){
+        public function fetchStandardSubjects($standardId, $allSessions){
 
             $institutionStandardService = new InstitutionStandardService();
             $standardSubjectRepository = new StandardSubjectRepository();
@@ -297,7 +296,7 @@
             foreach($standardSubjectDetails as $key => $subject){
 
                 $subjectData = $institutionSubjectRepository->find($subject->id_institution_subject);
-                $subjectCount = $institutionSubjectRepository->findCount($subjectData->id_subject);
+                $subjectCount = $institutionSubjectRepository->findCount($subjectData->id_subject, $allSessions);
 
                 $subjectMasterData = $subjectRepository->fetch($subjectData->id_subject);
                 $type = $subjectTypeRepository->fetch($subjectMasterData->id_type);
@@ -325,11 +324,11 @@
             return $allSubjectDetails;
         }
 
-        public function getStandardsSubject($standardIds){
+        public function getStandardsSubject($standardIds, $allSessions){
 
             $standardSubjectRepository = new StandardSubjectRepository();
 
-            $standardSubjectDetails =  $standardSubjectRepository->getStandardsSubject($standardIds);
+            $standardSubjectDetails =  $standardSubjectRepository->getStandardsSubject($standardIds, $allSessions);
             $subjectIds = array();
             $allSubjectDetails = array();
             $index = 0;
@@ -361,10 +360,10 @@
             return $subjectStandards;
         }
 
-        public function getStandardForSubjects($subjectId, $attendanceType){
+        public function getStandardForSubjects($subjectId, $attendanceType, $allSessions){
 
             $standardSubjectRepository = new StandardSubjectRepository();
-            $subjectStandards = $standardSubjectRepository->fetchSubjectStandards($subjectId, $attendanceType);
+            $subjectStandards = $standardSubjectRepository->fetchSubjectStandards($subjectId, $attendanceType, $allSessions);
 
             return $subjectStandards;
         }
@@ -388,17 +387,17 @@
             return $output;
         }
 
-        public function checkStandardSubject($request, $idSubject){
+        public function checkStandardSubject($request, $idSubject, $allSessions){
 
             $standardSubjectRepository = new StandardSubjectRepository();
 
             $nstitutionStandardRepository = new InstitutionStandardRepository();
-            $standardDetails = $nstitutionStandardRepository->fetchStandardDetails($request);
+            $standardDetails = $nstitutionStandardRepository->fetchStandardDetails($request, $allSessions);
             $subjectStandardArray = array();
 
             foreach($standardDetails as $index => $standard){//1a,1b, hindi
 
-                $result = $standardSubjectRepository->fetchSubjectBelongsToStandard($standard->id, $idSubject);
+                $result = $standardSubjectRepository->fetchSubjectBelongsToStandard($standard->id, $idSubject, $allSessions);
 
                 if($result){
                     array_push($subjectStandardArray, $standard->id);
@@ -408,7 +407,7 @@
             return $subjectStandardArray;
         }
 
-        public function fetchInstitutionStandardSubjects($examId, $standardId){
+        public function fetchInstitutionStandardSubjects($examId, $standardId, $allSessions){
 
             $standardSubjectRepository = new StandardSubjectRepository();
             $examSubjectConfigurationRepository = new ExamSubjectConfigurationRepository();
@@ -416,10 +415,10 @@
             $standardSubjectData = array();
             $gradeTemplate = '';
 
-            $standardSubjectDetails =  $standardSubjectRepository->fetchStandardSubjectsGroupBySubjects($standardId);
+            $standardSubjectDetails =  $standardSubjectRepository->fetchStandardSubjectsGroupBySubjects($standardId, $allSessions);
             $subjectParts = $subjectPartRepository->all();
 
-            $gradeTemplate = $getStandardSubjectInfo = $examSubjectConfigurationRepository->getExamStandardGrade($examId, $standardId);
+            $gradeTemplate = $getStandardSubjectInfo = $examSubjectConfigurationRepository->getExamStandardGrade($examId, $standardId, $allSessions);
             if($gradeTemplateData){
                 $gradeTemplate = $gradeTemplateData->id_grade_set;
             }
@@ -428,7 +427,7 @@
                 foreach($standardSubjectDetails as $index => $standardSubject){
                     $standardSubjectData['examConfig'][$index] = $standardSubject;
 
-                    $getStandardSubjectInfo = $examSubjectConfigurationRepository->getExamStandardConfiguration($examId, $standardId, $standardSubject->id_subject);
+                    $getStandardSubjectInfo = $examSubjectConfigurationRepository->getExamStandardConfiguration($examId, $standardId, $standardSubject->id_subject, $allSessions);
                     // dd($getStandardSubjectInfo);
                     if($getStandardSubjectInfo){
                         $standardSubjectData['examConfig'][$index]['config_display_name'] = $getStandardSubjectInfo->display_name;
@@ -456,7 +455,7 @@
             return $standardSubjectData;
         }
         
-        public function fetchInstitutionStandardExamTimetableSubjects($examId, $standardId){
+        public function fetchInstitutionStandardExamTimetableSubjects($examId, $standardId, $allSessions){
 
             $standardSubjectRepository = new StandardSubjectRepository();
             $examSubjectConfigurationRepository = new ExamSubjectConfigurationRepository();
@@ -464,10 +463,10 @@
             $standardSubjectData = array();
             $gradeTemplate = '';
 
-            $standardSubjectDetails =  $standardSubjectRepository->fetchStandardSubjectsGroupBySubjectsWithExamTimetable($standardId);
-            $subjectParts = $subjectPartRepository->all();
+            $standardSubjectDetails =  $standardSubjectRepository->fetchStandardSubjectsGroupBySubjectsWithExamTimetable($standardId, $allSessions);
+            $subjectParts = $subjectPartRepository->all($allSessions);
 
-            $gradeTemplateData = $getStandardSubjectInfo = $examSubjectConfigurationRepository->getExamStandardGrade($examId, $standardId);
+            $gradeTemplateData = $getStandardSubjectInfo = $examSubjectConfigurationRepository->getExamStandardGrade($examId, $standardId, $allSessions);
             if($gradeTemplateData){
                 $gradeTemplate = $gradeTemplateData->id_grade_set;
             }
@@ -475,7 +474,7 @@
                 foreach($standardSubjectDetails as $index => $standardSubject){
                     $standardSubjectData['examConfig'][$index] = $standardSubject;
 
-                    $getStandardSubjectInfo = $examSubjectConfigurationRepository->getExamStandardConfiguration($examId, $standardId, $standardSubject->id_subject);
+                    $getStandardSubjectInfo = $examSubjectConfigurationRepository->getExamStandardConfiguration($examId, $standardId, $standardSubject->id_subject, $allSessions);
                     // dd($getStandardSubjectInfo);
                     if($getStandardSubjectInfo){
                         $standardSubjectData['examConfig'][$index]['config_display_name'] = $getStandardSubjectInfo->display_name;

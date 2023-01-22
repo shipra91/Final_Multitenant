@@ -8,9 +8,8 @@
 
     class InstitutionSubjectRepository implements InstitutionSubjectRepositoryInterface {
 
-        public function all(){
+        public function all($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -23,9 +22,8 @@
             return InstitutionSubject::create($data);
         }
 
-        public function fetch($subjectType){
-            // dd($subjectType);
-            $allSessions = session()->all();
+        public function fetch($subjectType, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             // DB::enableQueryLog();
@@ -46,9 +44,8 @@
             return $institutionSubject;
         }
 
-        public function findCount($subjectId){
-            // dd($subjectType);
-            $allSessions = session()->all();
+        public function findCount($subjectId, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             // DB::enableQueryLog();
@@ -71,9 +68,8 @@
             return InstitutionSubject::whereId($id)->update($data);
         }
 
-        public function fetchInstitutionAttendanceSubject($attendanceType){
+        public function fetchInstitutionAttendanceSubject($attendanceType, $allSessions){
             // dd($subjectType);
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             // DB::enableQueryLog();
@@ -88,9 +84,8 @@
             // dd(DB::getQueryLog());
         }
 
-        public function fetchPracticalSubjects($subjectType){
+        public function fetchPracticalSubjects($subjectType, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -103,9 +98,8 @@
             //dd(DB::getQueryLog());
         }
 
-        public function fetchSubjectDetail($masterSubjectId){
+        public function fetchSubjectDetail($masterSubjectId, $allSessions){
             // dd($subjectType);
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             // DB::enableQueryLog();

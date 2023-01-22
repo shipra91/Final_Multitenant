@@ -7,14 +7,14 @@ use App\Repositories\StudentMappingRepository;
 
 class SeminarConductedByService {
 
-        public function getSeminarConductedByStudent($idSeminar) {
+        public function getSeminarConductedByStudent($idSeminar, $allSessions) {
             $seminarConductedByRepository = new SeminarConductedByRepository();
             $studentMappingRepository = new StudentMappingRepository();
             $seminarConductedByDetails = array();
             $seminarConductedBy = $seminarConductedByRepository->fetch($idSeminar); 
             foreach($seminarConductedBy as  $key => $conductors) {
                 if($conductors->type == "STUDENT") {
-                    $seminarConductedByDetails[$key] = $studentMappingRepository->fetchStudent($conductors->conducted_by);
+                    $seminarConductedByDetails[$key] = $studentMappingRepository->fetchStudent($conductors->conducted_by, $allSessions);
                 }
             }
             return $seminarConductedByDetails;
@@ -50,9 +50,9 @@ class SeminarConductedByService {
             return $output;
         }
 
-        public function getAll() {
+        public function getAll($allSessions) {
             $seminarConductedByRepository = new SeminarConductedByRepository();
-            $data = $seminarConductedByRepository->all();
+            $data = $seminarConductedByRepository->all($allSessions);
             return $data;
         }
     }

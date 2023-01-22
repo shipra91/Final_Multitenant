@@ -21,8 +21,13 @@
                         <div class="wizard-container">
                             <div class="card wizard-card" data-color="mediumaquamarine" id="wizardProfile">
                                 <form method="POST" class="demo-form" id="studentForm" enctype="multipart/form-data">
+
+                                    <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                    <input type="hidden" name="id_academic" value="{{session()->ge('academicYear')}}">
+                                    <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+
                                     <div class="wizard-header">
-                                        <h3 class="wizard-title">Edit Student</h3>
+                                        <h3 class="wizard-title">Edit Student</h3>                                        
                                     </div>
                                     <div class="wizard-navigation">
                                         <ul>

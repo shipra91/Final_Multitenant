@@ -11,16 +11,6 @@ use DataTables;
 class PaymentGatewayController extends Controller
 {
     /**
-     *
-     * create Constructor to use the functions defined in the repositories
-     */
-    protected $paymentGatewayService;
-    public function __construct(PaymentGatewayService $paymentGatewayService)
-    {
-        $this->paymentGatewayService = $paymentGatewayService;
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -28,8 +18,10 @@ class PaymentGatewayController extends Controller
 
     public function index(Request $request)
     {
+        $paymentGatewayService = new PaymentGatewayService();
+
         if ($request->ajax()) {
-            $paymentGateway = $this->paymentGatewayService->getAll();
+            $paymentGateway = $paymentGatewayService->getAll();
             return Datatables::of($paymentGateway)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -64,11 +56,13 @@ class PaymentGatewayController extends Controller
      */
     public function store(StorePaymentGatewayRequest $request)
     {
+        $paymentGatewayService = new PaymentGatewayService();
+
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->paymentGatewayService->add($request);
+            $result['data'] = $paymentGatewayService->add($request);
 
         }catch(Exception $e){
 
@@ -89,7 +83,10 @@ class PaymentGatewayController extends Controller
      */
     public function show($id)
     {
-        $paymentGatewayData = $this->paymentGatewayService->find($id);
+        
+        $paymentGatewayService = new PaymentGatewayService();
+
+        $paymentGatewayData = $paymentGatewayService->find($id);
         return view('PaymentGateway/viewPaymentGateway', ["paymentGatewayData" => $paymentGatewayData])->with("page", "payment_gateway");
         //dd($paymentGatewayData);
     }
@@ -102,7 +99,10 @@ class PaymentGatewayController extends Controller
      */
     public function edit($id)
     {
-        $selectedPaymentGateway = $this->paymentGatewayService->find($id);
+        
+        $paymentGatewayService = new PaymentGatewayService();
+
+        $selectedPaymentGateway = $paymentGatewayService->find($id);
         return view('PaymentGateway/editPaymentGateway', ["selectedPaymentGateway" => $selectedPaymentGateway])->with("page", "payment_gateway");
     }
 
@@ -115,11 +115,13 @@ class PaymentGatewayController extends Controller
      */
     public function update(StorePaymentGatewayRequest $request, $id)
     {
+        
+        $paymentGatewayService = new PaymentGatewayService();
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->paymentGatewayService->update($request, $id);
+            $result['data'] = $paymentGatewayService->update($request, $id);
 
         }catch(Exception $e){
 
@@ -139,12 +141,13 @@ class PaymentGatewayController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
+    {        
+        $paymentGatewayService = new PaymentGatewayService();
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->paymentGatewayService->delete($id);
+            $result['data'] = $paymentGatewayService->delete($id);
 
         }catch(Exception $e){
 

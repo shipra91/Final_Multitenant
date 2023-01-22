@@ -24,9 +24,10 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $projectService = new ProjectService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $project = $projectService->getAll();
+        if ($request->ajax()){
+            $project = $projectService->getAll($allSessions);
             return Datatables::of($project)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -68,7 +69,9 @@ class ProjectController extends Controller
     public function create()
     {
         $institutionStandardService = new InstitutionStandardService();
-        $standards = $institutionStandardService->fetchStaffStandard();
+        $allSessions = session()->all();
+
+        $standards = $institutionStandardService->fetchStaffStandard($allSessions);
 
        return view('Projects/addProject', ['standards' => $standards])->with("page", "project");
     }
@@ -126,11 +129,12 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $projectService = new ProjectService();
+        $institutionStandardService = new InstitutionStandardService();
+        $allSessions = session()->all();
 
-        $project = $projectService->getProjectSelectedData($id);
-        $projectDetails = $projectService->getDetails($project['projectData']);
-        //dd($projectDetails);
-
+        $project = $projectService->find($id);
+        $projectDetails = $projectService->getDetails($project, $allSessions);
+        // dd($projectDetails);
         return view('Projects/editProject', ["project" => $project, 'projectDetails' => $projectDetails])->with("page", "project");
     }
 
@@ -189,30 +193,39 @@ class ProjectController extends Controller
         return response()->json($result, $result['status']);
     }
 
-    // Get all subject based on standard
     public function getSubjects(Request $request)
     {
         $projectService = new ProjectService();
+        $allSessions = session()->all();
 
         $standardId = $request->standardId;
         // return $standardSubjectService->getStandardsSubject($standardId);
-        return $projectService->allSubject($standardId);
+        return $projectService->allSubject($standardId, $allSessions);
     }
 
-    // Download project attachment zip
+    public function getProjectDetails(Request $request)
+    {
+        $projectService = new ProjectService();
+        $allSessions = session()->all();
+
+        return $projectService->fetchDetails($request, $allSessions);
+    }
+
     public function downloadProjectFiles($id, $type)
     {
         $projectService = new ProjectService();
-        return $projectService->downloadProjectFiles($id, $type);
+        $allSessions = session()->all();
+
+        return $projectService->downloadProjectFiles($id, $type, $allSessions);
     }
 
-    // Deleted project records
     public function getDeletedRecords(Request $request){
 
         $projectService = new ProjectService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $deletedData = $projectService->getDeletedRecords();
+        if ($request->ajax()){
+            $deletedData = $projectService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -253,24 +266,25 @@ class ProjectController extends Controller
         return response()->json($result, $result['status']);
     }
 
-    // public function restoreAll()
-    // {
-    //     $projectService = new ProjectService();
+    public function restoreAll()
+    {
+        $projectService = new ProjectService();
+        $allSessions = session()->all();
 
-    //     $result = ["status" => 200];
+        $result = ["status" => 200];
 
-    //     try{
+        try{
 
-    //         $result['data'] = $projectService->restoreAll();
+            $result['data'] = $projectService->restoreAll($allSessions);
 
-    //     }catch(Exception $e){
+        }catch(Exception $e){
 
-    //         $result = [
-    //             "status" => 500,
-    //             "error" => $e->getMessage()
-    //         ];
-    //     }
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
 
-    //     return response()->json($result, $result['status']);
-    // }
+        return response()->json($result, $result['status']);
+    }
 }

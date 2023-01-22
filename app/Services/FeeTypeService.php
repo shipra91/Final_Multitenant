@@ -129,9 +129,16 @@
             return $output;
         }
 
+<<<<<<< HEAD
         public function getStandardFeeTypeDetails($idStandard){
 
             $feeTypeRepository = new FeeTypeRepository();
             return $feeTypeRepository->getStandardFeeType($idStandard);
+=======
+        public function getStandardFeeTypeDetails($idStandard, $allSessions){
+
+            $feeTypeRepository = new FeeTypeRepository();
+            return $feeTypeRepository->getStandardFeeType($idStandard, $allSessions);
+>>>>>>> main
         }
     }

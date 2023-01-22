@@ -1,6 +1,5 @@
 <?php
     namespace App\Services;
-
     use App\Models\StaffAttendance;
     use App\Repositories\StaffAttendanceRepository;
     use App\Repositories\StaffCategoryRepository;
@@ -28,7 +27,11 @@
 
             $staffRepository = new StaffRepository();
             $staffAttendanceRepository = new StaffAttendanceRepository();
-            $staffData = $staffRepository->getCategoryStaff($category, $idInstitution);
+
+            $allSessions = array(
+                'academicYear' => $idAcademic
+            );
+            $staffData = $staffRepository->getCategoryStaff($category, $idInstitution, $allSessions);
             $attendanceStatus = 'present';
             // $staffData = array();
 
@@ -108,28 +111,27 @@
         }
 
         // View staff attendance
-        public function getAll($request){
-
+        public function getAll($request, $allSessions){
+            // dd($request);
             $staffAttendanceRepository = new StaffAttendanceRepository();
 
-            $stafftData = array();
-            $attendanceDetails = $staffAttendanceRepository->fetchAttendanceDetail($request);
+            $attendanceDetails = $staffAttendanceRepository->fetchAttendanceDetail($request, $allSessions);
             // dd($attendanceDetails);
-
+            $stafftData = array();
 
             foreach($attendanceDetails as $key => $attendanceDetail){
 
                 $stafftData[$key] = $attendanceDetail;
                 $percentage = $totalWorkingDays = $totalPresentDays = 0;
 
-                $workingDays = $staffAttendanceRepository->fetchWorkingDays($attendanceDetail->id);
+                $workingDays = $staffAttendanceRepository->fetchWorkingDays($attendanceDetail->id, $allSessions);
                 // dd($workingDays);
 
                 if($workingDays){
                     $totalWorkingDays = $workingDays;
                 }
 
-                $presentDays = $staffAttendanceRepository->fetchPresentDays($attendanceDetail->id);
+                $presentDays = $staffAttendanceRepository->fetchPresentDays($attendanceDetail->id, $allSessions);
 
                 if($workingDays){
                     $totalPresentDays = $presentDays;

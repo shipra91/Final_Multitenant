@@ -1,6 +1,5 @@
 <?php
     namespace App\Repositories;
-
     use App\Models\HomeworkDetail;
     use App\Interfaces\HomeworkDetailRepositoryInterface;
 
@@ -11,20 +10,16 @@
         }
 
         public function store($data){
-            return $data = HomeworkDetail::create($data);
+            return $homeworkDetail = HomeworkDetail::create($data);
         }
 
         public function fetch($id){
-            return $data = HomeworkDetail::where('id_homework', $id)->get();
+            return $homeworkDetail = HomeworkDetail::where('id_homework', $id)->get();
         }
 
         public function update($data){
             return $data->save();
         }
-
-        // public function delete($id){
-        //     return $homeworkDetail = HomeworkDetail::where('id_homework', $id)->delete();
-        // }
 
         public function delete($id){
             return $data = HomeworkDetail::find($id)->delete();

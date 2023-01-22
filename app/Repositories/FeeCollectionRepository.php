@@ -32,10 +32,9 @@
             return FeeCollection::find($id)->delete();
         }
 
-        public function totalPaid($idStudent, $idAcademicYear){
+        public function totalPaid($idStudent, $idAcademicYear, $allSessions){
             DB::enableQueryLog();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
 
             $paidAmount = FeeCollection::select(\DB::raw('SUM(tbl_fee_collections.amount_received +  tbl_fee_collections.gst) as amount'))
@@ -47,8 +46,8 @@
             return $paidAmount;
         }
 
-        public function getMaxReceiptNo($idReceiptSetting, $idAcademicYear){
-            $allSessions = session()->all();
+        public function getMaxReceiptNo($idReceiptSetting, $idAcademicYear, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
 
             $maxReceiptNo = FeeCollection::where('id_institute', $institutionId)
@@ -59,8 +58,8 @@
             return $maxReceiptNo;
         }
 
-        public function getCollectionForReceiptSetting($idReceiptSetting){
-            $allSessions = session()->all();
+        public function getCollectionForReceiptSetting($idReceiptSetting, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $idAcademicYear = $allSessions['academicYear'];
 
@@ -85,8 +84,8 @@
             return $feeCollectionDetails;
         }
 
-        public function getCollectionForFeeMaster($idStandards, $idFeeType, $idFeeCategory){
-            $allSessions = session()->all();
+        public function getCollectionForFeeMaster($idStandards, $idFeeType, $idFeeCategory, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $idAcademicYear = $allSessions['academicYear'];
 

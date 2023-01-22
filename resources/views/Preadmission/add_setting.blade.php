@@ -16,7 +16,6 @@
                         <a href="{{ url('application-setting') }}" type="button" class="btn btn-info">Back</a>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-12 col-md-offset-0">
                         <div class="card">

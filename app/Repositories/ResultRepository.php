@@ -42,9 +42,8 @@
             return $result = Result::find($id)->delete();
         }
 
-        public function fetchResultDetail($standardId,$examId,$studentId){
+        public function fetchResultDetail($standardId, $examId, $studentId, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

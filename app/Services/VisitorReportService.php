@@ -8,9 +8,9 @@
     class VisitorReportService {
 
         // Get visitor reports
-        public function getReportData($request){
+        public function getReportData($request, $allSessions){
             $visitorManagementRepository = new VisitorManagementRepository();
-            return $visitorManagementRepository->visitorReportData($request);
+            return $visitorManagementRepository->visitorReportData($request, $allSessions);
         }
     }
 ?>

@@ -7,22 +7,22 @@
 
     class FineSettingRepository implements FineSettingRepositoryInterface{
   
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             return FineSetting::where('id_institute', $institutionId)->where('id_academic', $academicId)->groupBy('label_fine_options')->get();
         }
 
-        public function getData(){
-            $allSessions = session()->all();
+        public function getData($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             return FineSetting::where('id_institute', $institutionId)->where('id_academic', $academicId)->orderBy('number_of_days')->get();
         }
 
-        public function fetchData($labelFineOption){
-            $allSessions = session()->all();
+        public function fetchData($labelFineOption, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             return FineSetting::where('id_institute', $institutionId)->where('id_academic', $academicId)->where('label_fine_options', $labelFineOption)->get();

@@ -82,6 +82,12 @@
                     @if(count($examTimetableDetails)>0)
                         <div class="row">
                             <form method="POST" id="examTimetableForm">
+<<<<<<< HEAD
+=======
+                                <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+>>>>>>> main
                                 <div class="col-lg-12">
 
                                     @if($examTimetableDetails['setting']['timetable_type'] == 'classwise')
@@ -95,6 +101,7 @@
 
                                             <div class="card-content">
                                                 @foreach($examTimetableDetails['class_wise'] as $details)
+<<<<<<< HEAD
                                                     <h4 class="text-center">
                                                         <span class="fw-500 font-15">{{ $details['class_name'] }}</span>
                                                     </h4>
@@ -105,6 +112,16 @@
                                                         </span>
                                                     </h4>
                                                     <div class="mt-30">
+=======
+                                                    <h4 class="text-center"><b>{{$details['class_name']}}</b></h4>
+                                                    <h4 class="text-center mt-20">
+                                                        <b>
+                                                            From Date : {{$examTimetableDetails['setting']['from_date']}}
+                                                            To Date : {{$examTimetableDetails['setting']['to_date']}}
+                                                        </b>
+                                                    </h4>
+                                                    <div class="" style="margin: 20px 0px;">
+>>>>>>> main
                                                         <table class="table table-striped">
                                                             <thead style="font-size:12px;">
                                                                 <tr>
@@ -170,7 +187,11 @@
                                                                     @endforeach
                                                                 @else
                                                                     <tr>
+<<<<<<< HEAD
                                                                         <td colspan="7" class="text-center">No subjects available</td>
+=======
+                                                                        <td colspan="7" class="text-center">No Subjects Available</td>
+>>>>>>> main
                                                                     </tr>
                                                                 @endif
                                                             </tbody>
@@ -216,6 +237,10 @@
                                                                     </tr>
 
                                                                     @foreach($details['classArray'] as $index => $data)
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
                                                                         <tr>
                                                                             <td>
                                                                                 <input type="hidden" name="standard_ids[{{$details['subject_id']}}][]" value="{{$data['standard_id']}}">
@@ -304,12 +329,17 @@
         });
 
         $(function() {
+<<<<<<< HEAD
             $("input[type=checkbox]:checked").each(function(){
+=======
+            $("input[type=checkbox]:checked").each(function() {
+>>>>>>> main
 
                 $(this).parents('tr').find('.current_class').attr('disabled', false);
             });
         });
 
+<<<<<<< HEAD
         $('input[type=checkbox]').change(function(){
 
             var value = $(this).parents('tr').attr('data-id');
@@ -317,18 +347,36 @@
             if($(this).is(':checked')){
                 $(this).parents('tr').find('.current_class').attr('disabled', false);
             }else{
+=======
+        $('input[type=checkbox]').change(function() {
+
+            var value = $(this).parents('tr').attr('data-id');
+
+            if ($(this).is(':checked')) {
+
+                $(this).parents('tr').find('.current_class').attr('disabled', false);
+            } else {
+
+>>>>>>> main
                 $(this).parents('tr').find('.current_class').attr('disabled', true);
             }
 
         });
 
+<<<<<<< HEAD
         // Check min and max marks
+=======
+        //CHECK MIN AND MAX MARKS
+>>>>>>> main
         $("body").delegate(".min_marks", "keyup", function(event){
             event.preventDefault();
 
             var minMarks = $(this).val(); //alert(minMarks);
             var maxMarks = $(this).parents('tr').find('.max_marks').val(); //alert(maxMarks);
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
             if(parseInt(minMarks) > parseInt(maxMarks)){
                 $(this).val('');
             }
@@ -344,6 +392,7 @@
             maxDate: new Date(toDate),
         });
 
+<<<<<<< HEAD
         $('#timetable_type').on('change', function(){
 
             var timetableType = $(this).find(":selected").val();
@@ -352,11 +401,20 @@
                 $('#idStandard').addClass('d-none');
                 $("#standard").prop('required', false);
             }else{
+=======
+        $('#timetable_type').on('change', function() {
+            var timetableType = $(this).find(":selected").val();
+            if (timetableType == 'subjectwise') {
+                $('#idStandard').addClass('d-none');
+                $("#standard").prop('required', false);
+            } else {
+>>>>>>> main
                 $('#idStandard').removeClass('d-none');
                 $("#standard").prop('required', true);
             }
         });
 
+<<<<<<< HEAD
         $('#examId').on('change', function(){
 
             var examId = $(this).find(":selected").val();
@@ -372,6 +430,27 @@
                     var option = '';
                     $.each(standardDetails, function(index, value){
                         option += '<option value="' + value['id'] + '">' +  value['label'] + '</option>';
+=======
+        $('#examId').on('change', function() {
+            var examId = $(this).find(":selected").val();
+            console.log(examId);
+            $.ajax({
+                url: "/exam-master-data",
+                type: "POST",
+                data: {
+                    id: examId
+                },
+                success: function(data) {
+                    var standardDetails = data.standard_details;
+                   console.log(standardDetails);
+                    var option = '';
+                    $.each(standardDetails, function(index, value){
+                        option += '<option value="' +
+                            value['id'] +
+                            '">' +
+                            value['label'] +
+                            '</option>';
+>>>>>>> main
                     });
 
                     $('#from_date').html(data.from_date);
@@ -382,7 +461,12 @@
             });
         });
 
+<<<<<<< HEAD
         $('body').delegate('#examTimetableForm', 'submit', function(e){
+=======
+
+        $('body').delegate('#examTimetableForm', 'submit', function(e) {
+>>>>>>> main
             e.preventDefault();
 
             var btn = $('#submit');
@@ -394,7 +478,11 @@
                 data: new FormData(this),
                 contentType: false,
                 processData: false,
+<<<<<<< HEAD
                 beforeSend: function(){
+=======
+                beforeSend: function() {
+>>>>>>> main
                     btn.html('Submitting...');
                     btn.attr('disabled', true);
                 },
@@ -402,10 +490,16 @@
                     btn.html('Submit');
                     btn.attr('disabled', false);
 
+<<<<<<< HEAD
                     if(result['status'] == "200"){
 
                         if(result.data['signal'] == "success"){
 
+=======
+                    if (result['status'] == "200") {
+
+                        if (result.data['signal'] == "success") {
+>>>>>>> main
                             swal({
                                 title: result.data['message'],
                                 buttonsStyling: false,
@@ -414,7 +508,11 @@
                                 window.location.reload();
                             }).catch(swal.noop)
 
+<<<<<<< HEAD
                         }else if (result.data['signal'] == "exist"){
+=======
+                        } else if (result.data['signal'] == "exist") {
+>>>>>>> main
 
                             swal({
                                 title: result.data['message'],
@@ -422,7 +520,11 @@
                                 confirmButtonClass: "btn btn-warning"
                             });
 
+<<<<<<< HEAD
                         }else{
+=======
+                        } else {
+>>>>>>> main
 
                             swal({
                                 title: result.data['message'],
@@ -431,7 +533,11 @@
                             });
                         }
 
+<<<<<<< HEAD
                     }else{
+=======
+                    } else {
+>>>>>>> main
 
                         swal({
                             title: 'Server error',
@@ -442,6 +548,11 @@
                 }
             });
         });
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> main
     });
 </script>
 @endsection

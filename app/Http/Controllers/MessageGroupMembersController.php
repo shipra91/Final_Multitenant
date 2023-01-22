@@ -31,7 +31,9 @@ class MessageGroupMembersController extends Controller
     public function create()
     {
         $messageGroupNameService =  new MessageGroupNameService();
-        $messageGroupName = $messageGroupNameService->all();
+        $allSessions = session()->all();
+
+        $messageGroupName = $messageGroupNameService->all($allSessions);
         return view('MessageCenter/messageGroupMembersCreation',['messageGroupName' => $messageGroupName])->with("page", "message_group_member");
     }
 
@@ -61,6 +63,28 @@ class MessageGroupMembersController extends Controller
 
         return response()->json($result, $result['status']);
     }
+
+    public function storeExcelData(Request $request)
+    {
+        $messageGroupMembersService =  new MessageGroupMembersService();
+
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $messageGroupMembersService->addExcelData($request);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
+    }
+
     /**
      * Display the specified resource.
      *
@@ -69,9 +93,11 @@ class MessageGroupMembersController extends Controller
      */
     public function show(Request $request)
     {
-        $groupId = $request->messageGroupNameId;
         $messageGroupMembersService =  new MessageGroupMembersService();
-        return $messageGroupMembersService->all($groupId);
+        $allSessions = session()->all();
+        
+        $groupId = $request->messageGroupNameId;
+        return $messageGroupMembersService->all($groupId, $allSessions);
     }
 
     /**
@@ -127,19 +153,22 @@ class MessageGroupMembersController extends Controller
 
     public function getGroupMembersDetails(Request $request)
     {
-        $messageGroupMembersService =  new MessageGroupMembersService();
+        $messageGroupMembersService =  new MessageGroupMembersService();       
+        $allSessions = session()->all(); 
 
         $groupId = $request->get('group_name');
-        $groupMemberDetails = $messageGroupMembersService->all($groupId);
+        $groupMemberDetails = $messageGroupMembersService->all($groupId, $allSessions);
         return view('MessageCenter/messageGroupMembersCreation', ['groupMemberDetails' => $groupMemberDetails,])->with("page", "message_group_member");
     }
 
     public function getGroupMembersData(Request $request)
     {
-        $messageGroupMembersService =  new MessageGroupMembersService();
+        $messageGroupMembersService =  new MessageGroupMembersService();       
+        $allSessions = session()->all(); 
+
         if ($request->ajax()){
             $groupId = $request->groupId;
-            $groupMemberDetails = $messageGroupMembersService->all($groupId);
+            $groupMemberDetails = $messageGroupMembersService->all($groupId, $allSessions);
             return Datatables::of($groupMemberDetails)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -154,9 +183,7 @@ class MessageGroupMembersController extends Controller
 
         return view('MessageCenter/messageGroupMemberDetails')->with("page", "message_group_member");
     }
-
     
-
     public function exportGroupSample()
     {
         return (new ExportGroupSample())->download('sampleGroup.xlsx', \Maatwebsite\Excel\Excel::XLSX);

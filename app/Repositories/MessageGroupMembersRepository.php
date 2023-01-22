@@ -7,10 +7,11 @@
 
     class MessageGroupMembersRepository implements MessageGroupMembersRepositoryInterface{
   
-        public function all($groupId){
-            $allSessions = session()->all();
+        public function all($groupId, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
+            
             return MessageGroupMembers::where('id_institute', $institutionId)->where('id_academic', $academicId)->where('id_message_group', $groupId)->get();
         }
 

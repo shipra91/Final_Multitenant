@@ -17,9 +17,10 @@ class PracticalAttendanceController extends Controller
     public function index(Request $request)
     {
         $practicalAttendanceService = new PracticalAttendanceService;
+        $allSessions = session()->all();
 
-        $practicalSubjects = $practicalAttendanceService->getPracticalSubjects();
-        $periods = $practicalAttendanceService->getPeriods();
+        $practicalSubjects = $practicalAttendanceService->getPracticalSubjects($allSessions);
+        $periods = $practicalAttendanceService->getPeriods($allSessions);
 
         return view ('PracticalAttendance/PracticalAttendance', ['practicalSubjects' => $practicalSubjects, 'periods' => $periods])->with("page", "practicalAttendance");
     }
@@ -110,8 +111,9 @@ class PracticalAttendanceController extends Controller
     public function getbatch(Request $request){
 
         $practicalAttendanceService = new PracticalAttendanceService;
+        $allSessions = session()->all();
 
-        $batch = $practicalAttendanceService->getBatch($request->standardId);
+        $batch = $practicalAttendanceService->getBatch($request->standardId, $allSessions);
         //dd($batch);
         return $batch;
     }
@@ -120,10 +122,12 @@ class PracticalAttendanceController extends Controller
     public function getStudentPracticalAttendance(Request $request){
 
         $practicalAttendanceService = new PracticalAttendanceService;
+        $allSessions = session()->all();
 
-        $practicalSubjects = $practicalAttendanceService->getPracticalSubjects();
-        $periods = $practicalAttendanceService->getPeriods();
-        $attendanceData = $practicalAttendanceService->getAttendanceStudent($request);
+        $practicalSubjects = $practicalAttendanceService->getPracticalSubjects($allSessions);
+        $periods = $practicalAttendanceService->getPeriods($allSessions);
+
+        $attendanceData = $practicalAttendanceService->getAttendanceStudent($request, $allSessions);
         //dd($attendanceData);
 
         return view ('PracticalAttendance/PracticalAttendance', ["attendanceData" => $attendanceData, 'practicalSubjects' => $practicalSubjects, 'periods' => $periods])->with("page", "practicalAttendance");

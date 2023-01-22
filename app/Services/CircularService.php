@@ -21,7 +21,7 @@
 
     class CircularService{
 
-        public function getCircularData(){
+        public function getCircularData($allSessions){
 
             $staffCategoryRepository = new StaffCategoryRepository();
             $staffSubCategoryRepository = new StaffSubCategoryRepository();
@@ -32,12 +32,12 @@
             $staffCategory = $staffCategoryRepository->all();
             $staffSubCategory = $staffSubCategoryRepository->all();
 
-            $institutionStandards = $institutionStandardService->fetchStandard();
+            $institutionStandards = $institutionStandardService->fetchStandard($allSessions);
 
             foreach($institutionStandards as $institutionStandard){
                 array_push($standardIds, $institutionStandard['institutionStandard_id']);
             }
-            $standardSubjects = $standardSubjectService->getStandardsSubject($standardIds);
+            $standardSubjects = $standardSubjectService->getStandardsSubject($standardIds, $allSessions);
 
             $output = array(
                 'staffCategory' => $staffCategory,
@@ -50,14 +50,14 @@
         }
 
         // View circular
-        public function getAll(){
+        public function getAll($allSessions){
 
             $circularRepository = new CircularRepository();
             $circularRecipientRepository = new CircularRecipientRepository();
             $circularAttachmentRepository = new CircularAttachmentRepository();
 
             $circularDetail = array();
-            $circularData = $circularRepository->all();
+            $circularData = $circularRepository->all($allSessions);
 
             foreach($circularData as $key => $circular){
 
@@ -94,8 +94,8 @@
         public function add($circularData){
 
             $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $circularData->id_institute;
+            $academicYear = $circularData->id_academic;
 
             $circularRepository = new CircularRepository();
             $circularAttachmentRepository = new CircularAttachmentRepository();
@@ -210,7 +210,7 @@
 
                                     foreach($circularData->subject as $subject){
 
-                                        $data = $standardSubjectRepository->findStandardSubject($standard, $subject);
+                                        $data = $standardSubjectRepository->findStandardSubject($standard, $subject, $allSessions);
 
                                         if($data){
 
@@ -266,7 +266,7 @@
         }
 
         // Get particular circular
-        public function getCircularSelectedData($idCircular){
+        public function getCircularSelectedData($idCircular, $allSessions){
 
             $circularRecipientRepository = new CircularRecipientRepository();
             $circularApplicableToRepository = new CircularApplicableToRepository();
@@ -326,7 +326,7 @@
                             array_push($selectedStaffData, $staffId['id_recipient']);
                         }
 
-                        $allStaffs = $staffRepository->getStaffOnCategoryAndSubcategory($selectedStaffCategory, $selectedStaffSubCategory);
+                        $allStaffs = $staffRepository->getStaffOnCategoryAndSubcategory($selectedStaffCategory, $selectedStaffSubCategory, $allSessions);
 
 
                     }else{
@@ -346,7 +346,7 @@
                             'standardId' => $selectedStudentStandard
                         );
 
-                        $allStudents = $studentService->getAllStudent($requestData);
+                        $allStudents = $studentService->getAllStudent($requestData, $allSessions);
 
                         $selectedStudents = $circularRecipientRepository->circularRecepients($idCircular, $recepientType->recipient_type);
                         foreach($selectedStudents as $studentId){
@@ -374,11 +374,7 @@
         }
 
         // Update circular
-        public function update($circularData, $id){
-
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+        public function update($circularData, $id, $allSessions){
 
             $circularRepository = new CircularRepository();
             $circularAttachmentRepository = new CircularAttachmentRepository();
@@ -487,7 +483,7 @@
 
                                 foreach($circularData->subject as $subject){
 
-                                    $data = $standardSubjectRepository->findStandardSubject($standard, $subject);
+                                    $data = $standardSubjectRepository->findStandardSubject($standard, $subject, $allSessions);
 
                                     if($data){
                                         $applicableTo = array(
@@ -579,12 +575,12 @@
         }
 
         // Deleted circular records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $circularRecipientRepository = new CircularRecipientRepository();
             $circularRepository = new CircularRepository();
 
-            $circularData = $circularRepository->allDeleted();
+            $circularData = $circularRepository->allDeleted($allSessions);
             $circularDetail = array();
 
             foreach($circularData as $key => $circular){
@@ -632,5 +628,33 @@
             );
 
             return $output;
+        }
+
+        //get own circulars
+        public function viewOwnCirculars($allSessions){
+
+            $circularRepository = new CircularRepository();
+            $circularAttachmentRepository = new CircularAttachmentRepository();
+
+            $circularDetail = array();
+            $circularData = $circularRepository->getRecipientCirculars($allSessions['userId'], $allSessions['institutionId'], $allSessions['academicYear']);
+
+            foreach($circularData as $key => $circular){
+
+                $circularDetail[$key] = $circular;
+
+                $circularAttachment = $circularAttachmentRepository->fetch($circular->id);
+
+                if(count($circularAttachment) > 0){
+                    $status = 'file_found';
+                }else{
+                    $status = 'file_not_found';
+                }
+
+               $circularDetail[$key]['circularAttachment'] = $circularAttachment;
+               $circularDetail[$key]['status'] = $status;
+            }
+            // dd($circularDetail);
+            return $circularDetail;
         }
     }

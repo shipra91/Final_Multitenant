@@ -23,11 +23,11 @@
     use Session;
     use ZipArchive;
 
-    class ProjectSubmissionService {
-
-        // Get all project submission
-        public function getAll(){
-
+    class ProjectSubmissionService
+    {
+        // Get All ProjectSubmission
+        public function getAll($allSessions) {
+             
             $projectSubmissionRepository = new ProjectSubmissionRepository();
             $projectDetailRepository = new ProjectDetailRepository();
             $projectSubmissionPermissionRepository = new ProjectSubmissionPermissionRepository();
@@ -37,43 +37,36 @@
             $staffService = new StaffService();
             $studentMappingRepository = new StudentMappingRepository();
             $studentElectivesRepository = new StudentElectivesRepository();
-
             $projectDetails = array();
-            $idStudent = Session::get('userId');
+            $idStudent = $allSessions['userId'];
 
-            $studentDetails = $studentMappingRepository->fetchStudent($idStudent);
-
-            if($studentDetails){
-
+            $studentDetails = $studentMappingRepository->fetchStudent($idStudent, $allSessions);
+            if($studentDetails) {
                 $idStandard = $studentDetails->id_standard;
-
-                if($studentDetails->id_first_language){
+                if($studentDetails->id_first_language)
+                {
                     $subject[] = $studentDetails->id_first_language;
-                }
-
-                if($studentDetails->id_second_language){
+                } 
+                if($studentDetails->id_second_language)
+                {
                     $subject[] = $studentDetails->id_second_language;
                 }
-
-                if($studentDetails->id_third_language){
+                if($studentDetails->id_third_language)
+                {
                     $subject[] = $studentDetails->id_third_language;
                 }
-
-                $electiveSubjects = $studentElectivesRepository->fetchStudentSubjects($idStudent);
-
-                foreach ($electiveSubjects as $elective){
-
-                    if($elective->id_elective){
+                
+                $electiveSubjects = $studentElectivesRepository->fetchStudentSubjects($idStudent, $allSessions);
+                foreach ($electiveSubjects as $elective) {
+                    if($elective->id_elective)
+                    {
                         $subject[] = $elective->id_elective;
                     }
                 }
-
-                $projects = $projectRepository->fetchProjectByStudent($idStudent);
-
+            
+                $projects = $projectRepository->fetchProjectByStudent($idStudent, $allSessions);
                 if(count($projects) > 0){
-
-                    foreach ($projects as $details){
-
+                    foreach ($projects as $details) {
                         $resubmission = '';
                         $submission = '';
                         $resubmissionDate = '';
@@ -81,21 +74,18 @@
                         $resubmissionRequired = '';
                         $resubmissionDateTime = 0;
                         $standardName = $institutionStandardService->fetchStandardByUsingId($idStandard);
-                        $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject);
-                        $staffDetails = $staffService->find($details->id_staff);
+                        $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject, $allSessions);
+                        $staffDetails = $staffService->find($details->id_staff, $allSessions);
                         $fromDate = Carbon::createFromFormat('Y-m-d', $details->start_date)->format('d/m/Y');
                         $toDate = Carbon::createFromFormat('Y-m-d', $details->end_date)->format('d/m/Y');
-
+                        
                         $data['id_student'] = $idStudent;
                         $data['id_project'] = $details->id;
-
+                        
                         $permissionDetails = $projectSubmissionPermissionRepository->fetchActiveDetails($data);
-
                         if($permissionDetails){
-
                             $resubmissionRequired = $permissionDetails->resubmission_allowed;
-
-                            if($resubmissionRequired == 'YES'){
+                            if($resubmissionRequired == 'YES') {
                                 $resubmissionDate = $permissionDetails->resubmission_date;
                                 $resubmissionTime = $permissionDetails->resubmission_time;
                                 $resubmissionDateTime = $resubmissionDate.' '.$resubmissionTime;
@@ -256,9 +246,8 @@
             return $output;
         }
 
-        // Get student project details
-        public function getStudentProject($idProject){
-
+        public function getStudentProject($idProject, $allSessions) {
+            
             $projectSubmissionRepository = new ProjectSubmissionRepository();
             $projectRepository = new ProjectRepository();
             $studentMappingRepository = new StudentMappingRepository();
@@ -275,11 +264,11 @@
             $readReceipt = $projectDetails->read_receipt;
 
             $projectAssignedStudentDetails = $projectAssignedStudentsRepository->fetch($idProject);
-            $subjectName =  $institutionSubjectService->getSubjectName($projectDetails->id_subject);
+            $subjectName =  $institutionSubjectService->getSubjectName($projectDetails->id_subject, $allSessions);
 
             foreach ($projectAssignedStudentDetails as $studentDetails){
 
-                $student = $studentMappingRepository->fetchStudent($studentDetails->id_student);
+                $student = $studentMappingRepository->fetchStudent($studentDetails->id_student, $allSessions);
                 $studentName = $studentMappingRepository->getFullName($student->name, $student->middle_name, $student->last_name);
 
                 if($student){
@@ -296,7 +285,6 @@
                         $submittedDate = '';
                         $submittedTime = '';
                     }
-
                     $currentDateTime = date("Y-m-d h:i A");
                     $projectDateTime = $projectDetails->end_date.' '.$projectDetails->end_time;
                     $currentDateTime =  strtotime($currentDateTime);
@@ -324,7 +312,6 @@
                     $studentProjectDetails[] = array(
                         'id'=>$student->id_student,
                         'id_project'=>$idProject,
-                        //'student_name'=>$student->name,
                         'student_name'=>$studentName,
                         'submitted_date'=>$submittedDate,
                         'submitted_time'=>$submittedTime,
@@ -360,10 +347,12 @@
             header('Content-disposition: attachment; filename='.time().'.zip');
             header('Content-type: application/zip');
             readfile($fileName);
-        }
+        }   
 
-        public function fetchProjectValuationDetails($details){
-
+        public function fetchProjectValuationDetails($details, $allSessions) {
+          
+            $data['id_student'] = $details->studentId;
+            $data['id_project'] = $details->projectId;
             $projectSubmissionRepository = new ProjectSubmissionRepository();
             $institutionSubjectService = new InstitutionSubjectService();
             $projectRepository = new ProjectRepository();
@@ -390,22 +379,21 @@
                 $projectObtainedMarks = $projectSubmissionDetails->obtained_marks;
                 $projectComments = $projectSubmissionDetails->comments;
             }
-
+            
             $project = $projectRepository->fetch($data['id_project']);
             $projectSubmissionDetails = $projectSubmissionRepository->fetchActiveDetails($data);
-            $subjectName = $institutionSubjectService->getSubjectName($project->id_subject);
-            $staffDetails = $staffService->find($project->id_staff);
+            $subjectName =  $institutionSubjectService->getSubjectName($project->id_subject, $allSessions);
+            $staffDetails = $staffService->find($project->id_staff, $allSessions);
             $gradeValue = explode(',' , $project->grade);
 
             $permissionDetails = $projectSubmissionPermissionRepository->fetchActiveDetails($data);
-
             if($permissionDetails){
                 $resubmissionAllowed = $permissionDetails->resubmission_allowed;
-                if($resubmissionAllowed == 'YES'){
-                    $resubmissionDate = Carbon::createFromFormat('Y-m-d', $permissionDetails->resubmission_date)->format('d/m/Y');
+                if($resubmissionAllowed == 'YES') {
+                    $resubmissionDate = Carbon::createFromFormat('Y-m-d', $permissionDetails->resubmission_date)->format('d/m/Y');  
                     $resubmissionTime = $permissionDetails->resubmission_time;
                 }
-            }
+            }  
 
             $projectDetails = array(
                 'id'=>$project->id,
@@ -425,31 +413,29 @@
                 'resubmission_date'=>$resubmissionDate,
                 'resubmission_time'=>$resubmissionTime
             );
-
             return $projectDetails;
         }
 
-        public function fetchProjectVerifiedDetails($details){
-
+        public function fetchProjectVerifiedDetails($details, $allSessions) {
+            
+            $projectDetails = array();           
+            $valuationDetails = array();
+            
+            $data['id_student'] = $details->studentId;
+            $data['id_project'] = $details->projectId;
+            
             $projectSubmissionRepository = new ProjectSubmissionRepository();
             $institutionSubjectService = new InstitutionSubjectService();
             $projectRepository = new ProjectRepository();
             $staffService = new StaffService();
-
-            $projectDetails = array();
-            $valuationDetails = array();
-
-            $data['id_student'] = $details->studentId;
-            $data['id_project'] = $details->projectId;
-
+            
             $project = $projectRepository->fetch($data['id_project']);
             $projectSubmissionDetails = $projectSubmissionRepository->fetch($data);
-            $subjectName = $institutionSubjectService->getSubjectName($project->id_subject);
-            $staffDetails = $staffService->find($project->id_staff);
+            $subjectName =  $institutionSubjectService->getSubjectName($project->id_subject, $allSessions);
+            $staffDetails = $staffService->find($project->id_staff, $allSessions);
             $gradeValue = explode(',' , $project->grade);
 
-            foreach($projectSubmissionDetails as $projects){
-
+            foreach($projectSubmissionDetails as $projects) {
                 $valuationDetails[] = array(
                     'obtained_marks'=>$projects->obtained_marks,
                     'comments'=>$projects->comments
@@ -550,3 +536,4 @@
             return $output;
         }
     }
+?>

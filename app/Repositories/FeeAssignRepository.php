@@ -52,10 +52,9 @@
         }
                 
         //GET STUDENT FEE TYPE
-        public function fetchStudentFeeCategory($idStudent, $idAcademic){
+        public function fetchStudentFeeCategory($idStudent, $idAcademic, $allSessions){
             DB::enableQueryLog();
-
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
 
             $feeCAtegories = FeeAssign::select('tbl_fee_category.*')
@@ -68,8 +67,8 @@
             return $feeCAtegories;
         }
 
-        public function checkFeeAssignAvaibility($idStandard, $student, $idFeeCategory, $feeType){
-            $allSessions = session()->all();
+        public function checkFeeAssignAvaibility($idStandard, $student, $idFeeCategory, $feeType, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             $organizationId = $allSessions['organizationId'];
@@ -124,8 +123,8 @@
             return $paidHistoryArray;
         }
 
-        public function studentConcessionAssignedDetails($idStudent) {
-            $allSessions = session()->all();
+        public function studentConcessionAssignedDetails($idStudent, $allSessions) {
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             DB::enableQueryLog();
@@ -156,9 +155,8 @@
             return $check;
         }
 
-        public function studentCategoryFeeAssign($idStandard, $student, $idFeeCategory){
+        public function studentCategoryFeeAssign($idStandard, $student, $idFeeCategory, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             $organizationId = $allSessions['organizationId'];

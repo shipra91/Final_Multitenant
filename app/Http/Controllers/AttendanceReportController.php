@@ -38,8 +38,9 @@ class AttendanceReportController extends Controller
     public function store(Request $request)
     {
         $attendanceReportService = new AttendanceReportService();
+        $allSessions = session()->all();
         // $getReportData = $attendanceReportService->callAttendanceProcedure($request);
-        $getReportData = $attendanceReportService->getReportData($request);
+        $getReportData = $attendanceReportService->getReportData($request, $allSessions);
         
         return view('AttendanceReport/periodWiseReport')->with("page", "attendance_report");
     }
@@ -101,7 +102,7 @@ class AttendanceReportController extends Controller
         $institutionRepository = new InstitutionRepository();
 
         $institute = $institutionRepository->fetch($institutionId);
-        $getReportData = $attendanceReportService->getReportData($request);
+        $getReportData = $attendanceReportService->getReportData($request, $allSessions);
         // dd($getReportData);
 
         if($request->attendanceType == 'periodwise'){
@@ -122,7 +123,7 @@ class AttendanceReportController extends Controller
         $attendanceReportService = new AttendanceReportService();  
         $institutionRepository = new InstitutionRepository();
 
-        $getReportData = $attendanceReportService->getAbsentReport($request); 
+        $getReportData = $attendanceReportService->getAbsentReport($request, $allSessions); 
         $institute = $institutionRepository->fetch($institutionId);
         
         if($request->dailyAattendanceType == 'periodwise'){

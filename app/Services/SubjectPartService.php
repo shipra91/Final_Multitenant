@@ -11,9 +11,8 @@
 
             $subjectPartRepository = new SubjectPartRepository();
 
-            $allSessions = session()->all();
-            $idInstitution = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $idInstitution = $allSessions['id_institute'];
+            $academicYear = $allSessions['id_academic'];
 
             $check = SubjectPart::where('part_title', $requestData->subject_part)
                         ->where('id_institute', $idInstitution)
@@ -53,10 +52,10 @@
             return $output;
         }
 
-        public function getAll(){
+        public function getAll($allSessions){
             $subjectPartRepository = new SubjectPartRepository();
 
-            $data = $subjectPartRepository->all();
+            $data = $subjectPartRepository->all($allSessions);
 
             return $data;
         }

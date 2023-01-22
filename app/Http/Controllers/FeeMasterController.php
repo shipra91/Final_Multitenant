@@ -18,9 +18,11 @@ class FeeMasterController extends Controller
     public function index(Request $request)
     {
         $feeMasterService = new FeeMasterService();
+        $allSessions = session()->all();
+
         if ($request->ajax()) {
 
-            $feeMasterData = $feeMasterService->getFeeMasterData();
+            $feeMasterData = $feeMasterService->getFeeMasterData($allSessions);
             return Datatables::of($feeMasterData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -44,7 +46,9 @@ class FeeMasterController extends Controller
     public function create()
     {
         $feeMasterService = new FeeMasterService();
-        $filterData = $feeMasterService->getAllData();
+        $allSessions = session()->all();
+
+        $filterData = $feeMasterService->getAllData($allSessions);
 
         return view('FeeMaster/FeeMasterCreation', ['filterData' => $filterData])->with("page", "fee_master");
     }
@@ -58,11 +62,13 @@ class FeeMasterController extends Controller
     public function store(Request $request)
     {
         $feeMasterService = new FeeMasterService();
+        $allSessions = session()->all();
+
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $feeMasterService->add($request);
+            $result['data'] = $feeMasterService->add($request, $allSessions);
 
         }catch(Exception $e){
 
@@ -137,14 +143,18 @@ class FeeMasterController extends Controller
     // Get Fee Heading Based On Fee Category
     public function getFeeHeading(Request $request){
         $feeMasterService = new FeeMasterService();
-        $data = $feeMasterService->allFeeData($request);
+        $allSessions = session()->all();
+
+        $data = $feeMasterService->allFeeData($request, $allSessions);
         // dd($data);
         return $data;
     }
 
     public function getFeeCustomAssign(Request $request){
         $feeMasterService = new FeeMasterService();
-        $data = $feeMasterService->allCustomFeeData($request);
+        $allSessions = session()->all();
+
+        $data = $feeMasterService->allCustomFeeData($request, $allSessions);
         return $data;
     }
 }

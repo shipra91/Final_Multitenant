@@ -21,9 +21,10 @@ class SMSTemplateController extends Controller
     public function index(Request $request)
     {
         $SMSTemplateService = new SMSTemplateService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $allTemplates = $SMSTemplateService->getAll();
+            $allTemplates = $SMSTemplateService->getAll($allSessions);
             return Datatables::of($allTemplates)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -177,9 +178,10 @@ class SMSTemplateController extends Controller
     public function getDeletedRecords(Request $request){
 
         $SMSTemplateService = new SMSTemplateService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $allSmsTemplates = $SMSTemplateService->getDeletedRecords();
+            $allSmsTemplates = $SMSTemplateService->getDeletedRecords($allSessions);
             // dd($allSmsTemplates);
             return Datatables::of($allSmsTemplates)
                     ->addIndexColumn()

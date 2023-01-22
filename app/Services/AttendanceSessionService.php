@@ -8,11 +8,11 @@
     class AttendanceSessionService {
 
         // Get all session attendance
-        public function getAll(){
+        public function getAll($allSessions){
 
             $attendanceSessionRepository = New AttendanceSessionRepository();
 
-            $attendanceSession = $attendanceSessionRepository->all();
+            $attendanceSession = $attendanceSessionRepository->all($allSessions);
             return $attendanceSession;
         }
 
@@ -87,11 +87,11 @@
         }
 
         // Deleted session records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $attendanceSessionRepository = New AttendanceSessionRepository();
 
-            $data = $attendanceSessionRepository->allDeleted();
+            $data = $attendanceSessionRepository->allDeleted($allSessions);
             return $data;
         }
 

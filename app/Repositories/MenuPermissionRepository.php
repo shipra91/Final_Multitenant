@@ -6,8 +6,8 @@
 
     class MenuPermissionRepository implements MenuPermissionRepositoryInterface {
 
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -15,9 +15,8 @@
                                 ->where('id_academic', $academicId)->get();
         }
 
-        public function getAllServicePermission($roleId){
+        public function getAllServicePermission($roleId, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -26,9 +25,8 @@
                                 ->get();
         }
 
-        public function allDeleted(){
+        public function allDeleted($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -53,9 +51,8 @@
             return MenuPermission::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
+        public function restoreAll($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -89,9 +86,8 @@
             return MenuPermission::find($id)->delete();
         }
 
-        public function permissionedRoles(){
+        public function permissionedRoles($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -102,9 +98,8 @@
             return $roles;
         }
 
-        public function roleModules($roleId){
+        public function roleModules($roleId, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -113,9 +108,8 @@
             return $modules;
         }
 
-        public function roleModulesPermission($roleId, $idModule){
+        public function roleModulesPermission($roleId, $idModule, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

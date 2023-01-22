@@ -23,6 +23,11 @@
         <div class="content">
             <div class="container-fluid">
                 <form method="POST" class="demo-form" enctype="multipart/form-data" id="menuPermissionForm">
+                                        
+                    <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                    <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                    <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                     <div class="row">
                         <div class="col-sm-12 col-sm-offset-0">
                             <div class="card">

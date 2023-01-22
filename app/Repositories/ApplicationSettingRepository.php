@@ -5,8 +5,12 @@
 
     class ApplicationSettingRepository implements ApplicationSettingRepositoryInterface{
 
-        public function all(){
-            return PreadmissionApplicationSetting::all();            
+        public function all($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return PreadmissionApplicationSetting::where('id_institution', $institutionId)->where('id_academic', $academicId)->get();            
         }
 
         public function store($data){
@@ -17,24 +21,30 @@
             return PreadmissionApplicationSetting::find($id);
         }        
 
-        public function update($data, $id){
-            return PreadmissionApplicationSetting::whereId($id)->update($data);
+        public function update($data){
+            return $data->save();
         }        
 
         public function delete($id){
             return PreadmissionApplicationSetting::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return PreadmissionApplicationSetting::onlyTrashed()->get();            
+        public function allDeleted($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return PreadmissionApplicationSetting::where('id_institution', $institutionId)->where('id_academic', $academicId)->onlyTrashed()->get();            
         }
 
         public function restore($id){
             return PreadmissionApplicationSetting::withTrashed()->find($id)->restore();
         } 
         
-        public function restoreAll(){
-            return PreadmissionApplicationSetting::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return PreadmissionApplicationSetting::where('id_institution', $institutionId)->where('id_academic', $academicId)->onlyTrashed()->restore();
         }
     }
 ?>

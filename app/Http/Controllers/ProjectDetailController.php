@@ -98,5 +98,6 @@ class ProjectDetailController extends Controller
         }
 
         return response()->json($result, $result['status']);
+    
     }
 }

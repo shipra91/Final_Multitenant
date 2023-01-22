@@ -8,9 +8,9 @@
 
     class YearSemRepository implements YearSemRepositoryInterface{
 
-        public function all($idYear){
-            $institutionId = Session::get('institutionId');
-            $academicYear = Session::get('academicYear');
+        public function all($idYear, $allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
             return YearSem::where('id_year', $idYear)->where('id_institution', $institutionId)->where('id_academic_year', $academicYear)->orderBy('created_at', 'ASC')->get();     
         }
 
@@ -22,9 +22,9 @@
             return YearSem::find($id);
         }    
 
-        public function fetchSem($idYear){
-            $institutionId = Session::get('institutionId');
-            $academicYear = Session::get('academicYear');
+        public function fetchSem($idYear, $allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
             return YearSem::where('id_year', $idYear)->where('id_institution', $institutionId)->where('id_academic_year', $academicYear)->get();
         }  
 

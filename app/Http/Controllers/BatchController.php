@@ -18,10 +18,11 @@ class BatchController extends Controller
     public function index(Request $request)
     {
         $batchService = new BatchService;
+        $allSessions = session()->all();
 
-        $institutionStandards = $batchService->getStandard();
-        $studentData = $batchService->getStudentsData($request);
-        $batchDetails = $batchService->getBatchStudent($request['standard']);
+        $institutionStandards = $batchService->getStandard($allSessions);
+        $studentData = $batchService->getStudentsData($request, $allSessions);
+        $batchDetails = $batchService->getBatchStudent($request['standard'], $allSessions);
         //dd($studentData);
 
         return view ('PracticalAttendance/batch', ['institutionStandards' => $institutionStandards, 'studentData' => $studentData, 'batchDetails' => $batchDetails])->with("page", "batch_creation");
@@ -46,12 +47,13 @@ class BatchController extends Controller
     public function store(Request $request)
     {
         $batchService = new BatchService;
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $batchService->add($request);
+            $result['data'] = $batchService->add($request, $allSessions);
 
         }catch(Exception $e){
 
@@ -113,9 +115,10 @@ class BatchController extends Controller
     public function getbatch(Request $request){
 
         $batchService = new BatchService;
+        $allSessions = session()->all();
 
         $standardId = $request->standardId;
-        $batch= $batchService->getBatchNoByStandard($standardId);
+        $batch= $batchService->getBatchNoByStandard($standardId, $allSessions);
         //dd($batch);
         return $batch;
     }

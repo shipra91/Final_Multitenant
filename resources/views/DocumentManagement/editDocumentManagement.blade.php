@@ -12,6 +12,9 @@
         <div class="content">
             <div class="container-fluid">
                 <form method="POST" id="docManagementForm">
+                    <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                    <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                    <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
                     <input type="hidden" name="idDocument" id="idDocument" value="{{ $selectedData['idDocument'] }}">
                     <div class="row">
                         <div class="col-md-12 col-md-offset-0">

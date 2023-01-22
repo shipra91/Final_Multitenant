@@ -6,8 +6,8 @@
 
     class AssignmentRepository implements AssignmentRepositoryInterface{
 
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             return Assignment::where('id_institute', $institutionId)
@@ -21,8 +21,9 @@
         public function fetch($id){
             return $assignment = Assignment::find($id);
         } 
-        public function fetchAssignmentUsingStaff($idStaff){
-            $allSessions = session()->all();
+
+        public function fetchAssignmentUsingStaff($idStaff, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             return $assignment = Assignment::where('id_institute', $institutionId)
@@ -47,8 +48,15 @@
             return $assignment = Assignment::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return Assignment::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return Assignment::where('id_institute', $institutionId)
+                            ->where('id_academic', $academicId)
+                            ->onlyTrashed()
+                            ->get();
         }        
 
         public function restore($id){

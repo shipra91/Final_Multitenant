@@ -7,8 +7,8 @@
 
     class FeeSettingRepository implements FeeSettingRepositoryInterface{
   
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             return FeeSetting::where('id_institute', $institutionId)->where('id_academic', $academicId)->first();

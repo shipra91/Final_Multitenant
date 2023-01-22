@@ -65,7 +65,11 @@
                                                                 <p class="text-center standard-color mb-5"><span class="fw-400">{{ $timetable['standard'] }}</span></p>
                                                                 <p class="text-center subject-color mb-5"><span class="fw-400">{{ $timetable['subject'] }}</span></p>
                                                                 <p class="text-center time-color mb-5"><span class="fw-400">{{ $timetable['start_time'] }} - {{ $timetable['end_time'] }}</span></p>
+<<<<<<< HEAD
                                                                 <p class="text-center room-color mb-5"><span class="fw-400">{{ ucwords($timetable['room_name']) }} </span></p>
+=======
+                                                                <p class="text-center room-color mb-5"><span class="fw-400">{{ $timetable['room_name'] }} </span></p>
+>>>>>>> main
                                                             </td>
                                                         @endforeach
                                                     </tr>

@@ -6,8 +6,14 @@
 
     class ExaminationRoomSettingsRepository implements ExaminationRoomSettingsRepositoryInterface{
 
-        public function all(){
-            return ExaminationRoomSettings::all();
+        public function all($allSessions){
+            
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return ExaminationRoomSettings::where('id_academic_year', $academicId)
+                                        ->where('id_institute', $institutionId)
+                                        ->get();
         }
 
         public function store($data){
@@ -26,9 +32,8 @@
             return $data->save();
         }
 
-        public function delete($idExam, $idRoom){
+        public function delete($idExam, $idRoom, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             
@@ -39,8 +44,8 @@
                         ->delete();
         }
 
-        public function getStudentCountForExamRoom($idExam, $idRoom){
-            $allSessions = session()->all();
+        public function getStudentCountForExamRoom($idExam, $idRoom, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 

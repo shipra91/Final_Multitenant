@@ -12,19 +12,17 @@
         public function all(){
 
             // DB::enableQueryLog();
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
             return FeeReceiptSetting::where('id_institute', $institutionId)->where('id_academic', $academicId)->get();
         }
 
-        public function academicAllReceiptSetting($academicId){
+        public function academicAllReceiptSetting($academicId, $allSessions){
 
             // DB::enableQueryLog();
             $feeReceiptSettingCategoryRepository = new FeeReceiptSettingCategoryRepository();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
 
             $arrReceiptData = array();
@@ -63,9 +61,8 @@
         }
 
         // Fetch setting on category basis
-        public function fetch($idFeeCategory, $idAcademic){
+        public function fetch($idFeeCategory, $idAcademic, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
 
             $setting = FeeReceiptSetting::join('tbl_fee_receipt_setting_categories', 'tbl_fee_receipt_setting_categories.id_fee_receipt_settings', '=', 'tbl_fee_receipt_settings.id')

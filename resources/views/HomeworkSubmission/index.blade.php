@@ -172,6 +172,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="POST" id="homeworkSubmissionForm" enctype="multipart/form-data">
+                                        
+                <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                <input type="hidden" name="userId" value="{{session()->get('userId')}}">
+                                        
                 <input type="hidden" name="id_homework" id="id_homework">
                 <div class="modal-body">
                     <div class="row">
@@ -437,7 +443,6 @@
                             $('#marks').removeClass('d-none');
                         }
                     }
-
                     $("#homework_modal").find("#grading_option").html(gradingOption);
                     $("#homework_modal").find("#grade").html(gradeValue);
                     $("#homework_modal").find("#marks").html(marksValue);

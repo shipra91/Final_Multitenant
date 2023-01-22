@@ -45,6 +45,10 @@
                                     <strong>Note:</strong> Once you add the setting add option will be disabled.
                                 </div>
                                 <form method="POST" id="fineSettingForm">
+                                    <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                    <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                    <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                                     <input type="hidden" name="fine_option" value={{$fineSettingDetails['label_fine_option']}}>
                                     <div class="col-lg-12">
                                         <div class="card">

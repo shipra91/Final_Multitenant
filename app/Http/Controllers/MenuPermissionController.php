@@ -19,15 +19,15 @@ class MenuPermissionController extends Controller
      */
     public function index(Request $request)
     {
-        $menuPermissionService = new MenuPermissionService();
-        $userType = session()->all();
+        $menuPermissionService = new MenuPermissionService();        
+        $allSessions = session()->all();
 
         if ($request->ajax()){
 
-            if($userType['role'] === 'developer'){
-                $allPermissions = $menuPermissionService->getAllServicePermission();
+            if($allSessions['role'] === 'developer'){
+                $allPermissions = $menuPermissionService->getAllServicePermission($allSessions);
             }else{
-                $allPermissions = $menuPermissionService->getAll();
+                $allPermissions = $menuPermissionService->getAll($allSessions);
             }
             // dd($allPermissions);
             return Datatables::of($allPermissions)
@@ -57,14 +57,13 @@ class MenuPermissionController extends Controller
      */
     public function create()
     {
-        $menuPermissionService = new MenuPermissionService();
+        $menuPermissionService = new MenuPermissionService();     
+        $allSessions = session()->all();
 
-        $userType = session()->all();
-
-        if($userType['role'] === 'developer'){
-            $allData = $menuPermissionService->getServiceRoleModulesData();
+        if($allSessions['role'] === 'developer'){
+            $allData = $menuPermissionService->getServiceRoleModulesData($allSessions);
         }else{
-            $allData = $menuPermissionService->getRolesModulesData();
+            $allData = $menuPermissionService->getRolesModulesData($allSessions);
         }
         // dd($allData);
         return view('MenuPermission/addMenuPermission', ['allData' => $allData])->with("page", "menu_permission");
@@ -79,7 +78,6 @@ class MenuPermissionController extends Controller
     public function store(Request $request)
     {
         $menuPermissionService = new MenuPermissionService();
-
         $result = ["status" => 200];
 
         try{
@@ -118,10 +116,11 @@ class MenuPermissionController extends Controller
     {
         $menuPermissionService = new MenuPermissionService();
         $allSessions = session()->all();
+
         $institutionId = $allSessions['institutionId'];
         $academicId = $allSessions['academicYear'];
 
-        $allData = $menuPermissionService->roleMenuPermission($idRole, $institutionId);
+        $allData = $menuPermissionService->roleMenuPermission($idRole, $institutionId, $allSessions);
         // dd($allData);
         return view('MenuPermission/edit_menupermission', ['allData' => $allData])->with("page", "menu_permission");
     }
@@ -168,9 +167,10 @@ class MenuPermissionController extends Controller
     public function getDeletedRecords(Request $request){
 
         $menuPermissionService = new MenuPermissionService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $allPermissions = $menuPermissionService->getDeletedRecords();
+            $allPermissions = $menuPermissionService->getDeletedRecords($allSessions);
             // dd($allPermissions);
             return Datatables::of($allPermissions)
                     ->addIndexColumn()
@@ -209,12 +209,13 @@ class MenuPermissionController extends Controller
     public function restoreAll()
     {
         $menuPermissionService = new MenuPermissionService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $menuPermissionService->restoreAll();
+            $result['data'] = $menuPermissionService->restoreAll($allSessions);
 
         }catch(Exception $e){
 

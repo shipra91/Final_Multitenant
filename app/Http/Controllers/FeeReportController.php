@@ -7,6 +7,7 @@ use App\Services\InstitutionStandardService;
 use App\Repositories\FeeMappingRepository;
 use App\Repositories\InstitutionRepository;
 use App\Services\FeeReportService;
+use App\Services\FeeSettingService;
 
 class FeeReportController extends Controller
 {
@@ -19,9 +20,10 @@ class FeeReportController extends Controller
     {
         $institutionStandardService = new InstitutionStandardService();
         $feeMappingRepository = new FeeMappingRepository();
+        $allSessions = session()->all();
 
-        $standardData = $institutionStandardService->fetchStandard();
-        $feeCategory = $feeMappingRepository->getFeeCategory();
+        $standardData = $institutionStandardService->fetchStandard($allSessions);
+        $feeCategory = $feeMappingRepository->getFeeCategory($allSessions);
         $reportType = array(
                         array("OUTSTANDING", "Outstanding Report"),
                         array("FEE_COLLECTION", "Fee Collection Report"),
@@ -50,12 +52,13 @@ class FeeReportController extends Controller
     public function store(Request $request)
     {
         $feeSettingService = new FeeSettingService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $feeSettingService->add($request);
+            $result['data'] = $feeSettingService->add($request, $allSessions);
 
         }catch(Exception $e){
             $result = [
@@ -122,7 +125,7 @@ class FeeReportController extends Controller
 
         $institute = $institutionRepository->fetch($institutionId);
 
-        $getReportData = $feeReportService->getReportData($request);
+        $getReportData = $feeReportService->getReportData($request, $allSessions);
         // dd($getReportData);
         if($request->reportType == 'OUTSTANDING'){
             $page = 'outStandingReport';

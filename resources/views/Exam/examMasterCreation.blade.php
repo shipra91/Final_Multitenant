@@ -21,6 +21,9 @@
                                 <div class="card-content">
                                     <h4 class="card-title">Exam Master</h4>
                                     <form method="POST" class="demo-form" id="examMasterForm">
+                                        <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                        <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                        <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
                                         <div id="repeater">
                                             <input type="hidden" name="totalCount" id="totalCount" value="1">
                                             <div class="row" id="section_1" data-id="1">

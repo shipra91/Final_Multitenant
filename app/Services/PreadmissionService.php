@@ -1,6 +1,5 @@
 <?php
     namespace App\Services;
-
     use App\Models\Preadmission;
     use App\Models\Student;
     use App\Services\InstitutionStandardService;
@@ -52,7 +51,7 @@
         }
 
         // Get field data
-        public function getFieldDetails(){
+        public function getFieldDetails($allSessions){
 
             $genderRepository = new GenderRepository();
             $institutionStandardService = new InstitutionStandardService();
@@ -64,7 +63,7 @@
             $bloodGroupRepository = new BloodGroupRepository();
 
             $gender = $genderRepository->all();
-            $standard = $institutionStandardService->fetchStandardGroupByCombination();
+            $standard = $institutionStandardService->fetchStandardGroupByCombination($allSessions);
 
             // $standard = [{"institutionStandard_id" => 1, "class" => "1A"}];
             $nationality = $nationalityRepository->all();
@@ -852,7 +851,6 @@
                     $applicationDetails = array(
                         'id' => $data->id,
                         'application_number'=>$data->application_number,
-                        // 'name'=>$data->name,
                         'name'=>$studentName,
                         'class'=>$standard,
                         'gender'=>$gender->name,
@@ -1123,7 +1121,6 @@
                                 }
 
                                 $admitCount ++;
-
                             }else{
                                 $failureCount ++;
                             }
@@ -1146,7 +1143,6 @@
                 $signal = 'failure';
                 $msg = 'Error inserting data!';
             }
-
             $output = array(
                 'signal'=>$signal,
                 'message'=>$msg

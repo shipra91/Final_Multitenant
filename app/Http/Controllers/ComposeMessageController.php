@@ -16,7 +16,9 @@ class ComposeMessageController extends Controller
     public function index()
     {
         $composeMessageService = new ComposeMessageService();
-        $details = $composeMessageService->getDetails();
+        $allSessions = session()->all();
+        
+        $details = $composeMessageService->getDetails($allSessions);
 
         return view('MessageCenter/composeMessage',['details'=>$details])->with("page", "compose_message");  
     }
@@ -40,12 +42,13 @@ class ComposeMessageController extends Controller
     public function store(Request $request)
     {
         $composeMessageService = new ComposeMessageService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
             
-            $result['data'] = $composeMessageService->add($request);    
+            $result['data'] = $composeMessageService->add($request, $allSessions);    
 
         }catch(Exception $e){
             $result = [
@@ -104,12 +107,16 @@ class ComposeMessageController extends Controller
 
     public function getPhoneNumbers(Request $request) {
         $composeMessageService = new ComposeMessageService();
+        $allSessions = session()->all();
+
         $term = $request->term;
-        return $composeMessageService->getPhoneNumbers($term);
+        return $composeMessageService->getPhoneNumbers($term, $allSessions);
     }
 
     public function updateSentMessage() { //only sent messages not delivered or failed messages
         $composeMessageService = new ComposeMessageService();
-        return $composeMessageService->updateSentMessage();
+        $allSessions = session()->all();
+
+        return $composeMessageService->updateSentMessage($allSessions);
     }
 }

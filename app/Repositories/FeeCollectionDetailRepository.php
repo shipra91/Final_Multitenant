@@ -46,10 +46,9 @@
         }
 
 
-        public function getPaymentDetails($idStudent, $idAcademicYear){
+        public function getPaymentDetails($idStudent, $idAcademicYear, $allSessions){
             DB::enableQueryLog();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $paidHistoryArray = array();
 
@@ -77,10 +76,9 @@
             return $paidHistoryArray;
         }
 
-        public function getHeadingWiseInstallmentPaymentDetails($idStudent, $idFeeHeading, $installmentNo, $idAcademicYear){
+        public function getHeadingWiseInstallmentPaymentDetails($idStudent, $idFeeHeading, $installmentNo, $idAcademicYear, $allSessions){
             DB::enableQueryLog();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $paidHistoryArray = array();
 
@@ -97,10 +95,9 @@
             return $installmentPaymentDetail;
         }
 
-        public function getFeePaymentDetails($idStudent){
+        public function getFeePaymentDetails($idStudent, $allSessions){
             DB::enableQueryLog();
-
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             $paidHistoryArray = array();
@@ -116,10 +113,9 @@
             // dd($paidHistory);
         }
 
-        public function fetchPaidAmount($idFeeHeading, $idStudent){
+        public function fetchPaidAmount($idFeeHeading, $idStudent, $allSessions){
             DB::enableQueryLog();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             $paidHistoryArray = array();
@@ -136,10 +132,9 @@
             // dd($paidAmount);
         }
         
-        public function totalPaidAmountCategoryWise($idStudent){
+        public function totalPaidAmountCategoryWise($idStudent, $allSessions){
             DB::enableQueryLog();
-
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -155,10 +150,9 @@
             return $paidHistory;
         }
         
-        public function totalCollectedAmountCategoryWise($idFeeCollection, $idStudent, $idFeeCategory){
+        public function totalCollectedAmountCategoryWise($idFeeCollection, $idStudent, $idFeeCategory, $allSessions){
             DB::enableQueryLog();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -176,10 +170,9 @@
             return $paidHistory;
         }
 
-        public function totalPaidAmount($idStudent, $academicId){
+        public function totalPaidAmount($idStudent, $academicId, $allSessions){
             DB::enableQueryLog();
-
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
 
             $paidHistory = CollectionDetail::select(\DB::raw('SUM(tbl_fee_collection_details.fee_amount + tbl_fee_collection_details.gst_received) as paid_amount'))
@@ -194,10 +187,9 @@
             return $paidHistory;
         }
   
-        public function getStudentFeeCollectionDetail($studentId, $fromDate, $toDate){
+        public function getStudentFeeCollectionDetail($studentId, $fromDate, $toDate, $allSessions){
             DB::enableQueryLog();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             $paidHistoryArray = array();

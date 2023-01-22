@@ -41,9 +41,8 @@
                                                 ->where('id_standard', $standardId)->delete();
         }
 
-        public function getStaffs($subjectId, $standardId){
-
-            $allSessions = session()->all();
+        public function getStaffs($subjectId, $standardId, $allSessions){
+            
             $idInstitution = $allSessions['institutionId'];
             $idAcademic = $allSessions['academicYear'];
 
@@ -54,9 +53,8 @@
                                                 ->groupBy('id_staff')->get(['id_staff']);
         }
 
-        public function getStandardMappedWithStaff($idStaff){
-
-            $allSessions = session()->all();
+        public function getStandardMappedWithStaff($idStaff, $allSessions){
+            
             $idInstitution = $allSessions['institutionId'];
             $idAcademic = $allSessions['academicYear'];
 
@@ -68,9 +66,8 @@
                                                 ->groupBy('tbl_standard_subject_staff_mapping.id_standard')->get();
         }
 
-        public function fetchStandardStaffSubjects($idStandard, $idStaff){
-
-            $allSessions = session()->all();
+        public function fetchStandardStaffSubjects($idStandard, $idStaff, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -90,9 +87,8 @@
         }
 
         // Get staff based on standard and subject
-        public function getStaffOnStandardAndSubject($standardId, $subjectids){
+        public function getStaffOnStandardAndSubject($standardId, $subjectids, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -109,9 +105,8 @@
             return $staffDetails;
         }
 
-        public function fetchStaffOnStandardAndSubject($standardId, $subjectid){
+        public function fetchStaffOnStandardAndSubject($standardId, $subjectid, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -140,9 +135,8 @@
                                                 ->where('id_staff', $staffId)->first();
         }
 
-        public function fetchIfMapped($idStandard){
+        public function fetchIfMapped($idStandard, $allSessions){
             
-            $allSessions = session()->all();
             $idInstitution = $allSessions['institutionId'];
             $idAcademic = $allSessions['academicYear'];
          

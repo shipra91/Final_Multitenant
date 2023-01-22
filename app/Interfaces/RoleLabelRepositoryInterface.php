@@ -2,7 +2,7 @@
 
 namespace App\Interfaces;
 
-Interface RoleLabelRepositoryInterface{
+Interface RolelabelRepositoryInterface{
     public function all();
     public function store($data);
     public function fetch($id);

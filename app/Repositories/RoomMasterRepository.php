@@ -7,8 +7,8 @@
 
     class RoomMasterRepository implements RoomMasterRepositoryInterface{
 
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             //\DB::enableQueryLog();

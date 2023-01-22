@@ -69,7 +69,6 @@
                 $signal = 'invalid_email';
                 $msg = 'Please enter valid company email!';
             }
-
             $output = array(
                 'signal'=>$signal,
                 'message'=>$msg

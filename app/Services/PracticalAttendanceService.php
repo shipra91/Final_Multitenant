@@ -16,42 +16,42 @@
     class PracticalAttendanceService {
 
         // Fetch practical subjects
-        public function getPracticalSubjects(){
+        public function getPracticalSubjects($allSessions){
 
             $institutionSubjectRepository = new InstitutionSubjectRepository();
 
             $subjectType = 'PRACTICAL';
 
-            $practicalSubjects = $institutionSubjectRepository->fetchPracticalSubjects($subjectType);
+            $practicalSubjects = $institutionSubjectRepository->fetchPracticalSubjects($subjectType, $allSessions);
             return $practicalSubjects;
         }
 
-        // Fetch period
-        public function getPeriods(){
+        // Fetch Period
+        public function getPeriods($allSessions){
 
             $periodRepository = new PeriodRepository();
 
-            $period = $periodRepository->getPeriodTypeWise();
+            $period = $periodRepository->getPeriodTypeWise($allSessions);
             return $period;
         }
 
-        // Fetch all batch based on standard
-        public function getBatch($idStandard){
+        // Fetch all Batch based on standard
+        public function getBatch($idStandard, $allSessions){
 
             $batchRepository = new BatchRepository();
 
-            $batch = $batchRepository->getBatchDetails($idStandard);
+            $batch = $batchRepository->getBatchDetails($idStandard, $allSessions);
             return $batch;
         }
 
         // Get all student attendance
-        public function getAttendanceStudent($request){
+        public function getAttendanceStudent($request, $allSessions){
 
             $practicalAttendanceRepository = new PracticalAttendanceRepository();
             $studentRepository = new StudentRepository();
             $studentMappingRepository = new StudentMappingRepository();
-
             $attendanceStatus = 'PRESENT';
+
             $idStandard = $request->get('standard');
             $idSubject = $request->get('practicalSubject');
             $idPeriod = $request->get('period');
@@ -59,7 +59,7 @@
             $heldOn = $request->get('attendance_date');
             $heldOn = Carbon::createFromFormat('d/m/Y', $heldOn)->format('Y-m-d');
 
-            $studentData = $studentRepository->fetchStudentOnBatch($idBatch);
+            $studentData = $studentRepository->fetchStudentOnBatch($idBatch, $allSessions);
             //dd($studentData);
 
             foreach($studentData as $key => $student){
@@ -87,9 +87,8 @@
 
             $practicalAttendanceRepository = new PracticalAttendanceRepository();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $attendanceData->id_institute;
+            $academicYear = $attendanceData->id_academic;
 
             $idStandard = $attendanceData->standard;
             $idSubject = $attendanceData->practicalSubject;
@@ -154,3 +153,4 @@
             return $output;
         }
     }
+?>

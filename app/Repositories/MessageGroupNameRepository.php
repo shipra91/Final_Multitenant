@@ -7,10 +7,11 @@
 
     class MessageGroupNameRepository implements MessageGroupNameRepositoryInterface{
   
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
+            
             return MessageGroupName::where('id_institute', $institutionId)->where('id_academic', $academicId)->get();
         }
 
@@ -31,16 +32,23 @@
             return $institutionType = MessageGroupName::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return MessageGroupName::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+                        
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+            
+            return MessageGroupName::where('id_institute', $institutionId)->where('id_academic', $academicId)->onlyTrashed()->get();
         }        
 
         public function restore($id){
             return MessageGroupName::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return MessageGroupName::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+            
+            return MessageGroupName::where('id_institute', $institutionId)->where('id_academic', $academicId)->onlyTrashed()->restore();
         }
 
         public function getGroupNameId($groupName){
@@ -49,3 +57,4 @@
 
     }
 ?>
+     

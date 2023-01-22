@@ -5,8 +5,8 @@
 
     class ComposeMessageRepository implements ComposeMessageRepositoryInterface{
 
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             return ComposeMessage::where('id_institute', $institutionId)

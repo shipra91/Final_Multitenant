@@ -31,14 +31,15 @@ class StaffController extends Controller
         $staffService = new StaffService();
         $input = \Arr::except($request->all(),array('_token', '_method'));
         $allColumns = $staffService->getTableColumns();
-        // dd($allColumns);
-        // dd($staffService->getAll($input));
+        $allSessions = session()->all();
 
         $staffDetails = $staffService->getStaffData();
         $daysArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-        if($request->ajax()){
-            $Staff = $staffService->getAll($input);
+        if ($request->ajax()){
+
+            $Staff = $staffService->getAll($input, $allSessions);
+
             return Datatables::of($Staff)
                     ->addIndexColumn()
                     ->editColumn('show', function ($Staff){
@@ -81,15 +82,15 @@ class StaffController extends Controller
         $institutionSubjectService = new InstitutionSubjectService();
         $customFieldService = new CustomFieldService();
         $staffService = new StaffService();
-
         $allSessions = session()->all();
         $institutionId = $allSessions['institutionId'];
 
         $institutionBoards = $institutionBoardService->getInstitutionBoards($institutionId);
         $staffDetails = $staffService->getStaffData();
-        $subjects = $institutionSubjectService->getAll();
+        $subjects = $institutionSubjectService->getAll($allSessions);
         $customFields = $customFieldService->fetchRequiredCustomFields($institutionId, 'staff');
         // dd($subjects);
+
 
         return view('Staff/addStaff', ["staffDetails" => $staffDetails, "customFields" => $customFields, "subjects" => $subjects, 'institutionBoards' => $institutionBoards])->with("page", "staff");
     }
@@ -103,7 +104,6 @@ class StaffController extends Controller
     public function store(StoreStaffRequest $request)
     {
         $staffService = new StaffService();
-
         $result = ["status" => 200];
 
         try{
@@ -130,11 +130,11 @@ class StaffController extends Controller
     public function show($id)
     {
         $staffService = new StaffService();
+        $allSessions = session()->all();
 
-        $staffData = $staffService->find($id);
+        $staffData = $staffService->find($id, $allSessions);
         $customFieldDetails = $staffService->fetchCustomFieldValues($id);
         $customFileDetails = $staffService->fetchCustomFileValues($id);
-
         return view('Staff/viewStaff', ["staffData" => $staffData, "customFieldDetails" => $customFieldDetails, "customFileDetails" => $customFileDetails])->with("page", "staff");
         //dd($staffData);
     }
@@ -157,21 +157,14 @@ class StaffController extends Controller
         $allSessions = session()->all();
         $institutionId = $allSessions['institutionId'];
 
-        $selectedStaff = $staffService->find($id);
+        $selectedStaff = $staffService->find($id, $allSessions);
         $staffDetails = $staffService->getStaffData();
-        // familyDetails
-        // dd(count($selectedStaff['familyDetails']));
-        $subjects = $institutionSubjectService->getAll();
-        // dd($subjects);
+        $subjects = $institutionSubjectService->getAll($allSessions);
         $subjectMapping = $staffSubjectMappingService->getAllIds($id);
         $staffBoard = $staffBoardService->getAllIds($id);
         $institutionBoards = $institutionBoardService->getInstitutionBoards($institutionId);
-        // dd($staffBoard);
-        $institutionId = $allSessions['institutionId'];
         $customFields = $customFieldService->getCustomFieldsEdit($institutionId, 'staff', 'id_staff', $id, 'App\Models\StaffCustomDetails');
-        // foreach($staffDetails['staffCategory'] as $staffCategory){
-        //     // dd($staffCategory['label']);
-        // }
+        
         return view('Staff/editStaff', ["selectedStaff" => $selectedStaff, "staffDetails" => $staffDetails, "customFields" => $customFields, "subjects" => $subjects, "subjectMapping" => $subjectMapping, "staffBoard" => $staffBoard, 'institutionBoards'=> $institutionBoards])->with("page", "staff");
     }
 
@@ -185,7 +178,6 @@ class StaffController extends Controller
     public function update(StoreStaffRequest $request, $id)
     {
         $staffService = new StaffService();
-
         $result = ["status" => 200];
 
         try{
@@ -212,7 +204,6 @@ class StaffController extends Controller
     public function destroy($id)
     {
         $staffService = new StaffService();
-
         $result = ["status" => 200];
 
         try{
@@ -230,25 +221,25 @@ class StaffController extends Controller
         return response()->json($result, $result['status']);
     }
 
-    // Export staff details
-    public function ExportStaff(Request $request)
-    {
+    public function ExportStaff(Request $request){
         return (new ExportStaff($request))->download('staffs.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
-    // Deleted staff records
     public function getDeletedRecords(Request $request){
 
         $staffService = new StaffService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $deletedStaffs = $staffService->getDeletedRecords();
+        if ($request->ajax()) {
+            $deletedStaffs = $staffService->getDeletedRecords($allSessions);
+
             return Datatables::of($deletedStaffs)
                     ->addIndexColumn()
-                    ->editColumn('show', function ($Staff){
+                    ->editColumn('show', function ($Staff) {
                         return  ($Staff->working_hours == 'PART_TIME')?"Part Time":"Full Time";
                     })
                     ->addColumn('action', function($row){
+
                         $btn ='';
                         if(Helper::checkAccess('staff', 'create')){
                             $btn .= '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
@@ -265,13 +256,10 @@ class StaffController extends Controller
         return view('Staff/viewDeletedStaff')->with("page", "staff");
     }
 
-    // Restore staff records
     public function restore($id)
     {
         $staffService = new StaffService();
-
         $result = ["status" => 200];
-
         try{
 
             $result['data'] = $staffService->restore($id);
@@ -286,19 +274,23 @@ class StaffController extends Controller
         return response()->json($result, $result['status']);
     }
 
-    // Restore all staff records
+    /**
+     * Write code on Method
+     *
+     * @return response()
+    */
+
     public function restoreAll()
     {
         $staffService = new StaffService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
-
         try{
 
-            $result['data'] = $staffService->restoreAll();
+            $result['data'] = $staffService->restoreAll($allSessions);
 
         }catch(Exception $e){
-
             $result = [
                 "status" => 500,
                 "error" => $e->getMessage()

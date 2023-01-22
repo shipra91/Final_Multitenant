@@ -14,21 +14,21 @@
 
     class QuickAttendanceService {
 
-        public function getAll(){
+        public function getAll($allSessions){
 
             $quickAttendanceRepository = new QuickAttendanceRepository();
-            $quickAttendance = $quickAttendanceRepository->all();
+            $quickAttendance = $quickAttendanceRepository->all($allSessions);
 
             return $quickAttendance;
         }
 
-        public function getAttendanceData(){
+        public function getAttendanceData($allSessions){
 
             $attendanceSessionRepository = new AttendanceSessionRepository();
             $periodRepository = new PeriodRepository();
 
-            $sessions = $attendanceSessionRepository->all();
-            $period = $periodRepository->getPeriodTypeWise();
+            $sessions = $attendanceSessionRepository->all($allSessions);
+            $period = $periodRepository->getPeriodTypeWise($allSessions);
 
             $output = array(
                 'sessions' => $sessions,
@@ -37,13 +37,13 @@
             return $output;
         }
 
-        public function getSubjectStandards($request){
+        public function getSubjectStandards($request, $allSessions){
 
             $standardSubjectService =  new StandardSubjectService();
             $institutionStandardService =  new InstitutionStandardService();
             $standardsDetails = array();
 
-            $standards = $standardSubjectService->getStandardForSubjects($request->subjectId, $request->attendanceType);
+            $standards = $standardSubjectService->getStandardForSubjects($request->subjectId, $request->attendanceType, $allSessions);
 
             foreach($standards as $index => $data) {
                 $standardsDetails[$index]['id_standard'] = $data->id_standard;
@@ -53,14 +53,13 @@
             return $standardsDetails;
         }
 
-        public function add($attendanceData){
+        public function add($attendanceData, $allSessions){
 
             $quickAttendanceRepository = new QuickAttendanceRepository();
             $studentRepository = new StudentRepository();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $attendanceData->id_institute;
+            $academicYear = $attendanceData->id_academic;
             $count = 0;
 
             $attendanceType = $attendanceData->attendanceType;
@@ -75,11 +74,11 @@
 
             if($idSubject != ''){
 
-                $students = $studentRepository->fetchStudentBySubject($details);
+                $students = $studentRepository->fetchStudentBySubject($details, $allSessions);
 
             }else{
 
-                $students = $studentRepository->fetchStudentByStandard($details);
+                $students = $studentRepository->fetchStudentByStandard($details, $allSessions);
             }
 
             foreach($students as $student){
@@ -153,18 +152,18 @@
             return $output;
         }
 
-        public function getAbsentStudents(){
+        public function getAbsentStudents($allSessions){
 
             $quickAttendanceRepository = new QuickAttendanceRepository();
             $studentMappingRepository = new StudentMappingRepository();
             $institutionStandardService = new InstitutionStandardService();
             $absentDetails = array();
-            $quickAttendance = $quickAttendanceRepository->fetchAbsentStudents();
+            $quickAttendance = $quickAttendanceRepository->fetchAbsentStudents($allSessions);
 
             foreach($quickAttendance as $attendance){
 
                 $standard = $institutionStandardService->fetchStandardByUsingId($attendance->id_standard);
-                $student = $studentMappingRepository->fetchStudent($attendance->id_student);
+                $student = $studentMappingRepository->fetchStudent($attendance->id_student, $allSessions);
                 $absentDetails[] = array(
                     'id'=>$attendance->id_student,
                     'idAttendance'=>$attendance->id,

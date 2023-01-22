@@ -12,9 +12,10 @@ class StaffClassTimeTableController extends Controller
     public function index(Request $request)
     {
         $staffClassTimeTableService = new StaffClassTimeTableService();
-        // dd($staffClassTimeTableService->getAllTeachingStaff());
-        if($request->ajax()){
-            $staff = $staffClassTimeTableService->getAllTeachingStaff();
+        $allSessions = session()->all();
+
+        if ($request->ajax()){
+            $staff = $staffClassTimeTableService->getAllTeachingStaff($allSessions);
             return Datatables::of($staff)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -28,12 +29,13 @@ class StaffClassTimeTableController extends Controller
         return view('StaffClassTimeTable/index')->with("page", "staffClassTimeTable");
     }
 
-    public function show($id)
+    public function show($id, $allSessions)
     {
         $staffClassTimeTableService = new StaffClassTimeTableService();
 
-        $timetableData = $staffClassTimeTableService->getStaffTimeTableData($id);
+        $timetableData = $staffClassTimeTableService->getStaffTimeTableData($id, $allSessions);
         // dd($data);
+
         return view('StaffClassTimeTable/viewStaffTimeTable', ['timetableData' => $timetableData])->with("page", "staffClassTimeTable");
     }
 }

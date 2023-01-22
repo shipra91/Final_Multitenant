@@ -16,7 +16,11 @@
 
     class FeeReceiptService {
 
+<<<<<<< HEAD
         public function getReceiptData($idFeeCollection) {
+=======
+        public function getReceiptData($idFeeCollection, $allSessions) {
+>>>>>>> main
 
             $feeCollectionRepository = new FeeCollectionRepository();
             $feeCollectionDetailRepository = new FeeCollectionDetailRepository();
@@ -43,7 +47,11 @@
                 $totalGst = $feeReceipt->gst;
             }
 
+<<<<<<< HEAD
             $totalBalanceAmount = $feeAssignDetailService->fetchTotalBalanceAmount($feeReceipt->id_student, $feeReceipt->id_academic_year);
+=======
+            $totalBalanceAmount = $feeAssignDetailService->fetchTotalBalanceAmount($feeReceipt->id_student, $feeReceipt->id_academic_year, $allSessions);
+>>>>>>> main
 
             $feeReceiptData['total_receipt_amount'] = $feeReceipt->amount_received +  $feeReceipt->gst;
             // dd($feeReceiptData['total_receipt_amount']);
@@ -54,7 +62,11 @@
             $feeReceipt['amount_in_words'] = $currencyService->getIndianCurrency($feeReceiptData['total_receipt_amount']);
             
             $idStudent = $feeReceipt->id_student;
+<<<<<<< HEAD
             $studentDetails = $studentMappingRepository->fetchStudent($idStudent);
+=======
+            $studentDetails = $studentMappingRepository->fetchStudent($idStudent, $allSessions);
+>>>>>>> main
             $studentDetails['standard'] = $institutionStandardService->fetchStandardByUsingId($studentDetails->id_standard);
             
             $feeReceiptData['institute'] = $institute;
@@ -85,7 +97,11 @@
                     
                     $categoryData = $feeCategoryRepository->fetch($category->id_fee_category);
                     
+<<<<<<< HEAD
                     $categoryCollectedTotal = $feeCollectionDetailRepository->totalCollectedAmountCategoryWise($idFeeCollection, $category->id_student, $category->id_fee_category);
+=======
+                    $categoryCollectedTotal = $feeCollectionDetailRepository->totalCollectedAmountCategoryWise($idFeeCollection, $category->id_student, $category->id_fee_category, $allSessions);
+>>>>>>> main
                     // dd($categoryCollectedTotal);
                     $feeReceiptData['receipt_details'][$index]['fee_heading'] =  $categoryData->name;
                     $feeReceiptData['receipt_details'][$index]['heading_amount'] =  $categoryCollectedTotal->paid_amount;

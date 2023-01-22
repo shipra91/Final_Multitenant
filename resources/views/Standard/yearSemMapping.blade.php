@@ -20,6 +20,11 @@
                             <div class="card-content">
                                 <h4 class="card-title">Semester/ Trimester Mapping</h4>
                                 <form method="POST" class="demo-form" id="yearSemForm">
+                                    
+                                    <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                    <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                    <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                                     @if(count($yearSemDetails['all_year'])>0)
                                         <input type="hidden" id="year_array" name="year_array" value="{{ implode(',', $yearSemDetails['all_year']) }}">
 

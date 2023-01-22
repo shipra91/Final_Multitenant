@@ -34,7 +34,7 @@ class OnlineAdmissionController extends Controller
         );
 
         $response = $preadmissionService->checkLoginCredentials($request);
-        $fieldDetails = $preadmissionService->getFieldDetails();
+        $fieldDetails = $preadmissionService->getFieldDetails($allSessions);
 
         if($response['status'] == 'new') {
 

@@ -9,8 +9,8 @@
 
     class SeminarRepository implements SeminarRepositoryInterface{
 
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -34,15 +34,20 @@
             return $seminar = Seminar::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return Seminar::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return Seminar::where('id_institute', $institutionId)->where('id_academic', $academicYear)->onlyTrashed()->get();
         }
 
         public function restore($id){
             return Seminar::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return Seminar::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return Seminar::where('id_institute', $institutionId)->where('id_academic', $academicYear)->onlyTrashed()->restore();
         }
     }

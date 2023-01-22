@@ -8,15 +8,6 @@ use App\Services\StaffFamilyService;
 
 class StaffFamilyDetailsController extends Controller
 {
-    /**
-     *
-     * create Constructor to use the functions defined in the repositories
-     */
-    protected $staffFamilyService;
-    public function __construct(StaffFamilyService $staffFamilyService)
-    {
-        $this->staffFamilyService = $staffFamilyService;
-    }
 
     /**
      * Display a listing of the resource.
@@ -91,11 +82,13 @@ class StaffFamilyDetailsController extends Controller
      */
     public function destroy($id)
     {
+        $staffFamilyService = new StaffFamilyService();
+
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->staffFamilyService->delete($id);
+            $result['data'] = $staffFamilyService->delete($id);
 
         }catch(Exception $e){
 

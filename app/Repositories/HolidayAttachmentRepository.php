@@ -34,3 +34,4 @@
             return HolidayAttachment::withTrashed()->where('id_holiday', $idHoliday)->restore();
         }
     }
+?>

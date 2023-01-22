@@ -4,11 +4,14 @@
     padding: 0 15px;
 }
 
+<<<<<<< HEAD
 b,
 strong {
     font-weight: 500;
 }
 
+=======
+>>>>>>> main
 .card .card-title {
     font-weight: 400 !important;
 }
@@ -39,6 +42,7 @@ table.dataTable>thead>tr>th {
     outline: 0;
 }
 
+<<<<<<< HEAD
 .table>tbody>tr>td,
 .table>tbody>tr>th,
 .table>tfoot>tr>td,
@@ -51,6 +55,8 @@ table.dataTable>thead>tr>th {
     color: #555;
 }
 
+=======
+>>>>>>> main
 .pagination>.active>a,
 .pagination>.active>a:focus,
 .pagination>.active>a:hover,
@@ -236,10 +242,13 @@ a.text-secondary:hover {
     margin-bottom: 20px !important;
 }
 
+<<<<<<< HEAD
 .mb-30 {
     margin-bottom: 30px !important;
 }
 
+=======
+>>>>>>> main
 .mb-40 {
     margin-bottom: 40px !important;
 }
@@ -371,7 +380,10 @@ td.capitalize {
     background-size: 100% auto;
     background-repeat: no-repeat;
     background-position: center;
+<<<<<<< HEAD
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+=======
+>>>>>>> main
 }
 
 .fileinput-preview img,
@@ -471,21 +483,36 @@ td.capitalize {
     /* padding: 0px 0px 0px 15px;
     margin-bottom: 15px; */
     color: #5a5a5a;
+<<<<<<< HEAD
     font-size: 16px;
     font-weight: 400;
     margin: 20px 0px 20px 0px;
 }
 
 /* .staff-formHeader {
+=======
+    font-weight: 400;
+}
+
+.staff-formHeader {
+>>>>>>> main
     padding: 20px 0px 0px 20px;
     margin-bottom: 0px;
     color: #5a5a5a;
     font-weight: 400;
+<<<<<<< HEAD
 } */
 
 /* .staff-attachment {
     padding-left: 20px;
 } */
+=======
+}
+
+.staff-attachment {
+    padding-left: 20px;
+}
+>>>>>>> main
 
 .viewStaff-firstChild {
     margin: 0px;
@@ -539,12 +566,17 @@ td.capitalize {
     -webkit-box-shadow: 0 1px 4px 0 rgb(0 0 0 / 14%);
 }
 
+<<<<<<< HEAD
 /* .panel-body {
     padding: 20px !important;
 } */
 
 .panel-body {
     padding: 15px 20px !important;
+=======
+.panel-body {
+    padding: 20px !important;
+>>>>>>> main
 }
 
 .panel-default>.panel-heading {
@@ -571,6 +603,7 @@ td.capitalize {
     color: #212121;
 }
 
+<<<<<<< HEAD
 .panel [data-background-color] {
     box-shadow: 0 10px 30px -12px rgb(0 0 0 / 42%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
     margin: -20px 15px 0;
@@ -604,6 +637,8 @@ td.capitalize {
     margin: 20px 0;
 }
 
+=======
+>>>>>>> main
 /* Bootstrap selectpicker caret */
 .ripple.ripple-on {
     transition: opacity .0s linear 0s !important;
@@ -672,9 +707,14 @@ td.capitalize {
     margin: -30px 15px 0 !important;
     border-radius: 3px !important;
     padding: 15px !important;
+<<<<<<< HEAD
     /* background-color: #9c27b0 !important; */
     position: relative !important;
     background: linear-gradient(80deg, #6eb99a, #7ec1a5) !important;
+=======
+    background-color: #9c27b0 !important;
+    position: relative !important;
+>>>>>>> main
 }
 
 .card [data-background-color] {
@@ -749,10 +789,13 @@ td.capitalize {
     font-size: 14px !important;
 }
 
+<<<<<<< HEAD
 .font-15 {
     font-size: 15px !important;
 }
 
+=======
+>>>>>>> main
 .font-16 {
     font-size: 16px !important;
 }
@@ -889,12 +932,19 @@ legend.scheduler-border {
     opacity: 1;
 }
 
+<<<<<<< HEAD
 /* .get_image_preview li {
     height: 80px;
+=======
+.get_image_preview li {
+    /* height: 80px; */
+    height: 100px;
+>>>>>>> main
     margin-right: 10px;
     margin-bottom: 10px;
     display: inline-block;
     position: relative;
+<<<<<<< HEAD
 } */
 
 .get_image_preview li {
@@ -903,6 +953,8 @@ legend.scheduler-border {
     margin: 5px;
     display: inline-block;
     position: relative;
+=======
+>>>>>>> main
 }
 
 /* .get_image_preview li .remove_button {
@@ -948,6 +1000,7 @@ legend.scheduler-border {
     border-radius: 0.25rem !important;
 }
 
+<<<<<<< HEAD
 /* .get_image_preview img {
     height: 150px;
     width: 150px;
@@ -961,6 +1014,12 @@ legend.scheduler-border {
     overflow: hidden;
     padding-bottom: 10px;
     /* box-shadow: 0 10px 30px -12px rgb(0 0 0 / 42%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%); */
+=======
+.get_image_preview img {
+    /* height: 150px;
+    width: 150px; */
+    box-shadow: 0 10px 30px -12px rgb(0 0 0 / 42%), 0 4px 25px 0 rgb(0 0 0 / 12%), 0 8px 10px -5px rgb(0 0 0 / 20%);
+>>>>>>> main
 }
 
 .badge {
@@ -1082,6 +1141,7 @@ legend.scheduler-border {
     transition-duration: none !important;
 }
 
+<<<<<<< HEAD
 /* .applicableToDetail {
     font-weight: 400;
     font-size: 13px;
@@ -1092,6 +1152,12 @@ legend.scheduler-border {
     font-weight: 400;
     font-size: 13px;
     padding: 5px 0px;
+=======
+.applicableToDetail {
+    font-weight: 400;
+    font-size: 13px;
+    padding: 10px 0px;
+>>>>>>> main
 }
 
 .applicableTo_li {
@@ -1166,12 +1232,17 @@ legend.scheduler-border {
     padding: 15px 20px !important
 }
 
+<<<<<<< HEAD
 /* .wizard-pane {
     min-height: 50px !important;
 } */
 
 .wizard-pane {
     min-height: 235px !important;
+=======
+.wizard-pane {
+    min-height: 50px !important;
+>>>>>>> main
 }
 
 .view-details {
@@ -1423,12 +1494,16 @@ legend.scheduler-border {
     padding-left: 24px;
 }
 
+<<<<<<< HEAD
 .modal-footer {
     padding-right: 24px;
     padding-left: 24px;
 }
 
 /* Calender colorbox */
+=======
+/* CALENDER COLORBOX */
+>>>>>>> main
 .boxDiv {
     height: 10px;
     width: 20px;
@@ -1438,6 +1513,7 @@ legend.scheduler-border {
 .boxDesc {
     display: inline-block;
 }
+<<<<<<< HEAD
 
 .sidebar .sidebar-wrapper {
     position: relative;
@@ -1458,3 +1534,5 @@ legend.scheduler-border {
     background: #ffffff;
     display: inline-block;
 }
+=======
+>>>>>>> main

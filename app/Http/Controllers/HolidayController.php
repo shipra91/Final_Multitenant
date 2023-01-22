@@ -18,9 +18,10 @@ class HolidayController extends Controller
     public function index(Request $request)
     {
         $holidayService = new HolidayService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $holidays = $holidayService->getAll();
+        if ($request->ajax()){
+            $holidays = $holidayService->getAll($allSessions);
             return Datatables::of($holidays)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -56,7 +57,9 @@ class HolidayController extends Controller
     public function create()
     {
         $holidayService = new HolidayService();
-        $holidayData = $holidayService->getHolidayData();
+        $allSessions = session()->all();
+
+        $holidayData = $holidayService->getHolidayData($allSessions);
 
         return view('Holidays/add_holiday', ['holidayData' => $holidayData])->with("page", "holiday");
     }
@@ -108,10 +111,12 @@ class HolidayController extends Controller
     public function edit($id)
     {
         $holidayService = new HolidayService();
+        $allSessions = session()->all();
 
-        $holidayData = $holidayService->getHolidayData();
+        $holidayData = $holidayService->getHolidayData($allSessions);
         $selectedData = $holidayService->getHolidaySelectedData($id);
         // dd($selectedData);
+
         return view('Holidays/edit_holiday', ['holidayData' => $holidayData, 'selectedData' => $selectedData])->with("page", "holiday");
     }
 
@@ -173,10 +178,11 @@ class HolidayController extends Controller
     public function getDeletedRecords(Request $request)
     {
         $holidayService = new HolidayService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
+        if ($request->ajax()){
 
-            $deletedData = $holidayService->getDeletedRecords();
+            $deletedData = $holidayService->getDeletedRecords($allSessions);
 
             return Datatables::of($deletedData)
                     ->addIndexColumn()
@@ -187,6 +193,7 @@ class HolidayController extends Controller
                         }else{
                             $btn .= 'No Access';
                         }
+                        $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -217,30 +224,12 @@ class HolidayController extends Controller
         return response()->json($result, $result['status']);
     }
 
-    // public function restoreAll()
-    // {
-    //     $result = ["status" => 200];
+    public function getHolidayDetails($idHoliday){
 
-    //     try{
-
-    //         $result['data'] = $this->instituteService->restoreAll();
-
-    //     }catch(Exception $e){
-
-    //         $result = [
-    //             "status" => 500,
-    //             "error" => $e->getMessage()
-    //         ];
-    //     }
-
-    //     return response()->json($result, $result['status']);
-    // }
-
-    public function getHolidayDetails($idHoliday)
-    {
         $holidayService = new HolidayService();
+        $allSessions = session()->all();
 
-        $holidayData = $holidayService->getHolidayData();
+        $holidayData = $holidayService->getHolidayData($allSessions);
         $selectedData = $holidayService->getHolidaySelectedData($idHoliday);
         // dd($selectedData);
         return view('Holidays/view_holiday_detail', ['holidayData' => $holidayData, 'selectedData' => $selectedData])->with("page", "holiday");

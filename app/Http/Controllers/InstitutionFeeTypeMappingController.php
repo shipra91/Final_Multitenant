@@ -22,9 +22,10 @@ class InstitutionFeeTypeMappingController extends Controller
     public function index(Request $request)
     {
         $institutionFeeTypeMappingService = new InstitutionFeeTypeMappingService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $academicMapping = $institutionFeeTypeMappingService->getAll();
+            $academicMapping = $institutionFeeTypeMappingService->getAll($allSessions);
             return Datatables::of($academicMapping)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -105,9 +106,10 @@ class InstitutionFeeTypeMappingController extends Controller
     public function edit($id)
     {
         $academicYearService = new AcademicYearService();
+        $academicYearMappingService = new AcademicYearMappingService();
         $institutionFeeTypeMappingService = new InstitutionFeeTypeMappingService();
 
-        $institutions = $institutionFeeTypeMappingService->allInstitution();
+        $institutions = $academicYearMappingService->allInstitution();
         $academicYears = $academicYearService->getAll();
         $selectedinstitutionFeeTypeMapping = $institutionFeeTypeMappingService->find($id);
         // dd($selectedinstitutionFeeTypeMapping);
@@ -176,9 +178,10 @@ class InstitutionFeeTypeMappingController extends Controller
     public function getDeletedRecords(Request $request)
     {
         $institutionFeeTypeMappingService = new InstitutionFeeTypeMappingService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $deletedData = $institutionFeeTypeMappingService->getDeletedRecords();
+            $deletedData = $institutionFeeTypeMappingService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

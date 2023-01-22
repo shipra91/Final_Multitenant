@@ -3,14 +3,14 @@
 namespace App\Interfaces;
 
 Interface GalleryRepositoryInterface{
-    public function all();
+    public function all($allSessions);
     public function store($data);
     public function fetch($id);
     public function update($data);
     public function delete($id);
-    public function allDeleted();
+    public function allDeleted($allSessions);
     public function restore($id);
-    public function restoreAll();
+    public function restoreAll($allSessions);
 }
 
 ?>

@@ -6,150 +6,148 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\LoginOtp;
 use App\Services\MobileLoginService;
+use App\Repositories\AcademicYearMappingRepository;
+use Helper;
 
 class AppLoginController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        // dd('$request');
-        
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-    //    dd('ygh');
-    }
+    public function getInstitutionfromUrl(Request $request){
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        
         $mobileLoginService = new MobileLoginService();
         
-        $mobileLoginData = $mobileLoginService->createOTP($request);
-        return response()->json([
-            "status"=> true,
-            "data"=> $mobileLoginData
-        ]);
-    }
+        $result = ["status" => 200];
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        try{
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+            $result['data'] = $mobileLoginService->getUrl($request);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        }catch(Exception $e){
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
+
     }
 
     public function getOtp(Request $request){
         $mobileLoginService = new MobileLoginService();
         
-        $mobileLoginData = $mobileLoginService->createMobileOTP($request);
-        return response()->json([
-            "status"=> true,
-            "data"=> $mobileLoginData
-        ]);
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $mobileLoginService->createMobileOTP($request);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+
+        return response()->json($result, $result['status']);
+        
     }
 
     public function verifyOTP(Request $request){
+
         $mobileLoginService = new MobileLoginService();
-        
-        $mobileLoginData = $mobileLoginService->loginWithOTP($request);
-        return response()->json([
-            "status"=> true,
-            "data"=> $mobileLoginData
-        ]);
+
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $mobileLoginService->loginWithOTP($request);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+        return response()->json($result, $result['status']);
     }
 
     public function createmPIN(Request $request){
         $mobileLoginService = new MobileLoginService();
-        
-        $mobileLoginData = $mobileLoginService->createmPIN($request);
-        return response()->json([
-            "status"=> true,
-            "data"=> $mobileLoginData
-        ]);
+
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $mobileLoginService->createmPIN($request);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+        return response()->json($result, $result['status']);
     }
 
     public function login(Request $request){
         $mobileLoginService = new MobileLoginService();
-        
-        $mobileLoginData = $mobileLoginService->loginWithmPIN($request);
-        return response()->json([
-            "status"=> true,
-            "data"=> $mobileLoginData
-        ]);
+
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $mobileLoginService->loginWithmPIN($request);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+        return response()->json($result, $result['status']);
     }
 
     public function logout(Request $request){
         $mobileLoginService = new MobileLoginService();
         
-        $mobileLoginData = $mobileLoginService->mobileLogout($request);
-        return response()->json([
-            "status"=> true,
-            "data"=> $mobileLoginData
-        ]);
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $mobileLoginService->mobileLogout($request);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+        return response()->json($result, $result['status']);
     }
 
     public function refreshLogin(Request $request){
         $mobileLoginService = new MobileLoginService();
         
-        $mobileLoginData = $mobileLoginService->refreshLogin($request);
-        return response()->json([
-            "status"=> true,
-            "data"=> $mobileLoginData
-        ]);
+        $result = ["status" => 200];
+
+        try{
+
+            $result['data'] = $mobileLoginService->refreshLogin($request);
+
+        }catch(Exception $e){
+
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
+        return response()->json($result, $result['status']);
     }
 }

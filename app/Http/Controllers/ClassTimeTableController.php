@@ -20,9 +20,10 @@ class ClassTimeTableController extends Controller
     {
         $roomMasterService = new RoomMasterService();
         $classTimeTableService = new ClassTimeTableService();
+        $allSessions = session()->all();
 
         $roomData = $roomMasterService->all();
-        $standard = $classTimeTableService->getStandards();
+        $standard = $classTimeTableService->getStandards($allSessions);
         // dd($timeTableData);
         return view('ClassTimeTable/index', ['standard'=>$standard, 'roomData' => $roomData])->with("page", "class_timetable");
     }
@@ -117,8 +118,8 @@ class ClassTimeTableController extends Controller
         $standardId = $request->get('standard');
 
         $roomData = $roomMasterService->all();
-        $standard = $classTimeTableService->getStandards();
-        $timeTableSettingData = $classTimeTableService->getTimeTableDayWise($standardId);
+        $standard = $classTimeTableService->getStandards($allSessions);
+        $timeTableSettingData = $classTimeTableService->getTimeTableDayWise($standardId, $allSessions);
         // dd($timeTableSettingData);
         foreach($timeTableSettingData['dayPeriodSettingData'] as $index => $periodSettingData){
 
@@ -150,6 +151,7 @@ class ClassTimeTableController extends Controller
     public function getAllStaff(Request $request)
     {
         $staffService = new StaffService();
+        $allSessions = session()->all();
 
         $standard = $request->standardId;
         $subjectArray = array(
@@ -157,7 +159,7 @@ class ClassTimeTableController extends Controller
         );
         
 
-        $staffData = $staffService->getStaffByStandardAndSubject($standard, $subjectArray);
+        $staffData = $staffService->getStaffByStandardAndSubject($standard, $subjectArray, $allSessions);
       
         return $staffData;
     }

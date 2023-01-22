@@ -63,6 +63,11 @@
                                 </div>
                                 <div class="card-content">
                                     <form method="post" id="feeAssignForm">
+                                        
+                                        <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                        <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                        <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                                         <h4 class="card-title">Fee Assign</h4>
                                         <div class="material-datatables">
                                             <table class="table table-striped table-no-bordered table-hover data-table" cellspacing="0" style="width:100%">

@@ -26,9 +26,10 @@ class AttendanceController extends Controller
         $input = \Arr::except($request->all(),array('_token', '_method'));
 
         $institutionStandards = $attendanceService->getStandard();
+        $allSessions = session()->all();
 
         if($request->ajax()){
-            $attendanceData = $attendanceService->getAll($input);
+            $attendanceData = $attendanceService->getAll($input, $allSessions);
             // dd($attendanceData);
             return Datatables::of($attendanceData)
                     ->addIndexColumn()
@@ -72,12 +73,13 @@ class AttendanceController extends Controller
     {
         $attendanceSessionService = new AttendanceSessionService();
         $periodService = new PeriodService();
+        $allSessions = session()->all();
 
-        $allSessions = $attendanceSessionService->getAll();
+        $allSessionData = $attendanceSessionService->getAll($allSessions);
         $allPeriods = $periodService->periodTypeWise();
         // dd($allSessions);
 
-        return view('Attendance/attendance', ['allSessions' => $allSessions, 'allPeriods' => $allPeriods])->with("page", "student_attendance");
+        return view('Attendance/attendance', ['allSessions' => $allSessionData, 'allPeriods' => $allPeriods])->with("page", "student_attendance");
     }
 
     /**
@@ -89,12 +91,13 @@ class AttendanceController extends Controller
     public function store(Request $request)
     {
         $attendanceService = new AttendanceService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $attendanceService->add($request);
+            $result['data'] = $attendanceService->add($request, $allSessions);
 
         }catch(Exception $e){
 
@@ -153,13 +156,14 @@ class AttendanceController extends Controller
     }
 
     // Get standard on attendance type
-    public function getStandard(Request $request)
-    {
+    public function getStandard(Request $request){
+
         $attendanceSettingsService = new AttendanceSettingsService();
         $institutionSubjectService = new InstitutionSubjectService();
+        $allSessions = session()->all();
 
         $standardData = $attendanceSettingsService->getAttendanceTypeData($request->attendanceType);
-        $subjectData = $institutionSubjectService->getPeriodWiseSubjectData($request->attendanceType);
+        $subjectData = $institutionSubjectService->getPeriodWiseSubjectData($request->attendanceType, $allSessions);
         //dd($standardData);
         // dd($subjectData);
 
@@ -172,17 +176,18 @@ class AttendanceController extends Controller
     }
 
     // Get students details
-    public function getStudentAttendance(Request $request)
-    {
+    public function getStudentAttendance(Request $request){
+
         $attendanceService = new AttendanceService();
         $attendanceSessionService = new AttendanceSessionService();
         $periodService = new PeriodService();
+        $allSessions = session()->all();
 
-        $attendanceData = $attendanceService->getAttendanceStudent($request);
-        $allSessions = $attendanceSessionService->getAll();
+        $attendanceData = $attendanceService->getAttendanceStudent($request, $allSessions);
+        $allSessionData = $attendanceSessionService->getAll($allSessions);
         $allPeriods = $periodService->periodTypeWise();
         // dd($attendanceData);
 
-        return view('Attendance/attendance', ["attendanceData" => $attendanceData, 'allSessions' => $allSessions, 'allPeriods' => $allPeriods])->with("page", "student_attendance");
+        return view('Attendance/attendance', ["attendanceData" => $attendanceData, 'allSessions' => $allSessionData, 'allPeriods' => $allPeriods])->with("page", "student_attendance");
     }
 }

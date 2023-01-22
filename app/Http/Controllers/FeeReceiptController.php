@@ -26,10 +26,12 @@ class FeeReceiptController extends Controller
     public function generateReceipt($receiptIds){
         $feeReceiptService =  new FeeReceiptService();
         $staffRepository =  new StaffRepository();
+        $allSessions = session()->all();
+
         $receiptId = explode(',', $receiptIds);
         $receiptDetails = '';
         foreach($receiptId as $idFeeReceipt){
-            $feeReceiptDetails = $feeReceiptService->getReceiptData($idFeeReceipt);
+            $feeReceiptDetails = $feeReceiptService->getReceiptData($idFeeReceipt, $allSessions);
             $receiptCopyNames = explode(",", $feeReceiptDetails['feeReceiptSetting']->copy_name);
 
             $staffDetails = $staffRepository->fetch($feeReceiptDetails['receipt_data']->collected_by);

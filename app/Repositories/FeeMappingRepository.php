@@ -23,9 +23,8 @@
             return FeeMapping::where('id_fee_category', $idFeeCategory)->where('id_fee_heading', $idFeeHeading)->where('id_institute', $institutionId)->where('id_academic_year', $academicId)->first();
         }                
 
-        public function getAcademicHeadingMapping($idFeeHeadingMapping, $idAcademic){
+        public function getAcademicHeadingMapping($idFeeHeadingMapping, $idAcademic, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             
             return FeeMapping::where('id', $idFeeHeadingMapping)
@@ -34,9 +33,8 @@
             ->first();
         }        
 
-        public function fetchCategoryHeadingFromMapping($idFeeCategory){            
+        public function fetchCategoryHeadingFromMapping($idFeeCategory, $allSessions){            
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -58,10 +56,10 @@
             return FeeMapping::find($id)->delete();
         }
 
-        public function getFeeCategory(){
+        public function getFeeCategory($allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -75,9 +73,8 @@
             return $feeCategory;
         }
 
-        public function getReceiptSettingCategory($idSettingFeeCategory){
+        public function getReceiptSettingCategory($idSettingFeeCategory, $allSessions){
             
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -92,9 +89,8 @@
             return $feeCategory;
         }
 
-        public function getFeeCategoryDetail($idFeeHeadingMapping){
+        public function getFeeCategoryDetail($idFeeHeadingMapping, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             

@@ -24,12 +24,13 @@ class ResultController extends Controller
     {
         // dd($request);
         $resultService = new ResultService;
+        $allSessions = session()->all();
 
         $input = \Arr::except($request->all(), array('_token', '_method'));
 
         if($request->ajax()) {
 
-            $resultData = $resultService->getAllStudentData($input);
+            $resultData = $resultService->getAllStudentData($input, $allSessions);
 
             return Datatables::of($resultData)
                     ->addIndexColumn()
@@ -44,7 +45,7 @@ class ResultController extends Controller
                     ->make(true);
         }
 
-        $institutionStandards = $resultService->getAllData();
+        $institutionStandards = $resultService->getAllData($allSessions);
         $exam = $resultService->getExamByStandard($request['standardId']);
 
         return view('Exam/result', ['institutionStandards' => $institutionStandards, 'exam' => $exam])->with("page", "result");
@@ -58,11 +59,13 @@ class ResultController extends Controller
     public function create(Request $request)
     {
         $resultService = new ResultService;
+        $allSessions = session()->all();
 
-        $institutionStandards = $resultService->getAllData();
-        $students = $resultService->fetchStudent($request);
-        $exam = $resultService->getExamByStandard($request->get('standard'));
-        $subjects = $resultService->getSubjectByExam($request->get('standard'), $request->get('exam'));
+        $institutionStandards = $resultService->getAllData($allSessions);
+        $students = $resultService->fetchStudent($request, $allSessions);
+        // dd($students);
+        $exam = $resultService->getExamByStandard($request->get('standard'), $allSessions);
+        $subjects = $resultService->getSubjectByExam($request->get('standard'), $request->get('exam'), $allSessions);
         
         return view ('Exam/addResult', ['institutionStandards' => $institutionStandards, 'students' => $students, 'exam' => $exam, 'subjects' => $subjects])->with("page", "result");
     }
@@ -143,9 +146,10 @@ class ResultController extends Controller
     public function getExam(Request $request){
 
         $resultService = new ResultService;
+        $allSessions = session()->all();
 
         $standardId = $request->standardId;
-        $exam= $resultService->getExamByStandard($standardId);
+        $exam= $resultService->getExamByStandard($standardId, $allSessions);
         // dd($exam);
         return $exam;
     }
@@ -154,10 +158,11 @@ class ResultController extends Controller
     public function getSubject(Request $request){
 
         $resultService = new ResultService;
+        $allSessions = session()->all();
 
         $examId = $request->examId;
         $standardId = $request->standardId;
-        $subjects = $resultService->getSubjectByExam($standardId,$examId);
+        $subjects = $resultService->getSubjectByExam($standardId, $examId, $allSessions);
         // dd($subjects);
         return $subjects;
     }
@@ -166,8 +171,9 @@ class ResultController extends Controller
     public function getResult(Request $request){
 
         $resultService = new ResultService;
+        $allSessions = session()->all();
 
-        $resultDetails = $resultService->getResultDetail($request);
+        $resultDetails = $resultService->getResultDetail($request, $allSessions);
         //dd($resultDetails);
         return $resultDetails;
 
@@ -175,14 +181,14 @@ class ResultController extends Controller
 
     public function getMarksCard($exam, $standardId){
 
-        $resultService = new ResultService();
-        
+        $resultService = new ResultService();        
         $sessionData = Session::all();
+
         $idInstitution = $sessionData['institutionId'];
         $idAcademics = $sessionData['academicYear'];
 
         $pdf = \App::make('dompdf.wrapper');
-        $pdf->loadHTML($resultService->generateMarksCard($idInstitution, $idAcademics, $exam, $standardId))->setPaper('a4', 'landscape');
+        $pdf->loadHTML($resultService->generateMarksCard($idInstitution, $idAcademics, $exam, $standardId, $allSessions))->setPaper('a4', 'landscape');
         return $pdf->stream();
 
     }

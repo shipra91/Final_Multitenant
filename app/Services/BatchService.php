@@ -16,20 +16,20 @@
 
     class BatchService {
 
-        public function getStandard(){
+        public function getStandard($allSessions){
 
             $institutionStandardService = new InstitutionStandardService();
 
-            $institutionStandards = $institutionStandardService->fetchStandard();
+            $institutionStandards = $institutionStandardService->fetchStandard($allSessions);
             return $institutionStandards;
         }
 
         // Get batch number based on standard
-        public function getBatchNoByStandard($standardId){
+        public function getBatchNoByStandard($standardId, $allSessions){
 
             $batchRepository = new BatchRepository();
 
-            $batch = $batchRepository->fetchBatchNoByStandard($standardId);
+            $batch = $batchRepository->fetchBatchNoByStandard($standardId, $allSessions);
             return $batch;
         }
 
@@ -54,12 +54,11 @@
             $studentMappingRepository = new StudentMappingRepository();
             $studentRepository = new StudentRepository();
 
-            //$batch = $batchRepository->all();
             $arrayData = array();
+            $batch = $batchRepository->all($allSessions);
             $standard = $request->get('standard');
 
-            $studentData = $studentMappingRepository->fetchInstitutionStandardStudents($standard);
-
+            $studentData = $studentMappingRepository->fetchInstitutionStandardStudents($standard, $allSessions);
             foreach($studentData as $key => $data){
                 //dd($data);
                 $studentName = $studentMappingRepository->getFullName($data->name, $data->middle_name, $data->last_name);
@@ -77,13 +76,13 @@
         }
 
         // Get particular batch
-        public function getBatchStudent($standard){
+        public function getBatchStudent($standard, $allSessions){
 
             $batchRepository = new BatchRepository();
             $batchStudentRepository = new BatchStudentRepository();
 
             $batchDetail = array();
-            $batchInfo = $batchRepository->getBatchDetails($standard);
+            $batchInfo = $batchRepository->getBatchDetails($standard, $allSessions);
 
             foreach($batchInfo as $key => $batchData){
 
@@ -104,21 +103,20 @@
         }
 
         // Insert and update batch
-        public function add($batchData){
+        public function add($batchData, $allSessions){
 
             $batchRepository = new BatchRepository();
             $batchDetailRepository = new BatchDetailRepository();
             $batchStudentRepository = new BatchStudentRepository();
             $studentMappingRepository = new StudentMappingRepository();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $batchData->id_institute;
+            $academicYear = $batchData->id_academic;
 
             $standard = $batchData->standardId;
             $batchNo = $batchData->no_of_batch;
 
-            $studentData = $studentMappingRepository->fetchInstitutionStandardStudents($standard);
+            $studentData = $studentMappingRepository->fetchInstitutionStandardStudents($standard, $allSessions);
 
             $check = Batch::where('id_standard', $standard)
                             ->where('id_institute', $institutionId)
@@ -258,3 +256,4 @@
             return $output;
         }
     }
+?>

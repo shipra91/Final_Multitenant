@@ -22,12 +22,13 @@ class FeeChallanSettingController extends Controller
         $feeChallanSettingService = new FeeChallanSettingService();
         $feeCategoryRepository = new FeeCategoryRepository(); 
         $institutionBankDetailsService = new InstitutionBankDetailsService();
+        $allSessions = session()->all();
 
-        $feeCategories = $feeChallanSettingService->getChallanFeeCategories();
+        $feeCategories = $feeChallanSettingService->getChallanFeeCategories($allSessions);
         $institutionBankDetails = $institutionBankDetailsService->getAll();
 
         if($request->ajax()){
-            $feeSettings = $feeChallanSettingService->getAll();
+            $feeSettings = $feeChallanSettingService->getAll($allSessions);
             return Datatables::of($feeSettings)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

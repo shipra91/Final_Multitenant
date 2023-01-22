@@ -11,25 +11,17 @@ use DataTables;
 class InstitutionTypeController extends Controller
 {
     /**
-     *
-     * create Constructor to use the functions defined in the repositories
-     */
-    protected $institutionTypeService;
-    public function __construct(InstitutionTypeService $institutionTypeService)
-    {
-        $this->institutionTypeService = $institutionTypeService;
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
+        $institutionTypeService = new InstitutionTypeService();
+
         if ($request->ajax()){
 
-            $institutionType = $this->institutionTypeService->getAll();
+            $institutionType = $institutionTypeService->getAll();
 
             return Datatables::of($institutionType)
                     ->addIndexColumn()
@@ -64,11 +56,13 @@ class InstitutionTypeController extends Controller
      */
     public function store(StoreInstitutionTypeRequest $request)
     {
+        $institutionTypeService = new InstitutionTypeService();
+
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->institutionTypeService->add($request);
+            $result['data'] = $institutionTypeService->add($request);
 
         }catch(Exception $e){
 
@@ -100,7 +94,9 @@ class InstitutionTypeController extends Controller
      */
     public function edit($id)
     {
-        $institutionType = $this->institutionTypeService->find($id);
+        $institutionTypeService = new InstitutionTypeService();
+
+        $institutionType = $institutionTypeService->find($id);
         return view('Configurations/editinstitutionType', ["institutionType" => $institutionType])->with("page", "institution_type");
     }
 
@@ -113,12 +109,13 @@ class InstitutionTypeController extends Controller
      */
     public function update(StoreInstitutionTypeRequest $request, $id)
     {
+        $institutionTypeService = new InstitutionTypeService();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->institutionTypeService->update($request, $id);
+            $result['data'] = $institutionTypeService->update($request, $id);
 
         }catch(Exception $e){
 
@@ -140,11 +137,12 @@ class InstitutionTypeController extends Controller
 
     public function destroy($id)
     {
+        $institutionTypeService = new InstitutionTypeService();
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->institutionTypeService->delete($id);
+            $result['data'] = $institutionTypeService->delete($id);
 
         }catch(Exception $e){
 

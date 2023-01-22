@@ -7,8 +7,8 @@
 
     class ExamMasterRepository implements ExamMasterRepositoryInterface{
 
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             return ExamMaster::where('id_institute', $institutionId)->where('id_academic_year', $academicId)->get();
@@ -38,16 +38,17 @@
             return ExamMaster::whereId($id)->update($data);
         }
 
-        public function fetchExamMaster($idInstitutionStandard){
-            $allSessions = session()->all();
+        public function fetchExamMaster($idInstitutionStandard, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
+
             return ExamMaster::where('id_standard', $idInstitutionStandard)->where('id_institute', $institutionId)->where('id_academic_year', $academicId)->get();
         }
 
-        public function fetchExamByStandard($standardId){
+        public function fetchExamByStandard($standardId, $allSessions){
             \DB::enableQueryLog();
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

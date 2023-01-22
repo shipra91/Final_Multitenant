@@ -161,9 +161,10 @@ class InstitutionBankDetailsController extends Controller
     public function getDeletedRecords(Request $request){
 
         $institutionBankDetailsService = new InstitutionBankDetailsService();
+        $allSessions = session()->all();
        
         if ($request->ajax()){
-            $deletedData = $institutionBankDetailsService->getDeletedRecords();
+            $deletedData = $institutionBankDetailsService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

@@ -19,9 +19,10 @@ class DashboardController extends Controller
     {
         $staffRepository = new StaffRepository();
         $studentRepository = new StudentRepository();
+        $allSessions = session()->all();
 
-        $totalStudent = $studentRepository->fetchStudentCount();
-        $totalStaff = $staffRepository->fetchStaffCount();
+        $totalStudent = $studentRepository->fetchStudentCount($allSessions);
+        $totalStaff = $staffRepository->fetchStaffCount($allSessions);
 
         return view('dashboard', ['totalStudent' => $totalStudent, 'totalStaff' => $totalStaff]);
     }

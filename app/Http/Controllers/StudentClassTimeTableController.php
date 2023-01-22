@@ -10,16 +10,17 @@ use Session;
 
 class StudentClassTimeTableController extends Controller
 {
-    public function index()
+    public function index($allSessions)
     {
         $studentClassTimeTableService = new StudentClassTimeTableService();
-
-        $allSessions = session()->all();
+        
         $userId = $allSessions['userId'];
         $institutionId = $allSessions['institutionId'];
         $academicYear = $allSessions['academicYear'];
 
-        $timetableData = $studentClassTimeTableService->getStudentTimeTableData($userId, $institutionId , $academicYear );
+        $timetableData = $studentClassTimeTableService->getStudentTimeTableData($userId, $institutionId , $academicYear, $allSessions);
+           
+
         return view('StudentClassTimeTable/viewStudentTimeTable', ['timetableData' => $timetableData])->with("page", "studentClassTimeTable");
     }
 }

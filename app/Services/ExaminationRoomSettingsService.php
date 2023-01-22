@@ -11,14 +11,22 @@
     class ExaminationRoomSettingsService{
 
         // Get All Room
+<<<<<<< HEAD
         public function getAll()
+=======
+        public function getAll($allSessions)
+>>>>>>> main
         {
             $examinationRoomSettingsRepository =  new ExaminationRoomSettingsRepository();
             $roomMasterRepository = new RoomMasterRepository();
             $examMasterRepository = new ExamMasterRepository();
             $allExamRoomDetails = array();
             
+<<<<<<< HEAD
             $allExamRoomData = $examinationRoomSettingsRepository->all();
+=======
+            $allExamRoomData = $examinationRoomSettingsRepository->all($allSessions);
+>>>>>>> main
             foreach($allExamRoomData as $index => $details){
 
                 $buildingName = $blockName = $floorNumber = $display_name = "";
@@ -26,7 +34,11 @@
                 $allExamRoomDetails[$index] = $details;
                 $roomData = $roomMasterRepository->fetch($details['id_room']);
                 $examData = $examMasterRepository->fetch($details['id_exam']);
+<<<<<<< HEAD
                 $countStudent = $examinationRoomSettingsRepository->getStudentCountForExamRoom($details['id_exam'], $details['id_room']);
+=======
+                $countStudent = $examinationRoomSettingsRepository->getStudentCountForExamRoom($details['id_exam'], $details['id_room'], $allSessions);
+>>>>>>> main
                 
                 $allExamRoomDetails[$index]['room_no'] = $roomData->display_name;
                 $allExamRoomDetails[$index]['count'] = $countStudent;
@@ -38,9 +50,15 @@
         public function add($examRoomData)
         {
             //dd($examRoomData);
+<<<<<<< HEAD
             $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
+=======
+            $institutionId = $examRoomData->id_institute;
+            $academicYear = $examRoomData->id_academic;
+
+>>>>>>> main
             $examinationRoomSettingsRepository =  new ExaminationRoomSettingsRepository();
             $examRoomStudentMappingRepository =  new ExamRoomStudentMappingRepository();
             if($examRoomData->exam[0] != '')
@@ -114,7 +132,11 @@
         }
 
         // Delete event
+<<<<<<< HEAD
         public function delete($idExam, $idRoom){
+=======
+        public function delete($idExam, $idRoom, $allSessions){
+>>>>>>> main
 
             $examinationRoomSettingsRepository =  new ExaminationRoomSettingsRepository();
             $roomSetting = $examinationRoomSettingsRepository->delete($idExam, $idRoom);

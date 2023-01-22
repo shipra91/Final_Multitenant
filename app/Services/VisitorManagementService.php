@@ -9,20 +9,19 @@
     class VisitorManagementService {
 
         // Get all visitor
-        public function getAll($request){
+        public function getAll($request, $allSessions){
 
             $visitorManagementRepository = new VisitorManagementRepository();
 
-            $output = $visitorManagementRepository->all($request);
+            $output = $visitorManagementRepository->all($request, $allSessions);
             return $output;
         }
 
         // Insert visitor
         public function add($requestData){
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $requestData->id_institute;
+            $academicYear = $requestData->id_academic;
 
             $visitorManagementRepository = new VisitorManagementRepository();
 
@@ -137,11 +136,11 @@
         }
 
         // Deleted visitor records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $visitorManagementRepository = new VisitorManagementRepository();
 
-            $output = $visitorManagementRepository->allDeleted();
+            $output = $visitorManagementRepository->allDeleted($allSessions);
             return $output;
         }
 

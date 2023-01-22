@@ -18,9 +18,12 @@ class HomeworkSubmissionController extends Controller
     public function index(Request $request)
     {
         $homeworkSubmissionService = new HomeworkSubmissionService();
+        $allSessions = session()->all();
+
         //dd($homeworkSubmissionService->getAll());
-        if($request->ajax()){
-            $homeworkSubmission = $homeworkSubmissionService->getAll();
+
+        if ($request->ajax()){
+            $homeworkSubmission = $homeworkSubmissionService->getAll($allSessions);
             return Datatables::of($homeworkSubmission)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -107,12 +110,12 @@ class HomeworkSubmissionController extends Controller
      */
     public function show(Request $request)
     {
-        $homeworkSubmissionService = new HomeworkSubmissionService();
-
         $studentHomeworkDetails = '';
+        $homeworkSubmissionService = new HomeworkSubmissionService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $studentHomeworkDetails = $homeworkSubmissionService->getStudentHomework(request()->route()->parameters['id']);
+        if ($request->ajax()){
+            $studentHomeworkDetails = $homeworkSubmissionService->getStudentHomework(request()->route()->parameters['id'], $allSessions);
             return Datatables::of($studentHomeworkDetails)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -198,12 +201,16 @@ class HomeworkSubmissionController extends Controller
     public function getHomeworkValuationDetails(Request $request)
     {
         $homeworkSubmissionService = new HomeworkSubmissionService();
-        return $homeworkSubmissionService->fetchHomeworkValuationDetails($request);
+        $allSessions = session()->all();
+
+        return $homeworkSubmissionService->fetchHomeworkValuationDetails($request, $allSessions);
     }
 
     public function getHomeworkVerifiedDetails(Request $request)
     {
         $homeworkSubmissionService = new HomeworkSubmissionService();
-        return $homeworkSubmissionService->fetchHomeworkVerifiedDetails($request);
+        $allSessions = session()->all();
+
+        return $homeworkSubmissionService->fetchHomeworkVerifiedDetails($request, $allSessions);
     }
 }

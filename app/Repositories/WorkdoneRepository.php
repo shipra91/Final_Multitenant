@@ -21,16 +21,17 @@
         public function fetch($id){
             return $workdone = Workdone::find($id);
         } 
-        public function fetchWorkdoneUsingStaff($idStaff){
-            $allSessions = session()->all();
+        public function fetchWorkdoneUsingStaff($idStaff, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
+
             return $workdone = Workdone::where('id_institute', $institutionId)
             ->where('id_academic', $academicId)->where('id_staff', $idStaff)->get();
         } 
 
-        public function fetchWorkdoneByStandard($idStandard){
-            $allSessions = session()->all();
+        public function fetchWorkdoneByStandard($idStandard, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             return $workdone = Workdone::where('id_institute', $institutionId)
@@ -47,15 +48,24 @@
             return $workdone = Workdone::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return Workdone::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+            
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+            return Workdone::where('id_institute', $institutionId)
+                            ->where('id_academic', $academicId)
+                            ->onlyTrashed()->get();
         }        
 
         public function restore($id){
             return Workdone::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return Workdone::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+            return Workdone::where('id_institute', $institutionId)
+                            ->where('id_academic', $academicId)
+                            ->onlyTrashed()->restore();
         }
     }

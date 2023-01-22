@@ -9,9 +9,9 @@
 
     class FeeAssignDetailRepository implements FeeAssignDetailRepositoryInterface{
 
-        public function all($idStudent, $idFeeCategory, $idAcademic){
+        public function all($idStudent, $idFeeCategory, $idAcademic, $allSessions){
             DB::enableQueryLog();
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
 
             $feeAssigDetail =  FeeAssignDetail::join('tbl_fee_assign', 'tbl_fee_assign.id', '=', 'tbl_fee_assign_details.id_fee_assign')
@@ -46,9 +46,8 @@
             return FeeAssignDetail::where('id_fee_assign', $idFeeAssign)->where('action_type', $actionType)->delete();
         }
 
-        public function fetchConcession($idFeeHeading, $idStudent){
+        public function fetchConcession($idFeeHeading, $idStudent, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             DB::enableQueryLog();
@@ -67,9 +66,8 @@
             return $allConcessions;
         }
 
-        public function fetchAssignedAmount($idFeeHeading, $idStudent){
+        public function fetchAssignedAmount($idFeeHeading, $idStudent, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             DB::enableQueryLog();
@@ -87,9 +85,8 @@
             return $totalAssignedAmountPerHeading;
         }
 
-        public function fetchApprovedConcession($idFeeHeading, $idStudent){
+        public function fetchApprovedConcession($idFeeHeading, $idStudent, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             DB::enableQueryLog();
@@ -108,9 +105,8 @@
             return $allConcessions;
         }
 
-        public function fetchAddition($idFeeHeading, $idStudent){
+        public function fetchAddition($idFeeHeading, $idStudent, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             DB::enableQueryLog();
@@ -167,10 +163,9 @@
             return $additionAmount;
         }
 
-        public function getAcademicTotalAssignedAmount($idStudent, $idAcademicYear){
+        public function getAcademicTotalAssignedAmount($idStudent, $idAcademicYear, $allSessions){
             DB::enableQueryLog();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
 
              $feeAssignData = FeeAssignDetail::select(\DB::raw('SUM(tbl_fee_assign_details.amount) as amount'))
@@ -184,10 +179,9 @@
             return $feeAssignData;
         }
 
-        public function getAcademicTotalAdditionalAmount($idStudent, $idAcademicYear){
+        public function getAcademicTotalAdditionalAmount($idStudent, $idAcademicYear, $allSessions){
             DB::enableQueryLog();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
 
              $additionAmount = FeeAssignDetail::select(\DB::raw('SUM(tbl_fee_assign_details.amount) as amount'))
@@ -201,10 +195,9 @@
             return $additionAmount;
         }
 
-        public function getAcademicTotalConcessionAmount($idStudent, $idAcademicYear){
+        public function getAcademicTotalConcessionAmount($idStudent, $idAcademicYear, $allSessions){
             DB::enableQueryLog();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
 
             $concessionAmount = FeeAssignDetail::select(\DB::raw('SUM(tbl_fee_assign_details.amount) as amount'))
@@ -219,11 +212,10 @@
             return $concessionAmount;
         }
         
-        public function getCategoryTotalConcessionAmount($idFeeAssigned){
+        public function getCategoryTotalConcessionAmount($idFeeAssigned, $allSessions){
 
             DB::enableQueryLog();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $idAcademicYear = $allSessions['academicYear'];
             $organizationId = $allSessions['organizationId'];
@@ -241,9 +233,8 @@
             return $concessionAmount;
         }
 
-        public function fetchStudentFeeConcessionDetail($idStudent, $idFeeCategory, $idFeeHeading){
+        public function fetchStudentFeeConcessionDetail($idStudent, $idFeeCategory, $idFeeHeading, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             DB::enableQueryLog();
@@ -265,9 +256,8 @@
 
         
 
-        public function fetchFeeHeadingTotalAmount($idFeeCategory, $idFeeHeading){
+        public function fetchFeeHeadingTotalAmount($idFeeCategory, $idFeeHeading, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             DB::enableQueryLog();

@@ -21,9 +21,10 @@ class ExamMasterController extends Controller
     {
         $institutionStandardService =  new InstitutionStandardService();
         $examMasterService =  new ExamMasterService();
+        $allSessions = session()->all();
 
         if($request->ajax()) {
-            $examDetails = $examMasterService->all(); 
+            $examDetails = $examMasterService->all($allSessions); 
             
             return Datatables::of($examDetails)
                     ->addIndexColumn()
@@ -42,7 +43,7 @@ class ExamMasterController extends Controller
                     ->make(true);
         }
        
-        $standardDetails = $institutionStandardService->fetchStandard();
+        $standardDetails = $institutionStandardService->fetchStandard($allSessions);
         return view('Exam/examMasterCreation',['standardDetails' => $standardDetails])->with("page", "exam_master");
     }
 
@@ -102,8 +103,10 @@ class ExamMasterController extends Controller
     {
         $institutionStandardService =  new InstitutionStandardService();
         $examMasterService =  new ExamMasterService();
+        $allSessions = session()->all();
+
         $examDetails = $examMasterService->find($id);
-        $standardDetails = $institutionStandardService->fetchStandard();
+        $standardDetails = $institutionStandardService->fetchStandard($allSessions);
         return view('Exam/editExamMaster', ['examDetails' => $examDetails,'standardDetails' => $standardDetails])->with("page", "exam_master");
     }
     /**
@@ -154,7 +157,9 @@ class ExamMasterController extends Controller
     public function getExamForStandard(Request $request){
 
         $examMasterService =  new ExamMasterService();
+        $allSessions = session()->all();
+
         $standardId = $request['standardId'];
-        return $examMasterService->findExamsForStandard($standardId);
+        return $examMasterService->findExamsForStandard($standardId, $allSessions);
     }
 }

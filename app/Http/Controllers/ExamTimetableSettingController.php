@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\ExamMasterService;
 use App\Services\StandardSubjectService;
 use App\Services\ExamTimetableService;
+use Session;
 
 class ExamTimetableSettingController extends Controller
 {
@@ -17,9 +18,11 @@ class ExamTimetableSettingController extends Controller
      */
     public function index()
     {
-        $examMasterService =  new ExamMasterService();        
+        $examMasterService =  new ExamMasterService();   
+        $allSessions = session()->all();
+
         $examStandardDetails['standard_details'] = array();       
-        $examDetails = $examMasterService->all(); 
+        $examDetails = $examMasterService->all($allSessions); 
 
         return view('Exam/examTimetableCreation', ['examDetails' => $examDetails, 'examStandardDetails' => $examStandardDetails])->with("page", "exam_timetable");
     }
@@ -107,14 +110,15 @@ class ExamTimetableSettingController extends Controller
     { 
         $standardSubjectService =  new StandardSubjectService();
         $examMasterService =  new ExamMasterService();
-        $examTimetableService =  new ExamTimetableService();
+        $examTimetableService =  new ExamTimetableService(); 
+        $allSessions = session()->all();
 
         $examId = $request->get('exam');
         $standardIds = $request->get('standard');
   
-        $examDetails = $examMasterService->all();
+        $examDetails = $examMasterService->all($allSessions);
         $examStandardDetails = $examMasterService->find($examId);
-        $examTimetableDetails = $examTimetableService->find($request);
+        $examTimetableDetails = $examTimetableService->find($request, $allSessions);
 
         // dd($examTimetableDetails); 
         return view('Exam/examTimetableCreation', ['examDetails' => $examDetails, 'examStandardDetails' => $examStandardDetails, 'examTimetableDetails' => $examTimetableDetails])->with("page", "exam_timetable");
@@ -124,7 +128,9 @@ class ExamTimetableSettingController extends Controller
     public function getExamSubjects(Request $request)
     {
         $examTimetableService =  new ExamTimetableService();
-        $subjectDetails = $examTimetableService->fetchExamSubjects($request);
+        $allSessions = session()->all();
+
+        $subjectDetails = $examTimetableService->fetchExamSubjects($request, $allSessions);
         // dd($subjectDetails);
         return $subjectDetails;
     }

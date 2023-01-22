@@ -7,9 +7,8 @@
 
     class StandardSubjectRepository implements StandardSubjectRepositoryInterface {
 
-        public function all(){
+        public function all($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -24,9 +23,8 @@
             //dd(DB::getQueryLog());
         }
 
-        public function fetch($idStandard){
+        public function fetch($idStandard, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -36,30 +34,24 @@
                                     ->get();
         }
 
-        public function fetchSubjectStandards($idSubject, $attendanceType=''){
+        public function fetchSubjectStandards($idSubject, $attendanceType, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
-            DB::enableQueryLog();
-            $data = StandardSubject::where('id_institution_subject', $idSubject);
-
-            if($attendanceType != ''){
-                $data = $data->join('tbl_attendance_settings', 'tbl_attendance_settings.id_standard', '=', 'tbl_standard_subject.id_standard')
-                            ->where('id_institute', $institutionId)
-                            ->where('id_academic_year', $academicId)
-                            ->where('attendance_type', $attendanceType);
-            }
-
-            $data = $data->get();
-            // dd(DB::getQueryLog());
+            //DB::enableQueryLog();
+            $data = StandardSubject::join('tbl_attendance_settings', 'tbl_attendance_settings.id_standard', '=', 'tbl_standard_subject.id_standard')
+                                    ->where('id_institute', $institutionId)
+                                    ->where('id_academic_year', $academicId)
+                                    ->where('id_institution_subject', $idSubject)
+                                    ->where('attendance_type', $attendanceType)
+                                    ->get();
+            //dd(DB::getQueryLog());
             return $data;
         }
 
-        public function fetchStandardSubjects($idStandard){
-
-            $allSessions = session()->all();
+        public function fetchStandardSubjects($idStandard, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -74,9 +66,8 @@
             return $data;
         }
 
-        public function getStandardsSubject($idStandards){
+        public function getStandardsSubject($idStandards, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -92,9 +83,8 @@
             return $data->save();
         }
 
-        public function delete($idStandard){
+        public function delete($idStandard, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -110,9 +100,8 @@
             return StandardSubject::whereId($id)->update($data);
         }
 
-        public function findStandardSubject($idStandard, $idSubject){
+        public function findStandardSubject($idStandard, $idSubject, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -124,9 +113,8 @@
                                     ->first();
         }
 
-        public function fetchSubjectBelongsToStandard($idStandard, $idSubject){
+        public function fetchSubjectBelongsToStandard($idStandard, $idSubject, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -137,9 +125,8 @@
                                     ->first();
         }
 
-        public function getStandardsSubjectDetails($idStandard, $idSubject){
+        public function getStandardsSubjectDetails($idStandard, $idSubject, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -151,9 +138,8 @@
                                     ->first();
         }
 
-        public function getInstituteSubjectIds($idStandard, $idSubject){
+        public function getInstituteSubjectIds($idStandard, $idSubject, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -163,11 +149,10 @@
                                     ->where('tbl_standard_subject.id_institute', $institutionId)
                                     ->where('tbl_standard_subject.id_academic_year', $academicId)
                                     ->get(['tbl_institution_subject.id']);
-        }
+        }        
 
-        public function fetchStandardSubjectsGroupBySubjects($idStandard){
+        public function fetchStandardSubjectsGroupBySubjects($idStandard, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -178,11 +163,10 @@
                                 ->select('tbl_institution_subject.*')
                                 ->groupBy('tbl_institution_subject.id_subject')
                                 ->get();
-        }
+        }       
 
-        public function fetchStandardSubjectsGroupBySubjectsWithExamTimetable($idStandard){
+        public function fetchStandardSubjectsGroupBySubjectsWithExamTimetable($idStandard, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

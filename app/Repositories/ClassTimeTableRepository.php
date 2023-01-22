@@ -56,7 +56,6 @@
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
            
-
             DB::enableQueryLog();
             $students = ClassTimeTable::Select('tbl_class_time_table.id_standard', 'tbl_class_time_table.id_period', 'tbl_class_time_table_detail.id_subject', 'tbl_class_time_table_detail.id_room','tbl_class_time_table_setting.start_time', 'tbl_class_time_table_setting.end_time')
                         ->join('tbl_class_time_table_detail', 'tbl_class_time_table_detail.id_class_time_table', '=', 'tbl_class_time_table.id')

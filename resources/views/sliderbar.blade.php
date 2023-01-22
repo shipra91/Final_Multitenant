@@ -54,7 +54,16 @@
                 </li>
             @endif
 
+<<<<<<< HEAD
            
+=======
+            <li>
+                <a href="{{ url('/grade') }}">
+                    <i class="material-icons">assessment</i>
+                    <p>Grade</p>
+                </a>
+            </li>
+>>>>>>> main
             <!--<li>
                 <a href="{{ url('calender') }}">
                     <i class="material-icons">dashboard</i>

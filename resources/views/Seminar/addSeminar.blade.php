@@ -13,16 +13,20 @@
             <div class="container-fluid">
                 <div class="row">
                     <form method="POST" id="seminarForm">
+                        <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                        <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                        <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                         <div class="col-lg-8">
                             <div class="card">
                                 <div class="card-header card-header-icon" data-background-color="mediumaquamarine">
-                                    <i class="material-icons">school</i>
+                                    <i class="material-icons">pie_chart</i>
                                 </div>
                                 <div class="card-content">
                                     <h4 class="card-title">Add Seminar</h4>
-                                    <div class="row mt-30">
+                                    <div class="row mt-45">
                                         <div class="col-lg-10 col-lg-offset-1">
-                                            <h4 class="card-title text-center font-15">Seminar Conducted By</h4>
+                                            <h4 class="card-title text-center">Seminar Conducted By</h4>
                                             <div class="input-group">
                                                 <span class="input-group-addon">
                                                     <i class="material-icons">search</i>

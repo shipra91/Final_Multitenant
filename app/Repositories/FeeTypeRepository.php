@@ -29,8 +29,8 @@
             return FeeType::find($id)->delete();
         }
 
-        public function getStandardFeeType($standardId){
-            $allSessions = session()->all();
+        public function getStandardFeeType($standardId, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

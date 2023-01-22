@@ -16,9 +16,8 @@
             return CreateFeeChallan::create($data);
         }
 
-        public function fetch($idAcademic, $idStudent){
+        public function fetch($idAcademic, $idStudent, $allSessions){
             
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             return CreateFeeChallan::where('id_institute', $institutionId)
                                     ->where('id_academic_year', $idAcademic)
@@ -48,8 +47,8 @@
                             ->max('challan_no');
         }
 
-        public function getChallanForChallanSetting($idChallanSetting){
-            $allSessions = session()->all();
+        public function getChallanForChallanSetting($idChallanSetting, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

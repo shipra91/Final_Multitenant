@@ -17,20 +17,6 @@ use Helper;
 
 class StudentController extends Controller
 {
-    /**
-     *
-     * create Constructor to use the functions defined in the repositories
-     */
-    protected $studentService;
-    protected $customFieldService;
-    private StudentMappingRepositoryInterface $studentMappingRepository;
-
-    public function __construct(StudentService $studentService, CustomFieldService $customFieldService, StudentMappingRepositoryInterface $studentMappingRepository)
-    {
-        $this->studentService = $studentService;
-        $this->customFieldService = $customFieldService;
-        $this->studentMappingRepository = $studentMappingRepository;
-    }
 
     /**
      * Display a listing of the resource.
@@ -39,13 +25,18 @@ class StudentController extends Controller
      */
     public function index(Request $request){
 
-        $fieldDetails = $this->studentService->getFieldDetails();
+        $studentService = new StudentService();
+        $allSessions = session()->all();
+
+        $fieldDetails = $studentService->getFieldDetails($allSessions);
 
         $input = \Arr::except($request->all(),array('_token', '_method'));
-        $allColumns = $this->studentService->getTableColumns();
+        $allColumns = $studentService->getTableColumns();
 
-        if($request->ajax()){
-            $studentData = $this->studentService->fetchStudents($input);
+        if ($request->ajax()) {
+
+            $studentData = $studentService->fetchStudents($input, $allSessions);
+
             return Datatables::of($studentData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -65,7 +56,6 @@ class StudentController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         }
-
         return view('Student/index', ['fieldDetails' => $fieldDetails, 'allColumns' => $allColumns])->with("page", "student");
     }
 
@@ -76,12 +66,13 @@ class StudentController extends Controller
      */
     public function create()
     {
+        $customFieldService = new CustomFieldService();
+        $studentService = new StudentService();
         $allSessions = session()->all();
+
         $institutionId = $allSessions['institutionId'];
-
-        $fieldDetails = $this->studentService->getFieldDetails();
-        $customFields = $this->customFieldService->fetchRequiredCustomFields($institutionId, 'student');
-
+        $fieldDetails = $studentService->getFieldDetails($allSessions);
+        $customFields = $customFieldService->fetchRequiredCustomFields($institutionId, 'student');
         return view('Student/studentCreation',["customFields" => $customFields, "fieldDetails" => $fieldDetails])->with("page", "student");
     }
 
@@ -92,12 +83,13 @@ class StudentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StoreStudentRequest $request){
-
-       $result = ["status" => 200];
+      
+        $studentService = new StudentService();
+        $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->studentService->add($request);
+            $result['data'] = $studentService->add($request);
 
         }catch(Exception $e){
 
@@ -118,14 +110,14 @@ class StudentController extends Controller
      */
     public function show($id)
     {
+        $studentService = new StudentService();
         $allSessions = session()->all();
         $institutionId = $allSessions['institutionId'];
 
-        $fieldDetails = $this->studentService->getFieldDetails();
-        $customFieldDetails = $this->studentService->fetchCustomFieldValues($id);
-        $customFileDetails = $this->studentService->fetchCustomFileValues($id);
-        $studentDetails = $this->studentService->find($id);
-        //dd($studentDetails);
+        $fieldDetails = $studentService->getFieldDetails($allSessions);
+        $customFieldDetails = $studentService->fetchCustomFieldValues($id);
+        $customFileDetails = $studentService->fetchCustomFileValues($id);
+        $studentDetails = $studentService->find($id);
 
         return view('Student/viewStudent',["studentDetails" => $studentDetails, "fieldDetails" => $fieldDetails, "customFieldDetails" => $customFieldDetails, "customFileDetails" => $customFileDetails])->with("page", "student");
     }
@@ -138,15 +130,16 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
+        $customFieldService = new CustomFieldService();
+        $studentService = new StudentService();
         $allSessions = session()->all();
         $institutionId = $allSessions['institutionId'];
 
-        $studentDetails = $this->studentService->find($id);
+        $studentDetails = $studentService->find($id);
         // dd($studentDetails['standard_subjects']);
-        $fieldDetails = $this->studentService->getFieldDetails();
-        $customFields = $this->customFieldService->getCustomFieldsEdit($institutionId, 'student', 'id_student', $id, 'App\Models\StudentCustom');
-        //dd($fieldDetails);
-
+        $fieldDetails = $studentService->getFieldDetails($allSessions);
+        $customFields = $customFieldService->getCustomFieldsEdit($institutionId, 'student', 'id_student', $id, 'App\Models\StudentCustom');
+        
         return view('Student/editStudent', ["data" => $studentDetails, "customFields" => $customFields, "fieldDetails" => $fieldDetails])->with("page", "student");
     }
 
@@ -159,11 +152,12 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $studentService = new StudentService();
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->studentService->update($request, $id);
+            $result['data'] = $studentService->update($request, $id);
 
         }catch(Exception $e){
 
@@ -184,11 +178,12 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
+        $studentService = new StudentService();
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->studentService->delete($id);
+            $result['data'] = $studentService->delete($id);
 
         }catch(Exception $e){
 
@@ -208,16 +203,17 @@ class StudentController extends Controller
         return Excel::download(new ExportStudent($request), 'student.xlsx');
     }
 
-    // Deleted student records
-    public function getDeletedRecords(Request $request)
-    {
-        // dd($this->studentService->getDeletedRecords());
-        if($request->ajax()){
-            $deletedStudents = $this->studentService->getDeletedRecords();
+    public function getDeletedRecords(Request $request){
+
+        $studentService = new StudentService();
+        $allSessions = session()->all();
+
+        if ($request->ajax()) {
+            $deletedStudents = $studentService->getDeletedRecords($allSessions); 
+            
             return Datatables::of($deletedStudents)
                     ->addIndexColumn()
-                    ->addColumn('action', function($row){
-                        // $btn = '<button type="button" data-id="'.$row['id'].'" rel="tooltip" title="Restore" class="btn btn-success btn-xs restore"><i class="material-icons">delete</i> Restore</button>';
+                    ->addColumn('action', function($row){                        
                         $btn ='';
                         if(Helper::checkAccess('student', 'create')){
                             $btn .= '<button type="button" data-id="'.$row->id.'" rel="tooltip" title="Restore" class="btn btn-success btn-sm restore m0">Restore</button>';
@@ -249,42 +245,45 @@ class StudentController extends Controller
                 "error" => $e->getMessage()
             ];
         }
-
+        
         return response()->json($result, $result['status']);
-    }
+    }  
 
-    // Restore all student records
     public function restoreAll()
     {
+        $studentService = new StudentService();
+        $allSessions = session()->all();
         $result = ["status" => 200];
-
         try{
-
-            $result['data'] = $this->studentService->restoreAll();
+            
+            $result['data'] = $studentService->restoreAll($allSessions);
 
         }catch(Exception $e){
-
             $result = [
                 "status" => 500,
                 "error" => $e->getMessage()
             ];
         }
-
         return response()->json($result, $result['status']);
     }
 
     public function getStudents(Request $request)
     {
-        //$examTimetableService =  new ExamTimetableService();
-        $studentDetails = $this->studentService->fetchStudentDetails($request);
+        $studentService = new StudentService();
+        $allSessions = session()->all();
+
+        $studentDetails = $studentService->fetchStudentDetails($request, $allSessions);
         // dd($subjectDetails);
         return $studentDetails;
     }
 
     public function getStandardStudents(Request $request)
     {
+        $studentService = new StudentService();
+        $allSessions = session()->all();
+        
         $standardId = $request['standardId'];
-        $studentDetails = $this->studentService->fetchStandardStudents($standardId);
+        $studentDetails = $studentService->fetchStandardStudents($standardId, $allSessions);
         return $studentDetails;
     }
 

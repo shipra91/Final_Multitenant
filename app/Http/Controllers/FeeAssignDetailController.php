@@ -87,28 +87,32 @@ class FeeAssignDetailController extends Controller
 
     public function getFeeConcession(Request $request){
         $feeAssignDetailService = new FeeAssignDetailService();
+        $allSessions = session()->all();
 
         $idFeeCategory = $request->idFeeCategory;
         $idStudent = $request->idStudent;
 
-        $response = $feeAssignDetailService->fetchFeeConcession($idFeeCategory, $idStudent);
+        $response = $feeAssignDetailService->fetchFeeConcession($idFeeCategory, $idStudent, $allSessions);
         return $response;
     }
 
     public function getFeeAddition(Request $request){
         $feeAssignDetailService = new FeeAssignDetailService();
+        $allSessions = session()->all();
 
         $idFeeCategory = $request->idFeeCategory;
         $idStudent = $request->idStudent;
 
-        $response = $feeAssignDetailService->fetchFeeAddition($idFeeCategory, $idStudent);
+        $response = $feeAssignDetailService->fetchFeeAddition($idFeeCategory, $idStudent, $allSessions);
         return $response;
     }
 
     public function getFeeTypeAmount(Request $request){
         
         $feeMasterRepository = new FeeMasterRepository();
-        $feeData = $feeMasterRepository->getFeeTypeAmount($request);
+        $allSessions = session()->all();
+
+        $feeData = $feeMasterRepository->getFeeTypeAmount($request, $allSessions);
 
         return $feeData;
     }

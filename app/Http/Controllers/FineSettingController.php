@@ -18,15 +18,17 @@ class FineSettingController extends Controller
     public function index(Request $request)
     {
         $fineSettingService = new FineSettingService();
+        $allSessions = session()->all();
+
         $fineSettingDetails = array();
         $fineSettingDetails['fine_setting'] = '';
         $fineSettingDetails['label_fine_option'] = '';
         $fineSettingDetails['setting_types'] = '';
-        $fineSettingDetails['fine_setting_details'] = $fineSettingService->getSetting();
+        $fineSettingDetails['fine_setting_details'] = $fineSettingService->getSetting($allSessions);
         $fineOptionDetails = $fineSettingService->getOptionDetails();
 
         if ($request->ajax()) {
-            $fineSetting = $fineSettingService->getSetting();
+            $fineSetting = $fineSettingService->getSetting($allSessions);
             return Datatables::of($fineSetting)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -55,8 +57,10 @@ class FineSettingController extends Controller
     public function create(Request $request)
     {
         $fineSettingService = new FineSettingService();
+        $allSessions = session()->all();
+
         $labelFineOption = $request->get('fine_options');
-        $fineSettingDetails = $fineSettingService->getSettingDetails($labelFineOption);
+        $fineSettingDetails = $fineSettingService->getSettingDetails($labelFineOption, $allSessions);
         $fineOptionDetails = $fineSettingService->getOptionDetails();
         return view('FineSetting/fineSettingCreation', ['fineOptionDetails'=> $fineOptionDetails, 'fineSettingDetails'=> $fineSettingDetails])->with("page", "fine_setting");
     }
@@ -107,7 +111,9 @@ class FineSettingController extends Controller
     public function edit($label)
     {
         $fineSettingService = new FineSettingService();
-        $fineSettingDetails = $fineSettingService->getSettingDetails($label);
+        $allSessions = session()->all();
+
+        $fineSettingDetails = $fineSettingService->getSettingDetails($label, $allSessions);
         return view('FineSetting/editFineSetting', ["fineSettingDetails" => $fineSettingDetails])->with("page", "fine_setting");
     }
 

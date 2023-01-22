@@ -7,8 +7,9 @@
 
     class InstitutionFeeTypeMappingRepository implements InstitutionFeeTypeMappingRepositoryInterface {
 
-        public function all(){
-            return InstitutionFeeTypeMapping::all();
+        public function all($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            return InstitutionFeeTypeMapping::where('id_institute', $institutionId)->get();
         }
 
         public function store($data){
@@ -23,21 +24,20 @@
             return $institutionFeeTypeMapping = InstitutionFeeTypeMapping::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return InstitutionFeeTypeMapping::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+            return InstitutionFeeTypeMapping::where('id_institute', $institutionId)->onlyTrashed()->get();
         }
 
         public function restore($id){
             return InstitutionFeeTypeMapping::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return InstitutionFeeTypeMapping::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            return InstitutionFeeTypeMapping::where('id_institute', $institutionId)->onlyTrashed()->restore();
         }
 
-        public function getInstitutionFeetype(){
-
-            $allSessions = session()->all();
+        public function getInstitutionFeetype($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
 
             return InstitutionFeeTypeMapping::join('tbl_fee_type','tbl_fee_type.id', '=', 'tbl_institution_fee_type_mapping.id_fee_type')

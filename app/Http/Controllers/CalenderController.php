@@ -15,8 +15,10 @@ class CalenderController extends Controller
     public function index(Request $request)
     {
         $calenderService = new CalenderService();
+        $allSessions = session()->all();
+
         if($request->ajax()){
-    		$data = $calenderService->getCalenderData($request);
+    		$data = $calenderService->getCalenderData($request, $allSessions);
             return response()->json($data);
     	}
 

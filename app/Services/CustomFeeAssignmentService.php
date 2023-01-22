@@ -13,7 +13,7 @@
 
     class CustomFeeAssignmentService {
 
-        public function add($request){
+        public function add($request, $allSessions){
 
             $studentMappingRepository = new StudentMappingRepository();
             $customFeeAssignmentRepository = new CustomFeeAssignmentRepository();
@@ -110,7 +110,7 @@
                 
                 //UPDATING STUDENT FEE TYPE
 
-                $studentMappingData = $studentMappingRepository->fetch($request->custom_student_id);
+                $studentMappingData = $studentMappingRepository->fetch($request->custom_student_id, $allSessions);
                 $studentMappingData->id_fee_type = $request->custom_fee_type;
                 $studentMappingData->modified_by = Session::get('userId');
                 $studentMappingData->updated_at = Carbon::now();

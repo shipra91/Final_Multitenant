@@ -87,6 +87,10 @@
                                 </div>
 
                                 <form method="POST" id="practicalAttendanceForm" enctype="multipart/form-data">
+                                    <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                    <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                    <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                                     <input type="hidden" name="date" value="{{ $_GET && $_GET['attendance_date']? $_GET['attendance_date'] : date('d/m/Y') }}" />
                                     <input type="hidden" name="standard" value="{{$_GET['standard']}}" />
                                     <input type="hidden" name="practicalSubject" value="{{$_GET['practicalSubject']}}" />

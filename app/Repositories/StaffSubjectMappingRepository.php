@@ -17,10 +17,9 @@
             // dd(DB::getQueryLog());
         }
 
-        public function allStaffs($subjectId){
+        public function allStaffs($subjectId, $allSessions){
 
             //DB::enableQueryLog();
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -49,11 +48,7 @@
             return $staffSubjectMapping = StaffSubjectMapping::where('id_staff', $idStaff)->delete();
         }
 
-        public function fetchSubjectStaffs($subjectId){
-            // dd($subjectId);
-            // $subjectId = explode(',' , $subjectId);
-            // DB::enableQueryLog();
+        public function fetchSubjectStaffs($subjectId){            
             return $allSubjectStaffs = StaffSubjectMapping::where('id_subject', $subjectId)->get(['id_staff']);
-            // dd(DB::getQueryLog());
         }
     }

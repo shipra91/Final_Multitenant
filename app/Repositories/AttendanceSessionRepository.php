@@ -6,9 +6,8 @@
 
     class AttendanceSessionRepository implements AttendanceSessionRepositoryInterface{
 
-        public function all(){
+        public function all($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -31,8 +30,15 @@
             return $data = AttendanceSession::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return AttendanceSession::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return AttendanceSession::where('id_institute', $institutionId)
+                                    ->where('id_academic_year', $academicId)
+                                    ->onlyTrashed()
+                                    ->get();
         }
 
         public function restore($id){

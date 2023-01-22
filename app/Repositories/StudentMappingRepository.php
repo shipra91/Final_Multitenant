@@ -1,6 +1,5 @@
 <?php
     namespace App\Repositories;
-
     use App\Models\StudentMapping;
     use App\Interfaces\StudentMappingRepositoryInterface;
     use App\Repositories\InstitutionSubjectRepository;
@@ -27,12 +26,11 @@
             return $lastRecord;
         }
 
-        public function fetch($idStudent){
+        public function fetch($idStudent, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
-
+            
             return StudentMapping::where('id_institute', $institutionId)
                                 ->where('id_academic_year', $academicYear)
                                 ->where('id_student', $idStudent)->first();
@@ -50,10 +48,9 @@
             return StudentMapping::where('id_student', $idStudent)->get();
         }
 
-        public function fetchInstitutionStudents($standard, $feeType, $gender){
+        public function fetchInstitutionStudents($standard, $feeType, $gender, $allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             // dd($standard);
@@ -90,9 +87,8 @@
             return $studentDetails;
         }
 
-        public function fetchInstitutionStandardStudents($idStandard){
+        public function fetchInstitutionStandardStudents($idStandard, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -104,10 +100,9 @@
             return $studentDetails;
         }
 
-        public function fetchInstitutionPromotionElligibleStudents($idStandard){
+        public function fetchInstitutionPromotionElligibleStudents($idStandard, $allSessions){
 
             //DB::enableQueryLog();
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -120,10 +115,9 @@
             return $studentDetails;
         }
 
-        public function fetchInstitutionDetainedStudents(){
+        public function fetchInstitutionDetainedStudents($allSessions){
 
             //DB::enableQueryLog();
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -136,9 +130,8 @@
             return $studentDetails;
         }
 
-        public function fetchStudent($id){
+        public function fetchStudent($id, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             //DB::enableQueryLog();
@@ -155,10 +148,9 @@
             return $data->save();
         }
 
-        public function allDeleted(){
+        public function allDeleted($allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -174,12 +166,20 @@
             return StudentMapping::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return StudentMapping::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+
+            return StudentMapping::join('tbl_student', 'tbl_student.id', '=', 'tbl_student_mapping.id_student')
+                                ->where('tbl_student_mapping.id_institute', $institutionId)
+                                ->where('tbl_student_mapping.id_academic_year', $academicYear)
+                                ->onlyTrashed()
+                                ->restore();
         }
 
-        public function fetchStudentUsingSubject($request){
-
+        public function fetchStudentUsingSubject($request, $allSessions){
+            
             DB::enableQueryLog();
 
             $institutionSubjectRepository = new InstitutionSubjectRepository();
@@ -187,7 +187,6 @@
             $standardId = $request['standardId'];
             $subjectId = $request['subjectId'];
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -224,10 +223,10 @@
             return $studentDetails;
         }
 
-        public function fetchStudentUsingStandard($standardId){
+        public function fetchStudentUsingStandard($standardId, $allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
+
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -238,12 +237,11 @@
                                             ->select('tbl_student.*', 'tbl_student_mapping.*')->get();
             // dd(\DB::getQueryLog());
             return $studentDetails;
-        }
+        }        
 
-        public function fetchSessionStudentUsingStandard($request){
+        public function fetchSessionStudentUsingStandard($request, $allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             $standardId = $request['standard'];
@@ -258,10 +256,10 @@
             return $studentDetails;
         }
 
-        public function getStuentsAcademicYear($studentId){
+        public function getStuentsAcademicYear($studentId, $allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -275,10 +273,10 @@
             return $studentDetails;
         }
 
-        public function getStudentOnStandard($request){
+        public function getStudentOnStandard($request, $allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             $standardIds = $request['standardIds'];
@@ -292,13 +290,12 @@
             return $studentDetails;
         }
 
-        public function getStudentOnSubject($request){
+        public function getStudentOnSubject($request, $allSessions){
 
             // DB::enableQueryLog();
             $standardIds = $request['standardIds'];
             $subjectId = $request['subjectId'];
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -317,14 +314,13 @@
             return $studentDetails;
         }
 
-        public function checkSubjectMappedToStudent($data){
+        public function checkSubjectMappedToStudent($data, $allSessions){
 
             // DB::enableQueryLog();
             $standardId = $data['standardId'];
             $studentId = $data['studentId'];
             $subjectId = $data['subjectId'];
-
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -362,10 +358,10 @@
             return studentMapping::where('id_fee_type', $idFeeType)->first();
         }
 
-        public function fetchStudentByStandardFeetype($standardId, $idFeeType){
+        public function fetchStudentByStandardFeetype($standardId, $idFeeType, $allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -377,5 +373,7 @@
                                             ->select('tbl_student.*', 'tbl_student_mapping.*')->get();
             // dd(\DB::getQueryLog());
             return $studentDetails;
-        }
+        }        
+
     }
+?>

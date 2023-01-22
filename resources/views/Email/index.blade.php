@@ -39,7 +39,11 @@
 <body>
     <h1>{{ $mailData['title'] }}</h1>
     <div>
+<<<<<<< HEAD
         <h4>Please click on the given button to activate your account :</h4>
+=======
+        <h4>Please click on the given link given below:</h4>
+>>>>>>> main
         <a class="buttonClass" type="button" href="{{ $mailData['body'] }}">Acivate Email</a>
     </div>
 </body>

@@ -20,35 +20,6 @@ use DataTables;
 
 class InstitutionController extends Controller
 {
-    /**
-     *
-     * create Constructor to use the functions defined in the repositories
-     */
-
-    protected $instituteService;
-    private $institutionTypeService;
-    private $organizationService;
-    private $courseMasterService;
-    private $academicYearService;
-    private $moduleService;
-    private $universityService;
-    private $institutionModuleService;
-    private $institutionBoardService;
-    private $institutionCourseMasterService;
-
-    public function __construct(InstituteService $instituteService, InstitutionTypeService $institutionTypeService, OrganizationService $organizationService, CourseMasterService $courseMasterService, AcademicYearService $academicYearService, ModuleService $moduleService, UniversityService $universityService, InstitutionModuleService $institutionModuleService, InstitutionBoardService $institutionBoardService, InstitutionCourseMasterService $institutionCourseMasterService)
-    {
-        $this->instituteService = $instituteService;
-        $this->institutionTypeService = $institutionTypeService;
-        $this->organizationService = $organizationService;
-        $this->courseMasterService = $courseMasterService;
-        $this->academicYearService = $academicYearService;
-        $this->moduleService = $moduleService;
-        $this->universityService = $universityService;
-        $this->institutionModuleService = $institutionModuleService;
-        $this->institutionBoardService = $institutionBoardService;
-        $this->institutionCourseMasterService = $institutionCourseMasterService;
-    }
 
     /**
      * Display a listing of the resource.
@@ -58,9 +29,10 @@ class InstitutionController extends Controller
 
     public function index(Request $request)
     {
+        $instituteService = new InstituteService();
         if ($request->ajax()) {
 
-            $institutions = $this->instituteService->getAll();
+            $institutions = $instituteService->getAll();
 
             return Datatables::of($institutions)
                     ->addIndexColumn()
@@ -86,13 +58,20 @@ class InstitutionController extends Controller
 
     public function create()
     {
-        $institutionTypes = $this->institutionTypeService->getAll();
-        $organizations = $this->organizationService->all();
-        $courseMaster = $this->courseMasterService->getAll();
+        $institutionTypeService = new InstitutionTypeService();
+        $organizationService = new OrganizationService();
+        $courseMasterService = new CourseMasterService();
+        $academicYearService = new AcademicYearService();
+        $universityService = new UniversityService();
+        $moduleService = new ModuleService();
+
+        $institutionTypes = $institutionTypeService->getAll();
+        $organizations = $organizationService->all();
+        $courseMaster = $courseMasterService->getAll();
         // dd($courseMaster);
-        $academicYears = $this->academicYearService->getAll();
-        $module = $this->moduleService->getAllParents();
-        $university = $this->universityService->getAll();
+        $academicYears = $academicYearService->getAll();
+        $module = $moduleService->getAllParents();
+        $university = $universityService->getAll();
 
         return view('Institutions/institution', ["institutionTypes" => $institutionTypes, "organizations" => $organizations, "courseMaster" => $courseMaster, "academicYears" => $academicYears, "module" => $module, "university" => $university])->with("page", "institution");
     }
@@ -106,11 +85,13 @@ class InstitutionController extends Controller
 
     public function store(StoreInstitutionRequest $request)
     {
+        $instituteService = new InstituteService();
+
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->instituteService->add($request);
+            $result['data'] = $instituteService->add($request);
 
         }catch(Exception $e){
 
@@ -132,8 +113,11 @@ class InstitutionController extends Controller
 
     public function show($id)
     {
-        $institution = $this->instituteService->find($id);
-        $institutionCourseDetails = $this->institutionCourseMasterService->getInstitutionCourseData($id);
+        $instituteService = new InstituteService();
+        $institutionCourseMasterService = new InstitutionCourseMasterService();
+
+        $institution = $instituteService->find($id);
+        $institutionCourseDetails = $institutionCourseMasterService->getInstitutionCourseData($id);
         return view('Institutions/viewInstitution', ["institution" => $institution, "institutionCourseDetails" => $institutionCourseDetails])->with("page", "institution");
     }
 
@@ -146,6 +130,16 @@ class InstitutionController extends Controller
 
     public function edit($id)
     {
+        $instituteService = new InstituteService();
+        $institutionTypeService = new InstitutionTypeService();
+        $organizationService = new OrganizationService();
+        $courseMasterService = new CourseMasterService();
+        $academicYearService = new AcademicYearService();
+        $universityService = new UniversityService();
+        $institutionModuleService = new InstitutionModuleService();
+        $moduleService = new ModuleService();
+        $institutionCourseMasterService = new InstitutionCourseMasterService();
+
         $institutionTypeDetails = array();
         $courseDetails = array();
         $streamDetails = array();
@@ -177,11 +171,13 @@ class InstitutionController extends Controller
 
     public function update(StoreInstitutionRequest $request, $id)
     {
+        $instituteService = new InstituteService();
+
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->instituteService->update($request, $id);
+            $result['data'] = $instituteService->update($request, $id);
 
         }catch(Exception $e){
 
@@ -203,11 +199,13 @@ class InstitutionController extends Controller
 
     public function destroy($id)
     {
+        $instituteService = new InstituteService();
+
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->instituteService->delete($id);
+            $result['data'] = $instituteService->delete($id);
 
         }catch(Exception $e){
 
@@ -222,16 +220,20 @@ class InstitutionController extends Controller
 
     public function getBoard(Request $request)
     {
+        $instituteService = new InstituteService();
+
         $institutionId = $request['id'];
-        $boardDetails = $this->instituteService->getBoardDetails($institutionId);
+        $boardDetails = $instituteService->getBoardDetails($institutionId);
         return $boardDetails;
     }
 
     // Get Designation
     public function getDesignation(Request $request)
     {
+        $instituteService = new InstituteService();
+
         $term = $request->term;
-        $designationDetails = $this->instituteService->getDesignationdetails($term);
+        $designationDetails = $instituteService->getDesignationdetails($term);
 
         return $designationDetails;
     }
@@ -239,8 +241,10 @@ class InstitutionController extends Controller
 
     public function getDeletedRecords(Request $request){
         
+        $instituteService = new InstituteService();
+
         if ($request->ajax()) {
-            $deletedInstitutions = $this->instituteService->getDeletedRecords(); 
+            $deletedInstitutions = $instituteService->getDeletedRecords(); 
             
             return Datatables::of($deletedInstitutions)
                     ->addIndexColumn()
@@ -259,10 +263,12 @@ class InstitutionController extends Controller
 
     public function restore($id)
     {
+        $instituteService = new InstituteService();
+
         $result = ["status" => 200];
         try{
             
-            $result['data'] = $this->instituteService->restore($id);
+            $result['data'] = $instituteService->restore($id);
 
         }catch(Exception $e){
             $result = [
@@ -282,10 +288,12 @@ class InstitutionController extends Controller
 
     public function restoreAll()
     {
+        $instituteService = new InstituteService();
+
         $result = ["status" => 200];
         try{
             
-            $result['data'] = $this->instituteService->restoreAll();
+            $result['data'] = $instituteService->restoreAll();
 
         }catch(Exception $e){
             $result = [

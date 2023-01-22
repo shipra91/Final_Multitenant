@@ -22,9 +22,10 @@ class InstitutionStandardController extends Controller
     public function index(Request $request)
     {
         $institutionStandardService = new InstitutionStandardService();
-
-        if($request->ajax()){
-            $institutionStandard = $institutionStandardService->all();
+        $allSessions = session()->all();
+        
+        if ($request->ajax()){
+            $institutionStandard = $institutionStandardService->all($allSessions);
             return Datatables::of($institutionStandard)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

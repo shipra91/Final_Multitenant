@@ -17,6 +17,10 @@
                                 <h4 class="card-title">Fee Report</h4>
                                 <form method="POST" id="feeReportForm" action="{{ url('/fee-report-data') }}" target="print_popup" onsubmit="window.open('about:blank','print_popup','width=1000,height=800');">
                                     @csrf
+                                    <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                    <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                    <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                                     <div class="row">
                                         <div class="col-lg-3">
                                             <div class="form-group">

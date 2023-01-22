@@ -13,9 +13,8 @@
             
         }  
 
-        public function allChallanSettingCategory(){
+        public function allChallanSettingCategory($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

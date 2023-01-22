@@ -9,9 +9,8 @@
 
     class PeriodSettingsRepository implements PeriodSettingsRepositoryInterface{
 
-        public function all(){
-
-            $sessionData = Session::all();
+        public function all($allSessions){
+            
             $idInstitution = $sessionData['institutionId'];
             $idAcademics = $sessionData['academicYear'];
 
@@ -34,9 +33,8 @@
             return $periodSettings = PeriodSettings::find($id)->delete();
         }
 
-        public function getPeriodSettings($standardId, $day){
+        public function getPeriodSettings($standardId, $day, $allSessions){
 
-            $sessionData = Session::all();
             $idInstitution = $sessionData['institutionId'];
             $idAcademics = $sessionData['academicYear'];
 

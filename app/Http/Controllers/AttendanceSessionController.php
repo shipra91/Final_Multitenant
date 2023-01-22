@@ -19,9 +19,10 @@ class AttendanceSessionController extends Controller
     public function index(Request $request)
     {
         $attendanceSessionService = new AttendanceSessionService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $attendanceSession = $attendanceSessionService->getAll();
+            $attendanceSession = $attendanceSessionService->getAll($allSessions);
             return Datatables::of($attendanceSession)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -143,7 +144,7 @@ class AttendanceSessionController extends Controller
         //dd($attendanceSessionService->getDeletedRecords());
 
         if($request->ajax()){
-            $deletedData = $attendanceSessionService->getDeletedRecords();
+            $deletedData = $attendanceSessionService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

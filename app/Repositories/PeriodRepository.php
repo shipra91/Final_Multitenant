@@ -6,9 +6,8 @@
 
     class PeriodRepository implements PeriodRepositoryInterface{
 
-        public function all(){
+        public function all($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -33,24 +32,44 @@
             return $data = Period::find($id)->delete();
         }
 
-        public function periodCount($type){
-            return $data = Period::where('type', $type)->count();
+        public function periodCount($type, $allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return $data = Period::where('tbl_periods.id_institute', $institutionId)
+                                ->where('tbl_periods.id_academic_year', $academicYear)
+                                ->where('type', $type)
+                                ->count();
         }
 
-        public function getPeriodTypeWise(){
-            return $data = Period::where('type', 'teaching')->orderBy('priority')->get();
+        public function getPeriodTypeWise($allSessions){
+            
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return $data = Period::where('tbl_periods.id_institute', $institutionId)
+                        ->where('tbl_periods.id_academic_year', $academicYear)
+                        ->where('type', 'teaching')
+                        ->orderBy('priority')
+                        ->get();
         }
 
-        public function allDeleted(){
-            return Period::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return Period::where('tbl_periods.id_institute', $institutionId)
+                        ->where('tbl_periods.id_academic_year', $academicYear)
+                        ->onlyTrashed()->get();
         }
 
         public function restore($id){
             return Period::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return Period::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return Period::where('tbl_periods.id_institute', $institutionId)
+                        ->where('tbl_periods.id_academic_year', $academicYear)
+                        ->onlyTrashed()->restore();
         }
     }
 ?>

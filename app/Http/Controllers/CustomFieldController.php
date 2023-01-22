@@ -10,13 +10,6 @@ use Helper;
 
 class CustomFieldController extends Controller
 {
-    protected $yearSemService;
-    protected $customFieldService;
-    public function __construct(ModuleService $moduleService, CustomFieldService $customFieldService)
-    {
-        $this->moduleService = $moduleService; 
-        $this->customFieldService = $customFieldService; 
-    }
     /**
      * Display a listing of the resource.
      *
@@ -34,9 +27,12 @@ class CustomFieldController extends Controller
      */
     public function create()
     {
+        $moduleService = new ModuleService(); 
+        $customFieldService = new CustomFieldService(); 
+
         $option ='Yes';
-        $requiredModules = $this->moduleService->fetchRequiredModules($option);
-        $customFieldDetails =  $this->customFieldService->getAll();
+        $requiredModules = $moduleService->fetchRequiredModules($option);
+        $customFieldDetails =  $customFieldService->getAll();
         
         return view('CustomFieldConfiguration/customFieldCreation', ["requiredModules" => $requiredModules, "customFieldDetails" => $customFieldDetails])->with("page", "custom_field");
     }
@@ -49,13 +45,15 @@ class CustomFieldController extends Controller
      */
     public function store(Request $request)
     {
+        $customFieldService = new CustomFieldService(); 
+
         $allSessions = session()->all();
         $institutionId = $allSessions['institutionId'];
 
         $result = ["status" => 200];
         try{
             
-            $result['data'] = $this->customFieldService->add($request, $institutionId);    
+            $result['data'] = $customFieldService->add($request, $institutionId);    
 
         }catch(Exception $e){
             $result = [
@@ -86,7 +84,9 @@ class CustomFieldController extends Controller
      */
     public function edit($id)
     {
-        $customFieldDetails = $this->customFieldService->find($id);
+        $customFieldService = new CustomFieldService(); 
+
+        $customFieldDetails = $customFieldService->find($id);
         return view('CustomFieldConfiguration/editCustomField', ["customFieldDetails" => $customFieldDetails])->with("page", "custom_field");
     }
 
@@ -99,11 +99,13 @@ class CustomFieldController extends Controller
      */
     public function update(Request $request, $id)
     {
-         $result = ["status" => 200];
+        $customFieldService = new CustomFieldService(); 
+
+        $result = ["status" => 200];
 
         try{
             
-            $result['data'] = $this->customFieldService->update($request, $id);  
+            $result['data'] = $customFieldService->update($request, $id);  
 
         }catch(Exception $e){
 
@@ -124,11 +126,12 @@ class CustomFieldController extends Controller
      */
     public function destroy($id)
     {
+        $customFieldService = new CustomFieldService(); 
         $result = ["status" => 200];
         
         try{
             
-            $result['data'] = $this->customFieldService->delete($id);
+            $result['data'] = $customFieldService->delete($id);
 
         }catch(Exception $e){
             $result = [

@@ -17,12 +17,13 @@ class StandardSubjectStaffMappingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $institutionStandardService = new InstitutionStandardService();
-
-        $standard = $institutionStandardService->fetchStandardName();
+    { 
         $standardSubjectDetails['subject'] =  array();
+        $institutionStandardService = new InstitutionStandardService();
+        $allSessions = session()->all();
 
+        $standard = $institutionStandardService->fetchStandardName($allSessions);
+        
         return view('StandardSubjectStaffMapping/standardSubjectStaffMapping',['standard'=> $standard, 'standardSubjectDetails'=>$standardSubjectDetails])->with("page", "standard_subject_staff");
     }
 
@@ -45,21 +46,19 @@ class StandardSubjectStaffMappingController extends Controller
     public function store(Request $request)
     {
         $standardSubjectStaffMappingService =  new StandardSubjectStaffMappingService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
-
         try{
+            
+            $result['data'] = $standardSubjectStaffMappingService->add($request, $allSessions);
 
-            $result['data'] = $standardSubjectStaffMappingService->add($request);
-
-        }catch(Exception $e){
-
+        } catch(Exception $e){
             $result = [
                 "status" => 500,
                 "error" => $e->getMessage()
             ];
         }
-
         return response()->json($result, $result['status']);
     }
 
@@ -109,39 +108,43 @@ class StandardSubjectStaffMappingController extends Controller
     }
 
     public function getDetails(Request $request)
-    {
+    { 
         $institutionStandardService = new InstitutionStandardService();
         $standardSubjectStaffMappingService = new StandardSubjectStaffMappingService();
+        $allSessions = session()->all();
 
+        $standard = $institutionStandardService->fetchStandardName($allSessions);
+        
         $request = $request->get('standard_stream');
-        $standardSubjectDetails = $standardSubjectStaffMappingService->fetchDetails($request);
-        $standard = $institutionStandardService->fetchStandardName();
+        $standardSubjectDetails = $standardSubjectStaffMappingService->fetchDetails($request, $allSessions);
         // dd($standardSubjectDetails);
-
         return view('StandardSubjectStaffMapping/standardSubjectStaffMapping',['standard'=> $standard, 'standardSubjectDetails'=>$standardSubjectDetails])->with("page", "standard_subject_staff");
     }
 
     public function getStaffs(Request $request)
-    {
+    { 
         $standardSubjectStaffMappingService = new StandardSubjectStaffMappingService();
+        $allSessions = session()->all();
 
-        $staffSubjectDetails = $standardSubjectStaffMappingService->fetchSubjectStaffs($request);
+        $staffSubjectDetails = $standardSubjectStaffMappingService->fetchSubjectStaffs($request, $allSessions);
         return $staffSubjectDetails;
     }
 
     public function getStaffStudent(Request $request)
-    {
+    { 
         $standardSubjectStaffMappingService = new StandardSubjectStaffMappingService();
+        $allSessions = session()->all();
 
-        $staffSubjectDetails = $standardSubjectStaffMappingService->fetchSubjectStaffStudents($request);
+        $staffSubjectDetails = $standardSubjectStaffMappingService->fetchSubjectStaffStudents($request, $allSessions);
         return $staffSubjectDetails;
     }
 
     public function getStaffsStudents(Request $request)
-    {
+    { 
         $standardSubjectStaffMappingService = new StandardSubjectStaffMappingService();
+        $allSessions = session()->all();
 
-        $staffSubjectDetails = $standardSubjectStaffMappingService->fetchSubjectsStaffsStudents($request);
+        $staffSubjectDetails = $standardSubjectStaffMappingService->fetchSubjectsStaffsStudents($request, $allSessions);
         return $staffSubjectDetails;
     }
-}
+}  

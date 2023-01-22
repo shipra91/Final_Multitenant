@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Services\AssignmentSubmissionService;
 use App\Http\Requests\StoreAssignmentSubmissionRequest;
 use DataTables;
+use Session;
 
 class AssignmentSubmissionController extends Controller
 {
@@ -18,9 +19,12 @@ class AssignmentSubmissionController extends Controller
     public function index(Request $request)
     {
         $assignmentSubmissionService = new AssignmentSubmissionService();
+        $idStudent = Session::get('userId');
+
+        $allSessions = session()->all();
 
         if($request->ajax()){
-            $assignmentSubmission = $assignmentSubmissionService->getAll();
+            $assignmentSubmission = $assignmentSubmissionService->getAll($idStudent, $allSessions);
             return Datatables::of($assignmentSubmission)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -117,9 +121,10 @@ class AssignmentSubmissionController extends Controller
     {
         $studentAssignmentDetails = '';
         $assignmentSubmissionService = new AssignmentSubmissionService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $studentAssignmentDetails = $assignmentSubmissionService->getStudentAssignment(request()->route()->parameters['id']);
+        if ($request->ajax()){
+            $studentAssignmentDetails = $assignmentSubmissionService->getStudentAssignment(request()->route()->parameters['id'], $allSessions);
             return Datatables::of($studentAssignmentDetails)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -209,13 +214,17 @@ class AssignmentSubmissionController extends Controller
     public function getAssignmentValuationDetails(Request $request)
     {
         $assignmentSubmissionService = new AssignmentSubmissionService();
-        return $assignmentSubmissionService->fetchAssignmentValuationDetails($request);
+        $allSessions = session()->all();
+
+        return $assignmentSubmissionService->fetchAssignmentValuationDetails($request, $allSessions);
 
     }
 
     public function getAssignmentVerifiedDetails(Request $request)
     {
         $assignmentSubmissionService = new AssignmentSubmissionService();
-        return $assignmentSubmissionService->fetchAssignmentVerifiedDetails($request);
+        $allSessions = session()->all();
+        
+        return $assignmentSubmissionService->fetchAssignmentVerifiedDetails($request, $allSessions);
     }
 }

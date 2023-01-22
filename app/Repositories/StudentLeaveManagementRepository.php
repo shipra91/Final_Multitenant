@@ -10,8 +10,11 @@
 
     class StudentLeaveManagementRepository implements StudentLeaveManagementRepositoryInterface{
 
-        public function all(){
-            return StudentLeaveManagement::all();
+        public function all($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return StudentLeaveManagement::where('id_institute', $institutionId)->where('id_academic', $academicYear)->get();
         }
 
         public function store($data){
@@ -30,19 +33,30 @@
             return StudentLeaveManagement::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return StudentLeaveManagement::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+
+            return StudentLeaveManagement::where('id_institute', $institutionId)->where('id_academic', $academicYear)->onlyTrashed()->get();
         }
 
         public function restore($id){
             return StudentLeaveManagement::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return StudentLeaveManagement::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+
+            return StudentLeaveManagement::where('id_institute', $institutionId)->where('id_academic', $academicYear)->onlyTrashed()->restore();
         }
 
-        public function leaveReportData($request){
+        public function leaveReportData($request, $allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
 
             $leave_type= $request->leaveType;
 
@@ -52,10 +66,12 @@
             DB::enableQueryLog();
             $applicationData = StudentLeaveManagement::where(function($query) use ($from_date, $to_date){
                                                     $query->where('from_date','>=',$from_date)
-                                                    ->where('to_date','<=',$to_date);
-                                                })
-                                            ->whereIn('leave_status', $leave_type)
-                                            ->get();
+                                                        ->where('to_date','<=',$to_date);
+                                                    })
+                                                    ->whereIn('leave_status', $leave_type)
+                                                    ->where('id_institute', $institutionId)
+                                                    ->where('id_academic', $academicYear)
+                                                    ->get();
             // dd(\DB::getQueryLog());
             return $applicationData;
         }

@@ -424,7 +424,6 @@
                             $('#marks').removeClass('d-none');
                         }
                     }
-
                     $("#project_modal").find("#grading_option").html(gradingOption);
                     $("#project_modal").find("#grade").html(gradeValue);
                     $("#project_modal").find("#marks").html(marksValue);

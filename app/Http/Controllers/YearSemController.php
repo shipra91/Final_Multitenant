@@ -16,7 +16,9 @@ class YearSemController extends Controller
     public function create()
     {
         $yearSemService = new YearSemService();
-        $yearSemDetails = $yearSemService->getData();
+        $allSessions = session()->all();
+
+        $yearSemDetails = $yearSemService->getData($allSessions);
        // dd($yearSemDetails);
         return view('Standard/yearSemMapping',["yearSemDetails" => $yearSemDetails ])->with("page", "year_sem_mapping");
     }
@@ -24,8 +26,10 @@ class YearSemController extends Controller
     public function getYearSemester(Request $request)
     { 
         $yearSemService = new YearSemService();
+        $allSessions = session()->all();
+
         $yearId = $request['id'];
-        $semDetails = $yearSemService->getSem($yearId);
+        $semDetails = $yearSemService->getSem($yearId, $allSessions);
         return $semDetails;
     }
 

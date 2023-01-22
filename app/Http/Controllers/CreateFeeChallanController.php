@@ -17,10 +17,10 @@ class CreateFeeChallanController extends Controller
     public function index(Request $request, $idAcademic, $idStudent)
     {
         $createFeeChallanService = new CreateFeeChallanService();
-        $challanDetails = $createFeeChallanService->getChallan($idAcademic, $idStudent);
+        $allSessions = session()->all();
       
         if ($request->ajax()) {
-            $challanDetails = $createFeeChallanService->getChallan($idAcademic, $idStudent);
+            $challanDetails = $createFeeChallanService->getChallan($idAcademic, $idStudent, $allSessions);
                 return Datatables::of($challanDetails)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -117,9 +117,11 @@ class CreateFeeChallanController extends Controller
     public function approveChallan(Request $request, $id)
     {
         $createFeeChallanService = new CreateFeeChallanService();
+        $allSessions = session()->all();
+
         $result = ["status" => 200];
         try{     
-            $result['data'] = $createFeeChallanService->approveChallan($request, $id);  
+            $result['data'] = $createFeeChallanService->approveChallan($request, $id, $allSessions);  
 
         }catch(Exception $e){
 

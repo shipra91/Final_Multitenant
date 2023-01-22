@@ -7,10 +7,9 @@
 
     class FeeMasterRepository implements FeeMasterRepositoryInterface{
 
-        public function all($idFeeCategory, $standard, $fee_type, $installment_type){
+        public function all($idFeeCategory, $standard, $fee_type, $installment_type, $allSessions){
 
            // DB::enableQueryLog();
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -25,10 +24,10 @@
             return $feeMaterData;
         }  
         
-        public function getAll(){
+        public function getAll($allSessions){
 
             // DB::enableQueryLog();
-             $allSessions = session()->all();
+            
              $institutionId = $allSessions['institutionId'];
              $academicId = $allSessions['academicYear'];
  
@@ -39,9 +38,8 @@
              return $feeMaterData;
          }  
 
-        public function standardFeeCategory($standardId){
+        public function standardFeeCategory($standardId, $allSessions){
             
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -52,9 +50,8 @@
                         ->groupBY("id_fee_category");
         }
 
-        public function getInstallmentType($idFeeCategory, $standard, $fee_type){
+        public function getInstallmentType($idFeeCategory, $standard, $fee_type, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -101,10 +98,9 @@
             return FeeMaster::find($id)->delete();
         }
 
-        public function getFeeTypeAmount($request){
+        public function getFeeTypeAmount($request, $allSessions){
 
-           DB::enableQueryLog();
-            $allSessions = session()->all();
+            DB::enableQueryLog();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             
@@ -113,7 +109,7 @@
             $idFeeCategory = $request['idFeeCategory'];
             $feeAmount = 0;
 
-            $feeMasterData = $this->getInstallmentType($idFeeCategory, $standard, $fee_type);
+            $feeMasterData = $this->getInstallmentType($idFeeCategory, $standard, $fee_type, $allSessions);
 
             if($feeMasterData){
 
@@ -151,21 +147,20 @@
             
         }              
 
-        public function standardFeeType($standardId){
-            $allSessions = session()->all();
+        public function standardFeeType($standardId, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             
             return FeeMaster::where('id_institution_standard', $standardId)
                         ->where('id_institute', $institutionId)
                         ->where('id_academic_year', $academicId)
-                        ->get()
-                        ->groupBY("id_fee_type");
+                        ->groupBY("id_fee_type")
+                        ->get();
         }
 
-        public function getFeeMasterForFeeCategory($idFeeCategory) { 
+        public function getFeeMasterForFeeCategory($idFeeCategory, $allSessions) { 
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             
@@ -175,9 +170,8 @@
                         ->get();
         }
 
-        public function getFeeMasterDetails($standardIds, $fee_type, $idFeeCategory){
+        public function getFeeMasterDetails($standardIds, $fee_type, $idFeeCategory, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

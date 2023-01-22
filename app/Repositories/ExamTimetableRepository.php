@@ -28,9 +28,8 @@
             return $examTimetable;
         }
 
-        public function getExamMinMax($request){
+        public function getExamMinMax($request, $allSessions){
             //\DB::enableQueryLog();
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             $examId = $request['examId'];
@@ -71,11 +70,10 @@
 
         }
 
-        public function fetchExamSubjects($request){
+        public function fetchExamSubjects($request, $allSessions){
             $standardId = $request['standardId'];
             $examId = $request['examId'];
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -104,10 +102,9 @@
             return ExamTimetable::whereId($id)->update($data);
         }
 
-        public function fetchSubjectsByExam($standardId, $examId){
+        public function fetchSubjectsByExam($standardId, $examId, $allSessions){
             //\DB::enableQueryLog();
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

@@ -32,7 +32,6 @@
                                     <div class="card-header text-center" data-background-color="mediumaquamarine">
                                         <h4 class="card-title">Login</h4>
                                     </div>
-
                                     <div class="card-content">
                                         <div class="input-group">
                                             <span class="input-group-addon">
@@ -56,7 +55,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="footer text-center">
                                         <button type="submit" id="submit" class="btn btn-warning btn-simple btn-wd btn-lg">Let's go</button>
                                     </div>

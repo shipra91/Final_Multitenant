@@ -8,8 +8,18 @@
 
     class StudentRepository implements StudentRepositoryInterface {
 
-        public function all(){
-            return Student::all();
+        public function all($allSessions){
+            
+            $institutionId = $allSessions['institutionId'];          
+            $organizationId = $allSessions['organizationId'];
+            $academicYear = $allSessions['academicYear'];
+
+            return Student::Select('tbl_student.*')
+                            ->join('tbl_student_mapping', 'tbl_student_mapping.id_student', '=', 'tbl_student.id')
+                            ->where("id_institute", $institutionId)
+                            ->where("id_organization", $organizationId)
+                            ->where("id_academic_year", $academicYear)
+                            ->get();
         }
 
         public function store($data){
@@ -39,9 +49,8 @@
             return Student::find($id)->delete();
         }
 
-        public function fetchStudents($term){
+        public function fetchStudents($term, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];          
             $organizationId = $allSessions['organizationId'];
             $academicYear = $allSessions['academicYear'];
@@ -56,13 +65,13 @@
                             ->orWhere("egenius_uid", 'LIKE','%'.$term.'%')
                             ->orWhere("usn", 'LIKE','%'.$term.'%')
                             ->orWhere("father_mobile_number", 'LIKE','%'.$term.'%')
-                            ->groupBy('tbl_student_mapping.id_student')->get();
+                            ->groupBy('tbl_student_mapping.id_student')
+                            ->get();
             return $students;
         }
 
-        public function getStudentByStandard($term, $details){
+        public function getStudentByStandard($term, $details, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             $idStandards = $details[1];
@@ -82,15 +91,12 @@
             return $students;
         }
 
-        public function getStudentBySubject($term, $details ){
+        public function getStudentBySubject($term, $details, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             $idStandards = $details[1];
             $subjectId = $details[2];
-            // dd($subjectId);
-            // $subjectId = 'a3a48874-5f59-42dc-bf3e-7207ddcbc048';
 
             $students = Student::Select('tbl_student.*', 'tbl_student_mapping.id_standard')
                             ->join('tbl_student_mapping', 'tbl_student_mapping.id_student', '=', 'tbl_student.id')
@@ -116,9 +122,8 @@
             return $students;
         }
 
-        public function fetchStudentByStandard($details){
+        public function fetchStudentByStandard($details, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             $idStandards = $details[1];
@@ -134,14 +139,12 @@
             return $students;
         }
 
-        public function fetchStudentBySubject($details){
+        public function fetchStudentBySubject($details, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             $idStandards = $details[1];
             $subjectId = $details[2];
-            // $subjectId = 'a3a48874-5f59-42dc-bf3e-7207ddcbc048';
 
             $students = Student::Select('tbl_student.*', 'tbl_student_mapping.id_standard')
                         ->join('tbl_student_mapping', 'tbl_student_mapping.id_student', '=', 'tbl_student.id')
@@ -176,9 +179,8 @@
             return $studentData;
         }
 
-        public function fetchStudentCount(){
+        public function fetchStudentCount($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -191,12 +193,15 @@
             return $students;
         }
 
-        public function userExist($mobile){
+        public function userExist($mobile, $institutionId){
             $studentData = Student::join('tbl_student_mapping', 'tbl_student_mapping.id_student', '=', 'tbl_student.id')
                         ->where('father_mobile_number', $mobile)
-                        ->whereNull('tbl_student_mapping.deleted_at') 
                         ->orWhere('mother_mobile_number', $mobile)
                         ->select('tbl_student.*', 'tbl_student_mapping.*')
+                        ->where(function($query1) use ($institutionId){
+                            $query1->where('id_organization', $institutionId)
+                                    ->orWhere('id_institute', $institutionId);
+                        })
                         ->first();
             return $studentData;
         }
@@ -215,9 +220,8 @@
             return $studentData;
         }
 
-        public function fetchStudentOnBatch($batchStudentId){
+        public function fetchStudentOnBatch($batchStudentId, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -228,18 +232,23 @@
                         ->where('tbl_student_mapping.id_institute', $institutionId)
                         ->where('tbl_student_mapping.id_academic_year', $academicYear)
                         ->where('tbl_batch_student.id_batch_detail', $batchStudentId)
-                        ->whereNull('tbl_student_mapping.deleted_at') ->get();
+                        ->whereNull('tbl_student_mapping.deleted_at') 
+                        ->get();
             // dd(\DB::getQueryLog());
             return $students;
         }
 
-        public function allStudentUser($mobile){
+        public function allStudentUser($mobile, $institutionId){
 
             $studentData = Student::join('tbl_student_mapping', 'tbl_student_mapping.id_student', '=', 'tbl_student.id')
                         // ->where('tbl_student_mapping.id_institute', $institutionId)
                         ->where(function($query) use ($mobile){
                             $query->where('father_mobile_number', $mobile)
                             ->orWhere('mother_mobile_number', $mobile);
+                        })
+                        ->where(function($query1) use ($institutionId){
+                            $query1->where('id_organization', $institutionId)
+                                ->orWhere('id_institute', $institutionId);
                         })
                         ->select('tbl_student.*', 'tbl_student_mapping.*')
                         ->get();

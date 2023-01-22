@@ -32,9 +32,10 @@ class PreadmissionController extends Controller
     public function index(Request $request)
     {
         $preadmissionService = new PreadmissionService();
+        $allSessions = session()->all();
 
         if($request->ajax()){
-            $allSessions = session()->all();
+            
             $preadmissionDetails = $preadmissionService->all($allSessions);
             return Datatables::of($preadmissionDetails)
                     ->addIndexColumn()
@@ -79,7 +80,7 @@ class PreadmissionController extends Controller
         $institutionId = $allSessions['institutionId'];
 
         //$fieldDetails = $this->studentService->getFieldDetails();
-        $fieldDetails = $preadmissionService->getFieldDetails();
+        $fieldDetails = $preadmissionService->getFieldDetails($allSessions);
         $customFields = $customFieldService->fetchRequiredCustomFields($institutionId,'student');
 
         $studentDetails = array(
@@ -128,8 +129,9 @@ class PreadmissionController extends Controller
     public function show($id)
     {
         $preadmissionService = new PreadmissionService();
+        $allSessions = session()->all();
 
-        $fieldDetails = $preadmissionService->getFieldDetails();
+        $fieldDetails = $preadmissionService->getFieldDetails($allSessions);
         $customFieldDetails = $preadmissionService->fetchCustomFieldValues($id);
         $customFileDetails = $preadmissionService->fetchCustomFileValues($id);
         $preadmissionDetails = $preadmissionService->find($id);
@@ -158,7 +160,7 @@ class PreadmissionController extends Controller
         );
 
         $preadmissionDetails = $preadmissionService->find($id);
-        $fieldDetails = $preadmissionService->getFieldDetails();
+        $fieldDetails = $preadmissionService->getFieldDetails($allSessions);
         $customFields = $customFieldService->getCustomFieldsEdit($institutionId, 'student', 'id_preadmission', $id, 'App\Models\PreadmissionCustom');
 
         return view('Preadmission/editPreadmission', ["preadmissionDetails" => $preadmissionDetails, "customFields" => $customFields, "fieldDetails" => $fieldDetails, "type" => "OFFLINE", "studentDetails" => $studentDetails])->with("page", "pre_admission");
@@ -244,10 +246,12 @@ class PreadmissionController extends Controller
 
     public function approve($id)
     {
-         $result = ["status" => 200];
+        
+        $preadmissionService = new PreadmissionService();
+        $result = ["status" => 200];
 
         try{
-            $result['data'] = $this->preadmissionService->approve($id);
+            $result['data'] = $preadmissionService->approve($id);
 
         }catch(Exception $e){
 
@@ -262,10 +266,13 @@ class PreadmissionController extends Controller
 
     public function reject(Request $data, $id)
     {
+        
+        $preadmissionService = new PreadmissionService();
+
         $result = ["status" => 200];
 
         try{
-            $result['data'] = $this->preadmissionService->reject($data, $id);
+            $result['data'] = $preadmissionService->reject($data, $id);
 
         }catch(Exception $e){
 
@@ -280,10 +287,12 @@ class PreadmissionController extends Controller
 
     public function correction(Request $data, $id)
     {
-         $result = ["status" => 200];
+        
+        $preadmissionService = new PreadmissionService();
+        $result = ["status" => 200];
 
         try{
-            $result['data'] = $this->preadmissionService->correction($data, $id);
+            $result['data'] = $preadmissionService->correction($data, $id);
 
         }catch(Exception $e){
 
@@ -300,11 +309,12 @@ class PreadmissionController extends Controller
     public function admitPreadmission(Request $request){
 
         $preadmissionService = new PreadmissionService();
+        $allSessions = session()->all();
 
         $standardId = $request->standard;
 
         $studentData = $preadmissionService->studentsBasedOnStandard($standardId);
-        $fieldDetails = $preadmissionService->getFieldDetails();
+        $fieldDetails = $preadmissionService->getFieldDetails($allSessions);
         // dd($studentData);
 
         return view('Preadmission/admitPreadmission', ["fieldDetails" => $fieldDetails, "studentData" => $studentData])->with("page", "pre_admission");

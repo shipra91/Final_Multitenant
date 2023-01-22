@@ -30,9 +30,8 @@
             return Attendance::where('id', $idAttendance)->first();
         }
 
-        public function fetchAttendanceStatus($idStudent, $heldOn, $standardId){
+        public function fetchAttendanceStatus($idStudent, $heldOn, $standardId, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -45,9 +44,8 @@
             return $attendance;
         }
 
-        public function fetch($studentId, $heldOn, $standardId, $subjectId, $attendanceType, $periodSession){
+        public function fetch($studentId, $heldOn, $standardId, $subjectId, $attendanceType, $periodSession, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -94,9 +92,8 @@
         //     return $data;
         // }
 
-        public function fetchAttendanceDetail($request){
-
-            $allSessions = session()->all();
+        public function fetchAttendanceDetail($request, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -118,9 +115,8 @@
             return $attendanceDetails;
         }
 
-        public function fetchWorkingDays($studentUid){
+        public function fetchWorkingDays($studentUid, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -134,9 +130,8 @@
             return $workingDays;
         }
 
-        public function fetchPresentDays($studentUid){
+        public function fetchPresentDays($studentUid, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -149,9 +144,8 @@
             return $presentDays;
         }
 
-        public function allPeriodAttendanceData($standardId, $idStudent, $date, $idPeriodSession){
+        public function allPeriodAttendanceData($standardId, $idStudent, $date, $idPeriodSession, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -165,9 +159,8 @@
             return $attendanceData;
         }
 
-        public function allDayAttendanceData($standardId, $idStudent, $date){
+        public function allDayAttendanceData($standardId, $idStudent, $date, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 

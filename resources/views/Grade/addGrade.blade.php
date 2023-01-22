@@ -12,6 +12,11 @@
         <div class="content">
             <div class="container-fluid">
                 <form method="POST" id="gradeForm">
+                                        
+                    <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                    <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                    <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                     <div class="row">
                         <div class="col-md-12 col-md-offset-0">
                             <div class="card">

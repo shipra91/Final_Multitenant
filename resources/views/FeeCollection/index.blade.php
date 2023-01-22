@@ -55,6 +55,9 @@
                             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                                 @foreach($getStudentDetail as $index => $detail)
                                     <form id="feeCollection" method="POST" enctype="multipart/form-data">
+                                        <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                        <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                        <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
                                         <div class="panel panel-default">
                                             <div class="panel-heading" role="tab" id="headingOne_{{ $index }}">
                                                 <h4 class="panel-title">
@@ -1171,10 +1174,13 @@
             var feeChallanAmount=$(this).attr('data-amount');
             $("#challan_approve_modal").find("#approve_challan_id").val(feeChallanId);
             $("#challan_approve_modal").find("#challan_amount").val(feeChallanAmount);
+<<<<<<< HEAD
             $('#challan_paid_date').val();
             $('#challan_paid_amount').val('');
             $('#bank_transaction_id').val('');
             $("#challan_approve").attr('disabled', true);
+=======
+>>>>>>> main
             $("#challan_approve_modal").modal('show');
         });
 

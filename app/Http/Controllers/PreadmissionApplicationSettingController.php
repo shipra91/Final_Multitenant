@@ -11,14 +11,6 @@ use DataTables;
 
 class PreadmissionApplicationSettingController extends Controller
 {
-    protected $institutionStandardService;
-    protected $applicationSettingService;
-    public function __construct(InstitutionStandardService $institutionStandardService, ApplicationSettingService $applicationSettingService)
-    {
-        $this->institutionStandardService = $institutionStandardService;
-        $this->applicationSettingService = $applicationSettingService;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -26,8 +18,11 @@ class PreadmissionApplicationSettingController extends Controller
      */
     public function index(Request $request)
     {
+        $applicationSettingService = new ApplicationSettingService();
+        $allSessions = session()->all();
+
         if($request->ajax()){
-            $allSettingData = $this->applicationSettingService->getAll();
+            $allSettingData = $this->applicationSettingService->getAll($allSessions);
             return Datatables::of($allSettingData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -49,7 +44,10 @@ class PreadmissionApplicationSettingController extends Controller
      */
     public function create()
     {
-        $allStandard = $this->institutionStandardService->fetchStandard();
+        $institutionStandardService = new InstitutionStandardService();
+        $allSessions = session()->all();
+
+        $allStandard = $institutionStandardService->fetchStandard($allSessions);
         return view('Preadmission/add_setting', ['allStandard' => $allStandard]);
     }
 
@@ -61,11 +59,13 @@ class PreadmissionApplicationSettingController extends Controller
      */
     public function store(StoreApplicationSettingRequest $request)
     {
+        $applicationSettingService = new ApplicationSettingService();
+
         $result = ["status" => 200];
 
         try{
-
-            $result['data'] = $this->applicationSettingService->add($request);
+            
+            $result['data'] = $applicationSettingService->add($request);    
 
         }catch(Exception $e){
 
@@ -74,7 +74,6 @@ class PreadmissionApplicationSettingController extends Controller
                 "error" => $e->getMessage()
             ];
         }
-
         return response()->json($result, $result['status']);
     }
 
@@ -97,9 +96,12 @@ class PreadmissionApplicationSettingController extends Controller
      */
     public function edit($id)
     {
-        $allStandard = $this->institutionStandardService->fetchStandard();
-        $preadmissionData = $this->applicationSettingService->find($id);
+        $institutionStandardService = new InstitutionStandardService();
+        $applicationSettingService = new ApplicationSettingService();
+        $allSessions = session()->all();
 
+        $allStandard = $institutionStandardService->fetchStandard($allSessions);
+        $preadmissionData = $applicationSettingService->find($id);
         return view('Preadmission/edit_preadmission', ['preadmissionData' => $preadmissionData, 'allStandard' => $allStandard]);
     }
 
@@ -112,20 +114,19 @@ class PreadmissionApplicationSettingController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $applicationSettingService = new ApplicationSettingService();
+
         $result = ["status" => 200];
-
         try{
-
-            $result['data'] = $this->applicationSettingService->update($request, $id);
+            
+            $result['data'] = $applicationSettingService->update($request, $id);  
 
         }catch(Exception $e){
-
             $result = [
                 "status" => 500,
                 "error" => $e->getMessage()
             ];
         }
-
         return response()->json($result, $result['status']);
     }
 
@@ -137,28 +138,31 @@ class PreadmissionApplicationSettingController extends Controller
      */
     public function destroy($id)
     {
+        $applicationSettingService = new ApplicationSettingService();
+
         $result = ["status" => 200];
 
         try{
-
-            $result['data'] = $this->applicationSettingService->delete($id);
+            
+            $result['data'] = $applicationSettingService->delete($id);
 
         }catch(Exception $e){
-
+            
             $result = [
                 "status" => 500,
                 "error" => $e->getMessage()
             ];
         }
-
+        
         return response()->json($result, $result['status']);
     }
 
-    public function getDeletedRecords(Request $request)
-    {
-        if($request->ajax()){
+    public function getDeletedRecords(Request $request){
+        $applicationSettingService = new ApplicationSettingService();
+        $allSessions = session()->all();
 
-            $allSettings = $this->applicationSettingService->getDeletedRecords();
+        if ($request->ajax()) {
+            $allSettings = $applicationSettingService->getDeletedRecords($allSessions); 
             // dd($allSettings);
             return Datatables::of($allSettings)
                     ->addIndexColumn()

@@ -59,10 +59,10 @@
             return InstitutionModule::withTrashed()->find($id)->restore();
         }
 
-        public function allSubModules($idParent){
+        public function allSubModules($idParent, $allSessions){
             // dd($idParent);
             DB::enableQueryLog();
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
 
             $institutionSubModules = InstitutionModule::join('tbl_module', 'tbl_module.id', '=', 'tbl_institution_modules.id_module')->where('tbl_institution_modules.id_institution', $institutionId)

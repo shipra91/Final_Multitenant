@@ -22,8 +22,13 @@
             $examTimetableSettingRepository = new ExamTimetableSettingRepository();
            
             $allSessions = session()->all();
+<<<<<<< HEAD
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
+=======
+            $institutionId = $examTimetableData->id_institute;
+            $academicYear = $examTimetableData->id_academic;
+>>>>>>> main
 
             $idStandards = explode(',',$examTimetableData->id_standard);
             $idExam = $examTimetableData->id_exam;
@@ -122,7 +127,14 @@
                     foreach($examTimetableData->standard_ids[$subjectId] as $idStandard)
                     {
                         $check = ExamTimetableSetting::where('id_academic_year', $academicYear)
+<<<<<<< HEAD
                                         ->where('id_institute', $institutionId)->where('id_exam', $idExam)->where('id_standard', $idStandard)->first();
+=======
+                                        ->where('id_institute', $institutionId)
+                                        ->where('id_exam', $idExam)
+                                        ->where('id_standard', $idStandard)
+                                        ->first();
+>>>>>>> main
                         if(!$check)
                         {
                             $data = array( 
@@ -208,7 +220,11 @@
             return $output;
         }
 
+<<<<<<< HEAD
         public function find($request)
+=======
+        public function find($request, $allSessions)
+>>>>>>> main
         {
             $standardIds = $request->get('standard');
             $examId = $request->get('exam');
@@ -225,15 +241,25 @@
             // dd($examStandardIds);
             $fromDate = Carbon::createFromFormat('Y-m-d', $examDetails->from_date)->format('d/m/Y');
             $toDate = Carbon::createFromFormat('Y-m-d', $examDetails->to_date)->format('d/m/Y');
+<<<<<<< HEAD
             $examTimetableDetails = array();
 
             if($timetableType == 'classwise') {
+=======
+
+            if($timetableType == 'classwise') {
+                $examTimetableDetails = array();
+>>>>>>> main
 
                 foreach ($standardIds as $key => $standardId) {
 
                     $examTimetableDetails[$key]['subjectArray'] = array();
 
+<<<<<<< HEAD
                     $standardSubjectDetails = $standardSubjectService->fetchStandardSubjects($standardId);
+=======
+                    $standardSubjectDetails = $standardSubjectService->fetchStandardSubjects($standardId, $allSessions);
+>>>>>>> main
                     // dd($standardSubjectDetails);
                     $examTimetableSetting['setting']['from_date'] =  $fromDate;
                     $examTimetableSetting['setting']['to_date'] =  $toDate;
@@ -299,11 +325,19 @@
                 $examTimetableSetting['setting']['exam'] =  $examId;
                 $examTimetableSetting['setting']['timetable_type'] =  $timetableType;
 
+<<<<<<< HEAD
                 $institutionSubjects =  $institutionSubjectRepository->all();
 
                 foreach($institutionSubjects as $key => $subjectData){
 
                     $subjectCount = $institutionSubjectRepository->findCount($subjectData->id_subject);
+=======
+                $institutionSubjects =  $institutionSubjectRepository->all($allSessions);
+
+                foreach($institutionSubjects as $key => $subjectData){
+
+                    $subjectCount = $institutionSubjectRepository->findCount($subjectData->id_subject, $allSessions);
+>>>>>>> main
     
                     if(sizeof($subjectCount) == 2){
                         $displayName = $subjectData['display_name'].'-'.$subjectData['subject_type'];
@@ -311,7 +345,11 @@
                         $displayName= $subjectData['display_name'];
                     }
 
+<<<<<<< HEAD
                     $standardIds =  $standardSubjectRepository->fetchExamSubjectStandards($subjectData->id);
+=======
+                    $standardIds =  $standardSubjectRepository->fetchSubjectStandards($subjectData->id);
+>>>>>>> main
                     // dd($standardIds);
 
                     if($standardIds){
@@ -363,19 +401,31 @@
             return $examSettingDetails;
         }
 
+<<<<<<< HEAD
         public function fetchExamSubjects($request)
+=======
+        public function fetchExamSubjects($request, $allSessions)
+>>>>>>> main
         { 
             
             $institutionSubjectRepository = new InstitutionSubjectRepository();
             $examTimetableRepository = new ExamTimetableRepository();
             $allSubjectDetails = array();
 
+<<<<<<< HEAD
             $examSubjectDetails =  $examTimetableRepository->fetchExamSubjects($request);
+=======
+            $examSubjectDetails =  $examTimetableRepository->fetchExamSubjects($request, $allSessions);
+>>>>>>> main
 
             foreach($examSubjectDetails as $key => $subject){
                
                 $subjectData = $institutionSubjectRepository->find($subject->id_institution_subject);
+<<<<<<< HEAD
                 $subjectCount = $institutionSubjectRepository->findCount($subjectData->id_subject);
+=======
+                $subjectCount = $institutionSubjectRepository->findCount($subjectData->id_subject, $allSessions);
+>>>>>>> main
  
                 if(sizeof($subjectCount) == 2)
                 {
@@ -393,9 +443,14 @@
             return $allSubjectDetails;
         }
         
+<<<<<<< HEAD
         public function getExamWithTimetable(){
 
             $allSessions = session()->all();
+=======
+        public function getExamWithTimetable($allSessions){
+
+>>>>>>> main
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             

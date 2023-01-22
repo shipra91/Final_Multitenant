@@ -1,6 +1,5 @@
 <?php
     namespace App\Repositories;
-
     use App\Models\AssignmentDetail;
     use App\Interfaces\AssignmentDetailRepositoryInterface;
 
@@ -11,11 +10,11 @@
         }
 
         public function store($data){
-            return $data = AssignmentDetail::create($data);
+            return $assignmentDetail = AssignmentDetail::create($data);
         }
 
         public function fetch($id){
-            return $data = AssignmentDetail::where('id_assignment', $id)->get();
+            return $assignmentDetail = AssignmentDetail::where('id_assignment', $id)->get();
         }
 
         public function update($data){

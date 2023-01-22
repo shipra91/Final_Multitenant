@@ -19,9 +19,11 @@ class PeriodController extends Controller
     public function index(Request $request)
     {
         $periodService = new PeriodService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $period = $periodService->getAll();
+        if ($request->ajax()){
+            $period = $periodService->getAll($allSessions);
+
             return Datatables::of($period)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -140,10 +142,11 @@ class PeriodController extends Controller
     public function getDeletedRecords(Request $request){
 
         $periodService = new PeriodService();
-        //dd($periodService->getDeletedRecords());
+        $allSessions = session()->all();
+        //dd($periodService->getDeletedRecords($allSessions));
 
         if($request->ajax()){
-            $deletedData = $periodService->getDeletedRecords();
+            $deletedData = $periodService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

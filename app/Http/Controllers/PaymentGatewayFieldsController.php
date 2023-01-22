@@ -8,15 +8,6 @@ use App\Services\PaymentGatewayFieldsService;
 
 class PaymentGatewayFieldsController extends Controller
 {
-    /**
-     *
-     * create Constructor to use the functions defined in the repositories
-     */
-    protected $paymentGatewayFieldsService;
-    public function __construct(PaymentGatewayFieldsService $paymentGatewayFieldsService)
-    {
-        $this->paymentGatewayFieldsService = $paymentGatewayFieldsService;
-    }
 
     /**
      * Display a listing of the resource.
@@ -91,11 +82,12 @@ class PaymentGatewayFieldsController extends Controller
      */
     public function destroy($id)
     {
+        $paymentGatewayFieldsService = new PaymentGatewayFieldsService();
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->paymentGatewayFieldsService->delete($id);
+            $result['data'] = $paymentGatewayFieldsService->delete($id);
 
         }catch(Exception $e){
 
@@ -110,7 +102,9 @@ class PaymentGatewayFieldsController extends Controller
 
     public function fetchFieldsBasedOnGateways(Request $request)
     {
+        $paymentGatewayFieldsService = new PaymentGatewayFieldsService();
+
         $idPaymentGateway = $request['id'];
-        return $this->paymentGatewayFieldsService->fetchFieldsBasedOnGateways($idPaymentGateway);
+        return $data = $paymentGatewayFieldsService->fetchFieldsBasedOnGateways($idPaymentGateway);
     }
 }

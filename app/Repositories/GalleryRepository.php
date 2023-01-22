@@ -9,8 +9,12 @@
 
     class GalleryRepository implements GalleryRepositoryInterface{
 
-        public function all(){
-            return Gallery::all();
+        public function all($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return Gallery::where('id_institution', $institutionId)->where('id_academic_year', $academicId)->get();
         }
 
         public function store($data){
@@ -29,16 +33,21 @@
             return $gallery = Gallery::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return Gallery::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return Gallery::where('id_institution', $institutionId)->where('id_academic_year', $academicId)->onlyTrashed()->get();
         }
 
         public function restore($id){
             return Gallery::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return Gallery::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+            return Gallery::where('id_institution', $institutionId)->where('id_academic_year', $academicId)->onlyTrashed()->restore();
         }
     }
 ?>

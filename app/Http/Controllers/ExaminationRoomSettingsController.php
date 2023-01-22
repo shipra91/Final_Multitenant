@@ -9,6 +9,10 @@ use App\Services\ExamMasterService;
 use App\Repositories\RoomMasterRepository;
 use App\Http\Requests\StoreExaminationRoomSettingRequest;
 use DataTables;
+<<<<<<< HEAD
+=======
+use Session;
+>>>>>>> main
 use Helper;
 
 class ExaminationRoomSettingsController extends Controller
@@ -21,9 +25,16 @@ class ExaminationRoomSettingsController extends Controller
     public function index(Request $request)
     {        
         $examinationRoomSettingsService =  new ExaminationRoomSettingsService();
+<<<<<<< HEAD
         
         if ($request->ajax()) {
             $examRoomDetails = $examinationRoomSettingsService->getAll();
+=======
+        $allSessions = session()->all();
+        
+        if ($request->ajax()) {
+            $examRoomDetails = $examinationRoomSettingsService->getAll($allSessions);
+>>>>>>> main
             return Datatables::of($examRoomDetails)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -41,8 +52,13 @@ class ExaminationRoomSettingsController extends Controller
         }
         $roomMasterRepository = new RoomMasterRepository();
         $examMasterService =  new ExamMasterService();
+<<<<<<< HEAD
         $examDetails = $examMasterService->all(); 
         $rooms = $roomMasterRepository->all();
+=======
+        $examDetails = $examMasterService->all($allSessions); 
+        $rooms = $roomMasterRepository->all($allSessions);
+>>>>>>> main
         //dd($standards);
         return view('ExaminationRoomSettings/examRoomAllocation', ['examDetails'=>$examDetails, 'rooms' => $rooms])->with("page", "exam_room");
         // return view('ExaminationRoomSettings/index');
@@ -126,11 +142,20 @@ class ExaminationRoomSettingsController extends Controller
     public function destroy(Request $request)
     {   
         $examinationRoomSettingsService =  new ExaminationRoomSettingsService();
+<<<<<<< HEAD
+=======
+        $allSessions = session()->all();
+
+>>>>>>> main
         $result = ["status" => 200];
 
         try{
 
+<<<<<<< HEAD
             $result['data'] = $examinationRoomSettingsService->delete($request->idExam, $request->idRoom);
+=======
+            $result['data'] = $examinationRoomSettingsService->delete($request->idExam, $request->idRoom, $allSessions);
+>>>>>>> main
 
         }catch(Exception $e){
 

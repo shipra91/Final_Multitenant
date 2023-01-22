@@ -23,18 +23,19 @@
             return MessageReport::where('id_message_center', $idMessageCenter)->get();
         } 
 
-        public function fetchSentMessages(){ //only sent messages not delivered messages
-            $allSessions = session()->all();
+        public function fetchSentMessages($allSessions){ //only sent messages not delivered messages
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
+
             return MessageReport::where('completed', 'NO')->where('id_institute', $institutionId)
             ->where('id_academic', $academicId)->get();
         } 
         
-        public function getTotalConsumedCredit(){
+        public function getTotalConsumedCredit($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
+            
             return MessageReport::select(\DB::raw('SUM(sms_charge) as consumedCredit'))->where('id_institute', $institutionId)->first();
         }
 

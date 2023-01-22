@@ -17,10 +17,11 @@ class MessageGroupNameController extends Controller
      */
     public function index(Request $request)
     {
-        $messageGroupNameService = new MessageGroupNameService();
+        $messageGroupNameService = new MessageGroupNameService(); 
+        $allSessions = session()->all(); 
 
         if ($request->ajax()){
-            $details = $messageGroupNameService->all();
+            $details = $messageGroupNameService->all($allSessions);
             return Datatables::of($details)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -164,9 +165,10 @@ class MessageGroupNameController extends Controller
     public function getDeletedRecords(Request $request){
 
         $messageGroupNameService = new MessageGroupNameService();
+        $allSessions = session()->all();
 
         if ($request->ajax()) {
-            $deletedData = $messageGroupNameService->getDeletedRecords();
+            $deletedData = $messageGroupNameService->getDeletedRecords($allSessions);
 
             return Datatables::of($deletedData)
                     ->addIndexColumn()
@@ -205,11 +207,12 @@ class MessageGroupNameController extends Controller
     public function restoreAll()
     {
         $messageGroupNameService = new MessageGroupNameService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
         try{
 
-            $result['data'] = $messageGroupNameService->restoreAll();
+            $result['data'] = $messageGroupNameService->restoreAll($allSessions);
 
         }catch(Exception $e){
             $result = [

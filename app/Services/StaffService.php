@@ -1,6 +1,5 @@
 <?php
     namespace App\Services;
-
     use App\Models\Staff;
     use App\Repositories\StaffRepository;
     use App\Repositories\BloodGroupRepository;
@@ -32,7 +31,7 @@
     class StaffService {
 
         // Get all staff
-        public function getAll($request){
+        public function getAll($request, $allSessions){
 
             $categoryRepository = new CategoryRepository();
             $religionRepository = new ReligionRepository();
@@ -45,7 +44,7 @@
             $genderRepository = new GenderRepository();
             $bloodGroupRepository = new BloodGroupRepository();
             $staffRepository = new StaffRepository();
-            $staff = $staffRepository->all($request);
+            $staff = $staffRepository->all($request, $allSessions);
             $arrayData = array();
 
             foreach($staff as $key => $staffData){
@@ -150,7 +149,6 @@
             $organizationRepository = new OrganizationRepository();
 
             $allStaff = Staff::where('created_by', $idService)->get();
-
             $arrayData = array();
 
             foreach($allStaff as $key => $staffData){
@@ -159,13 +157,11 @@
                 $organizationName = $organizationData->name;
 
                 $existingUser = $loginOtpRepository->existingUser($staffData->primary_contact_no);
-
                 if($existingUser){
                     $editElligibility = 'NO';
                 }else{
                     $editElligibility = 'YES';
                 }
-
                 $arrayData[$key] = $staffData;
                 $role = '';
 
@@ -197,7 +193,7 @@
         }
 
         // Get particular staff
-        public function find($id){
+        public function find($id, $allSessions){
 
             $institutionSubjectRepository = new InstitutionSubjectRepository();
             $subjectRepository = new SubjectRepository();
@@ -216,7 +212,6 @@
             $bloodGroupRepository = new BloodGroupRepository();
             $staffRepository = new StaffRepository();
             $boardRepository = new BoardRepository();
-
             $staffData = array();
             $staffFamilyData = array();
             $selectedBoard = "";
@@ -310,7 +305,7 @@
 
                     $subjectId = $subjectMapping->id_subject;
                     $subject = $institutionSubjectRepository->find($subjectId);
-                    $subjectCount =  $institutionSubjectRepository->findCount($subject->id_subject);
+                    $subjectCount =  $institutionSubjectRepository->findCount($subject->id_subject, $allSessions);
 
                     if($subject){
 
@@ -362,6 +357,7 @@
             $departmentRepository = new DepartmentRepository();
             $genderRepository = new GenderRepository();
             $bloodGroupRepository = new BloodGroupRepository();
+            
             $bloodGroup = $bloodGroupRepository->all();
             $gender = $genderRepository->all();
             $department = $departmentRepository->all();
@@ -971,7 +967,7 @@
         }
 
         // Deleted staff records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $categoryRepository = new CategoryRepository();
             $religionRepository = new ReligionRepository();
@@ -983,7 +979,7 @@
             $genderRepository = new GenderRepository();
             $bloodGroupRepository = new BloodGroupRepository();
             $staffRepository = new StaffRepository();
-            $allDeletedStaffs = $staffRepository->allDeleted();
+            $allDeletedStaffs = $staffRepository->allDeleted($allSessions);
             $arrayData = array();
 
             foreach($allDeletedStaffs as $key => $staffData){
@@ -1097,10 +1093,10 @@
         }
 
         // Restore all staff records
-        public function restoreAll(){
+        public function restoreAll($allSessions){
 
             $staffRepository = new StaffRepository();
-            $staffs = $staffRepository->restoreAll();
+            $staffs = $staffRepository->restoreAll($allSessions);
 
             if($organization){
                 $signal = 'success';
@@ -1116,20 +1112,20 @@
         }
 
         // Get staff based on staffcategory and staffsubcategory
-        public function getAllStaff($StaffCategory, $staffSubcategory){
+        public function getAllStaff($StaffCategory, $staffSubcategory, $allSessions){
 
             $staffRepository = new StaffRepository();
 
-            $staffData = $staffRepository->getStaffOnCategoryAndSubcategory($StaffCategory, $staffSubcategory);
+            $staffData = $staffRepository->getStaffOnCategoryAndSubcategory($StaffCategory, $staffSubcategory, $allSessions);
             return $staffData;
         }
 
         // Get staff based on standard and subject
-        public function getStaffByStandardAndSubject($standardId, $subjectid){
+        public function getStaffByStandardAndSubject($standardId, $subjectid, $allSessions){
 
             $standardSubjectStaffMappingRepository = new StandardSubjectStaffMappingRepository();
-            $staffdetails = $standardSubjectStaffMappingRepository->getStaffOnStandardAndSubject($standardId,$subjectid);
-
+            $staffdetails = $standardSubjectStaffMappingRepository->getStaffOnStandardAndSubject($standardId, $subjectid, $allSessions);
+          
             return $staffdetails;
         }
     }

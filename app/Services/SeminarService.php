@@ -25,17 +25,17 @@
     use DB;
     use ZipArchive;
 
-    class SeminarService {
+    class SeminarService{
 
         // View seminar
-        public function getAll(){
+        public function getAll($allSessions){
 
             $seminarRepository = new SeminarRepository();
             $seminarRecipientRepository = new SeminarRecipientRepository();
             $seminarAttachmentRepository = new SeminarAttachmentRepository();
             $seminarDetail = array();
 
-            $seminarData = $seminarRepository->all();
+            $seminarData = $seminarRepository->all($allSessions);
 
             foreach($seminarData as $key => $seminar){
 
@@ -73,11 +73,10 @@
         }
 
         // Insert seminar
-        public function add($seminarData){
+        public function add($seminarData, $allSessions){
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $seminarData->id_institute;
+            $academicYear = $seminarData->id_academic;
 
             $seminarRepository = new SeminarRepository();
             $seminarAttachmentRepository = new SeminarAttachmentRepository();
@@ -232,7 +231,7 @@
 
                                     foreach($seminarData->subject as $subject){
 
-                                        $data = $standardSubjectRepository->findStandardSubject($standard, $subject);
+                                        $data = $standardSubjectRepository->findStandardSubject($standard, $subject, $allSessions);
 
                                         if($data){
                                             $applicableTo = array(
@@ -626,11 +625,10 @@
         }
 
         // Update seminar
-        public function update($seminarData, $id){
+        public function update($seminarData, $id, $allSessions){
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $seminarData->id_institute;
+            $academicYear = $seminarData->id_academic;
 
             $seminarRepository = new SeminarRepository();
             $seminarAttachmentRepository = new SeminarAttachmentRepository();
@@ -782,7 +780,7 @@
 
                                 foreach($seminarData->subject as $subject){
 
-                                    $data = $standardSubjectRepository->findStandardSubject($standard, $subject);
+                                    $data = $standardSubjectRepository->findStandardSubject($standard, $subject, $allSessions);
 
                                     if($data){
                                         $applicableTo = array(
@@ -854,12 +852,12 @@
         }
 
         // Deleted seminar records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $seminarRecipientRepository = new SeminarRecipientRepository();
             $seminarRepository = new SeminarRepository();
 
-            $seminarData = $seminarRepository->allDeleted();
+            $seminarData = $seminarRepository->allDeleted($allSessions);
             $seminarDetail = array();
 
             foreach($seminarData as $key => $seminar){
@@ -906,3 +904,4 @@
             return $output;
         }
     }
+?>

@@ -8,11 +8,11 @@
     class PeriodService {
 
         // Get all period
-        public function getAll(){
+        public function getAll($allSessions){
 
             $periodRepository = new PeriodRepository();
 
-            $period = $periodRepository->all();
+            $period = $periodRepository->all($allSessions);
             return $period;
         }
 
@@ -105,20 +105,20 @@
         }
 
         // Get all period based on type
-        public function periodTypeWise(){
+        public function periodTypeWise($allSessions){
 
             $periodRepository = new PeriodRepository();
 
-            $period = $periodRepository->getPeriodTypeWise();
+            $period = $periodRepository->getPeriodTypeWise($allSessions);
             return $period;
         }
 
         // Deleted period records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $periodRepository = new PeriodRepository();
 
-            $data = $periodRepository->allDeleted();
+            $data = $periodRepository->allDeleted($allSessions);
             return $data;
         }
 

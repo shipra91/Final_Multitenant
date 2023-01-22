@@ -9,11 +9,19 @@
 
     class ExamMasterService 
     {
+<<<<<<< HEAD
         public function all()
         {
             $institutionStandardService = new InstitutionStandardService();
             $examMasterRepository = new ExamMasterRepository();
             $allExamMasters = $examMasterRepository->all();
+=======
+        public function all($allSessions)
+        {
+            $institutionStandardService = new InstitutionStandardService();
+            $examMasterRepository = new ExamMasterRepository();
+            $allExamMasters = $examMasterRepository->all($allSessions);
+>>>>>>> main
             $examMasterDetails = array();
             
             foreach($allExamMasters as $index => $examDetails)
@@ -71,9 +79,15 @@
         public function add($examMasterData)
         {
             $examMasterRepository = new ExamMasterRepository();
+<<<<<<< HEAD
             $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
+=======
+            
+            $institutionId = $examMasterData->id_institute;
+            $academicYear = $examMasterData->id_academic;
+>>>>>>> main
 
             $count = 0;
             $existCount = 0;
@@ -141,9 +155,15 @@
          public function update($examMasterData, $id){
            
             $examMasterRepository = new ExamMasterRepository();
+<<<<<<< HEAD
             $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
+=======
+            
+            $institutionId = $examMasterData->id_institute;
+            $academicYear = $examMasterData->id_academic;
+>>>>>>> main
 
             $fromDate = Carbon::createFromFormat('d/m/Y', $examMasterData->from_date)->format('Y-m-d');
             $toDate = Carbon::createFromFormat('d/m/Y', $examMasterData->to_date)->format('Y-m-d');
@@ -196,10 +216,17 @@
             return $output;
         }
 
+<<<<<<< HEAD
         public function findExamsForStandard($institutionStandardId)
         {     
             $examMasterRepository = new ExamMasterRepository();
             $examDetails = $examMasterRepository->fetchExamMaster($institutionStandardId);
+=======
+        public function findExamsForStandard($institutionStandardId, $allSessions)
+        {     
+            $examMasterRepository = new ExamMasterRepository();
+            $examDetails = $examMasterRepository->fetchExamMaster($institutionStandardId, $allSessions);
+>>>>>>> main
             return $examDetails;
         }
      

@@ -1,6 +1,5 @@
 <?php
     namespace App\Services;
-
     use App\Models\Student;
     use App\Repositories\StudentRepository;
     use Carbon\Carbon;
@@ -39,7 +38,6 @@
 
             $studentRepository = new StudentRepository();
             $studentMappingRepository = new StudentMappingRepository();
-
             $studentDetails = $studentRepository->all();
 
             foreach($studentDetails as $index=> $studentData){
@@ -61,8 +59,7 @@
             return $allStudentDetails;
         }
 
-        // View student
-        public function fetchStudents($request){
+        public function fetchStudents($request, $allSessions){
 
             $allStudent = array();
 
@@ -88,7 +85,7 @@
                     $gender = $request['gender'];
                 }
 
-                $student = $studentMappingRepository->fetchInstitutionStudents($standard, $fee_type, $gender);
+                $student = $studentMappingRepository->fetchInstitutionStudents($standard, $fee_type, $gender, $allSessions);
 
                 foreach($student as $key => $data){
 
@@ -133,14 +130,13 @@
             return $allStudent;
         }
 
-        // Get student based on standard
-        public function fetchStandardStudents($idStandard){
+        public function fetchStandardStudents($idStandard, $allSessions){
 
             $institutionStandardService = new InstitutionStandardService();
             $studentMappingRepository = new StudentMappingRepository();
-
             $allStudent = array();
-            $student = $studentMappingRepository->fetchInstitutionStandardStudents($idStandard);
+
+            $student = $studentMappingRepository->fetchInstitutionStandardStudents($idStandard, $allSessions);
 
             foreach($student as $key => $data){
 
@@ -167,15 +163,14 @@
             return $allStudent;
         }
 
-        // Get promotion students list
-        public function fetchPromotionElligibleStudents($request){
+        public function fetchPromotionElligibleStudents($request, $allSessions){
 
             $institutionStandardService = new InstitutionStandardService();
             $studentMappingRepository = new StudentMappingRepository();
             $today = date('Y-m-d H:i:s');
             $allStudent = array();
 
-            $student = $studentMappingRepository->fetchInstitutionPromotionElligibleStudents($request);
+            $student = $studentMappingRepository->fetchInstitutionPromotionElligibleStudents($request, $allSessions);
 
             foreach($student as $data){
 
@@ -196,7 +191,6 @@
                 $studentDetails = array(
                     'id_student'=>$data->id_student,
                     'UID'=>$data->egenius_uid,
-                    // 'name'=>$data->name,
                     'name'=>$studentName,
                     'class'=>$standard,
                     'father_name'=>$data->name,
@@ -384,8 +378,7 @@
             return $customFileDetails;
         }
 
-        // Student data
-        public function getFieldDetails(){
+        public function getFieldDetails($allSessions){
 
             $genderRepository = new GenderRepository();
             $institutionStandardService = new InstitutionStandardService();
@@ -396,12 +389,12 @@
             $categoryRepository = new CategoryRepository();
             $bloodGroupRepository = new BloodGroupRepository();
             $gender = $genderRepository->all();
-            $standard = $institutionStandardService->fetchStandard();
+            $standard = $institutionStandardService->fetchStandard($allSessions);
 
             // $standard = [{"institutionStandard_id" => 1, "class" => "1A"}];
             $nationality = $nationalityRepository->all();
             $religion = $religionRepository->all();
-            $feeType = $institutionFeeTypeMappingRepository->getInstitutionFeetype();
+            $feeType = $institutionFeeTypeMappingRepository->getInstitutionFeetype($allSessions);
             $admissionType =  $admissionTypeRepository->all();
             $casteCategory = $categoryRepository->all();
             $bloodGroup = $bloodGroupRepository->all();
@@ -423,10 +416,9 @@
         // Insert Student
         public function add($studentData){
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $organizationId = $allSessions['organizationId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $studentData->id_institute;
+            $organizationId = $studentData->organization;
+            $academicYear = $studentData->id_academic;
 
             $studentRepository = new StudentRepository();
             $studentMappingRepository = new StudentMappingRepository();
@@ -636,7 +628,6 @@
                                     'created_by' => Session::get('userId'),
                                     'created_at' => Carbon::now()
                                 );
-
                                 $storeStudentData = $studentElectivesRepository->store($data);
                             }
                         }
@@ -711,10 +702,9 @@
         // Update Student
         public function update($studentData, $id){
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $organizationId = $allSessions['organizationId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $studentData->id_institute;
+            $organizationId = $studentData->organization;
+            $academicYear = $studentData->id_academic;
 
             $studentRepository = new StudentRepository();
             $studentCustomRepository = new StudentCustomRepository();
@@ -1011,7 +1001,6 @@
         public function delete($id){
 
             $studentMappingRepository = new StudentMappingRepository();
-
             $allSessions = session()->all();
             $student = $studentMappingRepository->fetchStudent($id, $allSessions);
 
@@ -1057,19 +1046,15 @@
             return $neededColumns;
         }
 
-        // Deleted student records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $studentMappingRepository = new StudentMappingRepository();
             $institutionStandardService = new InstitutionStandardService();
             $genderRepository = new GenderRepository();
-
             $allStudent = array();
-            $allDeletedStudents = $studentMappingRepository->allDeleted();
+            $allDeletedStudents = $studentMappingRepository->allDeleted($allSessions);
             // dd($allDeletedStudents);
-
             if(count($allDeletedStudents) > 0){
-
                 foreach($allDeletedStudents as $key => $data){
 
                     $standard = $institutionStandardService->fetchStandardByUsingId($data->id_standard);
@@ -1133,12 +1118,10 @@
             return $output;
         }
 
-        // Restore all student records
-        public function restoreAll(){
+        public function restoreAll($allSessions){
 
             $studentMappingRepository = new StudentMappingRepository();
-
-            $students = $studentMappingRepository->restoreAll();
+            $students = $studentMappingRepository->restoreAll($allSessions);
 
             if($students){
                 $signal = 'success';
@@ -1153,8 +1136,7 @@
             return $output;
         }
 
-        // Get student based on subject
-        public function fetchStudentDetails($request){
+        public function fetchStudentDetails($request, $allSessions){
 
             $institutionSubjectRepository = new InstitutionSubjectRepository();
             $subjectTypeRepository = new SubjectTypeRepository();
@@ -1166,9 +1148,9 @@
             $subjectType = $subjectTypeRepository->fetchSubjectDetails($subjectData->id_subject);
 
             if($subjectType->label !='common'){
-                $student = $studentMappingRepository->fetchStudentUsingSubject($request);
+                $student = $studentMappingRepository->fetchStudentUsingSubject($request, $allSessions);
             }else{
-                $student = $studentMappingRepository->fetchStudentUsingStandard($request['standardId']);
+                $student = $studentMappingRepository->fetchStudentUsingStandard($request['standardId'], $allSessions);
             }
 
             foreach($student as $data){
@@ -1185,7 +1167,7 @@
         }
 
         // Get student based on standard and subject
-        public function getAllStudent($request){
+        public function getAllStudent($request, $allSessions){
 
             $subjectIds = $request['subjectId'];
             $standardIds = $request['standardId'];
@@ -1204,22 +1186,19 @@
 
                 $data['subjectId'] = $subjectId;
 
-                $subjectType = $institutionSubjectService->getSubjectLabel($subjectId);
+                $subjectType = $institutionSubjectService->getSubjectLabel($subjectId, $allSessions);
 
                 if($subjectType->label == 'common'){
-                    $students = $studentMappingRepository->getStudentOnStandard($data);
+                    $students = $studentMappingRepository->getStudentOnStandard($data, $allSessions);
                 }else{
-                    $students = $studentMappingRepository->getStudentOnSubject($data);
+                    $students = $studentMappingRepository->getStudentOnSubject($data, $allSessions);
                 }
                 // dd($students);
-                foreach($students as $details){
-
-                    $studentName = $studentMappingRepository->getFullName($details->name, $details->middle_name, $details->last_name);
+                foreach($students as $details) {
 
                     if(!in_array($details->id_student, $studentId)){
                         $studentId[] = $details->id_student;
                         $studentDetails[$index]['id_student'] = $details->id_student;
-                        //$studentDetails[$index]['name'] = $details->name;
                         $studentDetails[$index]['name'] = $studentName;
                     }
 
@@ -1283,7 +1262,6 @@
             $whole_arr = array_reverse(explode(",",$wholenum));
             krsort($whole_arr,1);
             $response_txt = "";
-
             foreach($whole_arr as $key => $i){
 
                 while(substr($i,0,1)=="0")
@@ -1314,7 +1292,6 @@
                     $response_txt .= " ".$ones[substr($no_of_dordr,1,1)];
                 }
             }
-
             return $response_txt;
         }
 
@@ -1459,3 +1436,4 @@
             return $studentDetails;
         }
     }
+?>

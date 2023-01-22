@@ -8,9 +8,8 @@
 
     class SubjectPartRepository implements SubjectPartRepositoryInterface{
 
-        public function all(){
-
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $idInstitution = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 

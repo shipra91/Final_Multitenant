@@ -29,9 +29,9 @@ class PromotionController extends Controller
         $promotionService = new PromotionService;
         $studentService = new StudentService;
 
-        $institutionAcademics = $promotionService->getAllData($idInstitution, $idAcademics);
-        $allStudents = $studentService->fetchPromotionElligibleStudents($request->standard);
-        $instituteBasedOnOrganization = $studentService->fetchStandardStudents($request->standard);
+        $institutionAcademics = $promotionService->getAllData($idInstitution, $idAcademics, $allSessions);
+        $allStudents = $studentService->fetchPromotionElligibleStudents($request->standard, $allSessions);
+        $instituteBasedOnOrganization = $studentService->fetchStandardStudents($request->standard, $allSessions);
         $institutions = $promotionService->allInstitution($idOrganization);
         
         return view ('Promotion/index', ['institutionAcademics' => $institutionAcademics, 'allStudents' => $allStudents, 'institutions' => $institutions])->with("page", "promotion");

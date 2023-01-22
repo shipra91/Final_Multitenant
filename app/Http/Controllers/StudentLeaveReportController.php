@@ -91,11 +91,11 @@ class StudentLeaveReportController extends Controller
 
         $institutionRepository = new InstitutionRepository();
         $studentLeaveReportService = new StudentLeaveReportService();
-
         $allSessions = session()->all();
+        
         $institutionId = $allSessions['institutionId'];
         $institute = $institutionRepository->fetch($institutionId);
-        $getReportData = $studentLeaveReportService->getReportData($request);
+        $getReportData = $studentLeaveReportService->getReportData($request, $allSessions);
         // dd($getReportData);
 
         return view('StudentLeaveManagement/StudentLeaveReportData', ['institute' => $institute, 'getReportData' => $getReportData])->with("page", "student_leave_report");

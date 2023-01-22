@@ -170,10 +170,10 @@
             return $output;
         }
 
-        public function fetchSubjectTypeDetails($idSubject){
+        public function fetchSubjectTypeDetails($idSubject, $allSessions){
             $subjectRepository = new SubjectRepository();
 
-            return $subjectRepository->fetchSubjectTypeDetails($idSubject);
+            return $subjectRepository->fetchSubjectTypeDetails($idSubject, $allSessions);
         }
     }
 

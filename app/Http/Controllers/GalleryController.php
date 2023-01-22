@@ -20,9 +20,11 @@ class GalleryController extends Controller
     public function index(Request $request)
     {
         $galleryService = new GalleryService();
+        $allSessions = session()->all();
+        
         //dd($galleryService->getAll());
-        if($request->ajax()){
-            $galleryData = $galleryService->getAll();
+        if ($request->ajax()) {
+            $galleryData = $galleryService->getAll($allSessions);
             return Datatables::of($galleryData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -57,8 +59,9 @@ class GalleryController extends Controller
     public function create()
     {
         $galleryService = new GalleryService();
+        $allSessions = session()->all();
 
-        $gallerydata = $galleryService->getGalleryData();
+        $gallerydata = $galleryService->getGalleryData($allSessions);
         //dd($gallerydata);
         return view('Gallery/addGallery', ['gallerydata' => $gallerydata])->with("page", "gallery");
     }
@@ -99,8 +102,9 @@ class GalleryController extends Controller
     public function show($id)
     {
         $galleryService = new GalleryService();
+        $allSessions = session()->all();
 
-        $gallerydata = $galleryService->getGalleryData();
+        $gallerydata = $galleryService->getGalleryData($allSessions);
         $selectedData = $galleryService->getGallerySelectedData($id);
         //dd($selectedData);
 
@@ -115,8 +119,9 @@ class GalleryController extends Controller
     public function edit($id)
     {
         $galleryService = new GalleryService();
+        $allSessions = session()->all();
 
-        $gallerydata = $galleryService->getGalleryData();
+        $gallerydata = $galleryService->getGalleryData($allSessions);
         $selectedData = $galleryService->getGallerySelectedData($id);
         //dd($selectedData);
 
@@ -193,10 +198,11 @@ class GalleryController extends Controller
     public function getDeletedRecords(Request $request){
 
         $galleryService = new GalleryService();
+        $allSessions = session()->all();
         //dd($galleryService->getDeletedRecords());
 
         if ($request->ajax()){
-            $deletedData = $galleryService->getDeletedRecords();
+            $deletedData = $galleryService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

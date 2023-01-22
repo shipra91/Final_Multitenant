@@ -60,18 +60,16 @@ class AuthController extends Controller
 
             $credentials = $request->only('username', 'password');
 
-            if(Auth::attempt($credentials)){
+            if (Auth::attempt($credentials)) {
 
                 if(Auth::check()){
-
-                    $staffCheckData = $staffRepository->userExist(Auth::user()->username);
-                    $studentCheckData = $studentRepository->userExist(Auth::user()->username);
+                    $staffCheckData = $staffRepository->userExist(Auth::user()->username, $institutionId);
+                    $studentCheckData = $studentRepository->userExist(Auth::user()->username, $institutionId);
 
                     $defaultAcademicYear = $institutionId = $organizationId = $roleId = 0;
                     $academicYearLabel = $role = $logo = $institutionName = "";
 
                     if($staffCheckData){
-
                         $roleId = $staffCheckData->id_role;
                         $institutteId = $staffCheckData->id_institute;
                         $organizationId = $staffCheckData->id_organization;
@@ -149,10 +147,12 @@ class AuthController extends Controller
                         'allInstitutions' => $allInstitutions,
                         'allUsers' => $allUsers
                     );
-                    Session::put($data);
 
+                    Session::put($data);
                     return redirect()->intended('dashboard')->withSuccess('Signed in');
+
                 }
+
             }
         }
 
@@ -186,18 +186,16 @@ class AuthController extends Controller
 
             $credentials = $request->only('username', 'password');
 
-            if(Auth::attempt($credentials)){
+            if (Auth::attempt($credentials)) {
 
                 if(Auth::check()){
-
-                    $staffCheckData = $staffRepository->userExist(Auth::user()->username);
-                    $studentCheckData = $studentRepository->userExist(Auth::user()->username);
-
+                    $staffCheckData = $staffRepository->userExist(Auth::user()->username, $institutionId);
+                    $studentCheckData = $studentRepository->userExist(Auth::user()->username, $institutionId);
+                    
                     $defaultAcademicYear = $institutionId = $organizationId = $roleId = 0;
                     $academicYearLabel = $role = $logo = $institutionName = "";
 
                     if($staffCheckData){
-
                         $roleId = $staffCheckData->id_role;
                         $institutteId = $staffCheckData->id_institute;
                         $organizationId = $staffCheckData->id_organization;
@@ -273,7 +271,6 @@ class AuthController extends Controller
                         $defaultAcademicYear = $academicData->idAcademicMapping;
                         $academicYearLabel = $academicData->name;
                     }
-
                     $institutionId = $institutteId;
                     $organizationId = $organizationId;
                     $logo = $institutionData->institution_logo;
@@ -294,7 +291,6 @@ class AuthController extends Controller
                         'allInstitutions' => $allUsers[0]['allInstitutions'],
                         'allUsers' => $allUsers
                     );
-
                     Session::put($data);
                     // return redirect()->intended('dashboard')->withSuccess('Signed in');
                     $signal = 'success';
@@ -309,7 +305,6 @@ class AuthController extends Controller
                 $signal = 'failure';
                 $msg = 'Invalid credential !';
             }
-
         }else{
             $signal = 'invalid_user';
             $msg = 'This number is not registered with us';
@@ -336,8 +331,8 @@ class AuthController extends Controller
 
         if(Auth::check()){
 
-            $totalStudent = $studentRepository->fetchStudentCount();
-            $totalStaff = $staffRepository->fetchStaffCount();
+            $totalStudent = $studentRepository->fetchStudentCount($allSessions);
+            $totalStaff = $staffRepository->fetchStaffCount($allSessions);
 
             return view('dashboard', ['totalStudent' => $totalStudent, 'totalStaff' => $totalStaff])->with("page", "dashboard");
         }
@@ -353,3 +348,4 @@ class AuthController extends Controller
         return Redirect('/');
     }
 }
+?>

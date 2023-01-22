@@ -36,9 +36,8 @@
             return Subject::find($id)->delete();
         }
 
-        public function fetchSubjectTypeDetails($idSubject){
-
-            $allSessions = session()->all();
+        public function fetchSubjectTypeDetails($idSubject, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
            // DB::enableQueryLog();

@@ -6,8 +6,8 @@
 
     class HomeworkRepository implements HomeworkRepositoryInterface{
 
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             
@@ -22,8 +22,8 @@
         public function fetch($id){
             return $homework = Homework::find($id);
         } 
-        public function fetchHomeworkUsingStaff($idStaff){
-            $allSessions = session()->all();
+        public function fetchHomeworkUsingStaff($idStaff, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             
@@ -32,8 +32,8 @@
             ->get();
         } 
 
-        public function fetchHomeworkByStandard($idStandard){
-            $allSessions = session()->all();
+        public function fetchHomeworkByStandard($idStandard, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             return $homework = Homework::where('id_institute', $institutionId)
@@ -50,15 +50,26 @@
             return $homework = Homework::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return Homework::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+            return Homework::where('id_institute', $institutionId)
+                            ->where('id_academic', $academicId)
+                            ->onlyTrashed()
+                            ->get();
         }        
 
         public function restore($id){
             return Homework::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return Homework::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+            return Homework::where('id_institute', $institutionId)
+                            ->where('id_academic', $academicId)
+                            ->onlyTrashed()
+                            ->restore();
         }
     }

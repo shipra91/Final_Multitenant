@@ -11,7 +11,7 @@
 
     class PromotionService {
 
-        public function getAllData($idInstitution, $idAcademics){
+        public function getAllData($idInstitution, $idAcademics, $allSessions){
 
             $academicYearMappingRepository = new AcademicYearMappingRepository();
             $academicYearRepository = new AcademicYearRepository();
@@ -20,7 +20,7 @@
 
             $mappedAcademicYears = $academicYearMappingRepository->getInstitutionAcademics($idInstitution);
             // dd($mappedAcademicYears);
-            $institutionStandards = $institutionStandardService->fetchStandard();
+            $institutionStandards = $institutionStandardService->fetchStandard($allSessions);
             // dd($institutionStandards);
             $allInstitutions = $institutionRepository->all();
             $selectedInstitution = $institutionRepository->fetch($idInstitution);

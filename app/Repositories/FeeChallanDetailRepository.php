@@ -16,9 +16,8 @@
             return FeeChallanDetail::create($data);
         }
 
-        public function fetch($idFeeCategory, $idFeeChallan){
+        public function fetch($idFeeCategory, $idFeeChallan, $allSessions){
             
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             return FeeChallanDetail::where('id_fee_category', $idFeeCategory)->where('id_fee_challan', $idFeeChallan)
                                     ->get();

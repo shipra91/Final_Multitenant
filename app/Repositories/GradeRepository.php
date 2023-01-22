@@ -7,9 +7,8 @@
 
     class GradeRepository implements GradeRepositoryInterface {
 
-        public function all(){
-
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -36,16 +35,20 @@
             return Grade::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return Grade::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return Grade::where('id_institute', $institutionId)->where('id_academic_year', $academicYear)->onlyTrashed()->get();
         }
 
         public function restore($id){
             return Grade::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return Grade::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return Grade::where('id_institute', $institutionId)->where('id_academic_year', $academicYear)->onlyTrashed()->restore();
         }
 
         public function getGrade($institutionId, $academicYear, $exam, $standardId, $totalPercentage){

@@ -9,13 +9,13 @@
     use DB;
 
     class CalenderService {
-        public function getCalenderData($request){
+        public function getCalenderData($request, $allSessions){
 
             $eventRepository = new EventRepository();
             $holidayRepository = new HolidayRepository();
 
-            $eventData = $eventRepository->getEventData($request);
-            $holidayData = $holidayRepository->getHolidayData($request); 
+            $eventData = $eventRepository->getEventData($request, $allSessions);
+            $holidayData = $holidayRepository->getHolidayData($request, $allSessions); 
             
             $response = array();
 

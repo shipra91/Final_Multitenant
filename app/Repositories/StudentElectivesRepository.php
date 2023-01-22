@@ -20,9 +20,8 @@
             return $studentElectives;
         }
 
-        public function fetchStudentSubjects($idStudent){
+        public function fetchStudentSubjects($idStudent, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 

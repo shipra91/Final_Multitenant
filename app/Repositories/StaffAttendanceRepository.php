@@ -9,8 +9,10 @@
 
     class StaffAttendanceRepository implements StaffAttendanceRepositoryInterface{
 
-        public function all(){
-            return StaffAttendance::all();
+        public function all($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return StaffAttendance::where('id_institute', $institutionId)->where('id_academic_year', $academicYear)->get();
         }
 
         public function store($data){
@@ -33,9 +35,8 @@
             return $data->save();
         }
 
-        public function fetchAttendanceDetail($request){
+        public function fetchAttendanceDetail($request, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -52,9 +53,8 @@
             return $attendanceDetails;
         }
 
-        public function fetchWorkingDays($idStaff){
+        public function fetchWorkingDays($idStaff, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -66,9 +66,8 @@
             return $workingDays;
         }
 
-        public function fetchPresentDays($idStaff){
+        public function fetchPresentDays($idStaff, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 

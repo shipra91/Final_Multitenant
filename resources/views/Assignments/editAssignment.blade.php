@@ -13,7 +13,10 @@
             <div class="container-fluid">
                 <div class="row">
                     <form method="POST" class="demo-form" id="assignmentForm">
-                        <input type="hidden" name="assignment_id" id="assignment_id" value="{{ $assignment['assignmentData']->id }}">
+                        <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                        <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                        <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                        <input type="hidden" name="assignment_id" id="assignment_id" value="{{$assignment['assignmentData']->id}}">
                         <div class="col-lg-8">
                             <div class="card">
                                 <div class="card-header card-header-icon" data-background-color="mediumaquamarine">

@@ -18,9 +18,10 @@ class ProjectSubmissionController extends Controller
     public function index(Request $request)
     {
         $projectSubmissionService = new ProjectSubmissionService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $projectSubmission = $projectSubmissionService->getAll();
+        if ($request->ajax()){
+            $projectSubmission = $projectSubmissionService->getAll($allSessions);
             return Datatables::of($projectSubmission)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -59,7 +60,6 @@ class ProjectSubmissionController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         }
-
         return view('ProjectSubmission/index')->with("page", "project_submission");
     }
 
@@ -90,7 +90,6 @@ class ProjectSubmissionController extends Controller
             $result['data'] = $projectSubmissionService->add($request);
 
         }catch(Exception $e){
-
             $result = [
                 "status" => 500,
                 "error" => $e->getMessage()
@@ -108,12 +107,13 @@ class ProjectSubmissionController extends Controller
      */
     public function show(Request $request)
     {
-        $projectSubmissionService = new ProjectSubmissionService();
-
         $studentProjectDetails = '';
+        $projectSubmissionService = new ProjectSubmissionService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $studentProjectDetails = $projectSubmissionService->getStudentProject(request()->route()->parameters['id']);
+        if ($request->ajax()){
+            $studentProjectDetails = $projectSubmissionService->getStudentProject(request()->route()->parameters['id'], $allSessions);
+
             return Datatables::of($studentProjectDetails)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -135,7 +135,6 @@ class ProjectSubmissionController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         }
-
         return view('Projects/viewStudentProject')->with("page", "project_submission");
     }
 
@@ -197,13 +196,17 @@ class ProjectSubmissionController extends Controller
     public function getProjectValuationDetails(Request $request){
 
         $projectSubmissionService = new ProjectSubmissionService();
-        return $projectSubmissionService->fetchProjectValuationDetails($request);
+        $allSessions = session()->all();
+
+        return $projectSubmissionService->fetchProjectValuationDetails($request, $allSessions);
 
     }
     public function getProjectVerifiedDetails(Request $request){
 
         $projectSubmissionService = new ProjectSubmissionService();
-        return $projectSubmissionService->fetchProjectVerifiedDetails($request);
+        $allSessions = session()->all();
+
+        return $projectSubmissionService->fetchProjectVerifiedDetails($request, $allSessions);
 
     }
 }

@@ -11,14 +11,14 @@
 
     class ClassTimeTableSettingsService {
 
-        public function getAllPeriodSettings(){
+        public function getAllPeriodSettings($allSessions){
 
             $periodSettingsRepository = new PeriodSettingsRepository();
             $institutionStandardService = new InstitutionStandardService();
 
             $periodSettingDetail = array();
 
-            $periodSettingData = $periodSettingsRepository->all();
+            $periodSettingData = $periodSettingsRepository->all($allSessions);
 
             foreach($periodSettingData as $index => $periodSetting){
                 $standardData = $institutionStandardService->fetchStandardByUsingId($periodSetting->id_standard);
@@ -63,19 +63,19 @@
         }
 
         // time table settings data
-        public function getTimeTableData(){
+        public function getTimeTableData($allSessions){
 
             $periodSettingsRepository = new PeriodSettingsRepository();
             $periodRepository = new PeriodRepository();
             $institutionStandardService = new InstitutionStandardService();
 
-            $periodSettings = $periodSettingsRepository->all();
-            $institutionStandards = $institutionStandardService->fetchStandard();
-            $periods = $periodRepository->all();
+            $periodSettings = $periodSettingsRepository->all($allSessions);
+            $institutionStandards = $institutionStandardService->fetchStandard($allSessions);
+            $periods = $periodRepository->all($allSessions);
             $arrayperiod = array();
 
-            $teachingCount = $periodRepository->periodCount("teaching");
-            $breakCount = $periodRepository->periodCount("break");
+            $teachingCount = $periodRepository->periodCount("teaching", $allSessions);
+            $breakCount = $periodRepository->periodCount("break", $allSessions);
 
             $output = array(
                 'institutionStandards' => $institutionStandards,
@@ -87,7 +87,7 @@
         }
 
         // period settings data
-        public function getPeriodSettings($request){
+        public function getPeriodSettings($request, $allSessions){
 
             $periodRepository = new PeriodRepository();
 
@@ -100,7 +100,7 @@
 
             $totalPeriods = $noOfTeachingPeriods + $noOfBreakPeriods;
 
-            $periods = $periodRepository->all();
+            $periods = $periodRepository->all($allSessions);
             $timetableData = array();
             $arrayPeriod = array();
 
@@ -163,10 +163,9 @@
 
             $periodSettingsRepository = new PeriodSettingsRepository();
             $classTimeTableSettingsRepository = new ClassTimeTableSettingsRepository();
-
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            
+            $institutionId = $timeTableData->id_institute;
+            $academicYear = $timeTableData->id_academic;
 
             // dd($timeTableData->standardId);
             $standardId = explode(',',$timeTableData->standardId);

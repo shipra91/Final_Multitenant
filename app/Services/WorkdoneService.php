@@ -15,7 +15,7 @@
     class WorkdoneService {
 
         // View workdone
-        public function getAll(){
+        public function getAll($allSessions){
 
             $workdoneRepository = new WorkdoneRepository();
             $workdoneAttachmentRepository = new WorkdoneAttachmentRepository();
@@ -24,21 +24,20 @@
             $staffService = new StaffService();
             $workdoneAttachments = array();
 
-            $allSessions = session()->all();
+            $idStaff = $allSessions['userId'];
             $role = $allSessions['role'];
-            // $role = 'staff';
-            //$idStaff = '8d4b19d4-b0de-44ec-a254-7aec2018e507';
+
             if($role == 'admin'  || $role == 'superadmin'){
                 $workdoneAttachment = $workdoneRepository->all();
             }else{
-                $workdoneAttachment = $workdoneRepository->fetchWorkdoneUsingStaff($idStaff);
+                $workdoneAttachment = $workdoneRepository->fetchWorkdoneUsingStaff($idStaff, $allSessions);
             }
 
             foreach($workdoneAttachment as  $details){
 
                 $standardName = $institutionStandardService->fetchStandardByUsingId($details->id_standard);
-                $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject);
-                $staffDetails = $staffService->find($details->id_staff);
+                $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject, $allSessions);
+                $staffDetails = $staffService->find($details->id_staff, $allSessions);
                 if($staffDetails){
                     $staffName = $staffDetails['name'];
                 }else{
@@ -72,13 +71,6 @@
         }
 
         // Get particular workdone
-        // public function find($id){
-        //     $workdoneRepository = new WorkdoneRepository();
-        //     $workdone = $workdoneRepository->fetch($id);
-        //     return $workdone;
-        // }
-
-        // Get particular workdone
         public function getWorkdoneSelectedData($idWorkdone){
 
             $workdoneRepository = new WorkdoneRepository();
@@ -110,31 +102,7 @@
             );
             //dd($output);
             return $output;
-        }
-
-        public function getDetails($data){
-
-            $institutionStandardService = new InstitutionStandardService();
-            $standardSubjectService = new StandardSubjectService();
-            $standardSubjectStaffMappingRepository = new StandardSubjectStaffMappingRepository();
-            $staffRepository = new StaffRepository();
-
-            $standardId = $data->id_standard;
-            $subjectId = $data->id_subject;
-
-            $staffs = array();
-
-            $workdoneAttachments['standard'] = $institutionStandardService->fetchStandard();
-            $workdoneAttachments['subject'] = $standardSubjectService->fetchStandardSubjects($standardId);
-            $staffSubjectDetails = $standardSubjectStaffMappingRepository->getStaffs($subjectId, $standardId);
-
-            foreach($staffSubjectDetails as $index => $details){
-                $staffs[$index] = $staffRepository->fetch($details->id_staff);
-            }
-
-            $workdoneAttachments['staff'] = $staffs;
-            return $workdoneAttachments;
-        }
+        }        
 
         // Insert workdone
         public function add($workdoneData){
@@ -143,9 +111,8 @@
             $workdoneAttachmentRepository = new WorkdoneAttachmentRepository();
             $uploadService = new UploadService();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $workdoneData->id_institute;
+            $academicYear = $workdoneData->id_academic;
 
             $workdoneClass = $workdoneData->workdone_class;
             $workdoneSubject = $workdoneData->workdone_subject;
@@ -226,6 +193,38 @@
             return $output;
         }
 
+        // Get particular workdone
+        public function find($id){
+            $workdoneRepository = new WorkdoneRepository();
+            $workdone = $workdoneRepository->fetch($id);
+            return $workdone;
+        }
+
+        // Get particular workdone detail
+        public function getDetails($data, $allSessions){
+
+            $institutionStandardService = new InstitutionStandardService();
+            $standardSubjectService = new StandardSubjectService();
+            $standardSubjectStaffMappingRepository = new StandardSubjectStaffMappingRepository();
+            $staffRepository = new StaffRepository();
+
+            $standardId = $data->id_standard;
+            $subjectId = $data->id_subject;
+
+            $staffs = array();
+
+            $workdoneAttachments['standard'] = $institutionStandardService->fetchStandard($allSessions);
+            $workdoneAttachments['subject'] = $standardSubjectService->fetchStandardSubjects($standardId, $allSessions);
+            $staffSubjectDetails = $standardSubjectStaffMappingRepository->getStaffs($subjectId, $standardId, $allSessions);
+
+            foreach($staffSubjectDetails as $index => $details){
+                $staffs[$index] = $staffRepository->fetch($details->id_staff);
+            }
+
+            $workdoneAttachments['staff'] = $staffs;
+            return $workdoneAttachments;
+        }
+
         // Update workdone
         public function update($workdoneData, $id){
 
@@ -233,9 +232,8 @@
             $workdoneRepository = new WorkdoneRepository();
             $workdoneAttachmentRepository = new WorkdoneAttachmentRepository();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $workdoneData->id_institute;
+            $academicYear = $workdoneData->id_academic;
 
             $workdoneClass = $workdoneData->workdone_class;
             $workdoneSubject = $workdoneData->workdone_subject;
@@ -316,7 +314,7 @@
         }
 
         // Get workdone details
-        public function fetchDetails($data){
+        public function fetchDetails($data, $allSessions){
 
             $workdoneAttachmentRepository = new WorkdoneAttachmentRepository();
             $institutionStandardService = new InstitutionStandardService();
@@ -328,14 +326,13 @@
             $id = $data->workdoneId;
             $loginType = $data->login_type;
 
-            $idStudent = '3c17e456-2e2c-4c0c-beed-e91b1101e573';
-            $data['id_student'] = $idStudent;
+            $data['id_student'] = $allSessions['userId'];
             $data['id_workdone'] = $id;
 
             $workdone = $workdoneRepository->fetch($id);
             $standardName = $institutionStandardService->fetchStandardByUsingId($workdone->id_standard);
-            $subjectName =  $institutionSubjectService->getSubjectName($workdone->id_subject);
-            $staffDetails = $staffService->find($workdone->id_staff);
+            $subjectName =  $institutionSubjectService->getSubjectName($workdone->id_subject, $allSessions);
+            $staffDetails = $staffService->find($workdone->id_staff, $allSessions);
             $date = Carbon::createFromFormat('Y-m-d', $workdone->date)->format('d/m/Y');
 
             $workdoneImageDetails = $workdoneAttachmentRepository->fetch($workdone->id);
@@ -378,11 +375,11 @@
         }
 
         // Download workdone attachment zip
-        public function downloadWorkdoneFiles($id, $type){
+        public function downloadWorkdoneFiles($id, $type, $allSessions){
 
             $workdoneAttachmentRepository = new WorkdoneAttachmentRepository();
 
-            $idStudent = '3c17e456-2e2c-4c0c-beed-e91b1101e573';
+            $idStudent = $allSessions['userId'];
             $data['id_student'] = $idStudent;
             $data['id_workdone'] = $id;
 
@@ -404,20 +401,20 @@
         }
 
         // Deleted workdone records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $institutionStandardService = new InstitutionStandardService();
             $institutionSubjectService = new InstitutionSubjectService();
             $staffService = new StaffService();
             $workdoneRepository = new WorkdoneRepository();
-            $workdoneData = $workdoneRepository->allDeleted();
+            $workdoneData = $workdoneRepository->allDeleted($allSessions);
             $workdoneDetails = array();
 
             foreach($workdoneData as $data){
 
                 $standardName = $institutionStandardService->fetchStandardByUsingId($data->id_standard);
-                $subjectName =  $institutionSubjectService->getSubjectName($data->id_subject);
-                $staffDetails = $staffService->find($data->id_staff);
+                $subjectName =  $institutionSubjectService->getSubjectName($data->id_subject, $allSessions);
+                $staffDetails = $staffService->find($data->id_staff, $allSessions);
                 $date = Carbon::createFromFormat('Y-m-d', $data->date)->format('d/m/Y');
 
                 $workdoneDetails[] =  array(
@@ -460,3 +457,4 @@
             return $output;
         }
     }
+?>

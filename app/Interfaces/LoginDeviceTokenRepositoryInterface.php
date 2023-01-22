@@ -7,7 +7,7 @@ Interface LoginDeviceTokenRepositoryInterface{
     public function store($data);
     public function fetch($id);
     public function update($data);
-    public function delete($id);
+    public function delete($id, $deviceToken);
 }
 
 ?>

@@ -26,6 +26,11 @@
                                 <div class="tab-content">
                                     <div class="tab-pane" id="about">
                                         <form method="POST" id="groupMemberDetailsForm">
+
+                                            <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                            <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                            <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                                             <div class="row">
                                                 <div class="col-lg-6 col-lg-offset-3">
                                                     <div class="form-group">

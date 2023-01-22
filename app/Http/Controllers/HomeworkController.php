@@ -24,13 +24,16 @@ class HomeworkController extends Controller
     public function index(Request $request)
     {
         $homeworkService = new HomeworkService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $homework = $homeworkService->getAll();
+        if ($request->ajax()){
+            $homework = $homeworkService->getAll($allSessions);
             return Datatables::of($homework)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
+
                         $btn = '';
+
                         if($row['status'] == 'file_found'){
                             $download = '<a href="/homework-download/'.$row['id'].'/staff_admin" rel="tooltip" title="Download Files" class="text-success" target="_blank"><i class="material-icons">file_download</i></a>';
                         }else {
@@ -44,6 +47,7 @@ class HomeworkController extends Controller
                             // $btn .='<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="View" class="text-info homeworkDetail"><i class="material-icons">visibility</i></a>';
 
                             $btn .= '<a href="/homework-detail/'.$row['id'].'" rel="tooltip" title="View" class="text-info"><i class="material-icons">visibility</i></a>';
+                            $btn .='<a href="javascript:void();" data-id="'.$row['id'].'" rel="tooltip" title="View" class="text-info homeworkDetail"><i class="material-icons">visibility</i></a>';
                         }
                         if(Helper::checkAccess('homework', 'view')){
                             $btn .= $download;
@@ -72,8 +76,9 @@ class HomeworkController extends Controller
     public function create()
     {
         $institutionStandardService = new InstitutionStandardService();
+        $allSessions = session()->all();
 
-        $standards = $institutionStandardService->fetchStaffStandard();
+        $standards = $institutionStandardService->fetchStaffStandard($allSessions);
         return view('Homework/addHomework', ['standards' => $standards])->with("page", "homework");
     }
 
@@ -129,10 +134,11 @@ class HomeworkController extends Controller
     public function edit($id)
     {
         $homeworkService = new HomeworkService();
+        $institutionStandardService = new InstitutionStandardService();
+        $allSessions = session()->all();
 
-        $homework = $homeworkService->getHomeworkSelectedData($id);
-        $homeworkDetails = $homeworkService->getDetails($homework['homeworkData']);
-        //dd($homeworkDetails);
+        $homework = $homeworkService->find($id);
+        $homeworkDetails = $homeworkService->getDetails($homework, $allSessions);
         return view('Homework/editHomework', ["homework" => $homework, 'homeworkDetails' => $homeworkDetails])->with("page", "homework");
     }
 
@@ -190,36 +196,39 @@ class HomeworkController extends Controller
         return response()->json($result, $result['status']);
     }
 
-    // Get all subject based on standard
-    public function getSubjects(Request $request)
-    {
+    public function getSubjects(Request $request){
+
         $homeworkService = new HomeworkService();
+        $allSessions = session()->all();
 
         $standardId = $request->standardId;
         // return $standardSubjectService->getStandardsSubject($standardId);
-        return $homeworkService->allSubject($standardId);
+        return $homeworkService->allSubject($standardId, $allSessions);
     }
 
-    public function getHomeworkDetails(Request $request)
-    {
+    public function getHomeworkDetails(Request $request){
+
         $homeworkService = new HomeworkService();
-        return $homeworkService->fetchDetails($request);
+        $allSessions = session()->all();
+
+        return $homeworkService->fetchDetails($request, $allSessions);
     }
 
-    // Download homework attachment zip
-    public function downloadHomeworkFiles($id, $type)
-    {
+    public function downloadHomeworkFiles($id, $type){
+
         $homeworkService = new HomeworkService();
-        return $homeworkService->downloadHomeworkFiles($id, $type);
+        $allSessions = session()->all();
+
+        return $homeworkService->downloadHomeworkFiles($id, $type, $allSessions);
     }
 
-    // Deleted homework records
-    public function getDeletedRecords(Request $request)
-    {
-        $homeworkService = new HomeworkService();
+    public function getDeletedRecords(Request $request){
 
-        if($request->ajax()){
-            $deletedData = $homeworkService->getDeletedRecords();
+        $homeworkService = new HomeworkService();
+        $allSessions = session()->all();
+
+        if ($request->ajax()){
+            $deletedData = $homeworkService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -260,24 +269,25 @@ class HomeworkController extends Controller
         return response()->json($result, $result['status']);
     }
 
-    // public function restoreAll(){
+    public function restoreAll(){
 
-    //     $homeworkService = new HomeworkService();
+        $homeworkService = new HomeworkService();
+        $allSessions = session()->all();
 
-    //     $result = ["status" => 200];
+        $result = ["status" => 200];
 
-    //     try{
+        try{
 
-    //         $result['data'] = $homeworkService->restoreAll();
+            $result['data'] = $homeworkService->restoreAll($allSessions);
 
-    //     }catch(Exception $e){
+        }catch(Exception $e){
 
-    //         $result = [
-    //             "status" => 500,
-    //             "error" => $e->getMessage()
-    //         ];
-    //     }
+            $result = [
+                "status" => 500,
+                "error" => $e->getMessage()
+            ];
+        }
 
-    //     return response()->json($result, $result['status']);
-    // }
+        return response()->json($result, $result['status']);
+    }
 }

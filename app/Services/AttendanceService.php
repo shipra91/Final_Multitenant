@@ -21,11 +21,10 @@
         }
 
         // View student attendance
-        public function getAll($request){
+        public function getAll($request, $allSessions){
 
             $attendanceRepository = new AttendanceRepository();
-
-            $attendanceDetails = $attendanceRepository->fetchAttendanceDetail($request);
+            $attendanceDetails = $attendanceRepository->fetchAttendanceDetail($request, $allSessions);
             // dd($attendanceDetails);
             $studentData = array();
 
@@ -34,7 +33,7 @@
                 $studentData[$key] = $attendanceDetail;
                 $attendanceStatus = array();
 
-                $attendanceStatusData = $attendanceRepository->fetchAttendanceStatus($attendanceDetail->id_student, $attendanceDetail->held_on, $attendanceDetail->id_standard);
+                $attendanceStatusData = $attendanceRepository->fetchAttendanceStatus($attendanceDetail->id_student, $attendanceDetail->held_on, $attendanceDetail->id_standard, $allSessions);
 
                 if($attendanceStatusData){
                     foreach($attendanceStatusData as $status){
@@ -45,14 +44,14 @@
                 }
                 $percentage = $totalWorkingDays = $totalPresentDays = 0;
 
-                $workingDays = $attendanceRepository->fetchWorkingDays($attendanceDetail->id);
+                $workingDays = $attendanceRepository->fetchWorkingDays($attendanceDetail->id, $allSessions);
                 // dd($workingDays);
 
                 if($workingDays){
                     $totalWorkingDays = $workingDays;
                 }
 
-                $presentDays = $attendanceRepository->fetchPresentDays($attendanceDetail->id);
+                $presentDays = $attendanceRepository->fetchPresentDays($attendanceDetail->id, $allSessions);
 
                 if($workingDays){
                     $totalPresentDays = $presentDays;
@@ -72,13 +71,13 @@
         }
 
         // Get all student attendance
-        public function getAttendanceStudent($request){
+        public function getAttendanceStudent($request, $allSessions){
 
             $attendanceRepository = new AttendanceRepository();
             $studentRepository = new StudentRepository();
             $studentMappingRepository = new StudentMappingRepository();
-
             $attendanceStatus = 'PRESENT';
+
             $standardId = $request->get('standard');
             $attendanceType = $request->get('attendanceType');
 
@@ -107,20 +106,17 @@
             $heldOn = Carbon::createFromFormat('d/m/Y', $heldOn)->format('Y-m-d');
 
             if($attendanceType === 'periodwise'){
-                if($subjectId != ''){
-                    $studentData = $studentMappingRepository->fetchStudentUsingSubject($requestData);
-                }else{
-                    $studentData = $studentMappingRepository->fetchSessionStudentUsingStandard($request);
-                }
+                $studentData = $studentMappingRepository->fetchStudentUsingSubject($requestData, $allSessions);
                 //dd($studentData);
             }else{
-                $studentData = $studentMappingRepository->fetchSessionStudentUsingStandard($request);
+                $studentData = $studentMappingRepository->fetchSessionStudentUsingStandard($request, $allSessions);
             }
-
+            // dd($studentData);
             foreach($studentData as $key => $student){
 
                 $studentDetails = $studentRepository->fetch($student->id_student);
-                $studentAttendance = $attendanceRepository->fetch($student->id_student, $heldOn, $standardId, $subjectId, $attendanceType, $periodSession);
+
+                $studentAttendance = $attendanceRepository->fetch($student->id_student, $heldOn, $standardId, $subjectId, $attendanceType, $periodSession, $allSessions);
 
                 if($studentAttendance){
                     $attendanceStatus = $studentAttendance->attendance_status;
@@ -137,7 +133,7 @@
         }
 
         // Insert student attendance
-        public function add($attendanceData){
+        public function add($attendanceData, $allSessions){
 
             $attendanceRepository = new AttendanceRepository();
             $heldOn = Carbon::createFromFormat('d/m/Y', $attendanceData->date)->format('Y-m-d');
@@ -155,7 +151,7 @@
 
                 $count++;
 
-                $check = $attendanceRepository->fetch($key, $heldOn, $standardId, $subjectId, $attendanceType, $periodSession);
+                $check = $attendanceRepository->fetch($key, $heldOn, $standardId, $subjectId, $attendanceType, $periodSession, $allSessions);
 
                 if(!$check){
 
@@ -206,3 +202,4 @@
             return $output;
         }
     }
+?>

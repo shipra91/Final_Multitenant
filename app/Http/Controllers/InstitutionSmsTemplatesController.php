@@ -21,8 +21,10 @@ class InstitutionSmsTemplatesController extends Controller
     {
         $SMSTemplateService = new SMSTemplateService(); 
         $institutionSMSTemplateService = new InstitutionSMSTemplateService();
-        $senderIdDetails = $SMSTemplateService->getInstitutionSenderId();
-        $moduleDetails = $institutionSMSTemplateService->getSmsModuleDetails();
+        $allSessions = session()->all();
+
+        $senderIdDetails = $SMSTemplateService->getInstitutionSenderId($allSessions);
+        $moduleDetails = $institutionSMSTemplateService->getSmsModuleDetails($allSessions);
         return view("InstitutionSmsTemplate/institutionSmsTemplateCreation",['senderIdDetails' => $senderIdDetails, 'moduleDetails'=> $moduleDetails])->with("page", "institution_sms_template");
     }
 
@@ -45,12 +47,13 @@ class InstitutionSmsTemplatesController extends Controller
     public function store(StoreInstitutionSmsTemplateRequest $request)
     {
         $institutionSMSTemplateService = new InstitutionSMSTemplateService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
             
-            $result['data'] = $institutionSMSTemplateService->add($request);    
+            $result['data'] = $institutionSMSTemplateService->add($request, $allSessions);    
 
         }catch(Exception $e){
             $result = [
@@ -125,7 +128,9 @@ class InstitutionSmsTemplatesController extends Controller
     public function getSmsTemplates(Request $request)
     {
         $SMSTemplateService = new SMSTemplateService(); 
-        return $SMSTemplateService->getSmsTemplatesUsingSenderId($request);
+        $allSessions = session()->all();
+
+        return $SMSTemplateService->getSmsTemplatesUsingSenderId($request, $allSessions);
     }
 
     public function getTemplatesDetails(Request $request)

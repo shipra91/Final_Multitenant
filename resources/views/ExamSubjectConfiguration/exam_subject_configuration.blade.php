@@ -20,6 +20,9 @@
                             <div class="card-content">
                                 <h4 class="card-title">Exam Subject Configuration</h4>
                                 <form method="POST" class="demo-form" id="examSubjectForm">
+                                    <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                    <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                    <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
                                     <div class="row">
                                         <div class="col-lg-3 col-lg-offset-0">
                                             <div class="form-group">

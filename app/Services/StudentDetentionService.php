@@ -1,6 +1,5 @@
 <?php
     namespace App\Services;
-
     //use App\Models\StudentMapping;
     use App\Repositories\StudentRepository;
     use App\Repositories\StudentDetentionRepository;
@@ -13,24 +12,22 @@
     class StudentDetentionService {
 
         // View student detention data
-        public function getAll(){
+        public function getAll($allSessions){
 
             $studentMappingRepository = new StudentMappingRepository();
             $institutionStandardService = new InstitutionStandardService();
 
+            $detainedStudents = $studentMappingRepository->fetchInstitutionDetainedStudents($allSessions);
             $arrayData = array();
-
-            $detainedStudents = $studentMappingRepository->fetchInstitutionDetainedStudents();
 
             foreach($detainedStudents as $key => $data){
 
                 $standard = $institutionStandardService->fetchStandardByUsingId($data->id_standard);
                 $studentName = $studentMappingRepository->getFullName($data->name, $data->middle_name, $data->last_name);
-
+            
                 $studentDetails = array(
                     'id_student'=>$data->id_student,
                     'UID'=>$data->egenius_uid,
-                    // 'name'=>$data->name,
                     'name'=>$studentName,
                     'class'=>$standard,
                     'remark'=>$data->remark,
@@ -43,18 +40,16 @@
             return $arrayData;
         }
 
-        // Get student details
-        public function getStudentDetails($term){
+        // Get students
+        public function getStudentDetails($term, $allSessions){
 
             $studentRepository = new StudentRepository();
-            $studentMappingRepository = new StudentMappingRepository();
             $institutionStandardService = new InstitutionStandardService();
 
             $studentDetails = array();
-            $students = $studentRepository->fetchStudents($term);
+            $students = $studentRepository->fetchStudents($term, $allSessions);
 
             foreach($students as $key => $studentData){
-                //dd($studentData);
 
                 $standard = $institutionStandardService->fetchStandardByUsingId($studentData->id_standard);
                 //dd($standard);
@@ -133,21 +128,18 @@
             return $output;
         }
 
-        // Get staff student details
-        public function getStaffStudentDetails($term){
+        public function getStaffStudentDetails($term, $allSessions){
 
             $studentRepository = new StudentRepository();
-            $studentMappingRepository = new StudentMappingRepository();
             $staffRepository = new StaffRepository();
             $institutionStandardService = new InstitutionStandardService();
 
             $details = array();
-            $students = $studentRepository->fetchStudents($term);
+            $students = $studentRepository->fetchStudents($term, $allSessions);
 
             foreach($students as $key => $studentData){
 
                 $standard = $institutionStandardService->fetchStandardByUsingId($studentData->id_standard);
-                //dd($standard);
                 $studentName = $studentMappingRepository->getFullName($studentData->name, $studentData->middle_name, $studentData->last_name);
                 $type = "STUDENT";
 
@@ -158,56 +150,16 @@
                 $details[] = $allValues;
             }
 
-            $staffs = $staffRepository->fetchStaffs($term);
+            $staffs = $staffRepository->fetchStaffs($term, $allSessions);
 
             foreach($staffs as $key => $staffData){
                 //dd($standard);
                 $standard = '-';
                 $staffName = $staffRepository->getFullName($staffData->name, $staffData->middle_name, $staffData->last_name);
                 $type = "STAFF";
-
                 $detail =  $staffName.' | '.$standard.' | '.$type.' | '.$staffData['staff_uid'];
 
                 $allValues = $detail."@".$staffData['id']."@".$staffName."@".$standard."@".$staffData['primary_contact_no']."@".$staffData['staff_uid']."@".$type;
-
-                $details[] = $allValues;
-            }
-
-            return $details;
-        }
-
-        public function getStaffStudentDetailsForMessageCenter($term){
-
-            $studentRepository = new StudentRepository();
-            $staffRepository = new StaffRepository();
-            $institutionStandardService = new InstitutionStandardService();
-
-            $details = array();
-
-            $students = $studentRepository->fetchStudents($term);
-
-            foreach($students as $key => $studentData){
-
-                $standard = $institutionStandardService->fetchStandardByUsingId($studentData->id_standard);
-                //dd($standard);
-                $type = "STUDENT";
-
-                $detail =  $studentData['name'].' | '.$standard.' | '.$type.' | '.$studentData['egenius_uid'].' | '.$studentData['usn'];
-
-                $allValues = $detail."@".$studentData['id']."@".$studentData['name']."@".$standard."@".$studentData['father_mobile_number']."@".$studentData['egenius_uid']."@".$type;
-
-                $details[] = $allValues;
-            }
-
-            $staffs = $staffRepository->fetchStaffs($term);
-
-            foreach($staffs as $key => $staffData){
-                //dd($standard);
-                $standard = '-';
-                $type = "STAFF";
-                $detail =  $staffData['name'].' | '.$standard.' | '.$type.' | '.$staffData['staff_uid'];
-
-                $allValues = $detail."@".$staffData['id']."@".$staffData['name']."@".$standard."@".$staffData['primary_contact_no']."@".$staffData['staff_uid']."@".$type;
 
                 $details[] = $allValues;
             }
@@ -225,7 +177,7 @@
             return $details;
         }
 
-        public function fetchStudentDetails($term, $details){
+        public function fetchStudentDetails($term, $details, $allSessions){
 
             $studentRepository = new StudentRepository();
             $institutionStandardService = new InstitutionStandardService();
@@ -233,9 +185,12 @@
             $studentDetails = array();
 
             if($details[2] != '' ){
-                $students = $studentRepository->getStudentBySubject($term, $details);
+              
+                $students = $studentRepository->getStudentBySubject($term, $details, $allSessions);
+
             }else{
-                $students = $studentRepository->getStudentByStandard($term, $details);
+               
+                $students = $studentRepository->getStudentByStandard($term, $details, $allSessions);
             }
 
             foreach($students as $key => $studentData){

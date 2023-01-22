@@ -20,6 +20,11 @@
                             <div class="card-content">
                                 <h4 class="card-title">Institution SMS Template </h4>
                                 <form method="POST" id="institutionSmsTemplateForm" enctype="multipart/form-data">
+                                                                            
+                                    <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                    <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                    <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                                     @php $count = 0; @endphp
 
                                     @foreach($moduleDetails['smsModules'] as $module)

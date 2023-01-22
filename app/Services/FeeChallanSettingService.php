@@ -13,14 +13,22 @@
     class FeeChallanSettingService{ 
         
         //GET ALL SETTINGS
+<<<<<<< HEAD
         public function getAll(){
+=======
+        public function getAll($allSessions){
+>>>>>>> main
             $feeChallanSettingRepository = new FeeChallanSettingRepository();
             $feeChallanSettingCategoryRepository = new FeeChallanSettingCategoryRepository();
             $feeCategoryRepository = new FeeCategoryRepository();
             $createFeeChallanRepository =  new CreateFeeChallanRepository();
             $feeChallanData = array();
             
+<<<<<<< HEAD
             $getResult = $feeChallanSettingRepository->all();
+=======
+            $getResult = $feeChallanSettingRepository->all($allSessions);
+>>>>>>> main
             foreach($getResult as $index => $data){
 
                 $feeCategory = $feeChallanSettingCategoryRepository->all($data->id);
@@ -37,7 +45,11 @@
                 
                 $feeChallanSettingCategory = substr($feeChallanSettingCategory, 0, -2);
 
+<<<<<<< HEAD
                 $feeChallanDetails = $createFeeChallanRepository->getChallanForChallanSetting($data->id);
+=======
+                $feeChallanDetails = $createFeeChallanRepository->getChallanForChallanSetting($data->id, $allSessions);
+>>>>>>> main
                 if(count($feeChallanDetails) > 0){
                     $deleteStatus = "hide";
                 }
@@ -59,9 +71,14 @@
         // ADD FEE RECEIPT SETTING
         public function add($challanSettingData){
 
+<<<<<<< HEAD
             $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
+=======
+            $institutionId = $challanSettingData->id_institute;
+            $academicId = $challanSettingData->id_academic;
+>>>>>>> main
             $count = 0;
 
             $feeChallanSettingRepository = new FeeChallanSettingRepository();
@@ -139,18 +156,30 @@
             return $output;
         }
         
+<<<<<<< HEAD
         public function getChallanFeeCategories(){
+=======
+        public function getChallanFeeCategories($allSessions){
+>>>>>>> main
             $feeMappingRepository = new FeeMappingRepository();
             $feeChallanSettingCategoryRepository = new FeeChallanSettingCategoryRepository();
             $existingFeeCategory = array();
 
+<<<<<<< HEAD
             $allChallanSettingCategories = $feeChallanSettingCategoryRepository->allChallanSettingCategory();
+=======
+            $allChallanSettingCategories = $feeChallanSettingCategoryRepository->allChallanSettingCategory($allSessions);
+>>>>>>> main
             
             foreach($allChallanSettingCategories as $feeCategory){
                 array_push($existingFeeCategory, $feeCategory->id_fee_category);
             }
             
+<<<<<<< HEAD
             $feeCategories = $feeMappingRepository->getReceiptSettingCategory($existingFeeCategory);
+=======
+            $feeCategories = $feeMappingRepository->getReceiptSettingCategory($existingFeeCategory, $allSessions);
+>>>>>>> main
             return $feeCategories;
         }
 

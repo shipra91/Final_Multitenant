@@ -20,13 +20,14 @@ class StudentDetentionController extends Controller
     public function index(Request $request)
     {
         $studentDetentionService = new StudentDetentionService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $detainedStudents = $studentDetentionService->getAll();
+            $detainedStudents = $studentDetentionService->getAll($allSessions);
             return Datatables::of($detainedStudents)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-                        $btn = '' ;
+                        $btn = '' ;     
                         if(Helper::checkAccess('detention', 'delete')){
                             $btn .= '<a href="javascript:void();" type="button" data-id="'.$row['id_student'].'" rel="tooltip" title="Delete" class="text-danger deleteDetainedStudents"><i class="material-icons">delete</i></a>';
                         }
@@ -146,9 +147,10 @@ class StudentDetentionController extends Controller
     public function getStudents(Request $request){
 
         $studentDetentionService = new StudentDetentionService;
+        $allSessions = session()->all();
 
         $term = $request->term;
-        $students = $studentDetentionService->getStudentDetails($term);
+        $students = $studentDetentionService->getStudentDetails($term, $allSessions);
         //dd($students);
 
         return $students;
@@ -158,9 +160,10 @@ class StudentDetentionController extends Controller
     public function getStaffsStudents(Request $request){
 
         $studentDetentionService = new StudentDetentionService;
+        $allSessions = session()->all();
 
         $term = $request->term;
-        $students = $studentDetentionService->getStaffStudentDetails($term);
+        $students = $studentDetentionService->getStaffStudentDetails($term, $allSessions);
         //dd($students);
 
         return $students;
@@ -170,9 +173,10 @@ class StudentDetentionController extends Controller
       public function getStaffsStudentsForMessageCenter(Request $request){
 
         $studentDetentionService = new StudentDetentionService;
+        $allSessions = session()->all();
 
         $term = $request->term;
-        $students = $studentDetentionService->getStaffStudentDetailsForMessageCenter($term);
+        $students = $studentDetentionService->getStaffStudentDetailsForMessageCenter($term, $allSessions);
         //dd($students);
 
         return $students;
@@ -181,11 +185,12 @@ class StudentDetentionController extends Controller
     public function fetchStudents(Request $request){
 
         $studentDetentionService = new StudentDetentionService;
+        $allSessions = session()->all();
 
         $term = $request->term;
         $details = $request->details;
 
-        $students = $studentDetentionService->fetchStudentDetails($term, $details);
+        $students = $studentDetentionService->fetchStudentDetails($term, $details, $allSessions);
         // dd($students);
 
         return $students;

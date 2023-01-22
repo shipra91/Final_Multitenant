@@ -8,10 +8,9 @@
 
     class VisitorManagementRepository implements VisitorManagementRepositoryInterface {
 
-        public function all($request){
+        public function all($request, $allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -63,7 +62,10 @@
             return $VisitorManagement = VisitorManagement::find($id)->delete();
         }
 
-        public function visitorReportData($request){
+        public function visitorReportData($request, $allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
 
             $status_type= $request->status_type;
             $visitorType= $request->visitorType;
@@ -75,21 +77,33 @@
             $visitorData = VisitorManagement::where('type', $visitorType)
                                             ->whereBetween('visiting_datetime', [$from_date, $to_date])
                                             ->whereIn('visiting_status', $status_type)
+                                            ->where('id_institute', $institutionId)
+                                            ->where('id_academic_year', $academicYear)
                                             ->get();
             // dd(\DB::getQueryLog());
             return $visitorData;
         }
 
-        public function allDeleted(){
-            return VisitorManagement::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return VisitorManagement::where('id_institute', $institutionId)
+                                    ->where('id_academic_year', $academicYear)
+                                    ->onlyTrashed()
+                                    ->get();
         }
 
         public function restore($id){
             return VisitorManagement::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return VisitorManagement::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return VisitorManagement::where('id_institute', $institutionId)
+                                    ->where('id_academic_year', $academicYear)
+                                    ->onlyTrashed()
+                                    ->restore();
         }
     }
 ?>

@@ -13,9 +13,8 @@
             
         }  
 
-        public function allReceiptSettingCategory(){
+        public function allReceiptSettingCategory($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

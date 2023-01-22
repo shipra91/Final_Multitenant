@@ -10,10 +10,10 @@ class ChallanRejectionReasonService {
 
     }
 
-    public function getAll() {
+    public function getAll($allSessions) {
 
         $challanRejectionReasonRepository = new ChallanRejectionReasonRepository();
-        $challanRejectionReasons = $challanRejectionReasonRepository->all();
+        $challanRejectionReasons = $challanRejectionReasonRepository->all($allSessions);
         foreach($challanRejectionReasons as $reason) {
             $rejectionReason[] = $reason->reason;
         }

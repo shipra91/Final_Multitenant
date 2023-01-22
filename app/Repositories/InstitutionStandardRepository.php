@@ -8,9 +8,8 @@
 
     class InstitutionStandardRepository implements InstitutionStandardRepositoryInterface{
 
-        public function all(){
+        public function all($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -27,9 +26,8 @@
             return InstitutionStandard::find($id);
         }
 
-        public function fetchStandard(){
+        public function fetchStandard($allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -66,9 +64,8 @@
             return  InstitutionStandardType::all();
         }
 
-        public function fetchStandardDetails($request){
+        public function fetchStandardDetails($request, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             $standardStream = explode('/', $request);
@@ -82,9 +79,8 @@
                                         ->get();
         }
 
-        public function fetchStandardGroupByCombination(){
-
-            $allSessions = session()->all();
+        public function fetchStandardGroupByCombination($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomFeeAssignHeading;
+use App\Services\CustomFeeAssignHeadingService;
 use Illuminate\Http\Request;
 
 class CustomFeeAssignHeadingController extends Controller

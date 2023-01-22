@@ -980,7 +980,11 @@
 
             var btn = $('#submit');
 
+<<<<<<< HEAD
             if($('#preadmissionForm').parsley().isValid()){
+=======
+            if ($('#preadmissionForm').parsley().isValid()){
+>>>>>>> main
 
                 $.ajax({
                     url: "/preadmission",

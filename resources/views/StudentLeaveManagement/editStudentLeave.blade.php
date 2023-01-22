@@ -13,6 +13,10 @@
             <div class="container-fluid">
                 <div class="row">
                     <form method="POST" id="leaveForm">
+                        <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                        <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                        <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+
                         <input type="hidden" name="leaveId" id="leaveId" class="form-control" value="{{$selectedData['applicationData']->id}}">
                         <div class="col-lg-8">
                             <div class="card">

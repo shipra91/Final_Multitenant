@@ -21,9 +21,10 @@ class EventController extends Controller
     public function index(Request $request)
     {
         $eventService = new EventService();
+        $allSessions = session()->all();
         //dd($eventService->getAll());
         if($request->ajax()){
-            $eventData = $eventService->getAll();
+            $eventData = $eventService->getAll($allSessions);
             return Datatables::of($eventData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -63,7 +64,9 @@ class EventController extends Controller
     public function create()
     {
         $eventService = new EventService();
-        $eventdata = $eventService->getEventData();
+        $allSessions = session()->all();
+
+        $eventdata = $eventService->getEventData($allSessions);
 
         return view('Events/events', ['eventdata' => $eventdata])->with("page", "event");
     }
@@ -77,12 +80,13 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $eventService = new EventService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $eventService->add($request);
+            $result['data'] = $eventService->add($request, $allSessions);
 
         }catch(Exception $e){
 
@@ -104,9 +108,10 @@ class EventController extends Controller
     public function show($id)
     {
         $eventService = new EventService();
+        $allSessions = session()->all();
 
-        $eventData = $eventService->getEventData();
-        $selectedData = $eventService->getEventSelectedData($id);
+        $eventData = $eventService->getEventData($allSessions);
+        $selectedData = $eventService->getEventSelectedData($id, $allSessions);
         // dd($selectedData);
         return view('Events/viewEvent', ['eventData' => $eventData, 'selectedData' => $selectedData])->with("page", "event");
     }
@@ -120,9 +125,10 @@ class EventController extends Controller
     public function edit($id)
     {
         $eventService = new EventService();
+        $allSessions = session()->all();
 
-        $eventData = $eventService->getEventData();
-        $selectedData = $eventService->getEventSelectedData($id);
+        $eventData = $eventService->getEventData($allSessions);
+        $selectedData = $eventService->getEventSelectedData($id, $allSessions);
         // dd($selectedData);
         return view('Events/editEvent', ['eventData' => $eventData, 'selectedData' => $selectedData])->with("page", "event");
     }
@@ -164,7 +170,6 @@ class EventController extends Controller
     public function destroy($id)
     {
         $eventService = new EventService();
-
         $result = ["status" => 200];
 
         try{
@@ -186,9 +191,10 @@ class EventController extends Controller
     public function getAllSubjects(Request $request)
     {
         $eventService = new EventService();
+        $allSessions = session()->all();
 
         $standardId = $request->standardId;
-        $subjects = $eventService->allSubject($standardId);
+        $subjects = $eventService->allSubject($standardId, $allSessions);
         //dd($subjects);
         return $subjects;
     }
@@ -210,8 +216,9 @@ class EventController extends Controller
     public function getAllStudent(Request $request)
     {
         $studentService = new StudentService();
+        $allSessions = session()->all();
 
-        $studentData = $studentService->getAllStudent($request);
+        $studentData = $studentService->getAllStudent($request, $allSessions);
 
         return $studentData;
     }
@@ -230,9 +237,10 @@ class EventController extends Controller
     public function getDeletedRecords(Request $request)
     {
         $eventService = new EventService();
+        $allSessions = session()->all();
         //dd($eventService->getDeletedRecords());
-        if($request->ajax()){
-            $deletedData = $eventService->getDeletedRecords();
+        if ($request->ajax()){
+            $deletedData = $eventService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

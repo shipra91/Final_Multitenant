@@ -21,13 +21,14 @@ class QuickAttendanceController extends Controller
     public function index(Request $request)
     {
         $quickAttendanceService = new QuickAttendanceService();
-        $attendanceData = $quickAttendanceService->getAttendanceData();
-
         $institutionStandardService = new InstitutionStandardService();
-        $standards = $institutionStandardService->fetchStaffStandard();
+        $allSessions = session()->all();
+
+        $attendanceData = $quickAttendanceService->getAttendanceData($allSessions);
+        $standards = $institutionStandardService->fetchStaffStandard($allSessions);
 
         if ($request->ajax()){
-            $quickAttendance = $quickAttendanceService->getAll();
+            $quickAttendance = $quickAttendanceService->getAll($allSessions);
             return Datatables::of($quickAttendance)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -68,12 +69,13 @@ class QuickAttendanceController extends Controller
     {
 
         $quickAttendanceService = new QuickAttendanceService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $quickAttendanceService->add($request);
+            $result['data'] = $quickAttendanceService->add($request, $allSessions);
 
         }catch(Exception $e){
 
@@ -96,9 +98,10 @@ class QuickAttendanceController extends Controller
     public function show(Request $request)
     {
         $quickAttendanceService = new QuickAttendanceService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $absentData = $quickAttendanceService->getAbsentStudents();
+            $absentData = $quickAttendanceService->getAbsentStudents($allSessions);
             return Datatables::of($absentData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -167,7 +170,9 @@ class QuickAttendanceController extends Controller
     public function getSubjectStandards(Request $request){
 
         $quickAttendanceService = new QuickAttendanceService();
-        $standards = $quickAttendanceService->getSubjectStandards($request);
+        $allSessions = session()->all();
+
+        $standards = $quickAttendanceService->getSubjectStandards($request, $allSessions);
         //dd($standards);
         return $standards;
     }

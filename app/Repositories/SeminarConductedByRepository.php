@@ -9,11 +9,11 @@
 
     class SeminarConductedByRepository implements SeminarConductedByRepositoryInterface{
 
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
-            $idStudent = 'd51eed06-0cec-4b39-9c6b-83ed7cd436b6';
+            $idStudent = $allSessions['userId'];
 
             return SeminarConductedBy::join('tbl_seminar', 'tbl_seminar.id','=', 'tbl_seminar_conducted_by.id_seminar')
                                     ->where('id_institute', $institutionId)

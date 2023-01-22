@@ -1188,6 +1188,7 @@ Route::group(['middleware'=>'auth:web'],function(){
         Route::post('circular/{id}', 'update');
         Route::delete('circular/{id}', 'destroy');
         // Route::get('circular-detail/{id}', 'getCircularDetails');
+        Route::post('all-circular', 'getRecipientCircular');
         Route::get('circular-download/{id}', 'downloadCircularFiles');
         Route::get('circular-deleted-records', 'getDeletedRecords');
         Route::get('circular/restore/{id}', 'restore');
@@ -1604,3 +1605,4 @@ Route::group(['middleware'=>'auth:web'],function(){
     });
 });
 
+?>

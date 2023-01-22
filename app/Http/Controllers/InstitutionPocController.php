@@ -8,16 +8,6 @@ use App\Services\InstitutionPocService;
 
 class InstitutionPocController extends Controller
 {
-    /**
-     *
-     * create Constructor to use the functions defined in the repositories
-     */
-    protected $institutionPocService;
-    public function __construct(InstitutionPocService $institutionPocService)
-    {
-        $this->institutionPocService = $institutionPocService;
-    }
-
 
     /**
      * Display a listing of the resource.
@@ -92,11 +82,13 @@ class InstitutionPocController extends Controller
      */
     public function destroy($id)
     {
+        $institutionPocService = new InstitutionPocService();
+
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->institutionPocService->delete($id);
+            $result['data'] = $institutionPocService->delete($id);
 
         }catch(Exception $e){
 

@@ -20,11 +20,12 @@ class FeeReceiptSettingController extends Controller
     {
         $feeReceiptSettingService = new FeeReceiptSettingService();
         $feeCategoryRepository = new FeeCategoryRepository();
+        $allSessions = session()->all();
 
-        $feeCategories = $feeReceiptSettingService->getReceiptFeeCategories();
+        $feeCategories = $feeReceiptSettingService->getReceiptFeeCategories($allSessions);
 
         if($request->ajax()){
-            $feeSettings = $feeReceiptSettingService->getAll();
+            $feeSettings = $feeReceiptSettingService->getAll($allSessions);
             return Datatables::of($feeSettings)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

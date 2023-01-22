@@ -5,8 +5,12 @@
 
     class QuickAttendanceRepository implements QuickAttendanceRepositoryInterface{
 
-        public function all(){
-            return Attendance::all();
+        public function all($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            return Attendance::where('id_institute', $institutionId)
+                                ->where('id_academic_year', $academicYear)
+                                ->get();
         }
 
         public function store($data){
@@ -29,9 +33,16 @@
             return $attendance = Attendance::find($id)->delete();
         }
 
-        public function fetchAbsentStudents(){
+        public function fetchAbsentStudents($allSessions){
             $date = date('Y-m-d');
-            return Attendance::where('attendance_status', 'ABSENT')->where('held_on', $date)->get();
+            $institutionId = $allSessions['institutionId'];
+            $academicYear = $allSessions['academicYear'];
+            
+            return Attendance::where('id_institute', $institutionId)
+                                ->where('id_academic_year', $academicYear)
+                                ->where('attendance_status', 'ABSENT')
+                                ->where('held_on', $date)
+                                ->get();
         }
     }
 ?>

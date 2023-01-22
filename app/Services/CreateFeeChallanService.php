@@ -22,8 +22,7 @@
 
         public function add($request) {
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
+            $institutionId = $request->id_institute;
             $academicId = $request->academicId;
 
             $feeAssignRepository = new FeeAssignRepository();
@@ -216,11 +215,11 @@
             //END CREATE CHALLAN
         }
 
-        public function getChallan($idAcademic, $idStudent) {
+        public function getChallan($idAcademic, $idStudent, $allSessions) {
           
             $challanDetails = array();
             $createFeeChallanRepository = new CreateFeeChallanRepository();
-            $challanDetail = $createFeeChallanRepository->fetch($idAcademic, $idStudent);
+            $challanDetail = $createFeeChallanRepository->fetch($idAcademic, $idStudent, $allSessions);
             foreach($challanDetail as $key => $details)
             {
                 $challanDetails[$key]['id'] = $details->id;
@@ -234,9 +233,8 @@
             return $challanDetails;
         }
 
-        public function approveChallan($approveData, $idFeeChallan) {
+        public function approveChallan($approveData, $idFeeChallan, $allSessions) {
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $approveDate = date('Y-m-d');
             $approveStatus = 'YES';
@@ -272,18 +270,18 @@
             $challanDetail->modified_by = Session::get('userId');
             $challanDetail->updated_at = Carbon::now();             
             $updateData = $createFeeChallanRepository->update($challanDetail);
-           
+
             $collectionCount = 0;
 
             if($updateData){
-                $allReceiptSettings = $feeReceiptSettingRepository->academicAllReceiptSetting($academicId);
+                $allReceiptSettings = $feeReceiptSettingRepository->academicAllReceiptSetting($academicId, $allSessions);
                 foreach($allReceiptSettings as $index => $receiptSetting){
                     $totalCategoryPayable = 0 ;
                     $totalSGST = 0 ;
                     $totalCGST = 0 ;
                     $totalGST = 0 ;
                     foreach($receiptSetting['setting_categories'] as $key => $idFeeCategory){
-                        $categoryFeeHeadings = $feeChallanDetailRepository->fetch($idFeeCategory, $idFeeChallan);
+                        $categoryFeeHeadings = $feeChallanDetailRepository->fetch($idFeeCategory, $idFeeChallan, $allSessions);
                         if(count($categoryFeeHeadings) > 0){
                             foreach ($categoryFeeHeadings as $paidHeading) {
                                 if(!empty($paidHeading->fee_amount)) {
@@ -298,7 +296,7 @@
 
                     if($totalCategoryPayable > 0){
                         //CHECKING FEE RECEIPT NUMBER
-                        $getMaxReceiptNo = $feeCollectionRepository->getMaxReceiptNo($receiptSetting['id_receipt_setting'], $academicId);
+                        $getMaxReceiptNo = $feeCollectionRepository->getMaxReceiptNo($receiptSetting['id_receipt_setting'], $academicId, $allSessions);
                         if($getMaxReceiptNo == ""){
                             $receiptNo = $receiptSetting['receipt_no_sequence'];
                         }else{
@@ -334,7 +332,7 @@
                             $feeReceiptId[] = $storeFeeCollection->id;
                             $collectionCount++;
                             foreach($receiptSetting['setting_categories'] as $key => $idFeeCategory){
-                                $categoryFeeHeadings = $feeChallanDetailRepository->fetch($idFeeCategory, $idFeeChallan);
+                                $categoryFeeHeadings = $feeChallanDetailRepository->fetch($idFeeCategory, $idFeeChallan, $allSessions);
                                 if(count($categoryFeeHeadings) > 0){
                                     foreach ($categoryFeeHeadings as $paidHeading) {
                                         if(!empty($paidHeading->fee_amount)) {

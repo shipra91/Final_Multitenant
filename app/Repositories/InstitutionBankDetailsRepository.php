@@ -5,8 +5,12 @@
 
     class InstitutionBankDetailsRepository implements InstitutionBankDetailsRepositoryInterface{
 
-        public function all(){
-            return InstitutionBankDetails::all();
+        public function all($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return InstitutionBankDetails::where('id_institute', $institutionId)->where('id_academic', $academicId)->get();
         }
 
         public function store($data){
@@ -25,16 +29,24 @@
             return InstitutionBankDetails::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return InstitutionBankDetails::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return InstitutionBankDetails::where('id_institute', $institutionId)->where('id_academic', $academicId)->onlyTrashed()->get();
         }
 
         public function restore($id){
             return InstitutionBankDetails::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return InstitutionBankDetails::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return InstitutionBankDetails::where('id_institute', $institutionId)->where('id_academic', $academicId)->onlyTrashed()->restore();
         }
     }
 ?>

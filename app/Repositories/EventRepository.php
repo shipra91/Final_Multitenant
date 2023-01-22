@@ -10,8 +10,8 @@
 
     class EventRepository implements EventRepositoryInterface{
 
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -41,20 +41,34 @@
             return $event = Event::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return Event::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+            
+            return Event::where('id_institute', $institutionId)
+                        ->where('id_academic', $academicId)
+                        ->onlyTrashed()
+                        ->get();
         }
 
         public function restore($id){
             return Event::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return Event::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+
+            return Event::where('id_institute', $institutionId)
+                        ->where('id_academic', $academicId)
+                        ->onlyTrashed()
+                        ->restore();
         }
 
-        public function fetchStandardSubjects($idStandard){
-            $allSessions = session()->all();
+        public function fetchStandardSubjects($idStandard, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -69,9 +83,8 @@
         }
 
         //FUNCTION TO CALENDER DATA
-        public function getEventData($request){
+        public function getEventData($request, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

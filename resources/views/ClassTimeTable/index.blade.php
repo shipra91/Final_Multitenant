@@ -43,7 +43,11 @@
                             </div>
                         </div>
                     </div>
+<<<<<<< HEAD
 
+=======
+                
+>>>>>>> main
                     @if(isset($timeTableSettingData))
                         @if(count($timeTableSettingData['subjects']) > 0)
                             <div class="row mt-5">
@@ -53,6 +57,12 @@
                                             <i class="material-icons">assessment</i>
                                         </div>
                                         <form method="POST" id="timeTableForm" enctype="multipart/form-data">
+<<<<<<< HEAD
+=======
+                                            <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                            <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                            <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+>>>>>>> main
                                             <input type="hidden" id="days_array" value="{{ implode(',',$timeTableSettingData['daysPeriodDetails']['days_array']) }}">
                                             <div class="card-content">
                                                 <h4 class="card-title">Add Time Table</h4>
@@ -67,8 +77,14 @@
                                                             @endforeach
                                                         </ul>
 
+<<<<<<< HEAD
                                                         <div class="tab-content" style="margin-top: 15px; padding: 0px 15px;">
                                                             <input type="hidden" id="standard_id" name="standard_id" value="{{ $_REQUEST['standard'] }}">
+=======
+                                                        <div class="tab-content">
+                                                            <input type="hidden" id="standard_id" name="standard_id" value="{{ $_REQUEST['standard'] }}">
+
+>>>>>>> main
                                                             @foreach ($timeTableSettingData['dayPeriodSettingData'] as $index => $periodSettingData)
                                                                 <input type="hidden" id="day_period_array_{{ $periodSettingData['days'] }}" value="{{ implode(',',$timeTableSettingData['daysPeriodDetails']['day_periods'][$periodSettingData['days']]) }}">
 
@@ -93,8 +109,13 @@
                                                                             <tbody>
                                                                                 @foreach ($periodSettingData['classTimeTableSettingData'] as $key => $timetableSetting)
                                                                                     <div class="row">
+<<<<<<< HEAD
                                                                                         <div class="col-md-1 pt-20 ">{{ $key + 1 }} <input type="hidden" name="periodId[{{ $periodSettingData['days'] }}][]" value="{{ $timetableSetting['id_period'] }}"></div>
                                                                                         <div class="col-md-2 pt-20 ">{{ ucwords($timetableSetting['period']) }}
+=======
+                                                                                        <div class="col-md-1">{{ $key + 1 }} <input type="hidden" name="periodId[{{ $periodSettingData['days'] }}][]" value="{{ $timetableSetting['id_period'] }}"></div>
+                                                                                        <div class="col-md-2">{{ ucwords($timetableSetting['period']) }}
+>>>>>>> main
                                                                                         </div>
                                                                                         <div class="col-md-9">
                                                                                             <div id="repeater_{{$periodSettingData['days']}}_{{$timetableSetting['id_period']}}">
@@ -104,7 +125,11 @@
                                                                                                         <div class="row row_child" id="section_{{$periodSettingData['days']}}_{{$timetableSetting['id_period']}}_{{$subKey + 1}}" data-id="{{$periodSettingData['days']}}_{{$timetableSetting['id_period']}}_{{$subKey + 1}}">
                                                                                                             <div class="col-md-4">
                                                                                                                 <div class="form-group">
+<<<<<<< HEAD
                                                                                                                     <select class="selectpicker subject" name="subject_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}[]" id="subject" data-size="5" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select">
+=======
+                                                                                                                    <select class="selectpicker subject" name="subject_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}[]" id="subject" data-size="5" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select Subject">
+>>>>>>> main
                                                                                                                         @foreach($timeTableSettingData['subjects'] as $subjectData)
                                                                                                                             <option value="{{ $subjectData['id'] }}" @if($subjectData['id'] == $subject)) {{ "selected" }} @endif>{{ $subjectData['name'] }}</option>
                                                                                                                         @endforeach
@@ -113,7 +138,11 @@
                                                                                                             </div>
                                                                                                             <div class="col-md-4">
                                                                                                                 <div class="form-group">
+<<<<<<< HEAD
                                                                                                                     <select class="selectpicker staff" name="staff_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}_{{++$subKey}}[]" id="staff" data-size="3" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select" data-actions-box="true" multiple>
+=======
+                                                                                                                    <select class="selectpicker staff" name="staff_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}_{{++$subKey}}[]" id="staff" data-size="3" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select Teacher" data-actions-box="true" multiple>
+>>>>>>> main
                                                                                                                     @foreach ($timetableSetting['all_staff'][$subject] as $staff)
                                                                                                                         <option value="{{ $staff['id'] }}"  @if(in_array($staff['id'], $timetableSetting['selected_staff'][$subject])) {{ "selected" }} @endif> {{ $staff['name'] }} - {{ $staff['display_name'] }} ({{ $staff['subject_type'] }}) </option>
                                                                                                                     @endforeach
@@ -122,7 +151,11 @@
                                                                                                             </div>
                                                                                                             <div class="col-md-3">
                                                                                                                 <div class="form-group">
+<<<<<<< HEAD
                                                                                                                     <select class="selectpicker room" name="room_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}[]" id="room" data-size="3" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select" data-actions-box="true">
+=======
+                                                                                                                    <select class="selectpicker room" name="room_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}[]" id="room" data-size="3" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select Room" data-actions-box="true">
+>>>>>>> main
                                                                                                                         @foreach ($roomData as $room)
                                                                                                                             <option value="{{ $room['id'] }}" @if(in_array($room['id'], $timetableSetting['selected_room'][$subject])) {{ "selected" }} @endif> {{ $room['display_name'] }} </option>
                                                                                                                         @endforeach
@@ -137,12 +170,20 @@
                                                                                                             </div>
                                                                                                             @endif
                                                                                                         </div>
+<<<<<<< HEAD
+=======
+                                                                                                    
+>>>>>>> main
                                                                                                     @endforeach
                                                                                                 @else
                                                                                                     <div class="row row_child" id="section_{{$periodSettingData['days']}}_{{$timetableSetting['id_period']}}_1" data-id="{{$periodSettingData['days']}}_{{$timetableSetting['id_period']}}_1">
                                                                                                         <div class="col-md-4">
                                                                                                             <div class="form-group">
+<<<<<<< HEAD
                                                                                                                 <select class="selectpicker subject" name="subject_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}[]" id="subject" data-size="5" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select">
+=======
+                                                                                                                <select class="selectpicker subject" name="subject_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}[]" id="subject" data-size="5" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select Subject">
+>>>>>>> main
                                                                                                                     @foreach($timeTableSettingData['subjects'] as $subjectData)
                                                                                                                         <option value="{{ $subjectData['id'] }}">{{ $subjectData['name'] }}</option>
                                                                                                                     @endforeach
@@ -151,14 +192,23 @@
                                                                                                         </div>
                                                                                                         <div class="col-md-4">
                                                                                                             <div class="form-group">
+<<<<<<< HEAD
                                                                                                                 <select class="selectpicker staff" name="staff_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}_1[]" id="staff" data-size="3" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select" data-actions-box="true" multiple>
 
+=======
+                                                                                                                <select class="selectpicker staff" name="staff_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}_1[]" id="staff" data-size="3" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select Teacher" data-actions-box="true" multiple>
+                                                                                                               
+>>>>>>> main
                                                                                                                 </select>
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div class="col-md-3">
                                                                                                             <div class="form-group">
+<<<<<<< HEAD
                                                                                                                 <select class="selectpicker room" name="room_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}[]" id="room" data-size="3" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select" data-actions-box="true">
+=======
+                                                                                                                <select class="selectpicker room" name="room_{{ $periodSettingData['days'] }}_{{ $timetableSetting['id_period'] }}[]" id="room" data-size="3" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select Room" data-actions-box="true">
+>>>>>>> main
                                                                                                                     @foreach ($roomData as $room)
                                                                                                                         <option value="{{ $room['id'] }}"> {{ $room['display_name'] }} </option>
                                                                                                                     @endforeach
@@ -217,10 +267,16 @@
         });
 
         // Get subject based on standard selection
+<<<<<<< HEAD
         function getSubjects(standardId){
 
             var retVal;
 
+=======
+        
+        function getSubjects(standardId){
+            var retVal;
+>>>>>>> main
             $.ajax({
                 url: "/assignment-subjects",
                 type: "POST",
@@ -230,6 +286,7 @@
                     retVal = data;
                 }
             });
+<<<<<<< HEAD
 
             return retVal;
         }
@@ -310,6 +367,84 @@
 
         // Remove timetable
         $(document).on('click', '.remove_button', function(event){
+=======
+            return retVal;
+        }
+
+        var days_array = $('#days_array').val();
+        const daysArray = days_array.split(",");
+        //console.log(daysArray);
+        daysArray.forEach(function(day) {
+            var day_period_array = $('#day_period_array_'+day).val();
+            const dayPeriodArray = day_period_array.split(",");
+            //console.log(dayPeriodArray);
+            dayPeriodArray.forEach(function(periodId) {
+                
+                $(document).on('click', '#add_more_' + day + '_'+ periodId + '', function(){
+                    var count = $('#totalCount_'+ day + '_'+ periodId + '').val();
+                // console.log(count);
+                    var html = '';
+                    count++;
+               
+                    html += '<div class="row row_child" id="section_'+ day + '_'+ periodId + '_' + count + '" data-id="' + day + '_'+ periodId + '_' + count + '">';
+                    html += '<div class="col-md-4">';
+                    html += '<div class="form-group">';
+                    html += '<select class="selectpicker subject" name="subject_'+ day +'_'+ periodId +'[]" id="subject" data-size="5" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select Subject" data-actions-box="true" >';
+                        var subjectResult = getSubjects($("#standard").val());
+                        // console.log('d'+result);
+                        $.map(subjectResult, function(item, index){
+                            var subject_type = '';
+                            if(item.subject_type === "PRACTICAL"){ 
+                                subject_type = ' - ' + item.subject_type;
+                            }else{
+                                subject_type = '';
+                            }
+                            html += '<option value="' + item.id_institution_subject +
+                                '">' + item.display_name + '' + subject_type + '</option>';
+                        });
+                    
+                    html += '</select>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    html += '<div class="col-md-4">';
+                    html += '<div class="form-group">';
+                    html += '<select class="selectpicker staff" name="staff_'+ day +'_'+ periodId +'_'+count+'[]" id="staff" data-size="3" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select Teacher" data-actions-box="true" multiple>';
+                  
+                    html += '</select>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    html += '<div class="col-md-3">';
+                    html += '<div class="form-group">';
+                    html += '<select class="selectpicker room" name="room_'+ day +'_'+ periodId +'[]" id="room" data-size="3" data-style="select-with-transition" data-live-search="true" data-selected-text-format="count > 1" title="Select Room" data-actions-box="true">';
+                    <?php foreach ($roomData as $room){?>
+                    html += '<option value="<?php echo $room['id'];?>"> <?php echo $room['display_name'];?> </option>';
+                    <?php } ?>
+                    html += '</select>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    html += '<div class="col-md-1">';
+                    html += '<div class="form-group">';
+                    html += '<button type="button" id="' + day + '_'+ periodId + '_' + count + '" class="btn btn-danger btn-xs remove_button"><i class="material-icons">highlight_off</i></button>';
+                    html += '</div>';
+                    html += '</div>';
+                    html += '</div>';
+
+                    $('#repeater_' + day + '_'+ periodId + '').append(html);
+                    $("#totalCount_" + day + '_'+ periodId + "").val(count);
+                    $(".subject").selectpicker('refresh');
+                    $(".staff").selectpicker('refresh');
+                    $(".room").selectpicker('refresh');
+            
+                });
+            });
+        });
+
+         // Remove semester/trimester mapping
+         $(document).on('click', '.remove_button', function(event){
+>>>>>>> main
             event.preventDefault();
 
             var id = $(this).attr('id');
@@ -319,7 +454,11 @@
             // console.log('before remove' + totalCount);
             $(this).closest('div #section_' + id + '').remove();
             totalCount--;
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> main
             // console.log('remove' + totalCount);
             $("#totalCount_" + dayPeriod + "").val(totalCount);
         });
@@ -336,7 +475,13 @@
                 type:"POST",
                 data: {subjectId : subjectId, standardId : standardId },
                 success: function(data){
+<<<<<<< HEAD
                     var options = '';
+=======
+
+                    var options = '';
+
+>>>>>>> main
                     $.map(data, function(item, index){
                         options += '<option value="'+item.id+'">'+item.name+' - '+item.display_name+' ('+item.subject_type+')</option>';
                     });
@@ -350,11 +495,19 @@
             triggerAfterFailure: 'input change focusout changed.bs.select'
         });
 
+<<<<<<< HEAD
         // Save timetable
         $('body').delegate('#timeTableForm', 'submit', function(e){
             e.preventDefault();
 
             var btn=$('#submit');
+=======
+        // Save time table
+        $('body').delegate('#timeTableForm', 'submit', function(e){
+            e.preventDefault();
+            // alert();
+            var btn=$('#submit');           
+>>>>>>> main
 
             $.ajax({
                 url:"{{url('/class-time-table')}}",

@@ -24,32 +24,29 @@
 
     class EventService {
 
-        // Get event data
-        public function getEventData(){
+        // Event data
+        public function getEventData($allSessions){
 
             $staffCategoryRepository = new StaffCategoryRepository();
             $staffSubCategoryRepository = new StaffSubCategoryRepository();
             $institutionStandardService = new InstitutionStandardService();
             $standardSubjectService = new StandardSubjectService();
+            $standardIds = array();
             $staffRepository = new StaffRepository();
 
-            $standardIds = array();
             $staffCategory = $staffCategoryRepository->all();
             $staffSubCategory = $staffSubCategoryRepository->all();
-            $institutionStandards = $institutionStandardService->fetchStandard();
-            $teachingStaffs = $staffRepository->getTeachingStaff();
-            //dd($teachingStaffs);
-
+            $institutionStandards = $institutionStandardService->fetchStandard($allSessions);
+            $teachingStaffs = $staffRepository->getTeachingStaff($allSessions);
             foreach($teachingStaffs as $key => $staff){
                 $allStaff[$key] = $staff;
                 $allStaff[$key]['name'] = $staffRepository->getFullName($staff['name'], $staff['middle_name'], $staff['last_name']);
             }
-
             foreach($institutionStandards as $institutionStandard){
                 array_push($standardIds, $institutionStandard['institutionStandard_id']);
             }
 
-            $standardSubjects = $standardSubjectService->getStandardsSubject($standardIds);
+            $standardSubjects = $standardSubjectService->getStandardsSubject($standardIds, $allSessions);
 
             $output = array(
                 'staffCategory' => $staffCategory,
@@ -63,23 +60,23 @@
         }
 
         // Get subjects based on standard
-        public function allSubject($idStandard){
+        public function allSubject($idStandard, $allSessions){
 
             $eventRepository = new EventRepository();
-            $allSubjects = $eventRepository->fetchStandardSubjects($idStandard);
+            $allSubjects = $eventRepository->fetchStandardSubjects($idStandard, $allSessions);
             // dd($allSubjects);
             return $allSubjects;
         }
 
         // View event
-        public function getAll(){
+        public function getAll($allSessions){
 
             $eventRepository = new EventRepository();
             $eventRecipientRepository = new EventRecipientRepository();
             $eventAttachmentRepository = new EventAttachmentRepository();
 
             $eventDetail = array();
-            $eventData = $eventRepository->all();
+            $eventData = $eventRepository->all($allSessions);
 
             foreach($eventData as $key => $event){
 
@@ -111,7 +108,7 @@
         }
 
         // Insert event
-        public function add($eventData){
+        public function add($eventData, $allSessions){
 
             $eventRepository = new EventRepository();
             $eventAttachmentRepository = new EventAttachmentRepository();
@@ -121,9 +118,8 @@
             $standardSubjectRepository = new StandardSubjectRepository();
             $uploadService = new UploadService();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $eventData->id_institute;
+            $academicYear = $eventData->id_academic;
 
             $eventName = $eventData->eventName;
             $eventStartDate = Carbon::createFromFormat('d/m/Y', $eventData->eventStartDate)->format('Y-m-d');
@@ -236,7 +232,7 @@
 
                                     foreach($eventData->subject as $subject){
 
-                                        $data = $standardSubjectRepository->findStandardSubject($standard, $subject);
+                                        $data = $standardSubjectRepository->findStandardSubject($standard, $subject, $allSessions);
 
                                         if($data){
                                             $applicableTo = array(
@@ -292,7 +288,7 @@
         }
 
         // Get particular event
-        public function getEventSelectedData($idEvent){
+        public function getEventSelectedData($idEvent, $allSessions){
 
             $eventRepository = new EventRepository();
             $eventApplicableToRepository = new EventApplicableToRepository();
@@ -354,7 +350,7 @@
                             array_push($selectedStaffData, $staffId['id_recipient']);
                         }
 
-                        $allStaffs = $staffRepository->getStaffOnCategoryAndSubcategory($selectedStaffCategory, $selectedStaffSubCategory);
+                        $allStaffs = $staffRepository->getStaffOnCategoryAndSubcategory($selectedStaffCategory, $selectedStaffSubCategory, $allSessions);
 
                     }else{
 
@@ -375,7 +371,7 @@
                             'standardId' => $selectedStudentStandard
                         );
 
-                        $allStudents = $studentService->getAllStudent($requestData);
+                        $allStudents = $studentService->getAllStudent($requestData, $allSessions);
 
                         $selectedStudents = $eventRecipientRepository->eventRecepients($idEvent, $recepientType->recipient_type);
 
@@ -475,7 +471,6 @@
 
                             // Applicable to
                             if(isset($eventData->staffCategory)){
-
                                 foreach($eventData->staffCategory as $staffCategory){
 
                                     foreach($eventData->staffSubcategory as $staffSubcategory){
@@ -500,7 +495,6 @@
 
                                 // Recipient
                                 if(isset($eventData->staff)){
-
                                     foreach($eventData->staff as $index => $staff){
 
                                         $data = array(
@@ -520,7 +514,6 @@
 
                             // Applicable to
                             if(isset($eventData->standard)){
-
                                 foreach($eventData->standard as $standard){
 
                                     foreach($eventData->subject as $subject){
@@ -542,7 +535,6 @@
                                 }
 
                                 if(isset($eventData->student)){
-
                                     foreach($eventData->student as $index => $student){
 
                                         $data = array(
@@ -618,12 +610,12 @@
         }
 
         // Deleted event records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $eventRepository = new EventRepository();
             $eventRecipientRepository = new EventRecipientRepository();
 
-            $eventData = $eventRepository->allDeleted();
+            $eventData = $eventRepository->allDeleted($allSessions);
             $eventDetail = array();
 
             foreach($eventData as $key => $event){

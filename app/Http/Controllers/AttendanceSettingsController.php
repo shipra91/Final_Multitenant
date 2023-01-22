@@ -53,10 +53,12 @@ class AttendanceSettingsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    { 
         $attendanceSettingsService = new AttendanceSettingsService();
-        $settingsDetails = $attendanceSettingsService->getAttendanceData();
-     
+        $allSessions = session()->all();
+        
+        $settingsDetails = $attendanceSettingsService->getAttendanceData($allSessions);
+
         return view('AttendanceSettings/attendanceSettings', ["settingsDetails" => $settingsDetails])->with("page", "attendance_setting");
     }
 
@@ -177,9 +179,10 @@ class AttendanceSettingsController extends Controller
 
         $attendanceSettingsService = new AttendanceSettingsService();
         //dd($attendanceSettingsService->getDeletedRecords());
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $deletedData = $attendanceSettingsService->getDeletedRecords();
+            $deletedData = $attendanceSettingsService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

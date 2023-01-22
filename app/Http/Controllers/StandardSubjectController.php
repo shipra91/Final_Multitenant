@@ -26,10 +26,11 @@ class StandardSubjectController extends Controller
         $standardSubjectService =  new StandardSubjectService();
         $institutionSubjectService =  new InstitutionSubjectService();
         $subjectService =  new SubjectService();
+        $allSessions = session()->all();
 
         if($request->ajax()) {
 
-            $standardSubjects = $standardSubjectService->all(); 
+            $standardSubjects = $standardSubjectService->all($allSessions); 
             
             return Datatables::of($standardSubjects)
                     ->addIndexColumn()
@@ -47,8 +48,8 @@ class StandardSubjectController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         }
-        $standardDetails = $institutionStandardService->fetchStandard();
-        $subjectDetails = $institutionSubjectService->getSubjectWithType();
+        $standardDetails = $institutionStandardService->fetchStandard($allSessions);
+        $subjectDetails = $institutionSubjectService->getSubjectWithType($allSessions);
         return view('SubjectStandardMapping/subjectStandardMapping', ["standardDetails" => $standardDetails, "subjectDetails" => $subjectDetails])->with("page", "standard_subject");
     }
 
@@ -152,10 +153,12 @@ class StandardSubjectController extends Controller
     { 
         $standardSubjectService =  new StandardSubjectService();
         $feeTypeService = new FeeTypeService();
+        $allSessions = session()->all();
+
         $standardId = $request['id'];
         $standardSubjectDetails =  array();
-        $subject = $standardSubjectService->fetchSubject($standardId);
-        $feeType = $feeTypeService->getStandardFeeTypeDetails($standardId);
+        $subject = $standardSubjectService->fetchSubject($standardId, $allSessions);
+        $feeType = $feeTypeService->getStandardFeeTypeDetails($standardId, $allSessions);
 
         $standardSubjectDetails['subject'] = $subject;
         $standardSubjectDetails['fee_type'] = $feeType;

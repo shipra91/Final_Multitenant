@@ -26,7 +26,7 @@
     class AssignmentService {
 
         // Get all subjects
-        public function allSubject($idStandard){
+        public function allSubject($idStandard, $allSessions){
 
             $standardSubjectRepository = new StandardSubjectRepository();
             $standardSubjectStaffMappingRepository = new StandardSubjectStaffMappingRepository();
@@ -35,14 +35,13 @@
             $subjectRepository = new SubjectRepository();
             $subjectDetails=[];
 
-            $allSessions = session()->all();
             $role = $allSessions['role'];
             $idStaff = $allSessions['userId'];
 
             if($role == 'admin' || $role == 'superadmin'){
-                $allSubjects = $standardSubjectRepository->fetchStandardSubjects($idStandard);
+                $allSubjects = $standardSubjectRepository->fetchStandardSubjects($idStandard, $allSessions);
             }else{
-                $allSubjects = $standardSubjectStaffMappingRepository->fetchStandardStaffSubjects($idStandard, $idStaff);
+                $allSubjects = $standardSubjectStaffMappingRepository->fetchStandardStaffSubjects($idStandard, $idStaff, $allSessions);
             }
 
             foreach($allSubjects as $key => $subject){
@@ -79,31 +78,29 @@
         }
 
         // Get all assignment
-        public function getAll(){
+        public function getAll($allSessions){
 
             $assignmentRepository = new AssignmentRepository();
             $assignmentDetailRepository = new AssignmentDetailRepository();
             $institutionStandardService = new InstitutionStandardService();
             $institutionSubjectService = new InstitutionSubjectService();
             $staffService = new StaffService();
-
             $assignmentDetails = array();
-
-            $allSessions = session()->all();
+            
             $role = $allSessions['role'];
             $idStaff = $allSessions['userId'];
 
             if($role == 'admin' || $role == 'superadmin'){
-                $assignmentDetail = $assignmentRepository->all();
+                $assignmentDetail = $assignmentRepository->all($allSessions);
             }else{
-                $assignmentDetail = $assignmentRepository->fetchAssignmentUsingStaff($idStaff);
+                $assignmentDetail = $assignmentRepository->fetchAssignmentUsingStaff($idStaff, $allSessions);
             }
 
             foreach($assignmentDetail as  $details){
 
                 $standardName = $institutionStandardService->fetchStandardByUsingId($details->id_standard);
-                $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject);
-                $staffDetails = $staffService->find($details->id_staff);
+                $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject, $allSessions);
+                $staffDetails = $staffService->find($details->id_staff, $allSessions);
                 $fromDate = Carbon::createFromFormat('Y-m-d', $details->start_date)->format('d/m/Y');
                 $toDate = Carbon::createFromFormat('Y-m-d', $details->end_date)->format('d/m/Y');
                 $assignmentImageDetail = $assignmentDetailRepository->fetch($details->id);
@@ -139,11 +136,11 @@
         }
 
         // Get particular assignment
-        public function getAssignmentSelectedData($idAssignment){
+
+        public function getAssignmentSelectedData($idAssignment, $allSessions){
 
             $assignmentRepository = new AssignmentRepository();
             $assignmentDetailRepository = new AssignmentDetailRepository();
-            $staffRepository = new StaffRepository();
             $institutionStandardService = new InstitutionStandardService();
             $institutionSubjectService = new InstitutionSubjectService();
             $staffService = new StaffService();
@@ -151,9 +148,11 @@
             $assignmentAttachment = array();
             $assignmentData = $assignmentRepository->fetch($idAssignment);
             $assignmentAttachments = $assignmentDetailRepository->fetch($idAssignment);
+
             $standardName = $institutionStandardService->fetchStandardByUsingId($assignmentData->id_standard);
-            $subjectName = $institutionSubjectService->getSubjectName($assignmentData->id_subject);
-            $staffDetails = $staffService->find($assignmentData->id_staff);
+            $subjectName =  $institutionSubjectService->getSubjectName($assignmentData->id_subject, $allSessions);
+            $staffDetails = $staffService->find($assignmentData->id_staff, $allSessions);
+            
             $staffName = $staffRepository->getFullName($staffDetails->name, $staffDetails->middle_name, $staffDetails->last_name);
 
             foreach($assignmentAttachments as $key => $attachment){
@@ -263,10 +262,8 @@
             $assignmentDetailRepository = new AssignmentDetailRepository();
             $uploadService = new UploadService();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
-
+            $institutionId = $assignmentData->id_institute;
+            $academicYear = $assignmentData->id_academic;
             $assignmentClass = $assignmentData->assignment_class;
             $assignmentSubject = $assignmentData->assignment_subject;
             $assignmentStaff = $assignmentData->assignment_staff;
@@ -377,10 +374,9 @@
             $uploadService = new UploadService();
             $assignmentRepository = new AssignmentRepository();
             $assignmentDetailRepository = new AssignmentDetailRepository();
-
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            
+            $institutionId = $assignmentData->id_institute;;
+            $academicYear = $assignmentData->id_academic;
 
             $assignmentClass = $assignmentData->assignment_class;
             $assignmentSubject = $assignmentData->assignment_subject;
@@ -509,7 +505,7 @@
             return $output;
         }
 
-        public function getDetails($data){
+        public function getDetails($data, $allSessions){
 
             $institutionStandardService = new InstitutionStandardService();
             $standardSubjectService = new StandardSubjectService();
@@ -520,8 +516,8 @@
             $subjectId = $data->id_subject;
 
             $assignmentDetails['standard'] = $institutionStandardService->fetchStandard();
-            $assignmentDetails['subject'] = $standardSubjectService->fetchStandardSubjects($standardId);
-            $staffSubjectDetails = $standardSubjectStaffMappingRepository->getStaffs($subjectId, $standardId);
+            $assignmentDetails['subject'] = $standardSubjectService->fetchStandardSubjects($standardId, $allSessions);
+            $staffSubjectDetails = $standardSubjectStaffMappingRepository->getStaffs($subjectId, $standardId, $allSessions);
 
             foreach($staffSubjectDetails as $index => $details){
                 $staffData = $staffRepository->fetch($details->id_staff);
@@ -535,12 +531,11 @@
         }
 
         // Download assignment attachment zip
-        public function downloadAssignmentFiles($id, $type){
+        public function downloadAssignmentFiles($id, $type, $allSessions){
 
             $assignmentDetailRepository = new AssignmentDetailRepository();
             $assignmentViewedDetailsService = new AssignmentViewedDetailsService();
 
-            $allSessions = session()->all();
             $idStudent = $allSessions['userId'];
             $data['id_student'] = $idStudent;
             $data['id_assignment'] = $id;
@@ -567,12 +562,12 @@
         }
 
         // Deleted assignment records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $assignmentRepository = new AssignmentRepository();
 
             $assignmentDetail = array();
-            $assignmentData = $assignmentRepository->allDeleted();
+            $assignmentData = $assignmentRepository->allDeleted($allSessions);
 
             foreach($assignmentData as $key => $data){
                 $assignmentDetail[$key] = $data;

@@ -6,6 +6,7 @@ use App\Models\ExamSubjectConfiguration;
 use App\Services\ExamTimetableService;
 use App\Services\ExamSubjectConfigurationService;
 use Illuminate\Http\Request;
+use Session;
 
 class ExamSubjectConfigurationController extends Controller
 {
@@ -18,9 +19,10 @@ class ExamSubjectConfigurationController extends Controller
     {
         $examSubjectConfigurationService = new ExamSubjectConfigurationService();
         $examTimetableService = new ExamTimetableService();
+        $allSessions = session()->all();
 
-        $examData = $examTimetableService->getExamWithTimetable();
-        $gradeSets = $examSubjectConfigurationService->allGradeSet();
+        $examData = $examTimetableService->getExamWithTimetable($allSessions);
+        $gradeSets = $examSubjectConfigurationService->allGradeSet($allSessions);
 
         return view('ExamSubjectConfiguration/exam_subject_configuration', ['examData' => $examData, 'gradeSets' => $gradeSets])->with('page', 'exam_subject_configuration');
     }
@@ -44,12 +46,13 @@ class ExamSubjectConfigurationController extends Controller
     public function store(Request $request)
     {
         $examSubjectConfigurationService = new ExamSubjectConfigurationService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $examSubjectConfigurationService->add($request);
+            $result['data'] = $examSubjectConfigurationService->add($request, $allSessions);
 
         }catch(Exception $e){
 

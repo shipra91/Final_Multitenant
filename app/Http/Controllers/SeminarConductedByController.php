@@ -18,10 +18,10 @@ class SeminarConductedByController extends Controller
     public function index(Request $request)
     {
         $SeminarConductedByService = new SeminarConductedByService();
+        $allSessions = session()->all();
 
-        //dd($SeminarConductedByService->getAll($request));
-        if($request->ajax()){
-            $seminars = $SeminarConductedByService->getAll($request);
+        if ($request->ajax()){
+            $seminars = $SeminarConductedByService->getAll($request, $allSessions);
             return Datatables::of($seminars)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -75,9 +75,10 @@ class SeminarConductedByController extends Controller
     {
         $seminarDetails = '';
         $seminarConductedByService = new SeminarConductedByService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $seminarDetails = $seminarConductedByService->getSeminarConductedByStudent(request()->route()->parameters['id']);
+            $seminarDetails = $seminarConductedByService->getSeminarConductedByStudent(request()->route()->parameters['id'], $allSessions);
             return Datatables::of($seminarDetails)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

@@ -23,11 +23,11 @@
     use Session;
     use ZipArchive;
 
-    class AssignmentSubmissionService {
-
-        // Get all assignment submission
-        public function getAll(){
-
+    class AssignmentSubmissionService
+    {
+        // Get All AssignmentSubmission
+        public function getAll($idStudent, $allSessions) {
+             
             $assignmentSubmissionRepository = new AssignmentSubmissionRepository();
             $assignmentDetailRepository = new AssignmentDetailRepository();
             $assignmentRepository = new AssignmentRepository();
@@ -37,43 +37,37 @@
             $studentMappingRepository = new StudentMappingRepository();
             $studentElectivesRepository = new StudentElectivesRepository();
             $assignmentSubmissionPermissionRepository = new AssignmentSubmissionPermissionRepository();
-            $staffRepository = new StaffRepository();
-
             $assignmentDetails = array();
             $subject = array();
-
-            $idStudent = Session::get('userId');
-            $studentDetails = $studentMappingRepository->fetchStudent($idStudent);
-
+            
+            $studentDetails = $studentMappingRepository->fetchStudent($idStudent, $allSessions);
+            // dd($studentDetails);
             if($studentDetails){
-
                 $idStandard = $studentDetails->id_standard;
 
-                if($studentDetails->id_first_language){
+                if($studentDetails->id_first_language)
+                {
                     $subject[] = $studentDetails->id_first_language;
-                }
-
-                if($studentDetails->id_second_language){
+                } 
+                if($studentDetails->id_second_language)
+                {
                     $subject[] = $studentDetails->id_second_language;
                 }
-
-                if($studentDetails->id_third_language){
+                if($studentDetails->id_third_language)
+                {
                     $subject[] = $studentDetails->id_third_language;
                 }
 
-                $electiveSubjects = $studentElectivesRepository->fetchStudentSubjects($idStudent);
-
-                foreach ($electiveSubjects as $elective){
-
-                    if($elective->id_elective){
+                $electiveSubjects = $studentElectivesRepository->fetchStudentSubjects($idStudent, $allSessions);
+                foreach ($electiveSubjects as $elective) {
+                    if($elective->id_elective)
+                    {
                         $subject[] = $elective->id_elective;
                     }
                 }
-
-                $assignments = $assignmentRepository->fetchAssignmentByStandard($idStandard);
-
-                foreach ($assignments as $details){
-
+          
+                $assignments = $assignmentRepository->fetchAssignmentByStandard($idStandard, $allSessions);
+                foreach ($assignments as $details) {
                     $submission = '';
                     $resubmissionDate = '';
                     $resubmissionTime = '';
@@ -81,10 +75,10 @@
                     $resubmissionDateTime = 0;
 
                     $standardName = $institutionStandardService->fetchStandardByUsingId($idStandard);
-                    $subjectName = $institutionSubjectService->getSubjectName($details->id_subject);
-                    $staffDetails = $staffService->find($details->id_staff);
+                    $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject, $allSessions);
+                    $staffDetails = $staffService->find($details->id_staff, $allSessions);
                     $staffName = $staffRepository->getFullName($staffDetails->name, $staffDetails->middle_name, $staffDetails->last_name);
-
+                    
                     $fromDate = Carbon::createFromFormat('Y-m-d', $details->start_date)->format('d/m/Y');
                     $toDate = Carbon::createFromFormat('Y-m-d', $details->end_date)->format('d/m/Y');
                     $currentDate = date('Y-m-d');
@@ -94,12 +88,9 @@
                     $data['id_assignment'] = $details->id;
 
                     $permissionDetails = $assignmentSubmissionPermissionRepository->fetchActiveDetails($data);
-
                     if($permissionDetails){
-
                         $resubmissionRequired = $permissionDetails->resubmission_allowed;
-
-                        if($resubmissionRequired == 'YES'){
+                        if($resubmissionRequired == 'YES') {
                             $resubmissionDate = $permissionDetails->resubmission_date;
                             $resubmissionTime = $permissionDetails->resubmission_time;
                             $resubmissionDateTime = $resubmissionDate.' '.$resubmissionTime;
@@ -113,14 +104,13 @@
                     $currentDateTime =  strtotime($currentDateTime);
 
                     $assignmentSubmissionDetails = $assignmentSubmissionRepository->fetch($data);
-
-                    if(count($assignmentSubmissionDetails)>0){
-
+                
+                    if(count($assignmentSubmissionDetails)>0)
+                    {
                         $submitted = 'YES';
-
-                        if($resubmissionRequired == 'YES'){
-
-                            if($resubmissionDateTime >= $currentDateTime){
+                        if($resubmissionRequired == 'YES')
+                        {
+                            if($resubmissionDateTime >= $currentDateTime) {
                                 $resubmission = 'show';
                             }else{
                                 $resubmission = 'hide';
@@ -149,21 +139,19 @@
                             }
 
                             $submission = 'hide';
-                        }
+                        }                    
                     }
-
                     $assignmentSubmissionDetails = $assignmentSubmissionRepository->fetchActiveDetails($data);
-
-                    if($assignmentSubmissionDetails){
-
+                    if($assignmentSubmissionDetails) {
                         if($assignmentSubmissionDetails->obtained_marks != ''){
                             $resubmission = 'hide';
                             $submission = 'hide';
                         }
                     }
-
+                    
                     $assignmentImageDetails = $assignmentDetailRepository->fetch($details->id);
-                    $subjectType = $institutionSubjectService->getSubjectLabel($details->id_subject);
+
+                    $subjectType = $institutionSubjectService->getSubjectLabel($details->id_subject, $allSessions);
 
                     if($subjectType->label == 'common'){
 
@@ -171,7 +159,6 @@
                             'id'=>$details->id,
                             'class_name'=>$standardName,
                             'subject_name'=>$subjectName,
-                            // 'staff_name'=>$staffDetails->name,
                             'staff_name'=>$staffName,
                             'assignment_name'=>$details->name,
                             'description'=>$details->description,
@@ -193,7 +180,6 @@
                                 'id'=>$details->id,
                                 'class_name'=>$standardName,
                                 'subject_name'=>$subjectName,
-                                // 'staff_name'=>$staffDetails->name,
                                 'staff_name'=>$staffName,
                                 'assignment_name'=>$details->name,
                                 'description'=>$details->description,
@@ -284,9 +270,8 @@
             return $output;
         }
 
-        // Get student assignment details
-        public function getStudentAssignment($idAssignment){
-
+        public function getStudentAssignment($idAssignment, $allSessions) {
+            
             $assignmentSubmissionRepository = new AssignmentSubmissionRepository();
             $assignmentRepository = new AssignmentRepository();
             $studentMappingRepository = new StudentMappingRepository();
@@ -298,44 +283,48 @@
 
             $assignmentData['standardId'] = $assignmentDetails->id_standard;
             $assignmentData['subjectId'] = $assignmentDetails->id_subject;
+        
+            $subjectType = $institutionSubjectService->getSubjectLabel($assignmentData['subjectId'], $allSessions);
+         
+            if($subjectType->label == 'common') {
+    
+                $studentDetails = $studentMappingRepository->fetchStudentUsingStandard($assignmentDetails->id_standard, $allSessions);
+    
+            }else {
 
-            $subjectType = $institutionSubjectService->getSubjectLabel($assignmentData['subjectId']);
-
-            if($subjectType->label == 'common'){
-                $studentDetails = $studentMappingRepository->fetchStudentUsingStandard($assignmentDetails->id_standard);
-            }else{
-                $studentDetails = $studentMappingRepository->fetchStudentUsingSubject($assignmentData);
+                $studentDetails = $studentMappingRepository->fetchStudentUsingSubject($assignmentData, $allSessions);
             }
 
-            $subjectName = $institutionSubjectService->getSubjectName($assignmentDetails->id_subject);
+            $subjectName =  $institutionSubjectService->getSubjectName($assignmentDetails->id_subject, $allSessions);
 
-            foreach ($studentDetails as $student){
-
+            foreach ($studentDetails as $student) {
                 $data['id_student'] = $student->id_student;
                 $data['id_assignment'] = $idAssignment;
-
                 $assignmentSubmissionDetails = $assignmentSubmissionRepository->fetchActiveDetails($data);
-
-                if($assignmentSubmissionDetails){
+                if($assignmentSubmissionDetails)
+                {
                     $submittedDate = Carbon::createFromFormat('Y-m-d', $assignmentSubmissionDetails->submitted_date)->format('d-m-Y');
                     $submittedTime = $assignmentSubmissionDetails->submitted_time;
-                }else{
+                }
+                else
+                {
                     $submittedDate = '';
                     $submittedTime = '';
                 }
-
                 $currentDateTime = date("Y-m-d h:i A");
                 $assignmentDateTime = $assignmentDetails->end_date.' '.$assignmentDetails->end_time;
-                $currentDateTime = strtotime($currentDateTime);
-                $assignmentDateTime = strtotime($assignmentDateTime);
-
+                $currentDateTime =  strtotime($currentDateTime);
+                $assignmentDateTime =  strtotime($assignmentDateTime);
+               
                 $assignmentSubmittedFiles = $assignmentSubmissionDetailRepository->fetch($data);
-
-                if(count($assignmentSubmittedFiles)>0){
+              
+                if(count($assignmentSubmittedFiles)>0)
+                {
                     $status = 'submitted';
-
-                }else{
-                    if($assignmentDateTime >= $currentDateTime){
+                }
+                else
+                {
+                    if($assignmentDateTime >= $currentDateTime) {
                         $status = 'not-submitted';
                     }else{
                         $status = 'due-date-crossed';
@@ -355,7 +344,6 @@
                 $studentAssignmentDetails[] = array(
                     'id'=>$student->id_student,
                     'id_assignment'=>$idAssignment,
-                    // 'student_name'=>$student->name,
                     'student_name'=>$studentName,
                     'submitted_date'=>$submittedDate,
                     'submitted_time'=>$submittedTime,
@@ -389,10 +377,12 @@
             header('Content-disposition: attachment; filename='.time().'.zip');
             header('Content-type: application/zip');
             readfile($fileName);
-        }
+        }   
 
-        public function fetchAssignmentValuationDetails($details){
-
+        public function fetchAssignmentValuationDetails($details, $allSessions) {
+        
+            $data['id_student'] = $details->studentId;
+            $data['id_assignment'] = $details->assignmentId;
             $assignmentSubmissionRepository = new AssignmentSubmissionRepository();
             $institutionSubjectService = new InstitutionSubjectService();
             $assignmentRepository = new AssignmentRepository();
@@ -419,21 +409,18 @@
                 $assignmentSubmissionComments = $assignmentSubmissionDetails->comments;
             }
 
-            $subjectName =  $institutionSubjectService->getSubjectName($assignment->id_subject);
-            $staffDetails = $staffService->find($assignment->id_staff);
+            $subjectName =  $institutionSubjectService->getSubjectName($assignment->id_subject, $allSessions);
+            $staffDetails = $staffService->find($assignment->id_staff, $allSessions);
             $gradeValue = explode(',' , $assignment->grade);
 
             $permissionDetails = $assignmentSubmissionPermissionRepository->fetchActiveDetails($data);
-
             if($permissionDetails){
-
                 $resubmissionAllowed = $permissionDetails->resubmission_allowed;
-
-                if($resubmissionAllowed == 'YES'){
-                    $resubmissionDate = Carbon::createFromFormat('Y-m-d', $permissionDetails->resubmission_date)->format('d/m/Y');
+                if($resubmissionAllowed == 'YES') {
+                    $resubmissionDate = Carbon::createFromFormat('Y-m-d', $permissionDetails->resubmission_date)->format('d/m/Y');  
                     $resubmissionTime = $permissionDetails->resubmission_time;
                 }
-            }
+            }  
 
             $assignmentDetails = array(
                 'id'=>$assignment->id,
@@ -453,31 +440,27 @@
                 'resubmission_date'=>$resubmissionDate,
                 'resubmission_time'=>$resubmissionTime
             );
-
             return $assignmentDetails;
         }
 
-        public function fetchAssignmentVerifiedDetails($details){
-
+        public function fetchAssignmentVerifiedDetails($details, $allSessions) {
+          
+            $data['id_student'] = $details->studentId;
+            $data['id_assignment'] = $details->assignmentId;
             $assignmentSubmissionRepository = new AssignmentSubmissionRepository();
             $institutionSubjectService = new InstitutionSubjectService();
             $assignmentRepository = new AssignmentRepository();
             $staffService = new StaffService();
-
-            $data['id_student'] = $details->studentId;
-            $data['id_assignment'] = $details->assignmentId;
-
-            $assignmentDetails = array();
+            $assignmentDetails = array();           
             $valuationDetails = array();
-
+            
             $assignment = $assignmentRepository->fetch($data['id_assignment']);
             $assignmentSubmissionDetails = $assignmentSubmissionRepository->fetch($data);
-            $subjectName =  $institutionSubjectService->getSubjectName($assignment->id_subject);
-            $staffDetails = $staffService->find($assignment->id_staff);
+            $subjectName =  $institutionSubjectService->getSubjectName($assignment->id_subject, $allSessions);
+            $staffDetails = $staffService->find($assignment->id_staff, $allSessions);
             $gradeValue = explode(',' , $assignment->grade);
 
-            foreach($assignmentSubmissionDetails as $assignments){
-
+            foreach($assignmentSubmissionDetails as $assignments) {
                 $valuationDetails[] = array(
                     'obtained_marks'=>$assignments->obtained_marks,
                     'comments'=>$assignments->comments

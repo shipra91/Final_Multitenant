@@ -243,12 +243,12 @@
         }
 
         // Deleted attendance settings records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $attendanceSettingRepository = New AttendanceSettingRepository();
             $institutionStandardService = New InstitutionStandardService();
 
-            $attendanceSettings = $attendanceSettingRepository->allDeleted();
+            $attendanceSettings = $attendanceSettingRepository->allDeleted($allSessions);
             $arrayData = array();
 
             foreach($attendanceSettings as $key => $attendanceSetting){

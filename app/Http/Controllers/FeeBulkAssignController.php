@@ -23,10 +23,11 @@ class FeeBulkAssignController extends Controller
         $institutionStandardService = new InstitutionStandardService();
         $feeBulkAssignService = new FeeBulkAssignService();
         $feeMasterService = new FeeMasterService();
+        $allSessions = session()->all();
         
-        $allStandards = $institutionStandardService->fetchStandard();
-        $classStudents = $feeBulkAssignService->getStudentData($request);
-        $filterData = $feeMasterService->getAllData();
+        $allStandards = $institutionStandardService->fetchStandard($allSessions);
+        $classStudents = $feeBulkAssignService->getStudentData($request, $allSessions);
+        $filterData = $feeMasterService->getAllData($allSessions);
         // dd($classStudents);
         return view('FeeBulkAssign/index', ['allStandards' => $allStandards, 'classStudents' => $classStudents, 'filterData' => $filterData])->with("page", "bulk_fee_assign");
     }
@@ -35,6 +36,7 @@ class FeeBulkAssignController extends Controller
 
         $standardId = $request->standard;
         $feeBulkAssignService = new FeeBulkAssignService();
+        $allSessions = session()->all();
         
         $filterCategory = $feeBulkAssignService->getAllData($standardId);
         return $filterCategory;
@@ -59,11 +61,12 @@ class FeeBulkAssignController extends Controller
     public function store(Request $request)
     {
         $feeBulkAssignService =  new FeeBulkAssignService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
         try{
             
-            $result['data'] = $feeBulkAssignService->add($request);    
+            $result['data'] = $feeBulkAssignService->add($request, $allSessions);    
 
         }catch(Exception $e){
             $result = [
@@ -122,18 +125,21 @@ class FeeBulkAssignController extends Controller
 
     public function getStandardDetails() {
         $institutionStandardService = new InstitutionStandardService();
-        $institutionStandards = $institutionStandardService->fetchStandard();
+        $allSessions = session()->all();
+
+        $institutionStandards = $institutionStandardService->fetchStandard($allSessions);
         return view('FeeBulkAssign/concessionApproval', ['institutionStandards'=> $institutionStandards])->with("page", "concession_approval");
     }
 
     public function getStudentDetails(Request $request) {
         $studentService = new StudentService;
+        $allSessions = session()->all();
 
         $input = \Arr::except($request->all(), array('_token', '_method'));
         $standardId = $input['standardId'];
         if($request->ajax()) {
 
-            $studentData = $studentService->fetchStandardStudents($standardId);
+            $studentData = $studentService->fetchStandardStudents($standardId, $allSessions);
 
             return Datatables::of($studentData)
                     ->addIndexColumn()
@@ -153,11 +159,14 @@ class FeeBulkAssignController extends Controller
     }
 
     public function getStudentConcessionDetails(Request $request) {
+
         $feeBulkAssignService =  new FeeBulkAssignService();
+        $allSessions = session()->all();
+
         $studentId = request()->route()->parameters['id'];
-        
+
         if($request->ajax()) {
-        $concessionData = $feeBulkAssignService->studentConcessionAssignedDetails($studentId);
+            $concessionData = $feeBulkAssignService->studentConcessionAssignedDetails($studentId, $allSessions);
             return Datatables::of($concessionData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

@@ -12,18 +12,6 @@ use DataTables;
 
 class ApplicationFeeSettingController extends Controller
 {
-    protected $institutionStandardService;
-    protected $applicationFeeSettingService;
-    protected $applicationSettingService;
-
-    public function __construct(InstitutionStandardService $institutionStandardService, ApplicationFeeSettingService $applicationFeeSettingService, ApplicationSettingService $applicationSettingService){
-
-        $this->institutionStandardService = $institutionStandardService;
-        $this->applicationFeeSettingService = $applicationFeeSettingService;
-        $this->applicationSettingService = $applicationSettingService;
-
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -31,9 +19,11 @@ class ApplicationFeeSettingController extends Controller
      */
     public function index(Request $request)
     {        
+        $applicationFeeSettingService = new ApplicationFeeSettingService();
+
         if ($request->ajax()) {
 
-            $allFeeSettingData = $this->applicationFeeSettingService->getAll();
+            $allFeeSettingData = $applicationFeeSettingService->getAll();
 
             return Datatables::of($allFeeSettingData)
                 ->addIndexColumn()
@@ -59,8 +49,11 @@ class ApplicationFeeSettingController extends Controller
      */
     public function create()
     {
-        $allStandard = $this->institutionStandardService->fetchStandard();
-        $allApplications = $this->applicationSettingService->getAll();
+        $institutionStandardService = new InstitutionStandardService();
+        $applicationSettingService = new ApplicationSettingService();
+
+        $allStandard = $institutionStandardService->fetchStandard();
+        $allApplications = $applicationSettingService->getAll();
         
         return view('Preadmission/add_fee_setting', ['allStandard' => $allStandard, 'allApplications' => $allApplications])->with("page", "preadmission_fee");
     }
@@ -73,11 +66,13 @@ class ApplicationFeeSettingController extends Controller
      */
     public function store(StoreFeeSettingRequest $request)
     {
+        $applicationFeeSettingService = new ApplicationFeeSettingService();
+
         $result = ["status" => 200];
 
         try{
             
-            $result['data'] = $this->applicationFeeSettingService->add($request);    
+            $result['data'] = $applicationFeeSettingService->add($request);    
 
         }catch(Exception $e){
 
@@ -109,7 +104,9 @@ class ApplicationFeeSettingController extends Controller
      */
     public function edit($id)
     {
-        $selectedFeeSetting = $this->applicationFeeSettingService->find($id);
+        $applicationFeeSettingService = new ApplicationFeeSettingService();
+        
+        $selectedFeeSetting = $applicationFeeSettingService->find($id);
         return view('Preadmission/edit_fee_setting', ['selectedFeeSetting' => $selectedFeeSetting])->with("page", "preadmission_fee");
     }
 
@@ -122,11 +119,13 @@ class ApplicationFeeSettingController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $applicationFeeSettingService = new ApplicationFeeSettingService();
+
         $result = ["status" => 200];
 
         try{
             
-            $result['data'] = $this->applicationFeeSettingService->update($request, $id);  
+            $result['data'] = $applicationFeeSettingService->update($request, $id);  
 
         }catch(Exception $e){
             $result = [
@@ -146,11 +145,13 @@ class ApplicationFeeSettingController extends Controller
      */
     public function destroy($id)
     {
+        $applicationFeeSettingService = new ApplicationFeeSettingService();
+
         $result = ["status" => 200];
 
         try{
             
-            $result['data'] = $this->applicationFeeSettingService->delete($id);
+            $result['data'] = $applicationFeeSettingService->delete($id);
 
         }catch(Exception $e){
             
@@ -165,8 +166,10 @@ class ApplicationFeeSettingController extends Controller
 
     public function getDeletedRecords(Request $request){
 
+        $applicationFeeSettingService = new ApplicationFeeSettingService();
+
         if ($request->ajax()) {
-            $allSettings = $this->applicationFeeSettingService->getDeletedRecords(); 
+            $allSettings = $applicationFeeSettingService->getDeletedRecords(); 
             
             return Datatables::of($allSettings)
                     ->addIndexColumn()
@@ -193,7 +196,7 @@ class ApplicationFeeSettingController extends Controller
         $result = ["status" => 200];
         try{
             
-            $result['data'] = $this->applicationFeeSettingService->restore($id);
+            $result['data'] = $applicationFeeSettingService->restore($id);
 
         }catch(Exception $e){
             $result = [
@@ -213,10 +216,12 @@ class ApplicationFeeSettingController extends Controller
 
     public function restoreAll()
     {
+        $applicationFeeSettingService = new ApplicationFeeSettingService();
+
         $result = ["status" => 200];
         try{
             
-            $result['data'] = $this->applicationFeeSettingService->restoreAll();
+            $result['data'] = $applicationFeeSettingService->restoreAll();
 
         }catch(Exception $e){
             $result = [

@@ -3,25 +3,20 @@
 
     use App\Models\PreadmissionApplicationSetting;
     use App\Services\ApplicationSettingService;
-    use App\Interfaces\ApplicationSettingRepositoryInterface;
+    use App\Repositories\ApplicationSettingRepository;
     use App\Services\InstitutionStandardService;
     use Carbon\Carbon;
     use Session;
 
-    class ApplicationSettingService {
+    class ApplicationSettingService 
+    {
+        
+        public function getAll($allSessions){
 
-        private ApplicationSettingRepositoryInterface $applicationSettingRepository;
-        private InstitutionStandardService $institutionStandardService;
+            $applicationSettingRepository = new ApplicationSettingRepository();
+            $institutionStandardService = new InstitutionStandardService();
 
-        public function __construct(ApplicationSettingRepositoryInterface $applicationSettingRepository, InstitutionStandardService $institutionStandardService){
-
-            $this->applicationSettingRepository = $applicationSettingRepository;
-            $this->institutionStandardService = $institutionStandardService;
-        }
-
-        public function getAll(){
-
-            $applicationSetting = $this->applicationSettingRepository->all();
+            $applicationSetting = $applicationSettingRepository->all($allSessions);
             $applicationSettingData = array();
 
             foreach($applicationSetting as $index => $setting){
@@ -31,42 +26,43 @@
                 $applicationSettingData[$index] = $setting;
 
                 foreach($standards as $standardId){
-                    $standard = $this->institutionStandardService->fetchStandardByUsingId($standardId);
-
+                    $standard = $institutionStandardService->fetchStandardByUsingId($standardId);
+                    
                     array_push($standardData, $standard);
                 }
-
                 $standardData = implode(", ", $standardData);
                 $applicationSettingData[$index]['standardName'] = $standardData;
             }
-
+            
             return $applicationSettingData;
         }
 
         public function find($id){
-            return $this->applicationSettingRepository->fetch($id);
+            $applicationSettingRepository = new ApplicationSettingRepository();
+
+            return $applicationSettingRepository->fetch($id);
         }
 
-        public function add($applicationSettingData){
+        public function add($applicationSettingData)
+        {
+            $applicationSettingRepository = new ApplicationSettingRepository();
 
-            // dd($applicationSettingData);
             $check = PreadmissionApplicationSetting::where('id_academic', $applicationSettingData->id_academic)->where('id_institution', $applicationSettingData->id_institute)->where('name', $applicationSettingData->application_name)->first();
 
             if(!$check){
-
+              
                 $data = array(
-                    'id_academic' => $applicationSettingData->id_academic,
-                    'id_institution' => $applicationSettingData->id_institute,
-                    'name' => $applicationSettingData->application_name,
-                    'prefix' => $applicationSettingData->application_prefix,
-                    'starting_number' => $applicationSettingData->application_starting_number,
-                    'standards' => implode(",", $applicationSettingData->standards),
+                    'id_academic' => $applicationSettingData->id_academic, 
+                    'id_institution' => $applicationSettingData->id_institute, 
+                    'name' => $applicationSettingData->application_name,  
+                    'prefix' => $applicationSettingData->application_prefix,  
+                    'starting_number' => $applicationSettingData->application_starting_number,  
+                    'standards' => implode(",", $applicationSettingData->standards), 
                     'created_by' => Session::get('userId'),
                     'modified_by' => ''
                 );
-
-                $storeData = $this->applicationSettingRepository->store($data);
-
+                $storeData = $applicationSettingRepository->store($data); 
+                
                 if($storeData) {
 
                     $signal = 'success';
@@ -94,6 +90,8 @@
 
         public function update($applicationSettingData, $id){
 
+            $applicationSettingRepository = new ApplicationSettingRepository();
+
             $check = PreadmissionApplicationSetting::where('id_academic', $applicationSettingData->id_academic)
                                                     ->where('id_institution', $applicationSettingData->id_institute)
                                                     ->where('name', $applicationSettingData->application_name)
@@ -102,20 +100,19 @@
 
             if(!$check){
 
-                $data = array(
-                    'id_academic' => $applicationSettingData->id_academic,
-                    'id_institution' => $applicationSettingData->id_institute,
-                    'name' => $applicationSettingData->application_name,
-                    'prefix' => $applicationSettingData->application_prefix,
-                    'starting_number' => $applicationSettingData->application_starting_number,
-                    'standards' => implode(",", $applicationSettingData->standards),
-                    'created_by' => '',
-                    'modified_by' => Session::get('userId')
-                );
+                $detail = $applicationSettingRepository->fetch($id); 
 
-                $storeData = $this->applicationSettingRepository->update($data, $id);
-
-                if($storeData){
+                $detail->id_academic = $applicationSettingData->id_academic;
+                $detail->id_institution = $applicationSettingData->id_institute;
+                $detail->name = $applicationSettingData->application_name;
+                $detail->prefix = $applicationSettingData->application_prefix;
+                $detail->starting_number = $applicationSettingData->application_starting_number;
+                $detail->standards = implode(",", $applicationSettingData->standards);
+                $detail->modified_by = Session::get('userId');
+                
+                $storeData = $applicationSettingRepository->update($detail); 
+              
+                if($storeData) {
 
                     $signal = 'success';
                     $msg = 'Data updated successfully!';
@@ -141,10 +138,10 @@
         }
 
         public function delete($id){
+            $applicationSettingRepository = new ApplicationSettingRepository();
+            $bloodGroup = $applicationSettingRepository->delete($id);
 
-            $applicationSetting = $this->applicationSettingRepository->delete($id);
-
-            if($applicationSetting){
+            if($bloodGroup){
                 $signal = 'success';
                 $msg = 'Data deleted successfully!';
             }
@@ -157,36 +154,38 @@
             return $output;
         }
 
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
+
+            $applicationSettingRepository = new ApplicationSettingRepository();
+            $institutionStandardService = new InstitutionStandardService();
 
             $data = array();
             $arraySettings = array();
-            $settings = $this->applicationSettingRepository->allDeleted();
+            $settings = $applicationSettingRepository->allDeleted($allSessions);
             $applicationSettingData = array();
 
             foreach($settings as $index => $setting){
-
                 $standards = explode(",", $setting['standards']);
                 $standardData = array();
 
                 $applicationSettingData[$index] = $setting;
 
                 foreach($standards as $standardId){
-
-                    $standard = $this->institutionStandardService->fetchStandardByUsingId($standardId);
+                    $standard = $institutionStandardService->fetchStandardByUsingId($standardId);
+                    
                     array_push($standardData, $standard);
                 }
-
                 $standardData = implode(", ", $standardData);
                 $applicationSettingData[$index]['standardName'] = $standardData;
             }
-
+            
             return $applicationSettingData;
         }
 
         public function restore($id){
+            $applicationSettingRepository = new ApplicationSettingRepository();
 
-            $module = $this->applicationSettingRepository->restore($id);
+            $module = $applicationSettingRepository->restore($id);
 
             if($module){
                 $signal = 'success';
@@ -202,8 +201,9 @@
         }
 
         public function restoreAll(){
+            $applicationSettingRepository = new ApplicationSettingRepository();
 
-            $module = $this->applicationSettingRepository->restoreAll();
+            $module = $applicationSettingRepository->restoreAll();
 
             if($module){
                 $signal = 'success';

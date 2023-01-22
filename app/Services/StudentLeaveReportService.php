@@ -9,11 +9,11 @@
     class StudentLeaveReportService {
 
         // Get student leave reports
-        public function getReportData($request){
+        public function getReportData($request, $allSessions){
             $studentLeaveManagementRepository = new StudentLeaveManagementRepository();
             $studentRepository = new StudentRepository();
 
-            $leaveApplications = $studentLeaveManagementRepository->leaveReportData($request);
+            $leaveApplications = $studentLeaveManagementRepository->leaveReportData($request, $allSessions);
             $leaveDetails = array();
 
             foreach($leaveApplications as $key => $leaveApplication){

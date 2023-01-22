@@ -21,6 +21,10 @@
                                 <h4 class="card-title">Edit Message Group</h4>
                                 <form method="POST" id="groupNameForm">
                                     <div class="row">
+                                        <input type="hidden" name="id_institute" value="{{session()->get('institutionId')}}">
+                                        <input type="hidden" name="id_academic" value="{{session()->get('academicYear')}}">
+                                        <input type="hidden" name="organization" value="{{session()->get('organizationId')}}">
+                                        
                                         <input type="hidden" id="group_name_id" name="group_name_id" value="{{$groupNameDetails->id}}">
                                         <div class="col-lg-4 col-lg-offset-0">
                                             <div class="form-group">

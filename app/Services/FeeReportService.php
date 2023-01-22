@@ -25,7 +25,11 @@ class FeeReportService {
         return $dates;
     }
 
+<<<<<<< HEAD
     function getReportData($requestData){
+=======
+    function getReportData($requestData, $allSessions){
+>>>>>>> main
 
         $studentMappingRepository = new StudentMappingRepository();
         $institutionStandardService = new InstitutionStandardService();
@@ -36,7 +40,10 @@ class FeeReportService {
         $feeMappingRepository = new FeeMappingRepository();
         $feeHeadingRepository = new FeeHeadingRepository();
         
+<<<<<<< HEAD
         $allSessions = session()->all();
+=======
+>>>>>>> main
         $institutionId = $allSessions['institutionId'];
         $academicYear = $allSessions['academicYear'];
         $reportType = $requestData->reportType;
@@ -71,7 +78,11 @@ class FeeReportService {
 
                 foreach($standardIds as $standardId){
 
+<<<<<<< HEAD
                     $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId);
+=======
+                    $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId, $allSessions);
+>>>>>>> main
                     if($studentDetails){
                         foreach($studentDetails as $studentData){
 
@@ -90,19 +101,31 @@ class FeeReportService {
                             foreach($feeCategories as $feeKey => $category){
                                 $assignedFee = $assignedConcession = $feePaid = $dueAmount = 0;
 
+<<<<<<< HEAD
                                 $studentFeeAssign = $feeAssignRepository->studentCategoryFeeAssign($standardId, $studentData['id_student'], $category);
+=======
+                                $studentFeeAssign = $feeAssignRepository->studentCategoryFeeAssign($standardId, $studentData['id_student'], $category, $allSessions);
+>>>>>>> main
                                 if($studentFeeAssign){
 
                                     $assignedFee = $studentFeeAssign->total_amount;
                                     $totalAssigned = $totalAssigned + $assignedFee;
                                     // dd($assignedFee);
+<<<<<<< HEAD
                                     $studentConcession = $feeAssignDetailRepository->getCategoryTotalConcessionAmount($studentFeeAssign->id);
+=======
+                                    $studentConcession = $feeAssignDetailRepository->getCategoryTotalConcessionAmount($studentFeeAssign->id, $allSessions);
+>>>>>>> main
                                     if($studentConcession){
                                         $assignedConcession = $studentConcession->amount;
                                         $totalConcession = $totalConcession + $assignedConcession;
                                     }
 
+<<<<<<< HEAD
                                     $studentFeePaid = $feeCollectionDetailRepository->totalPaidAmountCategoryWise($studentData['id_student']);
+=======
+                                    $studentFeePaid = $feeCollectionDetailRepository->totalPaidAmountCategoryWise($studentData['id_student'], $allSessions);
+>>>>>>> main
                                     if($studentFeePaid){
                                         $feePaid = $studentFeePaid->paid_amount;
                                         $totalPaid = $totalPaid + $feePaid;
@@ -143,17 +166,29 @@ class FeeReportService {
 
                 foreach($standardIds as $standardId){
 
+<<<<<<< HEAD
                     $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId);
                     if($studentDetails){
                         foreach($studentDetails as $studentData){
 
                             $studentFeeCollectionDetails = $feeCollectionDetailRepository->getStudentFeeCollectionDetail($studentData['id_student'], $fromDate, $toDate);
+=======
+                    $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId, $allSessions);
+                    if($studentDetails){
+                        foreach($studentDetails as $studentData){
+
+                            $studentFeeCollectionDetails = $feeCollectionDetailRepository->getStudentFeeCollectionDetail($studentData['id_student'], $fromDate, $toDate, $allSessions);
+>>>>>>> main
                             if($studentFeeCollectionDetails){
                                 foreach($studentFeeCollectionDetails as $index => $detail){
 
                                     $totalPaid = $totalPaid + $detail['amount_received'] + $detail['gst'];
                                     
+<<<<<<< HEAD
                                     $categoryData = $feeMappingRepository->getFeeCategoryDetail($detail['id_fee_mapping_heading']);
+=======
+                                    $categoryData = $feeMappingRepository->getFeeCategoryDetail($detail['id_fee_mapping_heading'], $allSessions);
+>>>>>>> main
 
                                     $studentDetailArray[$index]['name'] = $studentData['name'];
                                     $studentDetailArray[$index]['egenius_uid'] = $studentData['egenius_uid'];
@@ -192,6 +227,7 @@ class FeeReportService {
 
                 foreach($standardIds as $standardId){
 
+<<<<<<< HEAD
                     $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId);
                     if($studentDetails){
                         foreach($studentDetails as $studentData){
@@ -201,6 +237,17 @@ class FeeReportService {
                                 foreach($studentFeeCollectionDetails as $index => $detail){
                                     
                                     $categoryData = $feeMappingRepository->getFeeCategoryDetail($detail['id_fee_mapping_heading']);
+=======
+                    $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId, $allSessions);
+                    if($studentDetails){
+                        foreach($studentDetails as $studentData){
+
+                            $studentFeeCollectionDetails = $feeCollectionDetailRepository->getStudentFeeCancelledDetailWithDetail($studentData['id_student'], $fromDate, $toDate, $allSessions);
+                            if($studentFeeCollectionDetails){
+                                foreach($studentFeeCollectionDetails as $index => $detail){
+                                    
+                                    $categoryData = $feeMappingRepository->getFeeCategoryDetail($detail['id_fee_mapping_heading'], $allSessions);
+>>>>>>> main
 
                                     $studentDetailArray[$index]['name'] = $studentData['name'];
                                     $studentDetailArray[$index]['egenius_uid'] = $studentData['egenius_uid'];
@@ -238,11 +285,19 @@ class FeeReportService {
                 $studentDetailArray['student'] = array();
                 $feeConcessionTotal = 0;
 
+<<<<<<< HEAD
                 $feeCategoriesList = $feeMappingRepository->getFeeCategory();                
 
                 foreach($standardIds as $standardId){
 
                     $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId);
+=======
+                $feeCategoriesList = $feeMappingRepository->getFeeCategory($allSessions);                
+
+                foreach($standardIds as $standardId){
+
+                    $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId, $allSessions);
+>>>>>>> main
                     if($studentDetails){
                         foreach($studentDetails as $studentData){
 
@@ -264,7 +319,11 @@ class FeeReportService {
                                 $studentDetailArray['feeCategory'][$key]['idCategory'] = $category['id'];
                                 $studentDetailArray['feeCategory'][$key]['categoryName'] = $category['name'];
 
+<<<<<<< HEAD
                                 $feeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($category['id']);
+=======
+                                $feeHeadings = $feeMappingRepository->fetchCategoryHeadingFromMapping($category['id'], $allSessions);
+>>>>>>> main
                                 // dd($feeHeadings);
                                 if($feeHeadings){
                                     foreach($feeHeadings as $head => $feeHeading){
@@ -276,7 +335,11 @@ class FeeReportService {
 
                                         }      
                                         
+<<<<<<< HEAD
                                         $headingAmount = $feeAssignDetailRepository->fetchFeeHeadingTotalAmount($category['id'], $feeHeading['id']);
+=======
+                                        $headingAmount = $feeAssignDetailRepository->fetchFeeHeadingTotalAmount($category['id'], $feeHeading['id'], $allSessions);
+>>>>>>> main
                                         if($headingAmount){
                                             if($headingAmount->amount != NULL){
                                                 $feeHeadingTotal = $headingAmount->amount;
@@ -291,7 +354,11 @@ class FeeReportService {
                                         $studentDetailArray['feeCategory'][$key]['feeHeading'][$head]['nameFeeHeading'] = $headingInfo->name;
                                         $studentDetailArray['feeCategory'][$key]['feeHeading'][$head]['feeHeadingTotal'] = $feeHeadingTotal;
 
+<<<<<<< HEAD
                                         $studentConcessionDetail = $feeAssignDetailRepository->fetchStudentFeeConcessionDetail($studentData['id_student'], $category['id'], $feeHeading['id']);
+=======
+                                        $studentConcessionDetail = $feeAssignDetailRepository->fetchStudentFeeConcessionDetail($studentData['id_student'], $category['id'], $feeHeading['id'], $allSessions);
+>>>>>>> main
                                         // dd($studentConcessionDetail);
                                         if(count($studentConcessionDetail) > 0){
 

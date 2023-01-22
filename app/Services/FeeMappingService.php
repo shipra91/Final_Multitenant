@@ -25,7 +25,11 @@
         // Get Fee Heading
         public function allFeeHeading(){
             $feeHeadingRepository = new FeeHeadingRepository();
+<<<<<<< HEAD
             $feeMappingRepository = new FeeMappingRepository();
+=======
+            
+>>>>>>> main
             $feeHeading = $feeHeadingRepository->all();
             return $feeHeading;
         }
@@ -34,9 +38,14 @@
         public function add($feeMappingData){
             $feeMappingRepository = new FeeMappingRepository();
 
+<<<<<<< HEAD
             $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
+=======
+            $institutionId = $feeMappingData->id_institute;
+            $academicId = $feeMappingData->id_academic;
+>>>>>>> main
 
             foreach($feeMappingData['feeHeadingSelect'] as $key => $feeHeadingSelect){
 

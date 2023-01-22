@@ -16,17 +16,17 @@
     class HolidayService {
 
         // View holiday data
-        public function getHolidayData(){
+        public function getHolidayData($allSessions){
 
             $holidayRepository = new HolidayRepository();
             $staffCategoryRepository = new StaffCategoryRepository();
             $staffSubCategoryRepository = new StaffSubCategoryRepository();
             $institutionStandardService = new InstitutionStandardService();
 
-            $holiday = $holidayRepository->all();
+            $holiday = $holidayRepository->all($allSessions);
             $staffCategory = $staffCategoryRepository->all();
             $staffSubCategory = $staffSubCategoryRepository->all();
-            $institutionStandards = $institutionStandardService->fetchStandard();
+            $institutionStandards = $institutionStandardService->fetchStandard($allSessions);
 
             $output = array(
                 'staffCategory' => $staffCategory,
@@ -38,14 +38,13 @@
         }
 
         // View holiday
-        public function getAll(){
+        public function getAll($allSessions){
 
             $holidayRepository = new HolidayRepository();
             $holidayApplicableForRepository = new HolidayApplicableForRepository();
-            $holidayAttachmentRepository = new HolidayAttachmentRepository();
 
+            $holidayData = $holidayRepository->all($allSessions);
             $holidayDetail = array();
-            $holidayData = $holidayRepository->all();
 
             foreach($holidayData as $key => $holiday){
 
@@ -85,9 +84,8 @@
         // Insert holiday
         public function add($holidayData){
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicId = $allSessions['academicYear'];
+            $institutionId = $holidayData->id_institute;
+            $academicId = $holidayData->id_academic;
 
             $holidayRepository = new HolidayRepository();
             $holidayAttachmentRepository = new HolidayAttachmentRepository();
@@ -209,10 +207,6 @@
 
         // Update holiday
         public function update($holidayData, $id){
-
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
 
             $holidayRepository = new HolidayRepository();
             $holidayAttachmentRepository = new HolidayAttachmentRepository();
@@ -435,13 +429,13 @@
         }
 
         // Deleted holiday records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $holidayApplicableForRepository = new HolidayApplicableForRepository();
             $holidayAttachmentRepository = new HolidayAttachmentRepository();
             $holidayRepository = new HolidayRepository();
 
-            $holidayData = $holidayRepository->allDeleted();
+            $holidayData = $holidayRepository->allDeleted($allSessions);
             $holidayDetail = array();
 
             foreach($holidayData as $key => $holiday){

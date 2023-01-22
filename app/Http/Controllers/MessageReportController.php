@@ -17,9 +17,10 @@ class MessageReportController extends Controller
     public function index(Request $request)
     {
         $composeMessageService = new ComposeMessageService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $allMessage = $composeMessageService->getAllMessages();
+            $allMessage = $composeMessageService->getAllMessages($allSessions);
             return Datatables::of($allMessage)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -65,7 +66,9 @@ class MessageReportController extends Controller
     public function show($idMessageCenter)
     {
         $composeMessageService = new ComposeMessageService();
-        $messageReportDetails = $composeMessageService->getMessageReport($idMessageCenter);
+        $allSessions = session()->all();
+
+        $messageReportDetails = $composeMessageService->getMessageReport($idMessageCenter, $allSessions);
 
         return view('MessageCenter/messageReportDetails',['messageReportDetails'=>$messageReportDetails])->with("page", "message_report");
 

@@ -9,27 +9,15 @@ use App\Services\StaffScheduleMappingService;
 class StaffScheduleMappingController extends Controller
 {
     /**
-     *
-     * create Constructor to use the functions defined in the repositories
-     */
-    protected $staffScheduleMappingService;
-    public function __construct(StaffScheduleMappingService $staffScheduleMappingService)
-    {
-        $this->staffScheduleMappingService = $staffScheduleMappingService;
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index($id)
-    {
-        // $getData = $this->staffScheduleMappingService->getData($id);
-        // // dd($getData);
-        // return response()->json($getData);
+    {       
+        $staffScheduleMappingService = new StaffScheduleMappingService(); 
 
-        $staffSchedules = $this->staffScheduleMappingService->getData($id);
+        $staffSchedules = $staffScheduleMappingService->getData($id);
         // dd($staffSchedules["Monday"]);
         $daysArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         return view('Staff/staffSchedule', ['staffSchedules' => $staffSchedules, 'daysArray' => $daysArray, "staffId"=>$id])->with("page", "staff");
@@ -53,11 +41,12 @@ class StaffScheduleMappingController extends Controller
      */
     public function store(Request $request)
     {
+        $staffScheduleMappingService = new StaffScheduleMappingService();
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->staffScheduleMappingService->add($request);
+            $result['data'] = $staffScheduleMappingService->add($request);
 
         }catch(Exception $e){
 
@@ -101,12 +90,11 @@ class StaffScheduleMappingController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->staffScheduleMappingService->update($request, $id);
+            $result['data'] = $staffScheduleMappingService->update($request, $id);
 
         }catch(Exception $e){
 
@@ -127,11 +115,12 @@ class StaffScheduleMappingController extends Controller
      */
     public function destroy($id)
     {
+        $staffScheduleMappingService = new StaffScheduleMappingService();
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->staffScheduleMappingService->delete($id);
+            $result['data'] = $staffScheduleMappingService->delete($id);
 
         }catch(Exception $e){
 

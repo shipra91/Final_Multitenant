@@ -16,7 +16,9 @@ class ChallanRejectionReasonController extends Controller
     public function index()
     {       
         $challanRejectionReasonService = new ChallanRejectionReasonService();
-        return $challanRejectionReasonService->getAll();
+        $allSessions = session()->all();
+
+        return $challanRejectionReasonService->getAll($allSessions);
         
     }
 

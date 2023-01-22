@@ -19,9 +19,10 @@ class StudentLeaveManagementController extends Controller
     public function index(Request $request)
     {
         $studentLeaveManagementService = new StudentLeaveManagementService();
-        //dd($studentLeaveManagementService->getAll());
+        $allSessions = session()->all();
+
         if($request->ajax()){
-            $applicationData = $studentLeaveManagementService->getAll();
+            $applicationData = $studentLeaveManagementService->getAll($allSessions);
             return Datatables::of($applicationData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -69,9 +70,10 @@ class StudentLeaveManagementController extends Controller
     public function create()
     {
         $studentLeaveManagementService = new StudentLeaveManagementService();
+        $allSessions = session()->all();
 
-        $studentData = $studentLeaveManagementService->allStudent();
-        // dd($studentData);
+        $studentData = $studentLeaveManagementService->allStudent($allSessions);
+
         return view('StudentLeaveManagement/addStudentLeave', ['studentData' => $studentData])->with("page", "studentLeaveManagement");
     }
 
@@ -111,8 +113,9 @@ class StudentLeaveManagementController extends Controller
     public function show($id)
     {
         $studentLeaveManagementService = new StudentLeaveManagementService();
+        $allSessions = session()->all();
 
-        $studentData = $studentLeaveManagementService->allStudent();
+        $studentData = $studentLeaveManagementService->allStudent($allSessions);
         $selectedData = $studentLeaveManagementService->getSelectedData($id);
         //dd($selectedData);
         return view('StudentLeaveManagement/viewStudentLeave', ['studentData' => $studentData, 'selectedData' => $selectedData])->with("page", "studentLeaveManagement");
@@ -127,11 +130,11 @@ class StudentLeaveManagementController extends Controller
     public function edit($id)
     {
         $studentLeaveManagementService = new StudentLeaveManagementService();
+        $allSessions = session()->all();
 
-        $studentData = $studentLeaveManagementService->allStudent();
+        $studentData = $studentLeaveManagementService->allStudent($allSessions);
         $selectedData = $studentLeaveManagementService->getSelectedData($id);
         //dd($selectedData);
-
         return view('StudentLeaveManagement/editStudentLeave', ['studentData' => $studentData, 'selectedData' => $selectedData])->with("page", "studentLeaveManagement");
     }
 
@@ -194,10 +197,10 @@ class StudentLeaveManagementController extends Controller
     public function getDeletedRecords(Request $request){
 
         $studentLeaveManagementService = new StudentLeaveManagementService();
-        //dd($studentLeaveManagementService->getDeletedRecords());
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $deletedData = $studentLeaveManagementService->getDeletedRecords();
+        if ($request->ajax()){
+            $deletedData = $studentLeaveManagementService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

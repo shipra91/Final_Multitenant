@@ -26,31 +26,21 @@
             return $staffData;
         }
 
-        // public function getAllTeachingStaff(){
-
-        //     $staffRepository = new StaffRepository();
-
-        //     $staffData = $staffRepository->getTeachingStaff();
-        //     return $staffData;
-        // }
-
-        public function getAllTeachingStaff(){
+        // Get particular staff time table
+        public function getAllTeachingStaff($allSessions){
 
             $staffRepository = new StaffRepository();
-
             $arrayData = array();
-            $staffData = $staffRepository->getTeachingStaff();
-
+            $staffData = $staffRepository->getTeachingStaff($allSessions);
             foreach($staffData as $key => $staffDetail){
                 $arrayData[$key] = $staffDetail;
                 $arrayData[$key]['name'] = $staffRepository->getFullName($staffDetail['name'], $staffDetail['middle_name'], $staffDetail['last_name']);
             }
-
             return $arrayData;
         }
 
         // Get particular staff time table
-        public function getStaffTimeTableData($staffId){
+        public function getStaffTimeTableData($staffId, $allSessions){
 
             $staffRepository = new StaffRepository();
             $classTimeTableRepository = new ClassTimeTableRepository();

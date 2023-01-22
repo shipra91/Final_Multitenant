@@ -96,7 +96,7 @@ class VisitorReportController extends Controller
         $institutionRepository = new InstitutionRepository();
 
         $institute = $institutionRepository->fetch($institutionId);
-        $getReportData = $visitorReportService->getReportData($request);
+        $getReportData = $visitorReportService->getReportData($request, $allSessions);
         // dd($getReportData);
 
         return view('VisitorManagement/visitorReportData', ['getReportData' => $getReportData, 'institute' => $institute])->with("page", "fee_report");

@@ -8,12 +8,12 @@
     use Session;
     use DB;
 
-    class StaffRepository implements StaffRepositoryInterface {
+    class StaffRepository implements StaffRepositoryInterface{
 
-        public function all($request){
+        public function all($request, $allSessions){
 
-            //DB::enableQueryLog();
-            $allSessions = session()->all();
+            DB::enableQueryLog();
+            
             $idInstitution = $allSessions['institutionId'];
             $idAcademic = $allSessions['academicYear'];
 
@@ -57,27 +57,24 @@
             return $staff = Staff::find($id)->delete();
         }
 
-        public function getCategoryStaff($category, $idInstitution){
+        public function getCategoryStaff($category, $idInstitution, $allSessions){
 
             $roleRepository = new RoleRepository();
-
-            $allSessions = session()->all();
-            $idInstitution = $allSessions['institutionId'];
+            
             $idAcademic = $allSessions['academicYear'];
 
             $roleData = $roleRepository->getRoleID('superadmin');
 
             $data = Staff::where('tbl_staff.id_staff_category', $category)
-                        ->where('tbl_staff.id_institute', $idInstitution)
-                        ->where('id_academic_year', $idAcademic)
-                        ->whereNot('id_role', $roleData->id)
-                        ->get();
+                    ->where('tbl_staff.id_institute', $idInstitution)
+                    ->where('id_academic_year', $idAcademic)
+                    ->whereNot('id_role', $roleData->id)
+                    ->get();
             return $data;
         }
 
-        public function allDeleted(){
+        public function allDeleted($allSessions){
 
-            $allSessions = session()->all();
             $idInstitution = $allSessions['institutionId'];
             $idAcademic = $allSessions['academicYear'];
 
@@ -88,18 +85,19 @@
             return Staff::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return Staff::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            $idInstitution = $allSessions['institutionId'];
+            $idAcademic = $allSessions['academicYear'];
+            return Staff::where('id_institute', $idInstitution)->where('id_academic_year', $idAcademic)->onlyTrashed()->restore();
         }
 
         // Get staff based on category and subcategory
-        public function getStaffOnCategoryAndSubcategory($StaffCategory, $staffSubcategory){
+        public function getStaffOnCategoryAndSubcategory($StaffCategory, $staffSubcategory, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
-            //\DB::enableQueryLog();
+            \DB::enableQueryLog();
             $staffData = Staff::whereIn('tbl_staff.id_staff_category', $StaffCategory)
                                 ->whereIn('tbl_staff.id_staff_subcategory', $staffSubcategory)
                                 ->where('tbl_staff.id_institute', $institutionId)
@@ -108,39 +106,36 @@
             return $staffData;
         }
 
-        public function fetchStaffs($term){
+        public function fetchStaffs($term, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
 
             $staffData = Staff::where("id_institute", $institutionId)
-                                ->where("id_academic_year", $academicYear)
-                                ->where("name", 'LIKE','%'.$term.'%')
-                                ->orWhere("staff_uid", 'LIKE','%'.$term.'%')
-                                ->orWhere("primary_contact_no", 'LIKE','%'.$term.'%')
-                                ->get();
+                    ->where("id_academic_year", $academicYear)
+                    ->where("name", 'LIKE','%'.$term.'%')
+                    ->orWhere("staff_uid", 'LIKE','%'.$term.'%')
+                    ->orWhere("primary_contact_no", 'LIKE','%'.$term.'%')
+                    ->get();
             return $staffData;
         }
 
-        public function getTeachingStaff(){
-
-            $allSessions = session()->all();
+        public function getTeachingStaff($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
             $data = Staff::join('tbl_staff_categories', 'tbl_staff_categories.id', '=', 'tbl_staff.id_staff_category')
-                        ->where('tbl_staff_categories.label', 'TEACHING')
-                        ->where('tbl_staff.id_institute', $institutionId)
-                        ->select('tbl_staff.*')
-                        ->get();
+            ->where('tbl_staff_categories.label', 'TEACHING')
+            ->where('tbl_staff.id_institute', $institutionId)
+            ->select('tbl_staff.*')
+            ->get();
             return $data;
         }
 
-        public function getNonTeachingStaff(){
-
-            $allSessions = session()->all();
+        public function getNonTeachingStaff($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -167,9 +162,8 @@
             return $staffData;
         }
 
-        public function fetchStaffCount(){
-
-            $allSessions = session()->all();
+        public function fetchStaffCount($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 
@@ -181,10 +175,16 @@
             return $students;
         }
 
-        public function userExist($mobile){
-
+        public function userExist($mobile, $institutionId){
             // \DB::enableQueryLog();
-            $staffData = Staff::where('primary_contact_no', $mobile)->orWhere('secondary_contact_no', $mobile)->first();
+
+            $staffData = Staff::where('primary_contact_no', $mobile)
+                        ->orWhere('secondary_contact_no', $mobile)
+                        ->where(function($query) use ($institutionId){
+                            $query->where('id_organization', $institutionId)
+                            ->orWhere('id_academic_year', $institutionId);
+                        })
+                        ->first();
             // dd(DB::getQueryLog());
             return $staffData;
         }
@@ -201,21 +201,23 @@
             return $staffData;
         }
 
-        public function allStaffUser($mobile){
-
+        public function allStaffUser($mobile, $institutionId){
             // \DB::enableQueryLog();
+
             $staffData = Staff::where(function($query) use ($mobile){
                                     $query->where('primary_contact_no', $mobile)
                                         ->orWhere('secondary_contact_no', $mobile);
                                 })
-                                // ->where('id_institute', $institutionId)
+                                ->where(function($query) use ($institutionId){
+                                    $query->where('id_organization', $institutionId)
+                                    ->orWhere('id_academic_year', $institutionId);
+                                })
                                 ->get();
             // dd(DB::getQueryLog());
             return $staffData;
         }
 
         public function userExistForInstitution($mobile, $institutionId){
-
             $staffData = Staff::where(function($query) use ($mobile){
                                     $query->where('primary_contact_no', $mobile)
                                         ->orWhere('secondary_contact_no', $mobile);
@@ -228,9 +230,8 @@
             return $staffData;
         }
 
-        public function getBirthdayData($request){
-
-            $allSessions = session()->all();
+        public function getBirthdayData($request, $allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -245,6 +246,7 @@
                         //    ->take(3)
                         ->get();
 
+                        
             return $data;
         }
 
@@ -263,5 +265,6 @@
 
             return $output;
         }
+           
     }
 

@@ -6,6 +6,7 @@ use App\Models\ClassTimeTableSettings;
 use App\Services\ClassTimeTableSettingsService;
 use Illuminate\Http\Request;
 use DataTables;
+use Session;
 use Helper;
 
 class ClassTimeTableSettingsController extends Controller
@@ -18,11 +19,12 @@ class ClassTimeTableSettingsController extends Controller
     public function index(Request $request)
     {
         $classTimeTableSettingsService = new ClassTimeTableSettingsService();
+        $allSessions = session()->all();
 
         //dd($classTimeTableSettingsService->getAllPeriodSettings());
 
         if ($request->ajax()) {
-            $timeTableData = $classTimeTableSettingsService->getAllPeriodSettings();
+            $timeTableData = $classTimeTableSettingsService->getAllPeriodSettings($allSessions);
             return Datatables::of($timeTableData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -50,8 +52,9 @@ class ClassTimeTableSettingsController extends Controller
     public function create()
     {
         $classTimeTableSettingsService = new ClassTimeTableSettingsService();
+        $allSessions = session()->all();
 
-        $timeTableData = $classTimeTableSettingsService->getTimeTableData();
+        $timeTableData = $classTimeTableSettingsService->getTimeTableData($allSessions);
         //dd($timeTableData);
         $daysArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         return view('ClassTimeTableSettings/timetableSetting', ['timeTableData'=>$timeTableData, 'daysArray' => $daysArray])->with("page", "class_timetable_setting");
@@ -168,8 +171,10 @@ class ClassTimeTableSettingsController extends Controller
     public function getPeriodSettings(Request $request)
     {
         $classTimeTableSettingsService = new ClassTimeTableSettingsService();
-        $timeTableData = $classTimeTableSettingsService->getTimeTableData();
-        $timeTableSettings = $classTimeTableSettingsService->getPeriodSettings($request);
+        $allSessions = session()->all();
+
+        $timeTableData = $classTimeTableSettingsService->getTimeTableData($allSessions);
+        $timeTableSettings = $classTimeTableSettingsService->getPeriodSettings($request, $allSessions);
         $daysArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         //dd($daysArray);
 

@@ -19,9 +19,10 @@ class SeminarController extends Controller
     public function index(Request $request)
     {
         $seminarService = new SeminarService();
+        $allSessions = session()->all();
 
-        if($request->ajax()){
-            $seminars = $seminarService->getAll();
+        if ($request->ajax()){
+            $seminars = $seminarService->getAll($allSessions);
             return Datatables::of($seminars)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -58,8 +59,9 @@ class SeminarController extends Controller
     public function create()
     {
         $eventService = new EventService();
+        $allSessions = session()->all();
 
-        $details = $eventService->getEventData();
+        $details = $eventService->getEventData($allSessions);
         return view('Seminar/addSeminar', ['details' => $details])->with("page", "seminar");
     }
 
@@ -72,12 +74,13 @@ class SeminarController extends Controller
     public function store(Request $request)
     {
         $seminarService = new SeminarService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $seminarService->add($request);
+            $result['data'] = $seminarService->add($request, $allSessions);
 
         }catch(Exception $e){
 
@@ -130,12 +133,13 @@ class SeminarController extends Controller
     public function update(Request $request, $id)
     {
         $seminarService = new SeminarService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $seminarService->update($request, $id);
+            $result['data'] = $seminarService->update($request, $id, $allSessions);
 
         }catch(Exception $e){
 
@@ -189,9 +193,10 @@ class SeminarController extends Controller
     public function getDeletedRecords(Request $request){
 
         $seminarService = new SeminarService();
+        $allSessions = session()->all();
 
         if($request->ajax()){
-            $deletedData = $seminarService->getDeletedRecords();
+            $deletedData = $seminarService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

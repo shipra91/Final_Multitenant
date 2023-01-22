@@ -20,7 +20,6 @@
                             <div class="card-content">
                                 <h4 class="card-title">Admit Student Preadmission</h4>
                                 <form method="GET" class="demo-form" id="getPreadmission">
-
                                     <div class="row">
                                         <div class="col-lg-4 col-lg-offset-0">
                                             <div class="form-group">

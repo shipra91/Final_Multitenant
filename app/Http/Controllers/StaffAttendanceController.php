@@ -19,13 +19,14 @@ class StaffAttendanceController extends Controller
     public function index(Request $request)
     {
         $staffAttendanceService = new StaffAttendanceService;
+        $allSessions = session()->all();
 
         $input = \Arr::except($request->all(),array('_token', '_method'));
 
         // dd($staffAttendanceService->getAll($input));
 
-        if($request->ajax()){
-            $attendanceData = $staffAttendanceService->getAll($input);
+        if ($request->ajax()){
+            $attendanceData = $staffAttendanceService->getAll($input, $allSessions);
             // dd($attendanceData);
             return Datatables::of($attendanceData)
                     ->addIndexColumn()
@@ -101,6 +102,7 @@ class StaffAttendanceController extends Controller
     public function getAttendance(Request $request)
     {
         $staffAttendanceService = new StaffAttendanceService;
+        $allSessions = session()->all();
 
         // dd($request->get('idInstitute'));
         $idInstitute = $request->get('idInstitute');

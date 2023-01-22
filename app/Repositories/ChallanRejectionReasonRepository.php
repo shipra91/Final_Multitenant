@@ -6,8 +6,8 @@
 
     class ChallanRejectionReasonRepository implements ChallanRejectionReasonRepositoryInterface{
 
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             return ChallanRejectionReason::where('id_institute', $institutionId)->orderBy('created_at', 'ASC')->get();
         }

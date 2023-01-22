@@ -18,10 +18,11 @@ class SubjectPartCreationController extends Controller
     public function index(Request $request)
     {
         $subjectPartService = new SubjectPartService();
+        $allSessions = session()->all();
 
         if ($request->ajax()){
 
-            $allParts = $subjectPartService->getAll();
+            $allParts = $subjectPartService->getAll($allSessions);
             // dd($allParts);
             return Datatables::of($allParts)
                     ->addIndexColumn()

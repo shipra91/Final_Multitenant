@@ -28,35 +28,34 @@
     class ProjectService {
 
         // Get all subjects
-        public function allSubject($idStandard){
+        public function allSubject($idStandard, $allSessions){
 
-            $allSessions = session()->all();
             $role = $allSessions['role'];
-            // $role = 'staff';
             $idStaff = $allSessions['userId'];
+
             $standardSubjectRepository = new StandardSubjectRepository();
             $standardSubjectStaffMappingRepository = new StandardSubjectStaffMappingRepository();
 
             if($role == 'admin' || $role == 'superadmin'){
-                $allSubjects = $standardSubjectRepository->fetchStandardSubjects($idStandard);
+                $allSubjects = $standardSubjectRepository->fetchStandardSubjects($idStandard, $allSessions);
             }else{
-                $allSubjects = $standardSubjectStaffMappingRepository->fetchStandardStaffSubjects($idStandard, $idStaff);
+                $allSubjects = $standardSubjectStaffMappingRepository->fetchStandardStaffSubjects($idStandard, $idStaff, $allSessions);
             }
 
             return $allSubjects;
         }
 
         // Get all staff
-        public function allStaff($subjectId){
+        public function allStaff($subjectId, $allSessions){
 
             $staffSubjectMappingRepository = new StaffSubjectMappingRepository();
 
-            $allStaffs = $staffSubjectMappingRepository->allStaffs($subjectId);
+            $allStaffs = $staffSubjectMappingRepository->allStaffs($subjectId, $allSessions);
             return $allStaffs;
         }
 
         // Get all project
-        public function getAll(){
+        public function getAll($allSessions){
 
             $projectRepository = new ProjectRepository();
             $projectDetailRepository = new ProjectDetailRepository();
@@ -68,29 +67,28 @@
             $subjectRepository = new SubjectRepository();
 
             $projectDetails = array();
-
-            $allSessions = session()->all();
             $role = $allSessions['role'];
             $idStaff = $allSessions['userId'];
 
             if($role == 'admin' || $role == 'superadmin'){
-                $projectDetail = $projectRepository->all();
+                $projectDetail = $projectRepository->all($allSessions);
             }else{
-                $projectDetail = $projectRepository->fetchProjectUsingStaff($idStaff);
+                $projectDetail = $projectRepository->fetchProjectUsingStaff($idStaff, $allSessions);
             }
 
             foreach($projectDetail as  $details){
 
                 $standardName = $institutionStandardService->fetchStandardByUsingId($details->id_standard);
-                $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject);
+                $subjectName =  $institutionSubjectService->getSubjectName($details->id_subject, $allSessions);
                 $subjectData = $institutionSubjectRepository->find($details->id_subject);
-                $staffDetails = $staffService->find($details->id_staff);
+                $staffDetails = $staffService->find($details->id_staff, $allSessions);
                 $fromDate = Carbon::createFromFormat('Y-m-d', $details->start_date)->format('d/m/Y');
                 $toDate = Carbon::createFromFormat('Y-m-d', $details->end_date)->format('d/m/Y');
                 $projectImageDetail = $projectDetailRepository->fetch($details->id);
-                $type = $subjectTypeRepository->fetch($subjectData->id_type);
-                $subjectNameCount = $subjectRepository->fetchSubjectNameCount($subjectData->name);
 
+                $type = $subjectTypeRepository->fetch($subjectData->id_type);
+
+                $subjectNameCount = $subjectRepository->fetchSubjectNameCount($subjectData->name);
                 if(count($subjectNameCount) > 1){
                     $subjectType = ' ( '.$type->display_name.' )';
                 }else{
@@ -120,15 +118,6 @@
             //dd($projectDetails);
             return $projectDetails;
         }
-
-        // Get particular project
-        // public function find($id){
-
-        //     $projectRepository = new ProjectRepository();
-
-        //     $project = $projectRepository->fetch($id);
-        //     return $project;
-        // }
 
         // Get particular project
         public function getProjectSelectedData($idProject){
@@ -165,7 +154,16 @@
         }
 
         // Get project details
-        public function fetchDetails($data){
+        public function find($id){
+
+            $projectRepository = new ProjectRepository();
+
+            $project = $projectRepository->fetch($id);
+            return $project;
+        }
+
+        // Get project details
+        public function fetchDetails($data, $allSessions){
 
             $projectDetailRepository = new ProjectDetailRepository();
             $institutionStandardService = new InstitutionStandardService();
@@ -180,7 +178,6 @@
             $id = $data->projectId;
             $loginType = $data->login_type;
 
-            $allSessions = session()->all();
             $idStudent = $allSessions['userId'];
             $data['id_student'] = $idStudent;
             $data['id_project'] = $id;
@@ -206,8 +203,8 @@
 
             $project = $projectRepository->fetch($id);
             $standardName = $institutionStandardService->fetchStandardByUsingId($project->id_standard);
-            $subjectName =  $institutionSubjectService->getSubjectName($project->id_subject);
-            $staffDetails = $staffService->find($project->id_staff);
+            $subjectName =  $institutionSubjectService->getSubjectName($project->id_subject, $allSessions);
+            $staffDetails = $staffService->find($project->id_staff, $allSessions);
             $fromDate = Carbon::createFromFormat('Y-m-d', $project->start_date)->format('d/m/Y');
             $toDate = Carbon::createFromFormat('Y-m-d', $project->end_date)->format('d/m/Y');
 
@@ -251,9 +248,8 @@
             $projectAssignedStudentsRepository = new ProjectAssignedStudentsRepository();
             $uploadService = new UploadService();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $projectData->id_institute;
+            $academicYear = $projectData->id_academic;
 
             $projectClass = $projectData->project_class;
             $projectSubject = $projectData->project_subject;
@@ -387,9 +383,8 @@
             $projectDetailRepository = new ProjectDetailRepository();
             $projectAssignedStudentsRepository = new ProjectAssignedStudentsRepository();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $projectData->id_institute;
+            $academicYear = $projectData->id_academic;
 
             $projectClass = $projectData->project_class;
             $projectSubject = $projectData->project_subject;
@@ -537,7 +532,15 @@
             return $output;
         }
 
-        public function getDetails($data){
+        public function getDetails($data, $allSessions){
+
+            $staffs = array();
+            $standardId = $data->id_standard;
+            $subjectId = $data->id_subject;
+            $projectId = $data->id;
+
+            $request['subjectId'] = $subjectId;
+            $request['standardId'] = $standardId;
 
             $institutionStandardService = new InstitutionStandardService();
             $standardSubjectService = new StandardSubjectService();
@@ -548,23 +551,13 @@
             $subjectService = new SubjectService();
             $subjectTypeRepository = new SubjectTypeRepository();
             $projectAssignedStudentsRepository = new ProjectAssignedStudentsRepository();
-
-            $staffs = array();
             $assignedStudents = array();
-
-            $standardId = $data->id_standard;
-            $subjectId = $data->id_subject;
-            $projectId = $data->id;
-            $request['subjectId'] = $subjectId;
-            $request['standardId'] = $standardId;
-            $projectDetails['standard'] = $institutionStandardService->fetchStandard();
-            $projectDetails['subject'] = $standardSubjectService->fetchStandardSubjects($standardId);
-            $staffSubjectDetails = $standardSubjectStaffMappingRepository->getStaffs($subjectId, $standardId);
+            $projectDetails['standard'] = $institutionStandardService->fetchStandard($allSessions);
+            $projectDetails['subject'] = $standardSubjectService->fetchStandardSubjects($standardId, $allSessions);
+            $staffSubjectDetails = $standardSubjectStaffMappingRepository->getStaffs($subjectId, $standardId, $allSessions);
 
             foreach($staffSubjectDetails as $index => $details){
-                $staffData = $staffRepository->fetch($details->id_staff);
-                $staffs[$index] = $staffData;
-                $staffs[$index]['name'] = $staffRepository->getFullName($staffData->name, $staffData->middle_name, $staffData->last_name);
+                $staffs[$index] = $staffRepository->fetch($details->id_staff);
             }
 
             $projectDetails['staff'] = $staffs;
@@ -574,16 +567,18 @@
             $type = $subjectTypeRepository->fetch($subjectDetails->id_type);
 
             if($type->label == 'common'){
-                $students = $studentMappingRepository->fetchStudentUsingStandard($data->id_standard);
+                $students = $studentMappingRepository->fetchStudentUsingStandard($data->id_standard, $allSessions);
             }else{
-                $students = $studentMappingRepository->fetchStudentUsingSubject($request);
+                $students = $studentMappingRepository->fetchStudentUsingSubject($request, $allSessions);
             }
             foreach($students as $key => $student){
+                
                 $allStudents[$key] = $student;
                 $allStudents[$key]['name'] = $studentMappingRepository->getFullName($student['name'], $student['middle_name'], $student['last_name']);
             }
 
-            $projectDetails['student'] = $allStudents;
+            $projectDetails['student'] = $allStudents;            
+
             $projectAssignedStudents = $projectAssignedStudentsRepository->fetch($projectId);
 
             foreach ($projectAssignedStudents as $index => $details){
@@ -595,11 +590,11 @@
         }
 
         // Download project attachment zip
-        public function downloadProjectFiles($id, $type){
+        public function downloadProjectFiles($id, $type, $allSessions){
 
             $projectDetailRepository = new ProjectDetailRepository();
             $projectAssignedStudentService = new ProjectAssignedStudentService();
-            $allSessions = session()->all();
+            
             $idStudent = $allSessions['userId'];
             $data['id_student'] = $idStudent;
             $data['id_project'] = $id;
@@ -626,11 +621,11 @@
         }
 
         // Deleted project records
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $ProjectRepository = new ProjectRepository();
             $ProjectDetail = array();
-            $ProjectData = $ProjectRepository->allDeleted();
+            $ProjectData = $ProjectRepository->allDeleted($allSessions);
 
             foreach($ProjectData as $key => $data){
                 $ProjectDetail[$key] = $data;
@@ -665,3 +660,4 @@
             return $output;
         }
     }
+?>

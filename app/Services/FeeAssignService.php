@@ -17,7 +17,10 @@
         public function assignFeeForStudent($idStandard, $idFeeType, $idStudent){
 
             $totalAmount = 0;
+<<<<<<< HEAD
             $feeAssign_id = '';
+=======
+>>>>>>> main
             $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $organizationId = $allSessions['organizationId'];
@@ -240,7 +243,10 @@
                                                     );
 
                                                     $storeFeeAssign = $feeAssignDetailRepository->store($assignedFeeData);
+<<<<<<< HEAD
                                                     
+=======
+>>>>>>> main
                                                 }
                                             }
                                         }
@@ -251,7 +257,10 @@
                     }
                 }
             }
+<<<<<<< HEAD
             return $feeAssign_id;
+=======
+>>>>>>> main
         }
     }
 

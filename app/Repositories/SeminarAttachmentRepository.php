@@ -22,11 +22,7 @@
             return $data->save();
         }
 
-        // public function delete($idSeminar){
-        //     return $data = SeminarAttachment::where('id_seminar', $idSeminar)->delete();
-        // }
-
-        public function delete($id){
-            return $data = SeminarAttachment::find($id)->delete();
+        public function delete($idSeminar){
+            return $seminarAttachment = SeminarAttachment::where('id_seminar', $idSeminar)->delete();
         }
     }

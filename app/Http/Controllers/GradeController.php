@@ -6,6 +6,7 @@ use App\Models\Grade;
 use Illuminate\Http\Request;
 use App\Services\GradeService;
 use DataTables;
+use Session;
 
 class GradeController extends Controller
 {
@@ -17,9 +18,10 @@ class GradeController extends Controller
     public function index(Request $request)
     {
         $gradeService = new GradeService();
-        // dd($gradeService->getAll());
+        $allSessions = session()->all();
+        
         if ($request->ajax()){
-            $data = $gradeService->getAll();
+            $data = $gradeService->getAll($allSessions);
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -102,6 +104,7 @@ class GradeController extends Controller
     public function edit($id)
     {
         $gradeService = new GradeService();
+        $allSessions = session()->all();
 
         $selectedData = $gradeService->getGradeSelectedData($id);
         //dd($selectedData);
@@ -167,10 +170,11 @@ class GradeController extends Controller
     public function getDeletedRecords(Request $request)
     {
         $gradeService = new GradeService();
+        $allSessions = session()->all();
         //dd($gradeService->getDeletedRecords());
 
         if ($request->ajax()){
-            $deletedData = $gradeService->getDeletedRecords();
+            $deletedData = $gradeService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){

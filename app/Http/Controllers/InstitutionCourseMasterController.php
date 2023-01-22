@@ -8,11 +8,6 @@ use App\Services\InstitutionCourseMasterService;
 
 class InstitutionCourseMasterController extends Controller
 {
-    private $institutionCourseMasterService;
-    public function __construct( InstitutionCourseMasterService $institutionCourseMasterService)
-    {
-        $this->institutionCourseMasterService = $institutionCourseMasterService;
-    }
     /**
      * Display a listing of the resource.
      *
@@ -86,11 +81,12 @@ class InstitutionCourseMasterController extends Controller
      */
     public function destroy($id)
     {
+        $institutionCourseMasterService = new InstitutionCourseMasterService();
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $this->institutionCourseMasterService->delete($id);
+            $result['data'] = $institutionCourseMasterService->delete($id);
 
         }catch(Exception $e){
 

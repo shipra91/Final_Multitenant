@@ -19,11 +19,11 @@
     class ClassTimeTableService {
 
         // Get standards
-        public function getStandards(){
+        public function getStandards($allSessions){
 
             $institutionStandardService = new InstitutionStandardService();
 
-            $institutionStandards = $institutionStandardService->fetchStandard();
+            $institutionStandards = $institutionStandardService->fetchStandard($allSessions);
 
             $output = array(
                 'institutionStandards' => $institutionStandards,
@@ -33,7 +33,7 @@
         }
 
         // Get time-table daywise
-        public function getTimeTableDayWise($standardId){
+        public function getTimeTableDayWise($standardId, $allSessions){
 
             $staffService = new StaffService();
             $periodRepository = new PeriodRepository();
@@ -50,16 +50,16 @@
             $allSubjects = array();
             $daysPeriodDetails = array();
 
-            $allSubjects = $standardSubjectService->fetchStandardSubjects($standardId);
+            $allSubjects = $standardSubjectService->fetchStandardSubjects($standardId, $allSessions);
             $daysPeriodDetails['days_array'] = $daysArray;
             foreach($daysArray as $index => $day){
 
-                $dayPeriodSetting = $periodSettingsRepository->getPeriodSettings($standardId, $day);
+                $dayPeriodSetting = $periodSettingsRepository->getPeriodSettings($standardId, $day, $allSessions);
                 if($dayPeriodSetting){
                     
                     $dayPeriodSettingData[$index] = $dayPeriodSetting;
 
-                    $classTimeTableSettingDetails = $classTimeTableSettingsRepository->getClassTimetableSettings($dayPeriodSetting->id);
+                    $classTimeTableSettingDetails = $classTimeTableSettingsRepository->getClassTimetableSettings($dayPeriodSetting->id, $allSessions);
                     
                     if($classTimeTableSettingDetails){
 
@@ -68,7 +68,7 @@
                             $daysPeriodDetails['day_periods'][$day][] = $timetableSetting->id_period;
                             $classTimeTableSettingData[$key] = $timetableSetting;
 
-                            $classSelectedData = $this->getTimeTableSelectedData($standardId, $day, $timetableSetting->id_period);
+                            $classSelectedData = $this->getTimeTableSelectedData($standardId, $day, $timetableSetting->id_period, $allSessions);
                            
                             $classTimeTableSettingData[$key]['selected_subject'] = $classTimeTableSettingData[$key]['selected_staff'] = $classTimeTableSettingData[$key]['selected_room'] = $classTimeTableSettingData[$key]['all_staff'] = array();
                             $classTimeTableSettingData[$key]['count'] = 0;
@@ -90,7 +90,7 @@
                                     $allStaffArray[$detail['id_subject']] = explode(',', $detail['id_staffs']);
                                     $allRoomArray[$detail['id_subject']][$sub] = $detail['id_room'];
 
-                                    $standardSubjectStaffData = $standardSubjectStaffMappingRepository->fetchStaffOnStandardAndSubject($standardId, $detail['id_subject']);
+                                    $standardSubjectStaffData = $standardSubjectStaffMappingRepository->fetchStaffOnStandardAndSubject($standardId, $detail['id_subject'], $allSessions);
 
                                     foreach($standardSubjectStaffData as $staffKey => $staffData) {
 
@@ -134,9 +134,8 @@
             $classTimeTableDetailRepository = new ClassTimeTableDetailRepository();
             $standardSubjectStaffMappingRepository = new StandardSubjectStaffMappingRepository();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $timeTableData->id_institute;
+            $academicYear = $timeTableData->id_academic;
             $idStandard = $timeTableData->standard_id;
             $count = 0;
 
@@ -243,15 +242,15 @@
         }
 
         // Get particular time-table data
-        public function getTimeTableSelectedData($idStandard, $day, $idPeriod){
+        public function getTimeTableSelectedData($idStandard, $day, $idPeriod, $allSessions){
 
             $classTimeTableRepository = new ClassTimeTableRepository();
 
-            $timeTableDetailData = $classTimeTableRepository->fetchTimeTableDetail($idStandard, $day, $idPeriod);
+            $timeTableDetailData = $classTimeTableRepository->fetchTimeTableDetail($idStandard, $day, $idPeriod, $allSessions);
 
             return $timeTableDetailData;
         }
-
+        
         public function fetchPeriodSubjects($standardId, $periodId, $attendanceDate, $allSessions){
             $classTimeTableRepository = new ClassTimeTableRepository();
             $institutionSubjectService = new InstitutionSubjectService();

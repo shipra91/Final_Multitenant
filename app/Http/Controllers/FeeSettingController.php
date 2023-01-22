@@ -16,7 +16,9 @@ class FeeSettingController extends Controller
     public function index()
     {
         $feeSettingService = new FeeSettingService();
-        $feeSettingData = $feeSettingService->fetchData();
+        $allSessions = session()->all();
+
+        $feeSettingData = $feeSettingService->fetchData($allSessions);
         return view('FeeSetting/feeSettingCreation',['feeSettingData'=> $feeSettingData])->with("page", "fee_setting");
     }
 
@@ -39,12 +41,13 @@ class FeeSettingController extends Controller
     public function store(Request $request)
     {
         $feeSettingService = new FeeSettingService();
+        $allSessions = session()->all();
 
         $result = ["status" => 200];
 
         try{
 
-            $result['data'] = $feeSettingService->add($request);
+            $result['data'] = $feeSettingService->add($request, $allSessions);
 
         }catch(Exception $e){
             $result = [

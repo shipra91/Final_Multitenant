@@ -32,10 +32,10 @@
             return FeeCategorySetting::find($id)->delete();
         }
 
-        public function fetchCategoryDetail($idFeeMaster){
+        public function fetchCategoryDetail($idFeeMaster, $allSessions){
 
             DB::enableQueryLog();
-            $allSessions = session()->all();
+            
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
 

@@ -8,9 +8,14 @@
     use App\Repositories\OrganizationRepository;
     use App\Services\SMSTemplateService;
     use App\Repositories\InstitutionSMSTemplateRepository;
+<<<<<<< HEAD
     use App\Repositories\LoginDeviceTokenRepository;
     use App\Repositories\AcademicYearMappingRepository;
     use App\Repositories\InstitutionRepository;
+=======
+    use App\Repositories\AcademicYearMappingRepository;
+    use App\Repositories\LoginDeviceTokenRepository;
+>>>>>>> main
     use App\Services\ComposeMessageService;
     use Carbon\Carbon;
     use Helper;
@@ -73,11 +78,16 @@
 
                     }else{
 
+<<<<<<< HEAD
                         $getLoginOtpStatus = $mobileLoginRepository->getLoginStatus($request);
+=======
+                        $getLoginOtpStatus = $mobileLoginRepository->getLoginStatus($mobileNumber);
+>>>>>>> main
                         if($getLoginOtpStatus){
 
                             if($getLoginOtpStatus->otp_used_status === 'YES'){
 
+<<<<<<< HEAD
                                 $otp = rand(100000, 999999);
 
                                 $getLoginOtpStatus->otp = $otp;
@@ -85,6 +95,22 @@
 
                                 $loginOtpStatus = $mobileLoginRepository->update($getLoginOtpStatus);
 
+=======
+                                $checkUserData = $userRepository->fetch($mobileNumber);
+                                if($checkUserData){
+
+                                    $signal = 'already_loggedin';
+                                    $msg = "mPIN already created";
+
+                                }else{
+                                    $otp = rand(100000, 999999);
+
+                                    $getLoginOtpStatus->otp = $otp;
+                                    $getLoginOtpStatus->otp_used_status = 'NO';
+
+                                    $loginOtpStatus = $mobileLoginRepository->update($getLoginOtpStatus);
+                                }
+>>>>>>> main
                             }else{
                                 $otp = $getLoginOtpStatus->otp;
                             }
@@ -172,7 +198,10 @@
             $smsTemplateService = new SMSTemplateService();
             $institutionSMSTemplateRepository = new InstitutionSMSTemplateRepository();
             $composeMessageService = new ComposeMessageService();
+<<<<<<< HEAD
             $academicYearMappingRepository = new AcademicYearMappingRepository();
+=======
+>>>>>>> main
 
             $output = $otp = $OTP_Message = $signal = '';
 
@@ -332,6 +361,7 @@
             if($signal == 'success'){
                 $reportDetails = array();
                 $smsTemplateDetails = $institutionSMSTemplateRepository->getData('OTP', $idInstitution);
+<<<<<<< HEAD
                 $academicYearMappingDetails = $academicYearMappingRepository->getInstitutionDefaultAcademics($idInstitution);
                 if($smsTemplateDetails){
 
@@ -352,6 +382,17 @@
 
                 $reportDetails['institution_id'] = $idInstitution;
                 $reportDetails['academic_id'] = $academicYearMappingDetails->idAcademicMapping;
+=======
+                $senderId           = $smsTemplateDetails->sender_id;
+                $smsTemplateId      = $smsTemplateDetails->sms_template_id;
+
+                $smsDetails = $smsTemplateService->find($smsTemplateId);
+
+                $description = $smsDetails->template_detail;
+                $templateId  = $smsDetails->template_id;
+                $description = "Dear User, OTP for Mobile App login is ".$otp.".".$domainDetail->name."(by eGenius)";
+
+>>>>>>> main
                 $reportDetails['id_message_center'] = 0;
                 $reportDetails['message_type'] = 'OTP';
                 $reportDetails['sender_id'] = $senderId;
@@ -360,7 +401,11 @@
                 $reportDetails['recipient_number'] = $mobile;
                 $reportDetails['sms_description'] = $description;
 
+<<<<<<< HEAD
                 $storeReportData = $composeMessageService->addOTPMessageReportData($reportDetails);
+=======
+                $storeReportData = $composeMessageService->addMessageReportData($reportDetails);
+>>>>>>> main
                 
                 if($storeReportData){
                     $sendMessage =  $composeMessageService->sendOTPMessage($storeReportData->id, $templateId);
@@ -407,6 +452,7 @@
         }
 
         public function createmPIN($request){
+<<<<<<< HEAD
             // dd($request->phone);
             $userRepository = new UserRepository();
             $output = '';
@@ -427,6 +473,58 @@
 
                 $signal = 'failure';
                 $msg = 'Error inserting data!';
+=======
+            
+            $userRepository = new UserRepository();
+            $staffRepository = new StaffRepository();
+            $studentRepository = new StudentRepository();
+            $output = '';
+            
+            if(isset($request->username) && isset($request->password) && isset($request->institutionId)){
+
+                $staffData = $staffRepository->userExist($request->username, $request->institutionId);
+                
+                $studentData = $studentRepository->userExist($request->username, $request->institutionId);
+                if($staffData || $studentData){
+                    
+                    $checkLogin = $userRepository->fetch($request->username);
+                    
+                    if(!$checkLogin){
+
+                        $data = array(
+                            'username' => $request->username,
+                            'password' => Hash::make($request->password)
+                        );
+
+                        $storeData = $userRepository->store($data);
+
+                    }else{
+                        $userData = $userRepository->fetch($request->username);
+                        $userData->password = Hash::make($request->password);
+                        $storeData = $userRepository->update($userData);
+                    }
+                    if($storeData) {
+
+                        $signal = 'success';
+                        $msg = 'mPIN set successfully!';
+
+                    }else{
+
+                        $signal = 'failure';
+                        $msg = 'Error inserting data!';
+
+                    }
+                }else{
+
+                    $signal = 'failure';
+                    $msg = 'Invalid mobile number!';
+
+                }
+            }else{
+
+                $signal = 'failure';
+                $msg = 'Incorrect parameter!';
+>>>>>>> main
 
             }
 
@@ -476,6 +574,7 @@
             $roleRepository = new RoleRepository();
             $loginDeviceTokenRepository = new LoginDeviceTokenRepository();
 
+<<<<<<< HEAD
             $mobile = $request->username;
             $mPIN = Hash::make($request->password);
             $deviceToken = $request->deviceToken;
@@ -527,17 +626,86 @@
                         $signal = "success";
                         $msg = "Login successful!";
 
+=======
+            if(isset($request->username) && isset($request->password) && isset($request->institutionId)){
+                $mobile = $request->username;
+                $mPIN = Hash::make($request->password);
+                $deviceToken = $request->deviceToken;
+                $institutionId = $request->institutionId;
+
+                $userList = array();
+                $output = '';
+
+                $staffData = $staffRepository->userExist($mobile, $institutionId);
+                $studentData = $studentRepository->userExist($mobile, $institutionId);
+                if($staffData || $studentData){
+                    $checkUserExistence = $userRepository->fetch($mobile);
+                    if($checkUserExistence){
+                        $checkLogin = $userRepository->checkMobileLoginData($mobile, $mPIN);
+                        if($checkLogin){
+
+                            //INSERT DEVICE TOKEN
+                            $deviceData = array(
+                                'mobile' => $mobile,
+                                'device_token' => $deviceToken
+                            );
+                            $storeDeviceToken = $loginDeviceTokenRepository->store($deviceData);
+                            
+                            //STAFF DATA
+                            $staffData = $staffRepository->allStaffUser($mobile, $institutionId);
+                            if($staffData){
+                                foreach($staffData as $staff){
+                                    $staffDetail = $staffService->find($staff['id']);
+                                    $menuData = $menuPermissionService->roleMenuPermission($staff['id_role'], $institutionId);
+
+                                    array_push($userList, $staffDetail);
+                                    array_push($userList['menu'], $menuData);
+                                }
+                            }                        
+
+                            // STUDENT DATA
+                            $studentData = $studentRepository->allStudentUser($mobile, $institutionId);
+                            if($studentData){
+                                foreach($studentData as $student){
+
+                                    $roleData = $roleRepository->getRoleID('student');
+                                    $studentDetail = $studentService->find($student['id_student']);
+                                    $menuData = $menuPermissionService->roleMenuPermission($roleData['id'], $institutionId);
+
+                                    array_push($userList, $studentDetail);
+                                    array_push($userList['menu'], $menuData);
+                                }
+                            }  
+
+                            $signal = "success";
+                            $msg = "Login successful!";
+
+                        }else{
+                            $signal = "failure";
+                            $msg = "Please set mPIN first";
+                        }
+>>>>>>> main
                     }else{
                         $signal = "failure";
                         $msg = "Please set mPIN first";
                     }
                 }else{
                     $signal = "failure";
+<<<<<<< HEAD
                     $msg = "Please set mPIN first";
                 }
             }else{
                 $signal = "failure";
                 $msg = "This number is not registered with us";
+=======
+                    $msg = "This number is not registered with us";
+                }
+            }else{
+
+                $signal = 'failure';
+                $msg = 'Incorrect parameter!';
+
+>>>>>>> main
             }
 
             $output = array(
@@ -646,6 +814,50 @@
 
             return $output;
         }
+<<<<<<< HEAD
+=======
+
+        public function getUrl($request){
+            $academicYearMappingRepository = new AcademicYearMappingRepository();
+
+            if(isset($request->url)){
+                $url = preg_replace("(^https?://)", "", $request->url);
+                $webUrl = explode("/", $url);
+                $websiteUrl = $webUrl[0];
+
+                $domainDetail = Helper::domainCheckWithUrl($websiteUrl);
+                
+                if($domainDetail != ''){
+                    $institutionId = $domainDetail->institution_id;
+                    $defaultAcademicYear = $academicYearMappingRepository->getInstitutionDefaultAcademics($institutionId);
+                    if($defaultAcademicYear){
+                        $defaultAcademicId = $defaultAcademicYear->idAcademicMapping;
+                    }else{
+                        $defaultAcademicId = '';
+                    }
+                    
+                    $signal = 'success';
+                    $data = array(
+                        "institutionId"=> $institutionId,
+                        "academicYearId"=> $defaultAcademicId
+                    );
+                }else{
+                    $signal = 'failure';
+                    $data = 'url not found';
+                }
+            }else{
+                $signal = 'failure';
+                $data = 'Incorrect parameter';
+            }
+
+            $output = array(
+                'signal' => $signal,
+                'msg' => $data
+            );
+
+            return $output;
+        }
+>>>>>>> main
     }
 
 ?>

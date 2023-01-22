@@ -8,10 +8,9 @@
 
     class FeeChallanSettingRepository implements FeeChallanSettingRepositoryInterface{
 
-        public function all(){
+        public function all($allSessions){
 
             // DB::enableQueryLog();
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 
@@ -65,9 +64,8 @@
 
 
         //FETCH SETTING ON CATEGORY BASIS
-        public function fetch($idFeeCategory, $idAcademic){
+        public function fetch($idFeeCategory, $idAcademic, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             //DB::enableQueryLog();
             $setting = FeeChallanSetting::join('tbl_fee_challan_setting_categories', 'tbl_fee_challan_setting_categories.id_fee_challan_settings', '=', 'tbl_fee_challan_setting.id')

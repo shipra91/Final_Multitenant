@@ -39,7 +39,7 @@
             return $dates;
         }
 
-        function getReportData($requestData){
+        function getReportData($requestData, $allSessions){
 
             $studentMappingRepository = new StudentMappingRepository();
             $attendanceReportRepository = new AttendanceReportRepository();
@@ -48,7 +48,6 @@
             $attendanceRepository = new AttendanceRepository();
             $periodService = new PeriodService();
             
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             $attendanceType = $requestData->attendanceType;
@@ -76,7 +75,7 @@
 
                     foreach($standardIds as $standardId){
 
-                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId);
+                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId, $allSessions);
                         if($studentDetails){
                             foreach($studentDetails as $studentData){
 
@@ -98,7 +97,7 @@
 
                                         $studentDetailArray[$index]['attendanceDetail'][$date][$period['id']] = '-';
 
-                                        $attendanceDetails = $attendanceRepository->allPeriodAttendanceData($standardId, $studentData['id_student'], $date, $period['id']);
+                                        $attendanceDetails = $attendanceRepository->allPeriodAttendanceData($standardId, $studentData['id_student'], $date, $period['id'], $allSessions);
                                         if($attendanceDetails){
 
                                             $totalCount++;
@@ -139,14 +138,14 @@
 
                 case "sessionwise":
                     
-                    $allSessions = $attendanceSessionService->getAll();
+                    $allSessions = $attendanceSessionService->getAll($allSessions);
                     $studentDetailArray = array();
                     $output = array();
                     $count = 0;
 
                     foreach($standardIds as $standardId){
 
-                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId);
+                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId, $allSessions);
                         
                         if($studentDetails){
                             foreach($studentDetails as $studentData){
@@ -169,7 +168,7 @@
 
                                         $studentDetailArray[$count]['attendanceDetail'][$date][$session['id']] = '-';
 
-                                        $attendanceDetails = $attendanceRepository->allPeriodAttendanceData($standardId, $studentData['id_student'], $date, $session['id']);
+                                        $attendanceDetails = $attendanceRepository->allPeriodAttendanceData($standardId, $studentData['id_student'], $date, $session['id'], $allSessions);
                                         if($attendanceDetails){
 
                                             $totalCount++;
@@ -215,7 +214,7 @@
 
                     foreach($standardIds as $standardId){
 
-                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId);
+                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId, $allSessions);
                         if($studentDetails){
                             foreach($studentDetails as $studentData){
 
@@ -235,7 +234,7 @@
 
                                     $studentDetailArray[$index]['attendanceDetail'][$date] = '-';
 
-                                    $attendanceDetails = $attendanceRepository->allDayAttendanceData($standardId, $studentData['id_student'], $date);
+                                    $attendanceDetails = $attendanceRepository->allDayAttendanceData($standardId, $studentData['id_student'], $date, $allSessions);
                                     if($attendanceDetails){
 
                                         $totalCount++;
@@ -277,7 +276,7 @@
 
         }
 
-        function getAbsentReport($requestData){
+        function getAbsentReport($requestData, $allSessions){
 
             $studentMappingRepository = new StudentMappingRepository();
             $attendanceReportRepository = new AttendanceReportRepository();
@@ -286,7 +285,6 @@
             $attendanceRepository = new AttendanceRepository();
             $periodService = new PeriodService();
             
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicYear = $allSessions['academicYear'];
             $attendanceType = $requestData->dailyAattendanceType;
@@ -308,7 +306,7 @@
 
                     foreach($standardIds as $standardId){
 
-                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId);
+                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId, $allSessions);
                         if($studentDetails){
                             foreach($studentDetails as $studentData){
                                 
@@ -321,7 +319,7 @@
 
                                     $studentDetailArray[$index]['attendanceDetail'][$date][$period['id']] = '-';
 
-                                    $attendanceDetails = $attendanceRepository->allPeriodAttendanceData($standardId, $studentData['id_student'], $date, $period['id']);
+                                    $attendanceDetails = $attendanceRepository->allPeriodAttendanceData($standardId, $studentData['id_student'], $date, $period['id'], $allSessions);
                                     if($attendanceDetails){
 
                                         if($attendanceDetails->attendance_status === 'ABSENT'){
@@ -356,14 +354,14 @@
 
                 case "sessionwise":
                     
-                    $allSessions = $attendanceSessionService->getAll();
+                    $allSessions = $attendanceSessionService->getAll($allSessions);
                     $studentDetailArray = array();
                     $output = array();
                     $index = 0;
 
                     foreach($standardIds as $standardId){
 
-                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId);
+                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId, $allSessions);
                         if($studentDetails){
                             foreach($studentDetails as $studentData){
                                 
@@ -376,7 +374,7 @@
 
                                     $studentDetailArray[$index]['attendanceDetail'][$date][$session['id']] = '-';
 
-                                    $attendanceDetails = $attendanceRepository->allPeriodAttendanceData($standardId, $studentData['id_student'], $date, $session['id']);
+                                    $attendanceDetails = $attendanceRepository->allPeriodAttendanceData($standardId, $studentData['id_student'], $date, $session['id'], $allSessions);
                                     if($attendanceDetails){
 
                                         if($attendanceDetails->attendance_status === 'ABSENT'){
@@ -416,7 +414,7 @@
 
                     foreach($standardIds as $standardId){
 
-                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId);
+                        $studentDetails = $studentMappingRepository->fetchInstitutionStandardStudents($standardId, $allSessions);
                         if($studentDetails){
                             foreach($studentDetails as $studentData){
                                 
@@ -425,7 +423,7 @@
                                 
                                 $studentDetailArray[$index]['attendanceDetail'] = array();
 
-                                $attendanceDetails = $attendanceRepository->allDayAttendanceData($standardId, $studentData['id_student'], $date);
+                                $attendanceDetails = $attendanceRepository->allDayAttendanceData($standardId, $studentData['id_student'], $date, $allSessions);
                                 if($attendanceDetails){
 
                                     if($attendanceDetails->attendance_status === 'ABSENT'){

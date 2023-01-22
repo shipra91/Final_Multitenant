@@ -3,7 +3,7 @@
 namespace App\Interfaces;
 
 Interface InstitutionFeeTypeMappingRepositoryInterface{
-    public function all();
+    public function all($allSessions);
     public function store($data);
     public function fetch($id);
     public function update($data);

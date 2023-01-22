@@ -15,7 +15,7 @@
             return $roles;      
         }
 
-        public function institutionRoleMenuPermission(){   
+        public function institutionRoleMenuPermission($allSessions){   
             
             $menuPermissionRepository = new MenuPermissionRepository();
             $roleArray = $rolePermissionArray = $rolesHavingNoPermissionArray = array();
@@ -25,7 +25,7 @@
                 array_push($roleArray, $role['id']);
             }
 
-            $rolesPermissions = $menuPermissionRepository->permissionedRoles();  
+            $rolesPermissions = $menuPermissionRepository->permissionedRoles($allSessions);  
             foreach($rolesPermissions as $rolesPermission){
                 array_push($rolePermissionArray, $rolesPermission['id_role']);
             }

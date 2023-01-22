@@ -5,8 +5,8 @@
 
     class HolidayRepository implements HolidayRepositoryInterface{
 
-        public function all(){
-            $allSessions = session()->all();
+        public function all($allSessions){
+            
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
             
@@ -30,22 +30,27 @@
             return Holiday::find($id)->delete();
         }
 
-        public function allDeleted(){
-            return Holiday::onlyTrashed()->get();
+        public function allDeleted($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+            return Holiday::where('id_institute', $institutionId)
+              ->where('id_academic', $academicId)->onlyTrashed()->get();
         }        
 
         public function restore($id){
             return Holiday::withTrashed()->find($id)->restore();
         }
 
-        public function restoreAll(){
-            return Holiday::onlyTrashed()->restore();
+        public function restoreAll($allSessions){
+            $institutionId = $allSessions['institutionId'];
+            $academicId = $allSessions['academicYear'];
+            return Holiday::where('id_institute', $institutionId)
+              ->where('id_academic', $academicId)->onlyTrashed()->restore();
         }
 
         //FUNCTION TO CALENDER DATA
-        public function getHolidayData($request){
+        public function getHolidayData($request, $allSessions){
 
-            $allSessions = session()->all();
             $institutionId = $allSessions['institutionId'];
             $academicId = $allSessions['academicYear'];
 

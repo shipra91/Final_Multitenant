@@ -14,44 +14,18 @@
     class StudentLeaveManagementService {
 
         // Get all student
-        // public function allStudent(){
-        //     $studentRepository = new StudentRepository();
-        //     return $studentRepository->all();
-        // }
-
-        // Get all student
-        public function allStudent(){
-
+        public function allStudent($allSessions){
             $studentRepository = new StudentRepository();
-            $studentMappingRepository = new StudentMappingRepository();
-
-            $studentDetails = array();
-            $students = $studentRepository->all();
-
-            foreach($students as $key => $student){
-
-                $studentName = $studentMappingRepository->getFullName($student->name, $student->middle_name, $student->last_name);
-
-                $dataArray = array(
-                    'id' => $student->id,
-                    'studentData'=> $studentName,
-                );
-
-                $studentDetails[$key]= $dataArray;
-            }
-
-            return $studentDetails;
+            return $studentRepository->all($allSessions);
         }
 
         // Get all leave application
-        public function getAll(){
+        public function getAll($allSessions){
 
             $studentLeaveManagementRepository = new StudentLeaveManagementRepository();
-            $studentLeaveAttachmentRepository = new StudentLeaveAttachmentRepository();
             $studentRepository = new StudentRepository();
-            $studentMappingRepository = new StudentMappingRepository();
 
-            $applicationData = $studentLeaveManagementRepository->all();
+            $applicationData = $studentLeaveManagementRepository->all($allSessions);
 
             $applicationDetails = array();
 
@@ -77,7 +51,6 @@
 
                 $applicationArray = array(
                     'id' => $application->id,
-                    // 'student'=>$student->name,
                     'student'=>$studentName,
                     'leaveTitle'=>$application->title,
                     'fromDate'=>$application->from_date,
@@ -136,9 +109,8 @@
             $studentLeaveAttachmentRepository = new StudentLeaveAttachmentRepository();
             $uploadService = new UploadService();
 
-            $allSessions = session()->all();
-            $institutionId = $allSessions['institutionId'];
-            $academicYear = $allSessions['academicYear'];
+            $institutionId = $leaveData['id_institute'];
+            $academicYear = $leaveData['id_academic'];
 
             $leaveTitle = $leaveData->leaveTitle;
             $student = $leaveData->student;
@@ -301,13 +273,12 @@
         }
 
         // Deleted leave application
-        public function getDeletedRecords(){
+        public function getDeletedRecords($allSessions){
 
             $studentLeaveManagementRepository = new StudentLeaveManagementRepository();
             $studentRepository = new StudentRepository();
-            $studentMappingRepository = new StudentMappingRepository();
 
-            $applicationData = $studentLeaveManagementRepository->allDeleted();
+            $applicationData = $studentLeaveManagementRepository->allDeleted($allSessions);
             $applicationDetails = array();
 
             foreach($applicationData as $key => $application){
@@ -325,7 +296,6 @@
 
                 $applicationArray = array(
                     'id' => $application->id,
-                    //'student'=>$student->name,
                     'student'=>$studentName,
                     'leaveTitle'=>$application->title,
                     'fromDate'=>$application->from_date,
@@ -418,3 +388,4 @@
             return $output;
         }
     }
+?>

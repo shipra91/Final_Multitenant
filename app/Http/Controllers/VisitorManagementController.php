@@ -17,11 +17,12 @@ class VisitorManagementController extends Controller
     public function index(Request $request)
     {
         $visitorManagementService = new VisitorManagementService();
+        $allSessions = session()->all();
 
         $input = \Arr::except($request->all(),array('_token', '_method'));
 
         if ($request->ajax()){
-            $visitorData = $visitorManagementService->getAll($input);
+            $visitorData = $visitorManagementService->getAll($input, $allSessions);
             // dd($visitorData);
             return Datatables::of($visitorData)
                     ->addIndexColumn()
@@ -217,10 +218,10 @@ class VisitorManagementController extends Controller
      public function getDeletedRecords(Request $request){
 
         $visitorManagementService = new VisitorManagementService();
-        //dd($visitorManagementService->getDeletedRecords());
+        $allSessions = session()->all();
 
         if ($request->ajax()){
-            $deletedData = $visitorManagementService->getDeletedRecords();
+            $deletedData = $visitorManagementService->getDeletedRecords($allSessions);
             return Datatables::of($deletedData)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
